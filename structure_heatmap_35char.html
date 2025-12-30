@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>EAM Structure Heatmap - 35 Characters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Condensed:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            border-bottom: 3px solid #4a9eff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .heatmap-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #0d0d0d;
+            padding: 15px 0;
+            margin-bottom: 5px;
+        }
+
+        .heatmap-bar {
+            display: flex;
+            gap: 0;
+            margin-bottom: 3px;
+        }
+
+        .heatmap-cell {
+            flex: 1;
+            height: 20px;
+            border-right: 1px solid #333;
+        }
+
+        .position-ruler {
+            display: flex;
+            gap: 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .position-label {
+            flex: 1;
+            text-align: center;
+        }
+
+        .message-block {
+            margin-bottom: 0px;
+            line-height: 1.2;
+        }
+
+        .message-meta {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 0px;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            font-family: 'Roboto Condensed', sans-serif;
+            cursor: pointer;
+            display: inline;
+        }
+
+        .group-1-dot {
+            color: #06b050;
+        }
+
+        .group-2-dot {
+            color: #ed7d32;
+        }
+
+        .group-3-dot {
+            color: #ffcc00;
+        }
+
+        .group-4-dot {
+            color: #ff0467;
+        }
+
+        .message-display {
+            display: flex;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 1px;
+        }
+
+        .char {
+            flex: 1;
+            text-align: center;
+            color: #e0e0e0;
+            padding: 3px 0;
+        }
+
+        .char-exact {
+            background-color: #4a9eff;
+            color: #000000;
+        }
+
+        .char-gapped {
+            background-color: #51cf66;
+            color: #000000;
+        }
+
+        .char-hot_k1 {
+            background-color: #cc5de8;
+            color: #000000;
+        }
+
+        .char-selected {
+            outline: 3px solid #ffffff;
+            outline-offset: -3px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            position: relative;
+            opacity: 1.0 !important;
+        }
+
+        .char[data-patterns] {
+            cursor: pointer;
+        }
+
+        .info-box {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #4a9eff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: #4a9eff;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>EAM Structure Heatmap - 35-Character Messages</h1>
+
+    <div class="info-box">
+        <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
+        <strong>Total Messages:</strong> 72<br>
+        <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
+        <strong>Pattern Types:</strong>
+        <span style="color: #51cf66; font-weight: bold;">Gapped</span>,
+        <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>,
+        <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Hot Position Pairs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">42</div>
+            <div class="stat-label">Messages with Patterns</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">62</div>
+            <div class="stat-label">Total Patterns Found</div>
+        </div>
+    </div>
+
+    <div class="heatmap-container">
+        <div class="heatmap-bar">
+            <div class="heatmap-cell" style="background-color: rgb(11, 5, 0);" title="Position 1: 2 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(66, 33, 0);" title="Position 2: 6 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(81, 40, 0);" title="Position 3: 7 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(51, 25, 0);" title="Position 4: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(37, 18, 0);" title="Position 5: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(24, 12, 0);" title="Position 6: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(37, 18, 0);" title="Position 7: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(81, 40, 0);" title="Position 8: 7 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(110, 55, 0);" title="Position 9: 9 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(138, 69, 0);" title="Position 10: 11 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(95, 47, 0);" title="Position 11: 8 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(24, 12, 0);" title="Position 12: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(66, 33, 0);" title="Position 13: 6 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(152, 76, 0);" title="Position 14: 12 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(95, 47, 0);" title="Position 15: 8 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(11, 5, 0);" title="Position 16: 2 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(51, 25, 0);" title="Position 17: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(66, 33, 0);" title="Position 18: 6 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(24, 12, 0);" title="Position 19: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(37, 18, 0);" title="Position 20: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(51, 25, 0);" title="Position 21: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(66, 33, 0);" title="Position 22: 6 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(51, 25, 0);" title="Position 23: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(110, 55, 0);" title="Position 24: 9 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(95, 47, 0);" title="Position 25: 8 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(230, 115, 0);" title="Position 26: 18 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 27: 20 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(66, 33, 0);" title="Position 28: 6 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(110, 55, 0);" title="Position 29: 9 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(179, 89, 0);" title="Position 30: 14 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(166, 83, 0);" title="Position 31: 13 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(138, 69, 0);" title="Position 32: 11 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(124, 62, 0);" title="Position 33: 10 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(51, 25, 0);" title="Position 34: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(24, 12, 0);" title="Position 35: 3 messages"></div>
+        </div>
+        <div class="position-ruler">
+            <div class="position-label">01</div>
+            <div class="position-label">02</div>
+            <div class="position-label">03</div>
+            <div class="position-label">04</div>
+            <div class="position-label">05</div>
+            <div class="position-label">06</div>
+            <div class="position-label">07</div>
+            <div class="position-label">08</div>
+            <div class="position-label">09</div>
+            <div class="position-label">10</div>
+            <div class="position-label">11</div>
+            <div class="position-label">12</div>
+            <div class="position-label">13</div>
+            <div class="position-label">14</div>
+            <div class="position-label">15</div>
+            <div class="position-label">16</div>
+            <div class="position-label">17</div>
+            <div class="position-label">18</div>
+            <div class="position-label">19</div>
+            <div class="position-label">20</div>
+            <div class="position-label">21</div>
+            <div class="position-label">22</div>
+            <div class="position-label">23</div>
+            <div class="position-label">24</div>
+            <div class="position-label">25</div>
+            <div class="position-label">26</div>
+            <div class="position-label">27</div>
+            <div class="position-label">28</div>
+            <div class="position-label">29</div>
+            <div class="position-label">30</div>
+            <div class="position-label">31</div>
+            <div class="position-label">32</div>
+            <div class="position-label">33</div>
+            <div class="position-label">34</div>
+            <div class="position-label">35</div>
+        </div>
+    </div>
+
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="SIKG2UA6J63TKPX3XS4OQIOGZTBONTBJMZH" title="SI (Group 2)">●</span><span>20230808 15:47 NO CHANCE</span></div>
+            <div class="message-display"><span class="char">S</span><span class="char">I</span><span class="char">K</span><span class="char">G</span><span class="char">2</span><span class="char">U</span><span class="char">A</span><span class="char">6</span><span class="char">J</span><span class="char">6</span><span class="char">3</span><span class="char">T</span><span class="char">K</span><span class="char">P</span><span class="char">X</span><span class="char">3</span><span class="char">X</span><span class="char">S</span><span class="char">4</span><span class="char">O</span><span class="char">Q</span><span class="char">I</span><span class="char">O</span><span class="char">G</span><span class="char">Z</span><span class="char char-exact" data-patterns="1" style="opacity: 0.94">T</span><span class="char char-exact" data-patterns="1" style="opacity: 1.00">B</span><span class="char">O</span><span class="char">N</span><span class="char char-exact" data-patterns="1" style="opacity: 0.82">T</span><span class="char char-exact" data-patterns="1" style="opacity: 0.79">B</span><span class="char">J</span><span class="char">M</span><span class="char">Z</span><span class="char">H</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="SIL5FQNDGO245YIAW2SRPPC6VV4CR6F3VSW" title="SI (Group 2)">●</span><span>20230815 15:19 SKEPTICAL</span></div>
+            <div class="message-display"><span class="char">S</span><span class="char">I</span><span class="char">L</span><span class="char">5</span><span class="char">F</span><span class="char">Q</span><span class="char">N</span><span class="char">D</span><span class="char">G</span><span class="char">O</span><span class="char">2</span><span class="char">4</span><span class="char">5</span><span class="char">Y</span><span class="char">I</span><span class="char">A</span><span class="char">W</span><span class="char">2</span><span class="char">S</span><span class="char">R</span><span class="char">P</span><span class="char">P</span><span class="char">C</span><span class="char">6</span><span class="char">V</span><span class="char">V</span><span class="char">4</span><span class="char">C</span><span class="char">R</span><span class="char">6</span><span class="char">F</span><span class="char">3</span><span class="char">V</span><span class="char">S</span><span class="char">W</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="EGIRMHNPUVZ35MTO4NNMUT3DAEOVK2KEO3Y" title="EG (Group 2)">●</span><span>20230926 15:34 PROXIMATE</span></div>
+            <div class="message-display"><span class="char">E</span><span class="char">G</span><span class="char">I</span><span class="char">R</span><span class="char">M</span><span class="char">H</span><span class="char">N</span><span class="char">P</span><span class="char">U</span><span class="char">V</span><span class="char">Z</span><span class="char">3</span><span class="char">5</span><span class="char">M</span><span class="char">T</span><span class="char">O</span><span class="char">4</span><span class="char">N</span><span class="char">N</span><span class="char">M</span><span class="char">U</span><span class="char">T</span><span class="char">3</span><span class="char">D</span><span class="char">A</span><span class="char char-exact" data-patterns="2" style="opacity: 0.94">E</span><span class="char char-exact" data-patterns="2" style="opacity: 1.00">O</span><span class="char">V</span><span class="char">K</span><span class="char">2</span><span class="char">K</span><span class="char char-exact" data-patterns="2" style="opacity: 0.73">E</span><span class="char char-exact" data-patterns="2" style="opacity: 0.69">O</span><span class="char">3</span><span class="char">Y</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="DD47AUJ223V5E6DVQ4F4F4F3STYNGTY5DAY" title="DD (Group 2)">●</span><span>20231121 22:33 RHETORIC</span></div>
+            <div class="message-display"><span class="char">D</span><span class="char">D</span><span class="char">4</span><span class="char">7</span><span class="char">A</span><span class="char">U</span><span class="char">J</span><span class="char">2</span><span class="char">2</span><span class="char">3</span><span class="char">V</span><span class="char">5</span><span class="char">E</span><span class="char">6</span><span class="char">D</span><span class="char">V</span><span class="char">Q</span><span class="char char-exact" data-patterns="3" style="opacity: 0.56">4</span><span class="char char-exact" data-patterns="3" style="opacity: 0.46">F</span><span class="char char-exact" data-patterns="3" style="opacity: 0.49">4</span><span class="char char-exact" data-patterns="3" style="opacity: 0.52">F</span><span class="char char-exact" data-patterns="3" style="opacity: 0.56">4</span><span class="char char-exact" data-patterns="3" style="opacity: 0.52">F</span><span class="char">3</span><span class="char">S</span><span class="char char-exact" data-patterns="4" style="opacity: 0.94">T</span><span class="char char-exact" data-patterns="4" style="opacity: 1.00">Y</span><span class="char">N</span><span class="char">G</span><span class="char char-exact" data-patterns="4" style="opacity: 0.82">T</span><span class="char char-exact" data-patterns="4" style="opacity: 0.79">Y</span><span class="char">5</span><span class="char">D</span><span class="char">A</span><span class="char">Y</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="Z2COUUT2KIGLAMN5B32XKIAZRJSNJJSXNC7" title="Z2 (Group 2)">●</span><span>20240227 17:55 BUSHPILOT</span></div>
+            <div class="message-display"><span class="char">Z</span><span class="char">2</span><span class="char">C</span><span class="char">O</span><span class="char">U</span><span class="char">U</span><span class="char">T</span><span class="char">2</span><span class="char char-exact" data-patterns="5" style="opacity: 0.66">K</span><span class="char char-exact" data-patterns="5" style="opacity: 0.73">I</span><span class="char">G</span><span class="char">L</span><span class="char">A</span><span class="char">M</span><span class="char">N</span><span class="char">5</span><span class="char">B</span><span class="char">3</span><span class="char">2</span><span class="char">X</span><span class="char char-exact" data-patterns="5" style="opacity: 0.52">K</span><span class="char char-exact" data-patterns="5" style="opacity: 0.56">I</span><span class="char">A</span><span class="char">Z</span><span class="char">R</span><span class="char char-exact" data-patterns="6" style="opacity: 0.94">J</span><span class="char char-exact" data-patterns="6" style="opacity: 1.00">S</span><span class="char">N</span><span class="char">J</span><span class="char char-exact" data-patterns="6" style="opacity: 0.82">J</span><span class="char char-exact" data-patterns="6" style="opacity: 0.79">S</span><span class="char">X</span><span class="char">N</span><span class="char">C</span><span class="char">7</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="6VRLRCVVRY2UE6V42JEDLFW4HMGIHMG6V3X" title="6V (Group 2)">●</span><span>20240502 15:02 GEODETIC</span></div>
+            <div class="message-display"><span class="char char-exact" data-patterns="8,9" style="opacity: 0.43">6</span><span class="char char-exact" data-patterns="8,9,10" style="opacity: 0.56">V</span><span class="char char-exact" data-patterns="10" style="opacity: 0.59">R</span><span class="char">L</span><span class="char">R</span><span class="char">C</span><span class="char">V</span><span class="char char-exact" data-patterns="10" style="opacity: 0.59">V</span><span class="char char-exact" data-patterns="10" style="opacity: 0.66">R</span><span class="char">Y</span><span class="char">2</span><span class="char">U</span><span class="char">E</span><span class="char char-exact" data-patterns="8" style="opacity: 0.76">6</span><span class="char char-exact" data-patterns="8" style="opacity: 0.63">V</span><span class="char">4</span><span class="char">2</span><span class="char">J</span><span class="char">E</span><span class="char">D</span><span class="char">L</span><span class="char">F</span><span class="char">W</span><span class="char">4</span><span class="char char-exact" data-patterns="7" style="opacity: 0.63">H</span><span class="char char-exact" data-patterns="7" style="opacity: 0.94">M</span><span class="char char-exact" data-patterns="7" style="opacity: 1.00">G</span><span class="char">I</span><span class="char char-exact" data-patterns="7" style="opacity: 0.66">H</span><span class="char char-exact" data-patterns="7" style="opacity: 0.82">M</span><span class="char char-exact" data-patterns="7" style="opacity: 0.79">G</span><span class="char char-exact" data-patterns="9" style="opacity: 0.73">6</span><span class="char char-exact" data-patterns="9" style="opacity: 0.69">V</span><span class="char">3</span><span class="char">X</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="6V7RIQHRPJXFGNSUHDTOFNSQDHC2RIZHCL3" title="6V (Group 2)">●</span><span>20240522 17:04 SING SONG</span></div>
+            <div class="message-display"><span class="char">6</span><span class="char">V</span><span class="char">7</span><span class="char char-exact" data-patterns="11" style="opacity: 0.52">R</span><span class="char char-exact" data-patterns="11" style="opacity: 0.49">I</span><span class="char">Q</span><span class="char">H</span><span class="char">R</span><span class="char">P</span><span class="char">J</span><span class="char">X</span><span class="char">F</span><span class="char">G</span><span class="char char-exact" data-patterns="12" style="opacity: 0.76">N</span><span class="char char-exact" data-patterns="12" style="opacity: 0.63">S</span><span class="char">U</span><span class="char">H</span><span class="char">D</span><span class="char">T</span><span class="char">O</span><span class="char">F</span><span class="char char-exact" data-patterns="12" style="opacity: 0.56">N</span><span class="char char-exact" data-patterns="12" style="opacity: 0.52">S</span><span class="char">Q</span><span class="char">D</span><span class="char char-exact" data-patterns="13" style="opacity: 0.94">H</span><span class="char char-exact" data-patterns="13" style="opacity: 1.00">C</span><span class="char">2</span><span class="char char-exact" data-patterns="11" style="opacity: 0.66">R</span><span class="char char-exact" data-patterns="11" style="opacity: 0.82">I</span><span class="char">Z</span><span class="char char-exact" data-patterns="13" style="opacity: 0.73">H</span><span class="char char-exact" data-patterns="13" style="opacity: 0.69">C</span><span class="char">L</span><span class="char">3</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="6VUD4GRA26VGWEK5GH2L6PK4VFWNUFWEKJO" title="6V (Group 2)">●</span><span>20240525 00:40 APPELLATE</span></div>
+            <div class="message-display"><span class="char char-exact" data-patterns="15" style="opacity: 0.43">6</span><span class="char char-exact" data-patterns="15" style="opacity: 0.56">V</span><span class="char">U</span><span class="char">D</span><span class="char">4</span><span class="char">G</span><span class="char">R</span><span class="char">A</span><span class="char">2</span><span class="char char-exact" data-patterns="15" style="opacity: 0.73">6</span><span class="char char-exact" data-patterns="15" style="opacity: 0.63">V</span><span class="char">G</span><span class="char char-exact" data-patterns="14" style="opacity: 0.56">W</span><span class="char char-exact" data-patterns="14" style="opacity: 0.76">E</span><span class="char char-exact" data-patterns="14" style="opacity: 0.63">K</span><span class="char">5</span><span class="char">G</span><span class="char">H</span><span class="char">2</span><span class="char">L</span><span class="char">6</span><span class="char">P</span><span class="char">K</span><span class="char">4</span><span class="char">V</span><span class="char char-exact" data-patterns="16" style="opacity: 0.94">F</span><span class="char char-exact" data-patterns="16" style="opacity: 1.00">W</span><span class="char">N</span><span class="char">U</span><span class="char char-exact" data-patterns="16" style="opacity: 0.82">F</span><span class="char char-exact" data-patterns="14,16" style="opacity: 0.79">W</span><span class="char char-exact" data-patterns="14" style="opacity: 0.73">E</span><span class="char char-exact" data-patterns="14" style="opacity: 0.69">K</span><span class="char">J</span><span class="char">O</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="XSZ7E7UXBBBC47QMCWN2WIM2CLQGDLQWTK4" title="XS (Group 2)">●</span><span>20240604 15:49 MAIL CALL</span></div>
+            <div class="message-display"><span class="char">X</span><span class="char">S</span><span class="char">Z</span><span class="char">7</span><span class="char">E</span><span class="char">7</span><span class="char">U</span><span class="char">X</span><span class="char char-exact" data-patterns="17" style="opacity: 0.66">B</span><span class="char char-exact" data-patterns="17" style="opacity: 0.73">B</span><span class="char char-exact" data-patterns="17" style="opacity: 0.63">B</span><span class="char">C</span><span class="char">4</span><span class="char">7</span><span class="char">Q</span><span class="char">M</span><span class="char">C</span><span class="char">W</span><span class="char">N</span><span class="char">2</span><span class="char">W</span><span class="char">I</span><span class="char">M</span><span class="char">2</span><span class="char">C</span><span class="char char-exact" data-patterns="18" style="opacity: 0.94">L</span><span class="char char-exact" data-patterns="18" style="opacity: 1.00">Q</span><span class="char">G</span><span class="char">D</span><span class="char char-exact" data-patterns="18" style="opacity: 0.82">L</span><span class="char char-exact" data-patterns="18" style="opacity: 0.79">Q</span><span class="char">W</span><span class="char">T</span><span class="char">K</span><span class="char">4</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BQ4TLPG3NAIIM235NRGHNGCED5EJ65EVDYA" title="BQ (Group 2)">●</span><span>20240817 17:28 TAX MONEY</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">Q</span><span class="char">4</span><span class="char">T</span><span class="char">L</span><span class="char">P</span><span class="char">G</span><span class="char">3</span><span class="char">N</span><span class="char">A</span><span class="char">I</span><span class="char">I</span><span class="char">M</span><span class="char">2</span><span class="char">3</span><span class="char">5</span><span class="char">N</span><span class="char">R</span><span class="char">G</span><span class="char">H</span><span class="char">N</span><span class="char">G</span><span class="char">C</span><span class="char">E</span><span class="char">D</span><span class="char char-exact" data-patterns="19" style="opacity: 0.94">5</span><span class="char char-exact" data-patterns="19" style="opacity: 1.00">E</span><span class="char">J</span><span class="char">6</span><span class="char char-exact" data-patterns="19" style="opacity: 0.82">5</span><span class="char char-exact" data-patterns="19" style="opacity: 0.79">E</span><span class="char">V</span><span class="char">D</span><span class="char">Y</span><span class="char">A</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="IER2HCLH6GADHU5PVVLGXQVXLZD3IZAUNSB" title="IE (Group 2)">●</span><span>20240827 15:49 BLACKOUT</span></div>
+            <div class="message-display"><span class="char">I</span><span class="char">E</span><span class="char">R</span><span class="char">2</span><span class="char">H</span><span class="char">C</span><span class="char">L</span><span class="char">H</span><span class="char">6</span><span class="char">G</span><span class="char">A</span><span class="char">D</span><span class="char">H</span><span class="char">U</span><span class="char">5</span><span class="char">P</span><span class="char">V</span><span class="char">V</span><span class="char">L</span><span class="char">G</span><span class="char">X</span><span class="char">Q</span><span class="char">V</span><span class="char">X</span><span class="char">L</span><span class="char">Z</span><span class="char">D</span><span class="char">3</span><span class="char">I</span><span class="char">Z</span><span class="char">A</span><span class="char">U</span><span class="char">N</span><span class="char">S</span><span class="char">B</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="P5DLGI3ZGGYNJH6KOEF3TDRZX3HQTS25NXC" title="P5 (Group 2)">●</span><span>20241008 21:34 HOME TEAM</span></div>
+            <div class="message-display"><span class="char">P</span><span class="char">5</span><span class="char">D</span><span class="char">L</span><span class="char">G</span><span class="char">I</span><span class="char">3</span><span class="char">Z</span><span class="char">G</span><span class="char">G</span><span class="char">Y</span><span class="char">N</span><span class="char">J</span><span class="char">H</span><span class="char">6</span><span class="char">K</span><span class="char">O</span><span class="char">E</span><span class="char">F</span><span class="char">3</span><span class="char">T</span><span class="char">D</span><span class="char">R</span><span class="char">Z</span><span class="char">X</span><span class="char">3</span><span class="char">H</span><span class="char">Q</span><span class="char">T</span><span class="char">S</span><span class="char">2</span><span class="char">5</span><span class="char">N</span><span class="char">X</span><span class="char">C</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="P5SQ6SDMUCIFOFS6PTFT6EZKODMTSVLBXEK" title="P5 (Group 2)">●</span><span>20241010 15:32 PARAFFIN</span></div>
+            <div class="message-display"><span class="char">P</span><span class="char">5</span><span class="char">S</span><span class="char">Q</span><span class="char">6</span><span class="char">S</span><span class="char char-exact" data-patterns="20" style="opacity: 0.49">D</span><span class="char char-exact" data-patterns="20" style="opacity: 0.59">M</span><span class="char">U</span><span class="char">C</span><span class="char">I</span><span class="char">F</span><span class="char">O</span><span class="char">F</span><span class="char">S</span><span class="char">6</span><span class="char">P</span><span class="char">T</span><span class="char">F</span><span class="char">T</span><span class="char">6</span><span class="char">E</span><span class="char">Z</span><span class="char">K</span><span class="char">O</span><span class="char char-exact" data-patterns="20" style="opacity: 0.94">D</span><span class="char char-exact" data-patterns="20" style="opacity: 1.00">M</span><span class="char">T</span><span class="char">S</span><span class="char">V</span><span class="char">L</span><span class="char">B</span><span class="char">X</span><span class="char">E</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="P5ANWHBPRGYVCTAN6OC2UL5BP7UY3SZYU74" title="P5 (Group 2)">●</span><span>20241010 19:55 PARAFFIN</span></div>
+            <div class="message-display"><span class="char">P</span><span class="char">5</span><span class="char char-exact" data-patterns="21" style="opacity: 0.59">A</span><span class="char char-exact" data-patterns="21" style="opacity: 0.52">N</span><span class="char">W</span><span class="char">H</span><span class="char char-exact" data-patterns="22" style="opacity: 0.49">B</span><span class="char char-exact" data-patterns="22" style="opacity: 0.59">P</span><span class="char">R</span><span class="char">G</span><span class="char">Y</span><span class="char">V</span><span class="char">C</span><span class="char">T</span><span class="char char-exact" data-patterns="21" style="opacity: 0.63">A</span><span class="char char-exact" data-patterns="21" style="opacity: 0.43">N</span><span class="char">6</span><span class="char">O</span><span class="char">C</span><span class="char">2</span><span class="char">U</span><span class="char">L</span><span class="char">5</span><span class="char char-exact" data-patterns="22" style="opacity: 0.66">B</span><span class="char char-exact" data-patterns="22" style="opacity: 0.63">P</span><span class="char">7</span><span class="char">U</span><span class="char">Y</span><span class="char">3</span><span class="char">S</span><span class="char">Z</span><span class="char">Y</span><span class="char">U</span><span class="char">7</span><span class="char">4</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="P5G26AFAFQENXBVAXMLX42HCIXFG7JG4L2N" title="P5 (Group 2)">●</span><span>20241015 21:37 POCKMARK</span></div>
+            <div class="message-display"><span class="char">P</span><span class="char">5</span><span class="char">G</span><span class="char">2</span><span class="char">6</span><span class="char char-exact" data-patterns="23" style="opacity: 0.46">A</span><span class="char char-exact" data-patterns="23" style="opacity: 0.49">F</span><span class="char char-exact" data-patterns="23" style="opacity: 0.59">A</span><span class="char char-exact" data-patterns="23" style="opacity: 0.66">F</span><span class="char">Q</span><span class="char">E</span><span class="char">N</span><span class="char">X</span><span class="char">B</span><span class="char">V</span><span class="char">A</span><span class="char">X</span><span class="char">M</span><span class="char">L</span><span class="char">X</span><span class="char">4</span><span class="char">2</span><span class="char">H</span><span class="char">C</span><span class="char">I</span><span class="char">X</span><span class="char">F</span><span class="char">G</span><span class="char">7</span><span class="char">J</span><span class="char">G</span><span class="char">4</span><span class="char">L</span><span class="char">2</span><span class="char">N</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="FJNN64JUYPUJZJCNJCX47RHP47RWP47R6XD" title="FJ (Group 3)">●</span><span>20241016 05:11 SAGE FIRE</span></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">N</span><span class="char">N</span><span class="char">6</span><span class="char">4</span><span class="char">J</span><span class="char">U</span><span class="char">Y</span><span class="char">P</span><span class="char">U</span><span class="char">J</span><span class="char">Z</span><span class="char char-exact" data-patterns="28" style="opacity: 0.76">J</span><span class="char char-exact" data-patterns="28" style="opacity: 0.63">C</span><span class="char">N</span><span class="char char-exact" data-patterns="28" style="opacity: 0.52">J</span><span class="char char-exact" data-patterns="28" style="opacity: 0.56">C</span><span class="char">X</span><span class="char char-gapped" data-patterns="24" style="opacity: 0.49">4</span><span class="char char-gapped" data-patterns="24,25" style="opacity: 0.52">7</span><span class="char char-gapped" data-patterns="24,25,26" style="opacity: 0.56">R</span><span class="char">H</span><span class="char char-gapped" data-patterns="24,25,26,27" style="opacity: 0.66">P</span><span class="char char-gapped" data-patterns="24,25,26,27" style="opacity: 0.63">4</span><span class="char char-gapped" data-patterns="24,25,26,27" style="opacity: 0.94">7</span><span class="char char-gapped" data-patterns="24,25,26,27" style="opacity: 1.00">R</span><span class="char">W</span><span class="char char-gapped" data-patterns="24,25,26,27" style="opacity: 0.66">P</span><span class="char char-gapped" data-patterns="25,26,27" style="opacity: 0.82">4</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 0.79">7</span><span class="char char-gapped" data-patterns="27" style="opacity: 0.73">R</span><span class="char">6</span><span class="char">X</span><span class="char">D</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="P5SLZALEJKUO7233QGBIF4VLVLUP3BKQVO2" title="P5 (Group 2)">●</span><span>20241022 01:07 BAR CANDY</span></div>
+            <div class="message-display"><span class="char">P</span><span class="char">5</span><span class="char">S</span><span class="char">L</span><span class="char">Z</span><span class="char">A</span><span class="char">L</span><span class="char">E</span><span class="char">J</span><span class="char">K</span><span class="char">U</span><span class="char">O</span><span class="char">7</span><span class="char">2</span><span class="char">3</span><span class="char">3</span><span class="char">Q</span><span class="char">G</span><span class="char">B</span><span class="char">I</span><span class="char">F</span><span class="char">4</span><span class="char char-exact" data-patterns="29" style="opacity: 0.52">V</span><span class="char char-exact" data-patterns="29" style="opacity: 0.66">L</span><span class="char char-exact" data-patterns="29" style="opacity: 0.63">V</span><span class="char char-exact" data-patterns="29" style="opacity: 0.94">L</span><span class="char">U</span><span class="char">P</span><span class="char">3</span><span class="char">B</span><span class="char">K</span><span class="char">Q</span><span class="char">V</span><span class="char">O</span><span class="char">2</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="FJVOGOETOV5XT3ZG3YGQGG6FYNPHYO2ZPWE" title="FJ (Group 3)">●</span><span>20241023 10:16 RARE COIN</span></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">V</span><span class="char">O</span><span class="char">G</span><span class="char">O</span><span class="char">E</span><span class="char">T</span><span class="char">O</span><span class="char">V</span><span class="char">5</span><span class="char">X</span><span class="char">T</span><span class="char">3</span><span class="char">Z</span><span class="char">G</span><span class="char">3</span><span class="char">Y</span><span class="char">G</span><span class="char">Q</span><span class="char">G</span><span class="char">G</span><span class="char">6</span><span class="char">F</span><span class="char">Y</span><span class="char">N</span><span class="char">P</span><span class="char">H</span><span class="char">Y</span><span class="char">O</span><span class="char">2</span><span class="char">Z</span><span class="char">P</span><span class="char">W</span><span class="char">E</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="ARHCPBNCXU4MULOEJ36POH4TJSNABIV6SM6" title="AR (Group 2)">●</span><span>20241028 17:31 SPY SONG</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">R</span><span class="char">H</span><span class="char">C</span><span class="char">P</span><span class="char">B</span><span class="char">N</span><span class="char">C</span><span class="char">X</span><span class="char">U</span><span class="char">4</span><span class="char">M</span><span class="char">U</span><span class="char">L</span><span class="char">O</span><span class="char">E</span><span class="char">J</span><span class="char">3</span><span class="char">6</span><span class="char">P</span><span class="char">O</span><span class="char">H</span><span class="char">4</span><span class="char">T</span><span class="char">J</span><span class="char">S</span><span class="char">N</span><span class="char">A</span><span class="char">B</span><span class="char">I</span><span class="char">V</span><span class="char">6</span><span class="char">S</span><span class="char">M</span><span class="char">6</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="AR2RBR5Z7SDME2JQENVN47SEDXVAVF3JZN4" title="AR (Group 2)">●</span><span>20241030 17:31 KNOWLEDGE</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">R</span><span class="char">2</span><span class="char">R</span><span class="char">B</span><span class="char">R</span><span class="char">5</span><span class="char">Z</span><span class="char char-exact" data-patterns="30" style="opacity: 0.66">7</span><span class="char char-exact" data-patterns="30" style="opacity: 0.73">S</span><span class="char">D</span><span class="char">M</span><span class="char">E</span><span class="char">2</span><span class="char">J</span><span class="char">Q</span><span class="char">E</span><span class="char">N</span><span class="char">V</span><span class="char char-exact" data-patterns="31" style="opacity: 0.49">N</span><span class="char char-exact" data-patterns="31" style="opacity: 0.52">4</span><span class="char char-exact" data-patterns="30" style="opacity: 0.56">7</span><span class="char char-exact" data-patterns="30" style="opacity: 0.52">S</span><span class="char">E</span><span class="char">D</span><span class="char">X</span><span class="char">V</span><span class="char">A</span><span class="char">V</span><span class="char">F</span><span class="char">3</span><span class="char">J</span><span class="char">Z</span><span class="char char-exact" data-patterns="31" style="opacity: 0.52">N</span><span class="char char-exact" data-patterns="31" style="opacity: 0.46">4</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BP3QGVHJLKMYLWIQPGUAQ3YGKLSDDL4HS72" title="BP (Group 2)">●</span><span>20241106 01:10 WILD MAN</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">3</span><span class="char">Q</span><span class="char">G</span><span class="char">V</span><span class="char">H</span><span class="char">J</span><span class="char">L</span><span class="char">K</span><span class="char">M</span><span class="char">Y</span><span class="char">L</span><span class="char">W</span><span class="char">I</span><span class="char">Q</span><span class="char">P</span><span class="char">G</span><span class="char">U</span><span class="char">A</span><span class="char">Q</span><span class="char">3</span><span class="char">Y</span><span class="char">G</span><span class="char">K</span><span class="char">L</span><span class="char">S</span><span class="char">D</span><span class="char">D</span><span class="char">L</span><span class="char">4</span><span class="char">H</span><span class="char">S</span><span class="char">7</span><span class="char">2</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BPNTLIXRGKU726DOTZIKHHYARDN2DVFX5ID" title="BP (Group 2)">●</span><span>20241113 01:31 MOTORIST</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">N</span><span class="char">T</span><span class="char">L</span><span class="char">I</span><span class="char">X</span><span class="char">R</span><span class="char">G</span><span class="char">K</span><span class="char">U</span><span class="char">7</span><span class="char">2</span><span class="char">6</span><span class="char">D</span><span class="char">O</span><span class="char">T</span><span class="char">Z</span><span class="char">I</span><span class="char">K</span><span class="char">H</span><span class="char">H</span><span class="char">Y</span><span class="char">A</span><span class="char">R</span><span class="char">D</span><span class="char">N</span><span class="char">2</span><span class="char">D</span><span class="char">V</span><span class="char">F</span><span class="char">X</span><span class="char">5</span><span class="char">I</span><span class="char">D</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BPM2ZSGM5O7QAS2APFWCYVDMY6SLPJ2KZFF" title="BP (Group 2)">●</span><span>20241113 17:20 MOTORIST</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">M</span><span class="char">2</span><span class="char">Z</span><span class="char">S</span><span class="char">G</span><span class="char">M</span><span class="char">5</span><span class="char">O</span><span class="char">7</span><span class="char">Q</span><span class="char">A</span><span class="char">S</span><span class="char">2</span><span class="char">A</span><span class="char">P</span><span class="char">F</span><span class="char">W</span><span class="char">C</span><span class="char">Y</span><span class="char">V</span><span class="char">D</span><span class="char">M</span><span class="char">Y</span><span class="char">6</span><span class="char">S</span><span class="char">L</span><span class="char">P</span><span class="char">J</span><span class="char">2</span><span class="char">K</span><span class="char">Z</span><span class="char">F</span><span class="char">F</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BP7XJ4X3MURYC7FR6YPBQXL3T2VMC3TPYSW" title="BP (Group 2)">●</span><span>20241116 01:30 HELLFIRE</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">7</span><span class="char">X</span><span class="char">J</span><span class="char">4</span><span class="char">X</span><span class="char">3</span><span class="char">M</span><span class="char">U</span><span class="char">R</span><span class="char">Y</span><span class="char">C</span><span class="char">7</span><span class="char">F</span><span class="char">R</span><span class="char">6</span><span class="char">Y</span><span class="char">P</span><span class="char">B</span><span class="char">Q</span><span class="char">X</span><span class="char">L</span><span class="char char-exact" data-patterns="32" style="opacity: 0.66">3</span><span class="char char-exact" data-patterns="32" style="opacity: 0.63">T</span><span class="char">2</span><span class="char">V</span><span class="char">M</span><span class="char">C</span><span class="char char-exact" data-patterns="32" style="opacity: 0.82">3</span><span class="char char-exact" data-patterns="32" style="opacity: 0.79">T</span><span class="char">P</span><span class="char">Y</span><span class="char">S</span><span class="char">W</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BPII7RX4T2IPIYH2B5NZ7UED6BCT7ZNJLDK" title="BP (Group 2)">●</span><span>20241116 22:04 HELLFIRE</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char char-exact" data-patterns="33" style="opacity: 0.56">P</span><span class="char char-exact" data-patterns="33" style="opacity: 0.59">I</span><span class="char">I</span><span class="char">7</span><span class="char">R</span><span class="char">X</span><span class="char">4</span><span class="char">T</span><span class="char">2</span><span class="char">I</span><span class="char char-exact" data-patterns="33" style="opacity: 0.46">P</span><span class="char char-exact" data-patterns="33" style="opacity: 0.56">I</span><span class="char">Y</span><span class="char">H</span><span class="char">2</span><span class="char">B</span><span class="char">5</span><span class="char">N</span><span class="char">Z</span><span class="char">7</span><span class="char">U</span><span class="char">E</span><span class="char">D</span><span class="char">6</span><span class="char">B</span><span class="char">C</span><span class="char">T</span><span class="char">7</span><span class="char">Z</span><span class="char">N</span><span class="char">J</span><span class="char">L</span><span class="char">D</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BPPFEOWOZ66PDDWYJZOEPX6IRZKT6ICZEOP" title="BP (Group 2)">●</span><span>20241118 17:31 LORD JIM</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">P</span><span class="char">F</span><span class="char char-exact" data-patterns="34" style="opacity: 0.49">E</span><span class="char char-exact" data-patterns="34" style="opacity: 0.46">O</span><span class="char">W</span><span class="char">O</span><span class="char">Z</span><span class="char">6</span><span class="char">6</span><span class="char">P</span><span class="char">D</span><span class="char">D</span><span class="char">W</span><span class="char">Y</span><span class="char">J</span><span class="char">Z</span><span class="char">O</span><span class="char">E</span><span class="char">P</span><span class="char">X</span><span class="char char-exact" data-patterns="35" style="opacity: 0.52">6</span><span class="char char-exact" data-patterns="35" style="opacity: 0.66">I</span><span class="char">R</span><span class="char">Z</span><span class="char">K</span><span class="char">T</span><span class="char char-exact" data-patterns="35" style="opacity: 0.66">6</span><span class="char char-exact" data-patterns="35" style="opacity: 0.82">I</span><span class="char">C</span><span class="char">Z</span><span class="char char-exact" data-patterns="34" style="opacity: 0.69">E</span><span class="char char-exact" data-patterns="34" style="opacity: 0.52">O</span><span class="char">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BPLFOLIMKVRTTJP5DW7VT4VUEQ4GJRC2PNG" title="BP (Group 2)">●</span><span>20241119 22:41 RHETORIC</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">L</span><span class="char">F</span><span class="char">O</span><span class="char">L</span><span class="char">I</span><span class="char">M</span><span class="char">K</span><span class="char">V</span><span class="char">R</span><span class="char">T</span><span class="char">T</span><span class="char">J</span><span class="char">P</span><span class="char">5</span><span class="char">D</span><span class="char">W</span><span class="char">7</span><span class="char">V</span><span class="char">T</span><span class="char">4</span><span class="char">V</span><span class="char">U</span><span class="char">E</span><span class="char">Q</span><span class="char">4</span><span class="char">G</span><span class="char">J</span><span class="char">R</span><span class="char">C</span><span class="char">2</span><span class="char">P</span><span class="char">N</span><span class="char">G</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BPOIECEZ2H3D274A2HIWSLACNXQB4I2M3B5" title="BP (Group 2)">●</span><span>20241203 16:13 FOOTWORK</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">O</span><span class="char">I</span><span class="char">E</span><span class="char">C</span><span class="char">E</span><span class="char">Z</span><span class="char char-exact" data-patterns="36" style="opacity: 0.66">2</span><span class="char char-exact" data-patterns="36" style="opacity: 0.73">H</span><span class="char">3</span><span class="char">D</span><span class="char">2</span><span class="char">7</span><span class="char">4</span><span class="char">A</span><span class="char char-exact" data-patterns="36" style="opacity: 0.52">2</span><span class="char char-exact" data-patterns="36" style="opacity: 0.56">H</span><span class="char">I</span><span class="char">W</span><span class="char">S</span><span class="char">L</span><span class="char">A</span><span class="char">C</span><span class="char">N</span><span class="char">X</span><span class="char">Q</span><span class="char">B</span><span class="char">4</span><span class="char">I</span><span class="char">2</span><span class="char">M</span><span class="char">3</span><span class="char">B</span><span class="char">5</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="BP6NYSRALRUSGWEWRURDFIX2GPT3WQI6RVV" title="BP (Group 2)">●</span><span>20241206 01:00 AUTOCRAT</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">P</span><span class="char">6</span><span class="char">N</span><span class="char">Y</span><span class="char">S</span><span class="char">R</span><span class="char">A</span><span class="char">L</span><span class="char char-exact" data-patterns="37" style="opacity: 0.73">R</span><span class="char char-exact" data-patterns="37" style="opacity: 0.63">U</span><span class="char">S</span><span class="char">G</span><span class="char">W</span><span class="char">E</span><span class="char">W</span><span class="char char-exact" data-patterns="37" style="opacity: 0.52">R</span><span class="char char-exact" data-patterns="37" style="opacity: 0.56">U</span><span class="char">R</span><span class="char">D</span><span class="char">F</span><span class="char">I</span><span class="char">X</span><span class="char">2</span><span class="char">G</span><span class="char">P</span><span class="char">T</span><span class="char">3</span><span class="char">W</span><span class="char">Q</span><span class="char">I</span><span class="char">6</span><span class="char">R</span><span class="char">V</span><span class="char">V</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="ABXIYSRZDKUCCJ4PH4Z6PZW3CWE3HY2MOFT" title="AB (Group 2)">●</span><span>20241206 18:49 AUTOCRAT</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">X</span><span class="char">I</span><span class="char">Y</span><span class="char">S</span><span class="char">R</span><span class="char">Z</span><span class="char">D</span><span class="char">K</span><span class="char">U</span><span class="char">C</span><span class="char">C</span><span class="char">J</span><span class="char">4</span><span class="char">P</span><span class="char">H</span><span class="char">4</span><span class="char">Z</span><span class="char">6</span><span class="char">P</span><span class="char">Z</span><span class="char">W</span><span class="char">3</span><span class="char">C</span><span class="char">W</span><span class="char">E</span><span class="char">3</span><span class="char">H</span><span class="char">Y</span><span class="char">2</span><span class="char">M</span><span class="char">O</span><span class="char">F</span><span class="char">T</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="AB2AR3O7UCMI5YDTKIVKKSFTCW7A5TV6Q3J" title="AB (Group 2)">●</span><span>20241210 01:44 FEARLESS</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">2</span><span class="char">A</span><span class="char">R</span><span class="char">3</span><span class="char">O</span><span class="char">7</span><span class="char">U</span><span class="char">C</span><span class="char">M</span><span class="char">I</span><span class="char">5</span><span class="char">Y</span><span class="char">D</span><span class="char">T</span><span class="char">K</span><span class="char">I</span><span class="char">V</span><span class="char">K</span><span class="char">K</span><span class="char">S</span><span class="char">F</span><span class="char">T</span><span class="char">C</span><span class="char">W</span><span class="char">7</span><span class="char">A</span><span class="char">5</span><span class="char">T</span><span class="char">V</span><span class="char">6</span><span class="char">Q</span><span class="char">3</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="ABNGVZMOH5NC3FC5PKKQU4ISA57TWFMEPGI" title="AB (Group 2)">●</span><span>20241211 15:02 TUNAFISH</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">N</span><span class="char">G</span><span class="char">V</span><span class="char">Z</span><span class="char">M</span><span class="char">O</span><span class="char">H</span><span class="char">5</span><span class="char">N</span><span class="char">C</span><span class="char">3</span><span class="char">F</span><span class="char">C</span><span class="char">5</span><span class="char">P</span><span class="char">K</span><span class="char">K</span><span class="char">Q</span><span class="char">U</span><span class="char">4</span><span class="char">I</span><span class="char">S</span><span class="char">A</span><span class="char">5</span><span class="char">7</span><span class="char">T</span><span class="char">W</span><span class="char">F</span><span class="char">M</span><span class="char">E</span><span class="char">P</span><span class="char">G</span><span class="char">I</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="AB6VQO7LDHFIAIWCKEWH5YLBWGOFZEDUR2C" title="AB (Group 2)">●</span><span>20241212 16:32 EAR GUARD</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">6</span><span class="char">V</span><span class="char">Q</span><span class="char">O</span><span class="char">7</span><span class="char">L</span><span class="char">D</span><span class="char">H</span><span class="char">F</span><span class="char">I</span><span class="char">A</span><span class="char">I</span><span class="char">W</span><span class="char">C</span><span class="char">K</span><span class="char">E</span><span class="char">W</span><span class="char">H</span><span class="char">5</span><span class="char">Y</span><span class="char">L</span><span class="char">B</span><span class="char">W</span><span class="char">G</span><span class="char">O</span><span class="char">F</span><span class="char">Z</span><span class="char">E</span><span class="char">D</span><span class="char">U</span><span class="char">R</span><span class="char">2</span><span class="char">C</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="ABUVJPNVHDF4VKQT6N6OSHG73TJOECG6PWL" title="AB (Group 2)">●</span><span>20241212 17:05 EAR GUARD</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">U</span><span class="char">V</span><span class="char">J</span><span class="char">P</span><span class="char">N</span><span class="char">V</span><span class="char">H</span><span class="char">D</span><span class="char">F</span><span class="char">4</span><span class="char">V</span><span class="char">K</span><span class="char">Q</span><span class="char">T</span><span class="char">6</span><span class="char">N</span><span class="char">6</span><span class="char">O</span><span class="char">S</span><span class="char">H</span><span class="char">G</span><span class="char">7</span><span class="char">3</span><span class="char">T</span><span class="char">J</span><span class="char">O</span><span class="char">E</span><span class="char">C</span><span class="char">G</span><span class="char">6</span><span class="char">P</span><span class="char">W</span><span class="char">L</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="ABWPTYUCNQ4FT3ZES7ALHEOJ2IXGXDZFRIO" title="AB (Group 2)">●</span><span>20241214 22:05 STAFF CAR</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">W</span><span class="char">P</span><span class="char">T</span><span class="char">Y</span><span class="char">U</span><span class="char">C</span><span class="char">N</span><span class="char">Q</span><span class="char">4</span><span class="char">F</span><span class="char">T</span><span class="char">3</span><span class="char">Z</span><span class="char">E</span><span class="char">S</span><span class="char">7</span><span class="char">A</span><span class="char">L</span><span class="char">H</span><span class="char">E</span><span class="char">O</span><span class="char">J</span><span class="char">2</span><span class="char">I</span><span class="char">X</span><span class="char">G</span><span class="char">X</span><span class="char">D</span><span class="char">Z</span><span class="char">F</span><span class="char">R</span><span class="char">I</span><span class="char">O</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="AB76BAZGO2G2EYCSDFBSYFQ2UREYQOAFBKE" title="AB (Group 2)">●</span><span>20241215 03:32 ROSE BUSH</span></div>
+            <div class="message-display"><span class="char">A</span><span class="char">B</span><span class="char">7</span><span class="char">6</span><span class="char char-gapped" data-patterns="38,39" style="opacity: 0.49">B</span><span class="char">A</span><span class="char">Z</span><span class="char">G</span><span class="char">O</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 0.73">2</span><span class="char">G</span><span class="char">2</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 0.56">E</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 0.76">Y</span><span class="char">C</span><span class="char">S</span><span class="char">D</span><span class="char char-gapped" data-patterns="39,40" style="opacity: 0.56">F</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 0.46">B</span><span class="char">S</span><span class="char">Y</span><span class="char">F</span><span class="char">Q</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 0.66">2</span><span class="char">U</span><span class="char">R</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 1.00">E</span><span class="char char-gapped" data-patterns="38,39,40" style="opacity: 0.56">Y</span><span class="char">Q</span><span class="char">O</span><span class="char">A</span><span class="char char-gapped" data-patterns="39,40" style="opacity: 0.73">F</span><span class="char char-gapped" data-patterns="40" style="opacity: 0.69">B</span><span class="char">K</span><span class="char">E</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="DQUWQIMYXRPKHDPDDIDLL7LEIIIIE5ZVZ2I" title="DQ (Group 3)">●</span><span>20241218 17:19 RED APPLE</span></div>
+            <div class="message-display"><span class="char">D</span><span class="char">Q</span><span class="char">U</span><span class="char">W</span><span class="char">Q</span><span class="char">I</span><span class="char">M</span><span class="char">Y</span><span class="char">X</span><span class="char">R</span><span class="char">P</span><span class="char">K</span><span class="char">H</span><span class="char">D</span><span class="char">P</span><span class="char">D</span><span class="char">D</span><span class="char">I</span><span class="char">D</span><span class="char">L</span><span class="char">L</span><span class="char">7</span><span class="char">L</span><span class="char">E</span><span class="char char-exact" data-patterns="41" style="opacity: 0.63">I</span><span class="char char-exact" data-patterns="41" style="opacity: 0.94">I</span><span class="char char-exact" data-patterns="41" style="opacity: 1.00">I</span><span class="char char-exact" data-patterns="41" style="opacity: 0.56">I</span><span class="char">E</span><span class="char">5</span><span class="char">Z</span><span class="char">V</span><span class="char">Z</span><span class="char">2</span><span class="char">I</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="3ZUVVGWYQK6RLCK3T4ZWUOWOUBKFAHNU3VI" title="3Z (Group 2)">●</span><span>20250106 17:13 RARENESS</span></div>
+            <div class="message-display"><span class="char">3</span><span class="char">Z</span><span class="char">U</span><span class="char">V</span><span class="char">V</span><span class="char">G</span><span class="char">W</span><span class="char">Y</span><span class="char">Q</span><span class="char">K</span><span class="char">6</span><span class="char">R</span><span class="char">L</span><span class="char">C</span><span class="char">K</span><span class="char">3</span><span class="char">T</span><span class="char">4</span><span class="char">Z</span><span class="char">W</span><span class="char">U</span><span class="char">O</span><span class="char">W</span><span class="char">O</span><span class="char">U</span><span class="char">B</span><span class="char">K</span><span class="char">F</span><span class="char">A</span><span class="char">H</span><span class="char">N</span><span class="char">U</span><span class="char">3</span><span class="char">V</span><span class="char">I</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="3ZTLQURFW2FOHVJZGJRPIM5BYI5LQUWZ3KR" title="3Z (Group 2)">●</span><span>20250106 18:31 RARENESS</span></div>
+            <div class="message-display"><span class="char">3</span><span class="char">Z</span><span class="char">T</span><span class="char char-exact" data-patterns="42" style="opacity: 0.52">L</span><span class="char char-exact" data-patterns="42" style="opacity: 0.49">Q</span><span class="char char-exact" data-patterns="42" style="opacity: 0.46">U</span><span class="char">R</span><span class="char">F</span><span class="char">W</span><span class="char">2</span><span class="char">F</span><span class="char">O</span><span class="char">H</span><span class="char">V</span><span class="char">J</span><span class="char">Z</span><span class="char">G</span><span class="char">J</span><span class="char">R</span><span class="char">P</span><span class="char">I</span><span class="char">M</span><span class="char">5</span><span class="char">B</span><span class="char">Y</span><span class="char">I</span><span class="char">5</span><span class="char char-exact" data-patterns="42" style="opacity: 0.56">L</span><span class="char char-exact" data-patterns="42" style="opacity: 0.66">Q</span><span class="char char-exact" data-patterns="42" style="opacity: 0.82">U</span><span class="char">W</span><span class="char">Z</span><span class="char">3</span><span class="char">K</span><span class="char">R</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="3ZZ4EOVNAF6REGCEYVQTGHFBOQGPGDJA7K6" title="3Z (Group 2)">●</span><span>20250110 17:02 INVOLVED</span></div>
+            <div class="message-display"><span class="char">3</span><span class="char">Z</span><span class="char">Z</span><span class="char">4</span><span class="char">E</span><span class="char">O</span><span class="char">V</span><span class="char">N</span><span class="char">A</span><span class="char">F</span><span class="char">6</span><span class="char">R</span><span class="char">E</span><span class="char">G</span><span class="char">C</span><span class="char">E</span><span class="char">Y</span><span class="char">V</span><span class="char">Q</span><span class="char">T</span><span class="char">G</span><span class="char">H</span><span class="char">F</span><span class="char">B</span><span class="char">O</span><span class="char">Q</span><span class="char">G</span><span class="char">P</span><span class="char">G</span><span class="char">D</span><span class="char">J</span><span class="char">A</span><span class="char">7</span><span class="char">K</span><span class="char">6</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="3ZMRNIIVICCJRYY62DP6QCUBZCPYUX2W7CP" title="3Z (Group 2)">●</span><span>20250110 17:12 INVOLVED</span></div>
+            <div class="message-display"><span class="char">3</span><span class="char">Z</span><span class="char">M</span><span class="char">R</span><span class="char">N</span><span class="char">I</span><span class="char">I</span><span class="char">V</span><span class="char">I</span><span class="char">C</span><span class="char">C</span><span class="char">J</span><span class="char">R</span><span class="char">Y</span><span class="char">Y</span><span class="char">6</span><span class="char">2</span><span class="char">D</span><span class="char">P</span><span class="char">6</span><span class="char">Q</span><span class="char">C</span><span class="char">U</span><span class="char">B</span><span class="char">Z</span><span class="char char-exact" data-patterns="43" style="opacity: 0.94">C</span><span class="char char-exact" data-patterns="43" style="opacity: 1.00">P</span><span class="char">Y</span><span class="char">U</span><span class="char">X</span><span class="char">2</span><span class="char">W</span><span class="char">7</span><span class="char char-exact" data-patterns="43" style="opacity: 0.52">C</span><span class="char char-exact" data-patterns="43" style="opacity: 0.46">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="3ZMRNIIVICCJRYY62DP6KCUBZCPYVX2W7CP" title="3Z (Group 2)">●</span><span>20250110 17:16 INVOLVED</span></div>
+            <div class="message-display"><span class="char">3</span><span class="char">Z</span><span class="char">M</span><span class="char">R</span><span class="char">N</span><span class="char">I</span><span class="char">I</span><span class="char">V</span><span class="char">I</span><span class="char">C</span><span class="char">C</span><span class="char">J</span><span class="char">R</span><span class="char">Y</span><span class="char">Y</span><span class="char">6</span><span class="char">2</span><span class="char">D</span><span class="char">P</span><span class="char">6</span><span class="char">K</span><span class="char">C</span><span class="char">U</span><span class="char">B</span><span class="char">Z</span><span class="char char-exact" data-patterns="44" style="opacity: 0.94">C</span><span class="char char-exact" data-patterns="44" style="opacity: 1.00">P</span><span class="char">Y</span><span class="char">V</span><span class="char">X</span><span class="char">2</span><span class="char">W</span><span class="char">7</span><span class="char char-exact" data-patterns="44" style="opacity: 0.52">C</span><span class="char char-exact" data-patterns="44" style="opacity: 0.46">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="3ZYUDBQ2CWYIYUOSQSXEKKDAF7DHEHNS2JY" title="3Z (Group 2)">●</span><span>20250113 18:21 MACKINAW</span></div>
+            <div class="message-display"><span class="char">3</span><span class="char">Z</span><span class="char char-exact" data-patterns="45" style="opacity: 0.59">Y</span><span class="char char-exact" data-patterns="45" style="opacity: 0.52">U</span><span class="char">D</span><span class="char">B</span><span class="char">Q</span><span class="char">2</span><span class="char">C</span><span class="char">W</span><span class="char">Y</span><span class="char">I</span><span class="char char-exact" data-patterns="45" style="opacity: 0.56">Y</span><span class="char char-exact" data-patterns="45" style="opacity: 0.76">U</span><span class="char">O</span><span class="char">S</span><span class="char">Q</span><span class="char">S</span><span class="char">X</span><span class="char">E</span><span class="char">K</span><span class="char">K</span><span class="char">D</span><span class="char">A</span><span class="char">F</span><span class="char">7</span><span class="char">D</span><span class="char">H</span><span class="char">E</span><span class="char">H</span><span class="char">N</span><span class="char">S</span><span class="char">2</span><span class="char">J</span><span class="char">Y</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="5W7GXRNW33VYDVXZVXJDU6I2DU6Y2GJQFS3" title="5W (Group 3)">●</span><span>20250428 20:06 BAD ALIBI</span></div>
+            <div class="message-display"><span class="char">5</span><span class="char">W</span><span class="char">7</span><span class="char">G</span><span class="char">X</span><span class="char">R</span><span class="char">N</span><span class="char">W</span><span class="char">3</span><span class="char">3</span><span class="char">V</span><span class="char">Y</span><span class="char">D</span><span class="char char-exact" data-patterns="47" style="opacity: 0.76">V</span><span class="char char-exact" data-patterns="47" style="opacity: 0.63">X</span><span class="char">Z</span><span class="char char-exact" data-patterns="47" style="opacity: 0.52">V</span><span class="char char-exact" data-patterns="47" style="opacity: 0.56">X</span><span class="char">J</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.49">D</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.52">U</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.56">6</span><span class="char">I</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.66">2</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.63">D</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.94">U</span><span class="char char-gapped" data-patterns="46" style="opacity: 1.00">6</span><span class="char">Y</span><span class="char char-gapped" data-patterns="46" style="opacity: 0.66">2</span><span class="char">G</span><span class="char">J</span><span class="char">Q</span><span class="char">F</span><span class="char">S</span><span class="char">3</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KOUR2WBVA3SBSQMF2HWOICRWX6ASVB4IERH" title="KO (Group 2)">●</span><span>20250429 15:34 TREASURER</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">O</span><span class="char">U</span><span class="char">R</span><span class="char">2</span><span class="char">W</span><span class="char">B</span><span class="char">V</span><span class="char">A</span><span class="char">3</span><span class="char">S</span><span class="char">B</span><span class="char">S</span><span class="char">Q</span><span class="char">M</span><span class="char">F</span><span class="char">2</span><span class="char">H</span><span class="char">W</span><span class="char">O</span><span class="char">I</span><span class="char">C</span><span class="char">R</span><span class="char">W</span><span class="char">X</span><span class="char">6</span><span class="char">A</span><span class="char">S</span><span class="char">V</span><span class="char">B</span><span class="char">4</span><span class="char">I</span><span class="char">E</span><span class="char">R</span><span class="char">H</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KOX76PVHX3O334JHQ7TASWPZGZCYCV34ZYF" title="KO (Group 2)">●</span><span>20250430 15:33 TEUTONIC</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">O</span><span class="char">X</span><span class="char">7</span><span class="char">6</span><span class="char">P</span><span class="char">V</span><span class="char">H</span><span class="char">X</span><span class="char">3</span><span class="char">O</span><span class="char">3</span><span class="char char-exact" data-patterns="48" style="opacity: 0.56">3</span><span class="char char-exact" data-patterns="48" style="opacity: 0.76">4</span><span class="char">J</span><span class="char">H</span><span class="char">Q</span><span class="char">7</span><span class="char">T</span><span class="char">A</span><span class="char">S</span><span class="char">W</span><span class="char">P</span><span class="char">Z</span><span class="char">G</span><span class="char">Z</span><span class="char">C</span><span class="char">Y</span><span class="char">C</span><span class="char">V</span><span class="char char-exact" data-patterns="48" style="opacity: 0.79">3</span><span class="char char-exact" data-patterns="48" style="opacity: 0.73">4</span><span class="char">Z</span><span class="char">Y</span><span class="char">F</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KOXMKKSPOZ6VCJGQBE4WFHGRO6WYR5QYWOL" title="KO (Group 2)">●</span><span>20250430 16:06 TEUTONIC</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">O</span><span class="char">X</span><span class="char">M</span><span class="char">K</span><span class="char">K</span><span class="char">S</span><span class="char">P</span><span class="char">O</span><span class="char">Z</span><span class="char">6</span><span class="char">V</span><span class="char">C</span><span class="char">J</span><span class="char">G</span><span class="char">Q</span><span class="char">B</span><span class="char">E</span><span class="char">4</span><span class="char">W</span><span class="char">F</span><span class="char">H</span><span class="char">G</span><span class="char">R</span><span class="char">O</span><span class="char">6</span><span class="char">W</span><span class="char">Y</span><span class="char">R</span><span class="char">5</span><span class="char">Q</span><span class="char">Y</span><span class="char">W</span><span class="char">O</span><span class="char">L</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KOICTDMITUJ2D3OVOZEC4DZOBOR3N3URD74" title="KO (Group 2)">●</span><span>20250430 17:37 TEUTONIC</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">O</span><span class="char">I</span><span class="char">C</span><span class="char">T</span><span class="char">D</span><span class="char">M</span><span class="char">I</span><span class="char">T</span><span class="char">U</span><span class="char">J</span><span class="char">2</span><span class="char">D</span><span class="char">3</span><span class="char">O</span><span class="char">V</span><span class="char">O</span><span class="char">Z</span><span class="char">E</span><span class="char">C</span><span class="char">4</span><span class="char">D</span><span class="char">Z</span><span class="char">O</span><span class="char">B</span><span class="char">O</span><span class="char">R</span><span class="char">3</span><span class="char">N</span><span class="char">3</span><span class="char">U</span><span class="char">R</span><span class="char">D</span><span class="char">7</span><span class="char">4</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="5WKLD4AMBTY3PGOFGAB2VU5FP7YBFP7PUDJ" title="5W (Group 3)">●</span><span>20250501 17:17 INFATUATE</span></div>
+            <div class="message-display"><span class="char">5</span><span class="char">W</span><span class="char">K</span><span class="char">L</span><span class="char">D</span><span class="char">4</span><span class="char">A</span><span class="char">M</span><span class="char">B</span><span class="char">T</span><span class="char">Y</span><span class="char">3</span><span class="char">P</span><span class="char">G</span><span class="char">O</span><span class="char">F</span><span class="char">G</span><span class="char">A</span><span class="char">B</span><span class="char">2</span><span class="char">V</span><span class="char">U</span><span class="char">5</span><span class="char char-exact" data-patterns="49" style="opacity: 0.66">F</span><span class="char char-exact" data-patterns="49" style="opacity: 0.63">P</span><span class="char char-exact" data-patterns="49" style="opacity: 0.94">7</span><span class="char">Y</span><span class="char">B</span><span class="char char-exact" data-patterns="49" style="opacity: 0.66">F</span><span class="char char-exact" data-patterns="49" style="opacity: 0.82">P</span><span class="char char-exact" data-patterns="49" style="opacity: 0.79">7</span><span class="char">P</span><span class="char">U</span><span class="char">D</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJT3CVVLJ2Z6BFYHCGCDAH32SYT44AYRGI7" title="KJ (Group 2)">●</span><span>20250528 19:32 OIL TANK</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">T</span><span class="char">3</span><span class="char">C</span><span class="char">V</span><span class="char">V</span><span class="char">L</span><span class="char">J</span><span class="char">2</span><span class="char">Z</span><span class="char">6</span><span class="char">B</span><span class="char">F</span><span class="char">Y</span><span class="char">H</span><span class="char">C</span><span class="char">G</span><span class="char">C</span><span class="char">D</span><span class="char">A</span><span class="char">H</span><span class="char">3</span><span class="char">2</span><span class="char">S</span><span class="char">Y</span><span class="char">T</span><span class="char">4</span><span class="char">4</span><span class="char">A</span><span class="char">Y</span><span class="char">R</span><span class="char">G</span><span class="char">I</span><span class="char">7</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJ626OVQF7UZCB7NWRKF3Z3FJKUVVYQLDOX" title="KJ (Group 2)">●</span><span>20250528 20:56 OIL TANK</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">6</span><span class="char">2</span><span class="char">6</span><span class="char">O</span><span class="char">V</span><span class="char">Q</span><span class="char">F</span><span class="char">7</span><span class="char">U</span><span class="char">Z</span><span class="char">C</span><span class="char">B</span><span class="char">7</span><span class="char">N</span><span class="char">W</span><span class="char">R</span><span class="char">K</span><span class="char">F</span><span class="char">3</span><span class="char">Z</span><span class="char">3</span><span class="char">F</span><span class="char">J</span><span class="char">K</span><span class="char">U</span><span class="char">V</span><span class="char">V</span><span class="char">Y</span><span class="char">Q</span><span class="char">L</span><span class="char">D</span><span class="char">O</span><span class="char">X</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJXTLZQCLBLQWHQZVFMODJI5QT2HVPEDQ52" title="KJ (Group 2)">●</span><span>20250528 22:18 OIL TANK</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">X</span><span class="char">T</span><span class="char">L</span><span class="char">Z</span><span class="char">Q</span><span class="char">C</span><span class="char">L</span><span class="char">B</span><span class="char">L</span><span class="char">Q</span><span class="char">W</span><span class="char">H</span><span class="char">Q</span><span class="char">Z</span><span class="char">V</span><span class="char">F</span><span class="char">M</span><span class="char">O</span><span class="char">D</span><span class="char">J</span><span class="char">I</span><span class="char">5</span><span class="char">Q</span><span class="char">T</span><span class="char">2</span><span class="char">H</span><span class="char">V</span><span class="char">P</span><span class="char">E</span><span class="char">D</span><span class="char">Q</span><span class="char">5</span><span class="char">2</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJVITYFAN7M7Y63DRKIDG2ONOU7X64REYGJ" title="KJ (Group 2)">●</span><span>20250528 23:40 OIL TANK</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">V</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.52">I</span><span class="char">T</span><span class="char">Y</span><span class="char">F</span><span class="char">A</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.66">N</span><span class="char">7</span><span class="char">M</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.46">7</span><span class="char">Y</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.76">6</span><span class="char">3</span><span class="char">D</span><span class="char">R</span><span class="char">K</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.46">I</span><span class="char">D</span><span class="char">G</span><span class="char">2</span><span class="char">O</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.66">N</span><span class="char">O</span><span class="char">U</span><span class="char char-gapped" data-patterns="50" style="opacity: 1.00">7</span><span class="char">X</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.66">6</span><span class="char">4</span><span class="char">R</span><span class="char">E</span><span class="char">Y</span><span class="char">G</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJ6VDHUQ5PJOTUQ6BHTEJJUVXCRLY4VJEQK" title="KJ (Group 2)">●</span><span>20250611 18:01 BIG MAC</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">6</span><span class="char">V</span><span class="char">D</span><span class="char">H</span><span class="char char-exact" data-patterns="51" style="opacity: 0.49">U</span><span class="char char-exact" data-patterns="51" style="opacity: 0.59">Q</span><span class="char">5</span><span class="char">P</span><span class="char">J</span><span class="char">O</span><span class="char">T</span><span class="char char-exact" data-patterns="51" style="opacity: 0.76">U</span><span class="char char-exact" data-patterns="51" style="opacity: 0.63">Q</span><span class="char">6</span><span class="char">B</span><span class="char">H</span><span class="char">T</span><span class="char">E</span><span class="char">J</span><span class="char">J</span><span class="char">U</span><span class="char">V</span><span class="char">X</span><span class="char">C</span><span class="char">R</span><span class="char">L</span><span class="char">Y</span><span class="char">4</span><span class="char">V</span><span class="char">J</span><span class="char">E</span><span class="char">Q</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJPUIARRFJPZG6EFF2VGXTAV3LCTBD65PQA" title="KJ (Group 2)">●</span><span>20250611 18:01 COMPRESS</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char char-exact" data-patterns="52" style="opacity: 0.56">J</span><span class="char char-exact" data-patterns="52" style="opacity: 0.59">P</span><span class="char">U</span><span class="char">I</span><span class="char">A</span><span class="char">R</span><span class="char">R</span><span class="char">F</span><span class="char char-exact" data-patterns="52" style="opacity: 0.73">J</span><span class="char char-exact" data-patterns="52" style="opacity: 0.63">P</span><span class="char">Z</span><span class="char">G</span><span class="char">6</span><span class="char">E</span><span class="char">F</span><span class="char">F</span><span class="char">2</span><span class="char">V</span><span class="char">G</span><span class="char">X</span><span class="char">T</span><span class="char">A</span><span class="char">V</span><span class="char">3</span><span class="char">L</span><span class="char">C</span><span class="char">T</span><span class="char">B</span><span class="char">D</span><span class="char">6</span><span class="char">5</span><span class="char">P</span><span class="char">Q</span><span class="char">A</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJW646PPEBDV7SXPE4SSTQGYRSUTBFUEXI2" title="KJ (Group 2)">●</span><span>20250621 22:05 LOST BALL</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">W</span><span class="char">6</span><span class="char">4</span><span class="char">6</span><span class="char">P</span><span class="char char-exact" data-patterns="53" style="opacity: 0.59">P</span><span class="char char-exact" data-patterns="53" style="opacity: 0.66">E</span><span class="char">B</span><span class="char">D</span><span class="char">V</span><span class="char">7</span><span class="char">S</span><span class="char">X</span><span class="char char-exact" data-patterns="53" style="opacity: 0.43">P</span><span class="char char-exact" data-patterns="53" style="opacity: 0.52">E</span><span class="char">4</span><span class="char">S</span><span class="char">S</span><span class="char">T</span><span class="char">Q</span><span class="char">G</span><span class="char">Y</span><span class="char">R</span><span class="char">S</span><span class="char">U</span><span class="char">T</span><span class="char">B</span><span class="char">F</span><span class="char">U</span><span class="char">E</span><span class="char">X</span><span class="char">I</span><span class="char">2</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJ23QVHYAF7CISYFZWXPYPAXXJDUK7OJQTE" title="KJ (Group 2)">●</span><span>20250622 03:53 BIRTHDAY</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">2</span><span class="char">3</span><span class="char">Q</span><span class="char">V</span><span class="char">H</span><span class="char">Y</span><span class="char">A</span><span class="char">F</span><span class="char">7</span><span class="char">C</span><span class="char">I</span><span class="char">S</span><span class="char">Y</span><span class="char">F</span><span class="char">Z</span><span class="char">W</span><span class="char">X</span><span class="char">P</span><span class="char">Y</span><span class="char">P</span><span class="char">A</span><span class="char">X</span><span class="char">X</span><span class="char">J</span><span class="char">D</span><span class="char">U</span><span class="char">K</span><span class="char">7</span><span class="char">O</span><span class="char">J</span><span class="char">Q</span><span class="char">T</span><span class="char">E</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="KJN3IFNXMCQTRWYNHYLLB33ZK6QB5VFCQY6" title="KJ (Group 2)">●</span><span>20250625 17:31 PINOCCHIO</span></div>
+            <div class="message-display"><span class="char">K</span><span class="char">J</span><span class="char">N</span><span class="char">3</span><span class="char">I</span><span class="char">F</span><span class="char">N</span><span class="char">X</span><span class="char">M</span><span class="char char-exact" data-patterns="54" style="opacity: 0.73">C</span><span class="char char-exact" data-patterns="54" style="opacity: 0.63">Q</span><span class="char">T</span><span class="char">R</span><span class="char">W</span><span class="char">Y</span><span class="char">N</span><span class="char">H</span><span class="char">Y</span><span class="char">L</span><span class="char">L</span><span class="char">B</span><span class="char">3</span><span class="char">3</span><span class="char">Z</span><span class="char">K</span><span class="char">6</span><span class="char">Q</span><span class="char">B</span><span class="char">5</span><span class="char">V</span><span class="char">F</span><span class="char char-exact" data-patterns="54" style="opacity: 0.73">C</span><span class="char char-exact" data-patterns="54" style="opacity: 0.69">Q</span><span class="char">Y</span><span class="char">6</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZ6H4B2PIIXD2BYCMXJ7IYBR73W2HG2Z6KJ" title="NZ (Group 2)">●</span><span>20250713 04:46 SPIRITUAL</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char char-exact" data-patterns="55" style="opacity: 0.56">Z</span><span class="char char-exact" data-patterns="55" style="opacity: 0.59">6</span><span class="char">H</span><span class="char">4</span><span class="char">B</span><span class="char">2</span><span class="char">P</span><span class="char">I</span><span class="char">I</span><span class="char">X</span><span class="char">D</span><span class="char">2</span><span class="char">B</span><span class="char">Y</span><span class="char">C</span><span class="char">M</span><span class="char">X</span><span class="char">J</span><span class="char">7</span><span class="char">I</span><span class="char">Y</span><span class="char">B</span><span class="char">R</span><span class="char">7</span><span class="char">3</span><span class="char">W</span><span class="char">2</span><span class="char">H</span><span class="char">G</span><span class="char">2</span><span class="char char-exact" data-patterns="55" style="opacity: 0.73">Z</span><span class="char char-exact" data-patterns="55" style="opacity: 0.69">6</span><span class="char">K</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZXT2SYAKBNRP4RTXQFX4GNC2HOGOGXZJNT" title="NZ (Group 2)">●</span><span>20250713 05:12 SPIRITUAL</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">X</span><span class="char">T</span><span class="char">2</span><span class="char">S</span><span class="char">Y</span><span class="char">A</span><span class="char">K</span><span class="char">B</span><span class="char">N</span><span class="char">R</span><span class="char">P</span><span class="char">4</span><span class="char">R</span><span class="char">T</span><span class="char">X</span><span class="char">Q</span><span class="char">F</span><span class="char">X</span><span class="char">4</span><span class="char">G</span><span class="char">N</span><span class="char">C</span><span class="char">2</span><span class="char">H</span><span class="char char-exact" data-patterns="56" style="opacity: 1.00">O</span><span class="char char-exact" data-patterns="56" style="opacity: 0.56">G</span><span class="char char-exact" data-patterns="56" style="opacity: 0.66">O</span><span class="char char-exact" data-patterns="56" style="opacity: 0.82">G</span><span class="char">X</span><span class="char">Z</span><span class="char">J</span><span class="char">N</span><span class="char">T</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZVLCDEHGREDIWT7DAY3AZXZQC2RRWS2ZDZ" title="NZ (Group 2)">●</span><span>20250713 06:37 SPIRITUAL</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">V</span><span class="char">L</span><span class="char">C</span><span class="char">D</span><span class="char">E</span><span class="char">H</span><span class="char">G</span><span class="char">R</span><span class="char">E</span><span class="char">D</span><span class="char">I</span><span class="char">W</span><span class="char">T</span><span class="char">7</span><span class="char">D</span><span class="char">A</span><span class="char">Y</span><span class="char">3</span><span class="char">A</span><span class="char">Z</span><span class="char">X</span><span class="char">Z</span><span class="char">Q</span><span class="char">C</span><span class="char">2</span><span class="char">R</span><span class="char">R</span><span class="char">W</span><span class="char">S</span><span class="char">2</span><span class="char">Z</span><span class="char">D</span><span class="char">Z</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZBXFZ6ZVOG4JOXK7TJE4NCKBTL6SQRGOXZ" title="NZ (Group 2)">●</span><span>20250713 06:59 SPIRITUAL</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">B</span><span class="char">X</span><span class="char">F</span><span class="char">Z</span><span class="char">6</span><span class="char">Z</span><span class="char">V</span><span class="char">O</span><span class="char">G</span><span class="char">4</span><span class="char">J</span><span class="char char-exact" data-patterns="57" style="opacity: 0.76">O</span><span class="char char-exact" data-patterns="57" style="opacity: 0.63">X</span><span class="char">K</span><span class="char">7</span><span class="char">T</span><span class="char">J</span><span class="char">E</span><span class="char">4</span><span class="char">N</span><span class="char">C</span><span class="char">K</span><span class="char">B</span><span class="char">T</span><span class="char">L</span><span class="char">6</span><span class="char">S</span><span class="char">Q</span><span class="char">R</span><span class="char">G</span><span class="char char-exact" data-patterns="57" style="opacity: 0.69">O</span><span class="char char-exact" data-patterns="57" style="opacity: 0.52">X</span><span class="char">Z</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZ6CV3OTQ6EBOX2XCULTCIRFWGPYNUH4CJW" title="NZ (Group 2)">●</span><span>20250718 17:31 DOGPATCH</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">6</span><span class="char">C</span><span class="char">V</span><span class="char">3</span><span class="char">O</span><span class="char">T</span><span class="char">Q</span><span class="char">6</span><span class="char">E</span><span class="char">B</span><span class="char">O</span><span class="char">X</span><span class="char">2</span><span class="char">X</span><span class="char">C</span><span class="char">U</span><span class="char">L</span><span class="char">T</span><span class="char">C</span><span class="char">I</span><span class="char">R</span><span class="char">F</span><span class="char">W</span><span class="char">G</span><span class="char">P</span><span class="char">Y</span><span class="char">N</span><span class="char">U</span><span class="char">H</span><span class="char">4</span><span class="char">C</span><span class="char">J</span><span class="char">W</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZOBWPBVH3K3BZEKTPAS3SWG23NGNWIGQZL" title="NZ (Group 2)">●</span><span>20250722 09:13 NEW MOON</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">O</span><span class="char">B</span><span class="char">W</span><span class="char">P</span><span class="char">B</span><span class="char">V</span><span class="char">H</span><span class="char">3</span><span class="char">K</span><span class="char">3</span><span class="char">B</span><span class="char">Z</span><span class="char">E</span><span class="char">K</span><span class="char">T</span><span class="char">P</span><span class="char">A</span><span class="char">S</span><span class="char">3</span><span class="char">S</span><span class="char">W</span><span class="char">G</span><span class="char">2</span><span class="char">3</span><span class="char">N</span><span class="char">G</span><span class="char">N</span><span class="char">W</span><span class="char">I</span><span class="char">G</span><span class="char">Q</span><span class="char">Z</span><span class="char">L</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZTPGJHN74N3DKZBEHTUTLDML6YTGO6YTSG" title="NZ (Group 2)">●</span><span>20250723 09:12 JUNE DAY</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">T</span><span class="char">P</span><span class="char">G</span><span class="char">J</span><span class="char">H</span><span class="char">N</span><span class="char">7</span><span class="char">4</span><span class="char">N</span><span class="char">3</span><span class="char">D</span><span class="char">K</span><span class="char">Z</span><span class="char">B</span><span class="char">E</span><span class="char">H</span><span class="char">T</span><span class="char">U</span><span class="char">T</span><span class="char">L</span><span class="char">D</span><span class="char">M</span><span class="char">L</span><span class="char char-exact" data-patterns="58" style="opacity: 0.94">6</span><span class="char char-exact" data-patterns="58" style="opacity: 1.00">Y</span><span class="char char-exact" data-patterns="58" style="opacity: 0.56">T</span><span class="char">G</span><span class="char">O</span><span class="char char-exact" data-patterns="58" style="opacity: 0.79">6</span><span class="char char-exact" data-patterns="58" style="opacity: 0.73">Y</span><span class="char char-exact" data-patterns="58" style="opacity: 0.69">T</span><span class="char">S</span><span class="char">G</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="NZUBRK5HJQRJ6P7BCES2HPQ5UHRJFCNJKOT" title="NZ (Group 2)">●</span><span>20250723 17:37 JUNE DAY</span></div>
+            <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">U</span><span class="char">B</span><span class="char">R</span><span class="char">K</span><span class="char">5</span><span class="char">H</span><span class="char">J</span><span class="char">Q</span><span class="char char-exact" data-patterns="59" style="opacity: 0.63">R</span><span class="char char-exact" data-patterns="59" style="opacity: 0.46">J</span><span class="char">6</span><span class="char">P</span><span class="char">7</span><span class="char">B</span><span class="char">C</span><span class="char">E</span><span class="char">S</span><span class="char">2</span><span class="char">H</span><span class="char">P</span><span class="char">Q</span><span class="char">5</span><span class="char">U</span><span class="char">H</span><span class="char char-exact" data-patterns="59" style="opacity: 1.00">R</span><span class="char char-exact" data-patterns="59" style="opacity: 0.56">J</span><span class="char">F</span><span class="char">C</span><span class="char">N</span><span class="char">J</span><span class="char">K</span><span class="char">O</span><span class="char">T</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="MP563SU4DP5OVSV7JKBMIWVDKAFORTNEVUE" title="MP (Group 2)">●</span><span>20250807 00:09 BEEBREAD</span></div>
+            <div class="message-display"><span class="char">M</span><span class="char char-exact" data-patterns="60" style="opacity: 0.56">P</span><span class="char char-exact" data-patterns="60" style="opacity: 0.59">5</span><span class="char">6</span><span class="char">3</span><span class="char">S</span><span class="char">U</span><span class="char">4</span><span class="char">D</span><span class="char char-exact" data-patterns="60" style="opacity: 0.73">P</span><span class="char char-exact" data-patterns="60" style="opacity: 0.63">5</span><span class="char">O</span><span class="char">V</span><span class="char">S</span><span class="char">V</span><span class="char">7</span><span class="char">J</span><span class="char">K</span><span class="char">B</span><span class="char">M</span><span class="char">I</span><span class="char">W</span><span class="char">V</span><span class="char">D</span><span class="char">K</span><span class="char">A</span><span class="char">F</span><span class="char">O</span><span class="char">R</span><span class="char">T</span><span class="char">N</span><span class="char">E</span><span class="char">V</span><span class="char">U</span><span class="char">E</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="MPVEL7G2KVDX5UHBQFVZDQCQAFCENTVD37E" title="MP (Group 2)">●</span><span>20250813 18:27 INTIMATE</span></div>
+            <div class="message-display"><span class="char">M</span><span class="char">P</span><span class="char">V</span><span class="char">E</span><span class="char">L</span><span class="char">7</span><span class="char">G</span><span class="char">2</span><span class="char">K</span><span class="char char-exact" data-patterns="61" style="opacity: 0.73">V</span><span class="char char-exact" data-patterns="61" style="opacity: 0.63">D</span><span class="char">X</span><span class="char">5</span><span class="char">U</span><span class="char">H</span><span class="char">B</span><span class="char">Q</span><span class="char">F</span><span class="char">V</span><span class="char">Z</span><span class="char">D</span><span class="char">Q</span><span class="char">C</span><span class="char">Q</span><span class="char">A</span><span class="char">F</span><span class="char">C</span><span class="char">E</span><span class="char">N</span><span class="char">T</span><span class="char char-exact" data-patterns="61" style="opacity: 0.79">V</span><span class="char char-exact" data-patterns="61" style="opacity: 0.73">D</span><span class="char">3</span><span class="char">7</span><span class="char">E</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="MPWTO2SH7SXMH7LFZB72WLLKARJYKNCX4EL" title="MP (Group 2)">●</span><span>20250816 20:48 SHAG LAND</span></div>
+            <div class="message-display"><span class="char">M</span><span class="char">P</span><span class="char">W</span><span class="char">T</span><span class="char">O</span><span class="char">2</span><span class="char">S</span><span class="char char-exact" data-patterns="62" style="opacity: 0.59">H</span><span class="char char-exact" data-patterns="62" style="opacity: 0.66">7</span><span class="char">S</span><span class="char">X</span><span class="char">M</span><span class="char char-exact" data-patterns="62" style="opacity: 0.56">H</span><span class="char char-exact" data-patterns="62" style="opacity: 0.76">7</span><span class="char">L</span><span class="char">F</span><span class="char">Z</span><span class="char">B</span><span class="char">7</span><span class="char">2</span><span class="char">W</span><span class="char">L</span><span class="char">L</span><span class="char">K</span><span class="char">A</span><span class="char">R</span><span class="char">J</span><span class="char">Y</span><span class="char">K</span><span class="char">N</span><span class="char">C</span><span class="char">X</span><span class="char">4</span><span class="char">E</span><span class="char">L</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="MPDODV5NIE3TFD2YOHERBWWGGKA4PGFR2QD" title="MP (Group 2)">●</span><span>20250819 16:22 CARD GAME</span></div>
+            <div class="message-display"><span class="char">M</span><span class="char">P</span><span class="char">D</span><span class="char">O</span><span class="char">D</span><span class="char">V</span><span class="char">5</span><span class="char">N</span><span class="char">I</span><span class="char">E</span><span class="char">3</span><span class="char">T</span><span class="char">F</span><span class="char">D</span><span class="char">2</span><span class="char">Y</span><span class="char">O</span><span class="char">H</span><span class="char">E</span><span class="char">R</span><span class="char">B</span><span class="char">W</span><span class="char">W</span><span class="char">G</span><span class="char">G</span><span class="char">K</span><span class="char">A</span><span class="char">4</span><span class="char">P</span><span class="char">G</span><span class="char">F</span><span class="char">R</span><span class="char">2</span><span class="char">Q</span><span class="char">D</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="7R7WZRDHRM5SJPVRHS6ZTCANGPFOARSKI72" title="7R (Group 2)">●</span><span>20251026 16:02 TEST KIT</span></div>
+            <div class="message-display"><span class="char">7</span><span class="char">R</span><span class="char">7</span><span class="char">W</span><span class="char">Z</span><span class="char">R</span><span class="char">D</span><span class="char">H</span><span class="char">R</span><span class="char">M</span><span class="char">5</span><span class="char">S</span><span class="char">J</span><span class="char">P</span><span class="char">V</span><span class="char">R</span><span class="char">H</span><span class="char">S</span><span class="char">6</span><span class="char">Z</span><span class="char">T</span><span class="char">C</span><span class="char">A</span><span class="char">N</span><span class="char">G</span><span class="char">P</span><span class="char">F</span><span class="char">O</span><span class="char">A</span><span class="char">R</span><span class="char">S</span><span class="char">K</span><span class="char">I</span><span class="char">7</span><span class="char">2</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span class="dot group-2-dot" data-message="7R22SK2EMBMIL56OYOTGCXQX7AGBDOWRTIK" title="7R (Group 2)">●</span><span>20251026 18:03 TEST KIT</span></div>
+            <div class="message-display"><span class="char">7</span><span class="char">R</span><span class="char">2</span><span class="char">2</span><span class="char">S</span><span class="char">K</span><span class="char">2</span><span class="char">E</span><span class="char">M</span><span class="char">B</span><span class="char">M</span><span class="char">I</span><span class="char">L</span><span class="char">5</span><span class="char">6</span><span class="char">O</span><span class="char">Y</span><span class="char">O</span><span class="char">T</span><span class="char">G</span><span class="char">C</span><span class="char">X</span><span class="char">Q</span><span class="char">X</span><span class="char">7</span><span class="char">A</span><span class="char">G</span><span class="char">B</span><span class="char">D</span><span class="char">O</span><span class="char">W</span><span class="char">R</span><span class="char">T</span><span class="char">I</span><span class="char">K</span></div>
+        </div>
+
+    <script>
+        // Track currently selected pattern
+        let selectedPatternId = null;
+
+        // Add click handler to all characters
+        document.querySelectorAll('.char[data-patterns]').forEach(char => {
+            char.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const patterns = this.getAttribute('data-patterns').split(',');
+
+                // If clicking the same pattern, deselect
+                if (selectedPatternId && patterns.includes(selectedPatternId)) {
+                    deselectAll();
+                    selectedPatternId = null;
+                    return;
+                }
+
+                // Select the first pattern (highest priority)
+                selectedPatternId = patterns[0];
+
+                // Deselect all first
+                deselectAll();
+
+                // Highlight all characters with this pattern ID
+                document.querySelectorAll('.char[data-patterns]').forEach(otherChar => {
+                    const otherPatterns = otherChar.getAttribute('data-patterns').split(',');
+                    if (otherPatterns.includes(selectedPatternId)) {
+                        otherChar.classList.add('char-selected');
+                    }
+                });
+            });
+        });
+
+        function deselectAll() {
+            document.querySelectorAll('.char-selected').forEach(char => {
+                char.classList.remove('char-selected');
+            });
+        }
+
+        // Click outside to deselect
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('char') && !e.target.classList.contains('dot')) {
+                deselectAll();
+                selectedPatternId = null;
+            }
+        });
+
+        // Dot copy functionality
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const message = this.getAttribute('data-message');
+
+                // Copy to clipboard
+                navigator.clipboard.writeText(message).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
