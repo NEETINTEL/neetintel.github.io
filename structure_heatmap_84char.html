@@ -15,46 +15,6 @@
             margin: 0;
         }
 
-        .nav-box {
-            background-color: #1a1a1a;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border: 2px solid #4a9eff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4a9eff;
-            color: #000;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
-
-        .nav-link:hover {
-            background-color: #6bb6ff;
-        }
-
-        .nav-link.disabled {
-            background-color: #333;
-            color: #666;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .nav-center {
-            text-align: center;
-            font-size: 1.2em;
-            color: #4a9eff;
-            font-weight: bold;
-        }
-
         h1 {
             color: #ffffff;
             border-bottom: 3px solid #4a9eff;
@@ -119,10 +79,21 @@
             display: inline;
         }
 
-        .group-1-dot { color: #06b050; }
-        .group-2-dot { color: #ed7d32; }
-        .group-3-dot { color: #ffcc00; }
-        .group-4-dot { color: #ff0467; }
+        .group-1-dot {
+            color: #06b050;
+        }
+
+        .group-2-dot {
+            color: #ed7d32;
+        }
+
+        .group-3-dot {
+            color: #ffcc00;
+        }
+
+        .group-4-dot {
+            color: #ff0467;
+        }
 
         .message-display {
             display: flex;
@@ -139,10 +110,25 @@
             padding: 3px 0;
         }
 
-        .char-exact { background-color: #4a9eff; color: #000000; }
-        .char-gapped { background-color: #51cf66; color: #000000; }
-        .char-hot_k1 { background-color: #cc5de8; color: #000000; }
-        .char-quad_repeat { background-color: #ff69b4; color: #000000; }
+        .char-exact {
+            background-color: #4a9eff;
+            color: #000000;
+        }
+
+        .char-gapped {
+            background-color: #51cf66;
+            color: #000000;
+        }
+
+        .char-hot_k1 {
+            background-color: #cc5de8;
+            color: #000000;
+        }
+
+        .char-quad_repeat {
+            background-color: #ff69b4;
+            color: #000000;
+        }
 
         .char-selected {
             outline: 3px solid #ffffff;
@@ -153,98 +139,50 @@
             opacity: 1.0 !important;
         }
 
-        .char[data-patterns] { cursor: pointer; }
-
-        .info-stats-container {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
+        .char[data-patterns] {
+            cursor: pointer;
         }
 
         .info-box {
             background-color: #1a1a1a;
             padding: 15px;
             border-radius: 5px;
+            margin: 20px 0;
             border-left: 4px solid #4a9eff;
-            flex: 1;
         }
 
         .stats-grid {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            flex-direction: row;
-            align-items: stretch;
+            margin: 20px 0;
         }
 
         .stat-card {
             background-color: #1a1a1a;
-            padding: 10px 15px;
+            padding: 15px;
             border-radius: 5px;
             text-align: center;
-            min-width: 180px;
         }
 
         .stat-value {
-            font-size: 1.5em;
+            font-size: 2em;
             color: #4a9eff;
             font-weight: bold;
         }
 
         .stat-label {
             color: #999;
-            font-size: 0.85em;
-            margin-top: 3px;
-        }
-
-        .controls-container {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
+            font-size: 0.9em;
+            margin-top: 5px;
         }
 
         .filter-controls {
             background-color: #1a1a1a;
             padding: 15px;
             border-radius: 5px;
+            margin: 20px 0;
             border-left: 4px solid #4a9eff;
-            flex: 1;
-        }
-
-        .sort-controls {
-            background-color: #1a1a1a;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #51cf66;
-            flex: 1;
-        }
-
-        .sort-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .sort-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .sort-btn.active {
-            background-color: #51cf66;
-            color: #000;
-        }
-
-        .sort-btn:not(.active) {
-            background-color: #333;
-            color: #999;
-        }
-
-        .sort-btn:not(.active):hover {
-            background-color: #444;
         }
 
         .filter-group {
@@ -286,59 +224,40 @@
         .group-label-4 { background-color: #ff0467; color: #fff; }
         .group-label-unclassified { background-color: #555; color: #fff; }
 
-        .group-heading {
-            background-color: #2a2a2a;
-            padding: 10px 15px;
-            margin: 20px 0 10px 0;
-            border-left: 5px solid;
-            font-weight: bold;
-            font-size: 1.1em;
+        .message-block.hidden {
+            display: none;
         }
-
-        .group-heading-1 { border-left-color: #06b050; color: #06b050; }
-        .group-heading-2 { border-left-color: #ed7d32; color: #ed7d32; }
-        .group-heading-3 { border-left-color: #ffcc00; color: #ffcc00; }
-        .group-heading-4 { border-left-color: #ff0467; color: #ff0467; }
-        .group-heading-unclassified { border-left-color: #555; color: #aaa; }
-
-        .message-block.hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="nav-box">
-        <a href="structure_heatmap_79char.html" class="nav-link">← 79-char</a>
-        <div class="nav-center">84-Character Messages</div>
-        <a href="structure_heatmap_85char.html" class="nav-link">85-char →</a>
-    </div>
-
     <h1>EAM Structure Heatmap - 84-Character Messages</h1>
 
-    <div class="info-stats-container">
-        <div class="info-box">
-            <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
-            <strong>Total Messages:</strong> 1<br>
-            <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
-            <strong>Pattern Types:</strong>
-            <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>,
-            <span style="color: #51cf66; font-weight: bold;">Gapped</span>,
-            <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>,
-            <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
+    <div class="info-box">
+        <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
+        <strong>Total Messages:</strong> 1<br>
+        <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
+        <strong>Pattern Types:</strong>
+        <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>,
+        <span style="color: #51cf66; font-weight: bold;">Gapped</span>,
+        <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>,
+        <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">128</div>
+            <div class="stat-label">Hot Position Pairs</div>
         </div>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">128</div>
-                <div class="stat-label">Hot Position Pairs</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">1</div>
-                <div class="stat-label">Messages with Patterns</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">26</div>
-                <div class="stat-label">Total Patterns Found</div>
-            </div>
+        <div class="stat-card">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Messages with Patterns</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">26</div>
+            <div class="stat-label">Total Patterns Found</div>
         </div>
     </div>
+
 
 
     <div class="heatmap-container">
@@ -516,25 +435,14 @@
         </div>
     </div>
 
-    <div id="messages-container">
-        <div class="message-block" data-group="4" data-patterns='[{"type": "gapped", "pattern": "*********C**2******************PE", "positions": [14, 47], "length": 33, "count": 2}, {"type": "gapped", "pattern": "******C**2******************PE**6", "positions": [17, 50], "length": 33, "count": 2}, {"type": "exact", "pattern": "AQ", "positions": [16, 35], "length": 2, "count": 2}, {"type": "exact", "pattern": "2C", "positions": [22, 59], "length": 2, "count": 2}, {"type": "exact", "pattern": "ZA", "positions": [32, 73], "length": 2, "count": 2}, {"type": "exact", "pattern": "UU", "positions": [40, 47], "length": 2, "count": 2}, {"type": "hot_k1", "pattern": "C", "positions": [12, 23, 56, 60, 67, 68], "length": 1, "count": 6}, {"type": "hot_k1", "pattern": "A", "positions": [16, 33, 35, 54, 74, 83], "length": 1, "count": 6}, {"type": "hot_k1", "pattern": "2", "positions": [22, 26, 44, 59, 62, 65], "length": 1, "count": 6}, {"type": "hot_k1", "pattern": "Z", "positions": [30, 32, 72, 73, 77], "length": 1, "count": 5}, {"type": "hot_k1", "pattern": "U", "positions": [25, 40, 41, 47, 48], "length": 1, "count": 5}, {"type": "hot_k1", "pattern": "L", "positions": [19, 24, 27, 28, 55], "length": 1, "count": 5}, {"type": "hot_k1", "pattern": "D", "positions": [4, 11, 34, 69, 70], "length": 1, "count": 5}, {"type": "hot_k1", "pattern": "Y", "positions": [8, 38, 39, 43, 50], "length": 1, "count": 5}, {"type": "hot_k1", "pattern": "F", "positions": [10, 20, 21, 80], "length": 1, "count": 4}, {"type": "hot_k1", "pattern": "6", "positions": [49, 71, 81, 82], "length": 1, "count": 4}, {"type": "hot_k1", "pattern": "X", "positions": [3, 6, 7, 15], "length": 1, "count": 4}, {"type": "hot_k1", "pattern": "P", "positions": [45, 75, 78], "length": 1, "count": 3}, {"type": "hot_k1", "pattern": "G", "positions": [13, 51, 58], "length": 1, "count": 3}, {"type": "hot_k1", "pattern": "R", "positions": [2, 57], "length": 1, "count": 2}, {"type": "hot_k1", "pattern": "4", "positions": [64, 66], "length": 1, "count": 2}, {"type": "hot_k1", "pattern": "3", "positions": [14, 76], "length": 1, "count": 2}, {"type": "hot_k1", "pattern": "N", "positions": [5, 63], "length": 1, "count": 2}, {"type": "hot_k1", "pattern": "W", "positions": [9, 61], "length": 1, "count": 2}, {"type": "hot_k1", "pattern": "O", "positions": [37, 52], "length": 1, "count": 2}, {"type": "hot_k1", "pattern": "7", "positions": [29, 53], "length": 1, "count": 2}]' data-timestamp="20240423 17:46" data-prefix="BH">
-            <div class="message-meta">
-                <span class="dot group-4-dot" data-message="BHRXDNXXYWFDCG3XAQILFF2CLU2LL7ZVZADAQOYYUUJY2PEUU6YGO7ALCRG2CW2N424CCDD6ZZAP3ZPEF66A">●</span>
-                <span>20240423 17:46</span>
-                <span>PR=BH</span>
-                <span>CS=FREE HAND</span>
-            </div>
-            <div class="message-display">
-<span class="char">B</span><span class="char">H</span><span class="char char-hot_k1" data-patterns="19" style="opacity: 1.00" title="hot_k1">R</span><span class="char char-hot_k1" data-patterns="16" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="22" style="opacity: 1.00" title="hot_k1">N</span><span class="char char-hot_k1" data-patterns="16" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-hot_k1" data-patterns="16" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="23" style="opacity: 1.00" title="hot_k1">W</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="18" style="opacity: 1.00" title="hot_k1 (×3)">G</span><span class="char char-gapped" data-patterns="0,21" style="opacity: 1.00" title="gapped">3</span><span class="char char-hot_k1" data-patterns="16" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-exact" data-patterns="2,7" style="opacity: 1.00" title="exact (×6)">A</span><span class="char char-gapped" data-patterns="1" style="opacity: 1.00" title="gapped">Q</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-exact" data-patterns="3,8" style="opacity: 1.00" title="exact (×6)">2</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 1.00" title="hot_k1 (×5)">U</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 1.00" title="hot_k1">7</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char">V</span><span class="char char-exact" data-patterns="4,9" style="opacity: 1.00" title="exact (×5)">Z</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">A</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-exact" data-patterns="2,7" style="opacity: 1.00" title="exact (×6)">A</span><span class="char">Q</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 1.00" title="hot_k1">O</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-exact" data-patterns="5,10" style="opacity: 1.00" title="exact (×5)">U</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 1.00" title="hot_k1 (×5)">U</span><span class="char">J</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×3)">P</span><span class="char">E</span><span class="char char-gapped" data-patterns="0,5,10" style="opacity: 1.00" title="gapped (×5)">U</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 1.00" title="hot_k1 (×5)">U</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">6</span><span class="char char-gapped" data-patterns="1,13" style="opacity: 1.00" title="gapped (×5)">Y</span><span class="char char-hot_k1" data-patterns="18" style="opacity: 1.00" title="hot_k1 (×3)">G</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 1.00" title="hot_k1">O</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 1.00" title="hot_k1">7</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">A</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="19" style="opacity: 1.00" title="hot_k1">R</span><span class="char char-hot_k1" data-patterns="18" style="opacity: 1.00" title="hot_k1 (×3)">G</span><span class="char char-exact" data-patterns="3,8" style="opacity: 1.00" title="exact (×6)">2</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="23" style="opacity: 1.00" title="hot_k1">W</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-hot_k1" data-patterns="22" style="opacity: 1.00" title="hot_k1">N</span><span class="char char-hot_k1" data-patterns="20" style="opacity: 1.00" title="hot_k1">4</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-hot_k1" data-patterns="20" style="opacity: 1.00" title="hot_k1">4</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">6</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char char-exact" data-patterns="4,9" style="opacity: 1.00" title="exact (×5)">Z</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">A</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×3)">P</span><span class="char char-hot_k1" data-patterns="21" style="opacity: 1.00" title="hot_k1">3</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×3)">P</span><span class="char">E</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">6</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">6</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">A</span></div>
+        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [45, 46, 78, 79, 23, 56, 26, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [45, 46, 78, 79, 49, 82, 23, 56, 26, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [16, 17, 35, 36], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [59, 60, 22, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 33, 74, 73], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 48, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [67, 68, 12, 23, 56, 60], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 35, 74, 16, 83, 54], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 44, 22, 26, 59, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 72, 73, 77, 30], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 47, 48, 25], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [19, 55, 24, 27, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 4, 69, 70, 11], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 39, 8, 43, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 10, 20, 21], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [81, 49, 82, 71], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 15, 6, 7], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [75, 45, 78], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 51, 13], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [57, 2], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [64, 66], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [76, 14], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [5, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [52, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [53, 29], &quot;weight&quot;: 1.0}]">
+            <div class="message-meta"><span class="dot group-4-dot" data-message="BHRXDNXXYWFDCG3XAQILFF2CLU2LL7ZVZADAQOYYUUJY2PEUU6YGO7ALCRG2CW2N424CCDD6ZZAP3ZPEF66A" title="BH (Group 4)">●</span><span>20240423 17:46 FREE HAND</span></div>
+            <div class="message-display"><span class="char">B</span><span class="char">H</span><span class="char char-hot_k1" data-patterns="20" style="opacity: 1.00" title="hot_k1">R</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="23" style="opacity: 1.00" title="hot_k1">N</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 1.00" title="hot_k1">W</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="19" style="opacity: 1.00" title="hot_k1 (×3)">G</span><span class="char char-hot_k1" data-patterns="22" style="opacity: 1.00" title="hot_k1">3</span><span class="char char-hot_k1" data-patterns="17" style="opacity: 1.00" title="hot_k1 (×4)">X</span><span class="char char-exact" data-patterns="3,8" style="opacity: 1.00" title="exact (×6)">A</span><span class="char char-exact" data-patterns="3" style="opacity: 1.00" title="exact">Q</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-exact" data-patterns="4,9" style="opacity: 1.00" title="exact (×6)">2</span><span class="char char-gapped" data-patterns="1,2,4,7" style="opacity: 1.00" title="gapped (×6)">C</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1 (×5)">U</span><span class="char char-gapped" data-patterns="1,2,9" style="opacity: 1.00" title="gapped (×6)">2</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-hot_k1" data-patterns="26" style="opacity: 1.00" title="hot_k1">7</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char">V</span><span class="char char-exact" data-patterns="5,10" style="opacity: 1.00" title="exact (×5)">Z</span><span class="char char-exact" data-patterns="5,8" style="opacity: 1.00" title="exact (×6)">A</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-exact" data-patterns="3,8" style="opacity: 1.00" title="exact (×6)">A</span><span class="char char-exact" data-patterns="3" style="opacity: 1.00" title="exact">Q</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 1.00" title="hot_k1">O</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-exact" data-patterns="6,11" style="opacity: 1.00" title="exact (×5)">U</span><span class="char char-exact" data-patterns="6,11" style="opacity: 1.00" title="exact (×5)">U</span><span class="char">J</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-gapped" data-patterns="1,2,18" style="opacity: 1.00" title="gapped (×3)">P</span><span class="char char-gapped" data-patterns="1,2" style="opacity: 1.00" title="gapped">E</span><span class="char char-exact" data-patterns="6,11" style="opacity: 1.00" title="exact (×5)">U</span><span class="char char-exact" data-patterns="6,11" style="opacity: 1.00" title="exact (×5)">U</span><span class="char char-gapped" data-patterns="2,16" style="opacity: 1.00" title="gapped (×4)">6</span><span class="char char-hot_k1" data-patterns="14" style="opacity: 1.00" title="hot_k1 (×5)">Y</span><span class="char char-hot_k1" data-patterns="19" style="opacity: 1.00" title="hot_k1 (×3)">G</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 1.00" title="hot_k1">O</span><span class="char char-hot_k1" data-patterns="26" style="opacity: 1.00" title="hot_k1">7</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00" title="hot_k1 (×6)">A</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 1.00" title="hot_k1 (×5)">L</span><span class="char char-gapped" data-patterns="1,2,7" style="opacity: 1.00" title="gapped (×6)">C</span><span class="char char-hot_k1" data-patterns="20" style="opacity: 1.00" title="hot_k1">R</span><span class="char char-hot_k1" data-patterns="19" style="opacity: 1.00" title="hot_k1 (×3)">G</span><span class="char char-gapped" data-patterns="1,2,4,9" style="opacity: 1.00" title="gapped (×6)">2</span><span class="char char-exact" data-patterns="4,7" style="opacity: 1.00" title="exact (×6)">C</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 1.00" title="hot_k1">W</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-hot_k1" data-patterns="23" style="opacity: 1.00" title="hot_k1">N</span><span class="char char-hot_k1" data-patterns="21" style="opacity: 1.00" title="hot_k1">4</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 1.00" title="hot_k1 (×6)">2</span><span class="char char-hot_k1" data-patterns="21" style="opacity: 1.00" title="hot_k1">4</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="7" style="opacity: 1.00" title="hot_k1 (×6)">C</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00" title="hot_k1 (×5)">D</span><span class="char char-hot_k1" data-patterns="16" style="opacity: 1.00" title="hot_k1 (×4)">6</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char char-exact" data-patterns="5,10" style="opacity: 1.00" title="exact (×5)">Z</span><span class="char char-exact" data-patterns="5,8" style="opacity: 1.00" title="exact (×6)">A</span><span class="char char-hot_k1" data-patterns="18" style="opacity: 1.00" title="hot_k1 (×3)">P</span><span class="char char-hot_k1" data-patterns="22" style="opacity: 1.00" title="hot_k1">3</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char char-gapped" data-patterns="1,2,18" style="opacity: 1.00" title="gapped (×3)">P</span><span class="char char-gapped" data-patterns="1,2" style="opacity: 1.00" title="gapped">E</span><span class="char char-hot_k1" data-patterns="15" style="opacity: 1.00" title="hot_k1 (×4)">F</span><span class="char char-hot_k1" data-patterns="16" style="opacity: 1.00" title="hot_k1 (×4)">6</span><span class="char char-gapped" data-patterns="2,16" style="opacity: 1.00" title="gapped (×4)">6</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00" title="hot_k1 (×6)">A</span></div>
         </div>
-    </div>
 
     <script>
         // Track currently selected pattern
         let selectedPatternId = null;
-        let currentSortMode = 'chronological';  // 'chronological' or 'grouped'
-        const messageLength = 84;
-        const heatmapCells = document.querySelectorAll('.heatmap-cell');
 
         // Add click handler to all characters
         document.querySelectorAll('.char[data-patterns]').forEach(char => {
@@ -542,15 +450,20 @@
                 e.stopPropagation();
                 const patterns = this.getAttribute('data-patterns').split(',');
 
+                // If clicking the same pattern, deselect
                 if (selectedPatternId && patterns.includes(selectedPatternId)) {
                     deselectAll();
                     selectedPatternId = null;
                     return;
                 }
 
+                // Select the first pattern
                 selectedPatternId = patterns[0];
+
+                // Deselect all first
                 deselectAll();
 
+                // Highlight all characters with this pattern ID
                 document.querySelectorAll('.char[data-patterns]').forEach(otherChar => {
                     const otherPatterns = otherChar.getAttribute('data-patterns').split(',');
                     if (otherPatterns.includes(selectedPatternId)) {
@@ -579,94 +492,25 @@
             dot.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const message = this.getAttribute('data-message');
+
+                // Copy to clipboard
                 navigator.clipboard.writeText(message).catch(err => {
                     console.error('Failed to copy:', err);
                 });
             });
         });
 
-        // Sorting functionality
-        function sortMessages(mode) {
-            currentSortMode = mode;
-            const container = document.getElementById('messages-container');
-            const messageBlocks = Array.from(container.querySelectorAll('.message-block'));
-
-            // Update button states
-            document.getElementById('sort-chronological').classList.toggle('active', mode === 'chronological');
-            document.getElementById('sort-grouped').classList.toggle('active', mode === 'grouped');
-
-            if (mode === 'chronological') {
-                // Sort by timestamp
-                messageBlocks.sort((a, b) => {
-                    const timeA = a.getAttribute('data-timestamp');
-                    const timeB = b.getAttribute('data-timestamp');
-                    return timeA.localeCompare(timeB);
-                });
-
-                // Remove all existing headings
-                container.querySelectorAll('.group-heading').forEach(h => h.remove());
-
-                // Re-append messages in chronological order
-                messageBlocks.forEach(block => container.appendChild(block));
-
-            } else if (mode === 'grouped') {
-                // Sort by group, then by timestamp within each group
-                const groupOrder = ['1', '2', '3', '4', 'unclassified'];
-                messageBlocks.sort((a, b) => {
-                    const groupA = a.getAttribute('data-group');
-                    const groupB = b.getAttribute('data-group');
-                    const groupCompare = groupOrder.indexOf(groupA) - groupOrder.indexOf(groupB);
-
-                    if (groupCompare !== 0) return groupCompare;
-
-                    const timeA = a.getAttribute('data-timestamp');
-                    const timeB = b.getAttribute('data-timestamp');
-                    return timeA.localeCompare(timeB);
-                });
-
-                // Remove all existing headings
-                container.querySelectorAll('.group-heading').forEach(h => h.remove());
-
-                // Group messages and add headings
-                let currentGroup = null;
-                messageBlocks.forEach(block => {
-                    const group = block.getAttribute('data-group');
-
-                    if (group !== currentGroup) {
-                        currentGroup = group;
-                        const heading = document.createElement('div');
-                        heading.className = 'group-heading group-heading-' + group;
-
-                        let groupName = 'Group ' + group;
-                        if (group === 'unclassified') {
-                            groupName = 'Unknown Classification';
-                        }
-
-                        heading.textContent = groupName;
-                        container.appendChild(heading);
-                    }
-
-                    container.appendChild(block);
-                });
-            }
-        }
-
-        // Sorting button handlers
-        const sortChronBtn = document.getElementById('sort-chronological');
-        const sortGroupedBtn = document.getElementById('sort-grouped');
-
-        if (sortChronBtn) {
-            sortChronBtn.addEventListener('click', () => sortMessages('chronological'));
-        }
-
-        if (sortGroupedBtn) {
-            sortGroupedBtn.addEventListener('click', () => sortMessages('grouped'));
-        }
-
         // Group filtering functionality
+        const messageLength = 84;
+        const heatmapCells = document.querySelectorAll('.heatmap-cell');
+
         function updateHeatmapAndVisibility() {
+            console.log('updateHeatmapAndVisibility called');
+
+            // Get checked groups
             const checkedGroups = new Set();
 
+            // Check groups 1-4
             for (let i = 1; i <= 4; i++) {
                 const checkbox = document.getElementById('filter-group-' + i);
                 if (checkbox && checkbox.checked) {
@@ -674,33 +518,30 @@
                 }
             }
 
+            // Check unclassified
             const unclassifiedCheckbox = document.getElementById('filter-group-unclassified');
             if (unclassifiedCheckbox && unclassifiedCheckbox.checked) {
                 checkedGroups.add('unclassified');
             }
 
-            // Show/hide messages (including headings)
-            const allElements = document.querySelectorAll('#messages-container > *');
+            console.log('Checked groups:', Array.from(checkedGroups));
+
+            // Show/hide messages based on filters
+            const messageBlocks = document.querySelectorAll('.message-block');
             const visibleMessages = [];
 
-            allElements.forEach(element => {
-                if (element.classList.contains('group-heading')) {
-                    // Show heading only if its group is checked
-                    const groupClass = Array.from(element.classList).find(c => c.startsWith('group-heading-'));
-                    if (groupClass) {
-                        const group = groupClass.replace('group-heading-', '');
-                        element.classList.toggle('hidden', !checkedGroups.has(group));
-                    }
-                } else if (element.classList.contains('message-block')) {
-                    const group = element.getAttribute('data-group');
-                    if (checkedGroups.has(group)) {
-                        element.classList.remove('hidden');
-                        visibleMessages.push(element);
-                    } else {
-                        element.classList.add('hidden');
-                    }
+            messageBlocks.forEach(block => {
+                const group = block.getAttribute('data-group');
+
+                if (checkedGroups.has(group)) {
+                    block.classList.remove('hidden');
+                    visibleMessages.push(block);
+                } else {
+                    block.classList.add('hidden');
                 }
             });
+
+            console.log('Visible messages:', visibleMessages.length, 'of', messageBlocks.length);
 
             // Recalculate aggregate heatmap
             const positionCounts = new Array(messageLength).fill(0);
@@ -712,6 +553,8 @@
                 try {
                     const patternData = JSON.parse(patternDataStr);
                     if (Array.isArray(patternData)) {
+                        // Collect all positions covered by ANY pattern for this message
+                        // Each position should only be counted once per message
                         const coveredPositions = new Set();
                         patternData.forEach(pattern => {
                             if (pattern.positions && Array.isArray(pattern.positions)) {
@@ -723,16 +566,17 @@
                             }
                         });
 
+                        // Now increment count once per position
                         coveredPositions.forEach(pos => {
                             positionCounts[pos] += 1.0;
                         });
                     }
                 } catch (e) {
-                    console.error('Error parsing pattern data:', e);
+                    console.error('Error parsing pattern data:', e, patternDataStr);
                 }
             });
 
-            // Update heatmap cells
+            // Update heatmap cells with new colors
             const maxCount = Math.max(...positionCounts, 1);
 
             positionCounts.forEach((count, i) => {
@@ -748,14 +592,23 @@
                     color = 'rgb(' + intensity + ', ' + Math.floor(intensity / 2) + ', 0)';
                 }
                 heatmapCells[i].style.backgroundColor = color;
-                heatmapCells[i].title = 'Position ' + (i + 1) + ': ' + count.toFixed(1) + ' messages';
+                heatmapCells[i].title = 'Position ' + (i + 1) + ': ' + count.toFixed(1) + ' weighted messages';
             });
+
+            console.log('Heatmap updated');
         }
 
-        // Add event listeners to filter checkboxes
+        // Add event listeners to all checkboxes
+        console.log('Setting up checkbox event listeners...');
         const filterCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
+        console.log('Found checkboxes:', filterCheckboxes.length);
+
         filterCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateHeatmapAndVisibility);
+            console.log('Adding listener to:', checkbox.id);
+            checkbox.addEventListener('change', function() {
+                console.log('Checkbox changed:', this.id, 'checked:', this.checked);
+                updateHeatmapAndVisibility();
+            });
         });
     </script>
 </body>
