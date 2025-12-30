@@ -22,6 +22,46 @@
             margin-bottom: 20px;
         }
 
+        .nav-box {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 2px solid #4a9eff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4a9eff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: #6bb6ff;
+        }
+
+        .nav-link.disabled {
+            background-color: #333;
+            color: #666;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .nav-center {
+            text-align: center;
+            font-size: 1.2em;
+            color: #4a9eff;
+            font-weight: bold;
+        }
+
         .heatmap-container {
             position: sticky;
             top: 0;
@@ -95,6 +135,10 @@
             color: #ff0467;
         }
 
+        .group-5-dot {
+            color: #9063cd;
+        }
+
         .message-display {
             display: flex;
             font-family: 'Roboto Mono', monospace;
@@ -143,19 +187,19 @@
             cursor: pointer;
         }
 
+        .top-section {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            align-items: stretch;
+        }
+
         .info-box {
+            flex: 1;
             background-color: #1a1a1a;
             padding: 15px;
             border-radius: 5px;
-            margin: 20px 0;
             border-left: 4px solid #4a9eff;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
         }
 
         .stat-card {
@@ -163,6 +207,11 @@
             padding: 15px;
             border-radius: 5px;
             text-align: center;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .stat-value {
@@ -177,12 +226,18 @@
             margin-top: 5px;
         }
 
+        .controls-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
         .filter-controls {
             background-color: #1a1a1a;
             padding: 15px;
             border-radius: 5px;
-            margin: 20px 0;
             border-left: 4px solid #4a9eff;
+            flex: 1;
         }
 
         .filter-group {
@@ -222,28 +277,89 @@
         .group-label-2 { background-color: #ed7d32; color: #000; }
         .group-label-3 { background-color: #ffcc00; color: #000; }
         .group-label-4 { background-color: #ff0467; color: #fff; }
+        .group-label-5 { background-color: #9063cd; color: #fff; }
         .group-label-unclassified { background-color: #555; color: #fff; }
 
+        .group-heading {
+            background-color: #2a2a2a;
+            padding: 10px 15px;
+            margin: 20px 0 10px 0;
+            border-left: 5px solid;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .group-heading-1 { border-left-color: #06b050; color: #06b050; }
+        .group-heading-2 { border-left-color: #ed7d32; color: #ed7d32; }
+        .group-heading-3 { border-left-color: #ffcc00; color: #ffcc00; }
+        .group-heading-4 { border-left-color: #ff0467; color: #ff0467; }
+        .group-heading-5 { border-left-color: #9063cd; color: #9063cd; }
+        .group-heading-unclassified { border-left-color: #555; color: #aaa; }
+
+        .sort-controls {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #51cf66;
+            flex: 1;
+        }
+
+        .sort-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .sort-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            background-color: #333;
+            color: #aaa;
+        }
+
+        .sort-btn.active {
+            background-color: #51cf66;
+            color: #000;
+        }
+
+        .sort-btn:hover {
+            background-color: #444;
+        }
+
+        .sort-btn.active:hover {
+            background-color: #6dd77d;
+        }
+
         .message-block.hidden {
+            display: none;
+        }
+
+        .group-heading.hidden {
             display: none;
         }
     </style>
 </head>
 <body>
-    <h1>EAM Structure Heatmap - 92-Character Messages</h1>
-
-    <div class="info-box">
-        <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
-        <strong>Total Messages:</strong> 8<br>
-        <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
-        <strong>Pattern Types:</strong>
-        <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>,
-        <span style="color: #51cf66; font-weight: bold;">Gapped</span>,
-        <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>,
-        <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
+    <div class="nav-box">
+        <a href="structure_heatmap_89char.html" class="nav-link">← 89-char</a>
+        <div class="nav-center">92-Character Messages</div>
+        <span class="nav-link disabled">→</span>
     </div>
 
-    <div class="stats-grid">
+    <h1>EAM Structure Heatmap - 92-Character Messages</h1>
+
+    <!-- Horizontal layout: Info box + 3 stat cards -->
+    <div class="top-section">
+        <div class="info-box">
+            <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
+            <strong>Total Messages:</strong> 8<br>
+            <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
+            <strong>Pattern Types:</strong> <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>, <span style="color: #51cf66; font-weight: bold;">Gapped</span>, <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>, <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
+        </div>
         <div class="stat-card">
             <div class="stat-value">58</div>
             <div class="stat-label">Hot Position Pairs</div>
@@ -451,38 +567,40 @@
         </div>
     </div>
 
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [46, 48, 17, 19, 88, 90, 59, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [39, 8, 78, 47, 16, 19, 55, 58], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 6, 40, 15, 52, 27, 28, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [35, 36, 40, 15, 52, 27, 60, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 84, 85, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [5, 16, 20, 23, 55], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 33, 27, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [86, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 39], &quot;weight&quot;: 1.0}]">
+    <div id="messages-container">
+        <div class="message-block" data-group="4" data-timestamp="2023-06-05T04:33:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [46, 48, 17, 19, 88, 90, 59, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [39, 8, 78, 47, 16, 19, 55, 58], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 6, 40, 15, 52, 27, 28, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [35, 36, 40, 15, 52, 27, 60, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 84, 85, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [5, 16, 20, 23, 55], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 33, 27, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [86, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 39], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="6KAIXYQC75GOAP6RYTJLYHNYBJVDIW3QDDSULE6SRVVVVJF7L4N2DKQY3ILTULXAZHGEA7HXZBROR5SMMMM2SRXWFWLJ" title="6K (Group 4)">●</span><span>20230605 04:33 SUNSPOT</span></div>
             <div class="message-display"><span class="char">6</span><span class="char">K</span><span class="char">A</span><span class="char char-gapped" data-patterns="5" style="opacity: 0.64" title="gapped">I</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 0.73" title="hot_k1 (×5)">Y</span><span class="char char-gapped" data-patterns="5" style="opacity: 0.42" title="gapped">Q</span><span class="char">C</span><span class="char char-gapped" data-patterns="4" style="opacity: 0.55" title="gapped">7</span><span class="char">5</span><span class="char">G</span><span class="char">O</span><span class="char">A</span><span class="char">P</span><span class="char">6</span><span class="char char-gapped" data-patterns="5,6" style="opacity: 0.48" title="gapped">R</span><span class="char char-gapped" data-patterns="4,8" style="opacity: 0.55" title="gapped (×5)">Y</span><span class="char char-gapped" data-patterns="3" style="opacity: 0.55" title="gapped">T</span><span class="char">J</span><span class="char char-gapped" data-patterns="3,4" style="opacity: 0.55" title="gapped">L</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 0.82" title="hot_k1 (×5)">Y</span><span class="char">H</span><span class="char">N</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 0.82" title="hot_k1 (×5)">Y</span><span class="char">B</span><span class="char">J</span><span class="char">V</span><span class="char char-gapped" data-patterns="5,6,9" style="opacity: 0.91" title="gapped (×4)">D</span><span class="char char-gapped" data-patterns="5" style="opacity: 0.82" title="gapped">I</span><span class="char">W</span><span class="char">3</span><span class="char char-gapped" data-patterns="5" style="opacity: 0.73" title="gapped">Q</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 0.64" title="hot_k1 (×4)">D</span><span class="char char-hot_k1" data-patterns="9" style="opacity: 0.73" title="hot_k1 (×4)">D</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 1.00" title="hot_k1">S</span><span class="char char-gapped" data-patterns="6" style="opacity: 0.55" title="gapped">U</span><span class="char char-gapped" data-patterns="6" style="opacity: 0.82" title="gapped">L</span><span class="char">E</span><span class="char">6</span><span class="char char-gapped" data-patterns="4,7,11" style="opacity: 1.00" title="gapped">S</span><span class="char char-gapped" data-patterns="5,6,7" style="opacity: 1.00" title="gapped">R</span><span class="char char-quad_repeat" data-patterns="1" style="opacity: 1.00" title="quad_repeat">V</span><span class="char char-quad_repeat" data-patterns="1" style="opacity: 1.00" title="quad_repeat">V</span><span class="char char-quad_repeat" data-patterns="1" style="opacity: 1.00" title="quad_repeat">V</span><span class="char char-quad_repeat" data-patterns="1" style="opacity: 1.00" title="quad_repeat">V</span><span class="char">J</span><span class="char char-gapped" data-patterns="3" style="opacity: 0.82" title="gapped">F</span><span class="char char-gapped" data-patterns="4" style="opacity: 0.55" title="gapped">7</span><span class="char char-gapped" data-patterns="3" style="opacity: 0.82" title="gapped">L</span><span class="char">4</span><span class="char">N</span><span class="char">2</span><span class="char char-gapped" data-patterns="5,6,9" style="opacity: 0.73" title="gapped (×4)">D</span><span class="char">K</span><span class="char">Q</span><span class="char char-gapped" data-patterns="4,8" style="opacity: 0.73" title="gapped (×5)">Y</span><span class="char">3</span><span class="char">I</span><span class="char char-gapped" data-patterns="4" style="opacity: 0.91" title="gapped">L</span><span class="char char-gapped" data-patterns="3" style="opacity: 0.64" title="gapped">T</span><span class="char char-gapped" data-patterns="6" style="opacity: 0.55" title="gapped">U</span><span class="char char-gapped" data-patterns="3,6" style="opacity: 1.00" title="gapped">L</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 0.64" title="hot_k1">X</span><span class="char">A</span><span class="char">Z</span><span class="char">H</span><span class="char">G</span><span class="char">E</span><span class="char">A</span><span class="char">7</span><span class="char">H</span><span class="char">X</span><span class="char">Z</span><span class="char">B</span><span class="char">R</span><span class="char">O</span><span class="char">R</span><span class="char">5</span><span class="char char-gapped" data-patterns="4" style="opacity: 0.82" title="gapped">S</span><span class="char char-quad_repeat" data-patterns="2" style="opacity: 1.00" title="quad_repeat">M</span><span class="char char-quad_repeat" data-patterns="2" style="opacity: 1.00" title="quad_repeat">M</span><span class="char char-quad_repeat" data-patterns="2" style="opacity: 1.00" title="quad_repeat">M</span><span class="char char-quad_repeat" data-patterns="2" style="opacity: 1.00" title="quad_repeat">M</span><span class="char">2</span><span class="char char-exact" data-patterns="7" style="opacity: 0.82" title="exact">S</span><span class="char char-exact" data-patterns="7" style="opacity: 0.64" title="exact">R</span><span class="char char-hot_k1" data-patterns="10" style="opacity: 0.64" title="hot_k1">X</span><span class="char">W</span><span class="char char-gapped" data-patterns="3" style="opacity: 0.42" title="gapped">F</span><span class="char">W</span><span class="char char-gapped" data-patterns="3" style="opacity: 0.42" title="gapped">L</span><span class="char">J</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [64, 33, 72, 59, 12, 13, 14, 78, 19, 57, 58, 27], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 76, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 76, 81, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 42, 76, 81, 82, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 48, 80, 81, 82], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 45, 48, 80, 81, 82, 84], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 7, 41, 42, 45, 79, 80, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 41, 42, 43, 44, 79, 80, 81, 82, 53, 91, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 13, 14, 58, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 3, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 4, 5, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 38, 39, 9, 48, 53, 89, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 70, 40, 75, 46, 56, 58], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [72, 74, 27, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 69, 28, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [51, 36, 78, 76], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [25, 12], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [86, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [20, 55], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 67], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2023-06-15T20:41:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [64, 33, 72, 59, 12, 13, 14, 78, 19, 57, 58, 27], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 76, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 76, 81, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 42, 76, 81, 82, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 48, 80, 81, 82], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 45, 48, 80, 81, 82, 84], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 7, 41, 42, 45, 79, 80, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 41, 42, 43, 44, 79, 80, 81, 82, 53, 91, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 13, 14, 58, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 3, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 4, 5, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 38, 39, 9, 48, 53, 89, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 70, 40, 75, 46, 56, 58], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [72, 74, 27, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 69, 28, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [51, 36, 78, 76], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [25, 12], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [86, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [20, 55], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 67], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="6KMW3UCBARAAKW2CQMG4VAG3UKZYMMJMEPRKPHRRW2222BWTRLHPYRUVWKW2IAJ34INNSMW7YXYWPXP2222HB4JNIRZR" title="6K (Group 4)">●</span><span>20230615 20:41 RADCLIFFE</span></div>
             <div class="message-display"><span class="char">6</span><span class="char">K</span><span class="char char-exact" data-patterns="22,27" style="opacity: 0.55" title="exact (×4)">M</span><span class="char char-exact" data-patterns="22,25" style="opacity: 0.64" title="exact (×7)">W</span><span class="char char-exact" data-patterns="23" style="opacity: 0.48" title="exact">3</span><span class="char char-exact" data-patterns="23" style="opacity: 0.73" title="exact">U</span><span class="char">C</span><span class="char char-gapped" data-patterns="19" style="opacity: 0.55" title="gapped">B</span><span class="char">A</span><span class="char char-gapped" data-patterns="17,18,24" style="opacity: 0.73" title="gapped (×8)">R</span><span class="char">A</span><span class="char">A</span><span class="char char-gapped" data-patterns="13,29" style="opacity: 0.55" title="gapped">K</span><span class="char char-gapped" data-patterns="13,21" style="opacity: 0.64" title="gapped (×3)">W</span><span class="char char-gapped" data-patterns="13,21" style="opacity: 0.55" title="gapped (×3)">2</span><span class="char">C</span><span class="char">Q</span><span class="char">M</span><span class="char">G</span><span class="char char-gapped" data-patterns="13" style="opacity: 0.55" title="gapped">4</span><span class="char char-hot_k1" data-patterns="31" style="opacity: 0.82" title="hot_k1">V</span><span class="char char-gapped" data-patterns="14,15,16" style="opacity: 0.64" title="gapped">A</span><span class="char">G</span><span class="char char-gapped" data-patterns="14,15,16,23" style="opacity: 0.82" title="gapped">3</span><span class="char char-exact" data-patterns="23" style="opacity: 0.55" title="exact">U</span><span class="char char-hot_k1" data-patterns="29" style="opacity: 0.64" title="hot_k1">K</span><span class="char">Z</span><span class="char char-gapped" data-patterns="13,26" style="opacity: 0.91" title="gapped (×4)">Y</span><span class="char char-hot_k1" data-patterns="27" style="opacity: 0.82" title="hot_k1 (×4)">M</span><span class="char char-gapped" data-patterns="14,15,16,27" style="opacity: 0.82" title="gapped (×4)">M</span><span class="char">J</span><span class="char char-gapped" data-patterns="19,20" style="opacity: 0.73" title="gapped">M</span><span class="char">E</span><span class="char char-gapped" data-patterns="13" style="opacity: 0.73" title="gapped">P</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 1.00" title="hot_k1 (×8)">R</span><span class="char">K</span><span class="char char-gapped" data-patterns="14,15,16,28" style="opacity: 0.82" title="gapped (×4)">P</span><span class="char char-hot_k1" data-patterns="32" style="opacity: 0.82" title="hot_k1">H</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 0.91" title="hot_k1 (×8)">R</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 1.00" title="hot_k1 (×8)">R</span><span class="char char-exact" data-patterns="21,25" style="opacity: 1.00" title="exact (×7)">W</span><span class="char char-quad_repeat" data-patterns="12,15,16,17,18,19,20,21" style="opacity: 1.00" title="quad_repeat (×3)">2</span><span class="char char-quad_repeat" data-patterns="12,16,17,18,19,20" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="12,17,18,20" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="12,20" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-gapped" data-patterns="18,19" style="opacity: 0.55" title="gapped">B</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 0.82" title="hot_k1 (×7)">W</span><span class="char">T</span><span class="char char-gapped" data-patterns="17,18,24" style="opacity: 0.82" title="gapped (×8)">R</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="32" style="opacity: 0.55" title="hot_k1">H</span><span class="char char-hot_k1" data-patterns="28" style="opacity: 0.64" title="hot_k1 (×4)">P</span><span class="char char-hot_k1" data-patterns="26" style="opacity: 0.73" title="hot_k1 (×4)">Y</span><span class="char char-gapped" data-patterns="20,24" style="opacity: 0.55" title="gapped (×8)">R</span><span class="char">U</span><span class="char char-hot_k1" data-patterns="31" style="opacity: 0.73" title="hot_k1">V</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 0.73" title="hot_k1 (×7)">W</span><span class="char char-gapped" data-patterns="13" style="opacity: 0.55" title="gapped">K</span><span class="char char-gapped" data-patterns="13,21,25" style="opacity: 0.91" title="gapped (×7)">W</span><span class="char char-gapped" data-patterns="13,21" style="opacity: 0.64" title="gapped (×3)">2</span><span class="char">I</span><span class="char char-gapped" data-patterns="14,15,16" style="opacity: 1.00" title="gapped">A</span><span class="char char-hot_k1" data-patterns="30" style="opacity: 0.64" title="hot_k1">J</span><span class="char char-gapped" data-patterns="14,15,16" style="opacity: 0.48" title="gapped">3</span><span class="char char-gapped" data-patterns="13" style="opacity: 0.48" title="gapped">4</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="33" style="opacity: 0.82" title="hot_k1">N</span><span class="char char-hot_k1" data-patterns="33" style="opacity: 0.82" title="hot_k1">N</span><span class="char">S</span><span class="char char-gapped" data-patterns="14,15,16,19,20,22,27" style="opacity: 0.82" title="gapped (×4)">M</span><span class="char char-exact" data-patterns="22,25" style="opacity: 0.82" title="exact (×7)">W</span><span class="char">7</span><span class="char char-gapped" data-patterns="13,26" style="opacity: 0.55" title="gapped (×4)">Y</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="26" style="opacity: 0.64" title="hot_k1 (×4)">Y</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 0.82" title="hot_k1 (×7)">W</span><span class="char char-gapped" data-patterns="14,15,16,28" style="opacity: 0.73" title="gapped (×4)">P</span><span class="char">X</span><span class="char char-gapped" data-patterns="13,28" style="opacity: 0.82" title="gapped (×4)">P</span><span class="char char-gapped" data-patterns="19,20" style="opacity: 1.00" title="gapped">2</span><span class="char char-gapped" data-patterns="17,18,19,20" style="opacity: 1.00" title="gapped">2</span><span class="char char-gapped" data-patterns="15,16,17,18,20" style="opacity: 1.00" title="gapped">2</span><span class="char char-gapped" data-patterns="16,17,18,20" style="opacity: 1.00" title="gapped">2</span><span class="char">H</span><span class="char char-gapped" data-patterns="18" style="opacity: 0.82" title="gapped">B</span><span class="char">4</span><span class="char char-hot_k1" data-patterns="30" style="opacity: 0.64" title="hot_k1">J</span><span class="char">N</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="24" style="opacity: 0.64" title="hot_k1 (×8)">R</span><span class="char">Z</span><span class="char char-gapped" data-patterns="20,24" style="opacity: 0.73" title="gapped (×8)">R</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [64, 72, 59, 12, 13, 14, 19, 57, 58, 27], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 76, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 76, 81, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 42, 76, 81, 82, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 48, 80, 81, 82], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 45, 48, 80, 81, 82, 84], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 7, 41, 42, 45, 79, 80, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 41, 42, 43, 44, 79, 80, 81, 82, 53, 91, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 13, 14, 58, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 3, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 4, 5, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [8, 9, 34, 33], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 38, 39, 9, 48, 53, 89, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 70, 40, 75, 46, 56, 58], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [72, 74, 27, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 69, 28, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [51, 36, 78, 76], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [25, 12], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [86, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [20, 55], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 67], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2023-06-15T21:00:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [64, 72, 59, 12, 13, 14, 19, 57, 58, 27], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 76, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 76, 81, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [36, 69, 41, 42, 76, 81, 82, 61, 21, 23, 29, 63], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 48, 80, 81, 82], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 42, 43, 41, 45, 48, 80, 81, 82, 84], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 7, 41, 42, 45, 79, 80, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [69, 41, 42, 43, 44, 79, 80, 81, 82, 53, 91, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 13, 14, 58, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 3, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 4, 5, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [8, 9, 34, 33], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 38, 39, 9, 48, 53, 89, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [3, 70, 40, 75, 46, 56, 58], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [72, 74, 27, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [2, 69, 28, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [51, 36, 78, 76], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [25, 12], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [86, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [20, 55], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 67], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="6KMW3UCBARAAKW2CQMG4VAG3UKZYMMJMEARKPHRRW2222BWTRLHPYRUVWKW2IAJ34INNSMW7YXYWPXP2222HB4JNIRZR" title="6K (Group 4)">●</span><span>20230615 21:00 RADCLIFFE</span></div>
             <div class="message-display"><span class="char">6</span><span class="char">K</span><span class="char char-exact" data-patterns="44,50" style="opacity: 0.55" title="exact (×4)">M</span><span class="char char-exact" data-patterns="44,48" style="opacity: 0.64" title="exact (×7)">W</span><span class="char char-exact" data-patterns="45" style="opacity: 0.48" title="exact">3</span><span class="char char-exact" data-patterns="45" style="opacity: 0.73" title="exact">U</span><span class="char">C</span><span class="char char-gapped" data-patterns="41" style="opacity: 0.55" title="gapped">B</span><span class="char char-exact" data-patterns="46" style="opacity: 0.55" title="exact">A</span><span class="char char-gapped" data-patterns="39,40,46,47" style="opacity: 0.73" title="gapped (×8)">R</span><span class="char">A</span><span class="char">A</span><span class="char char-gapped" data-patterns="35,52" style="opacity: 0.55" title="gapped">K</span><span class="char char-gapped" data-patterns="35,43" style="opacity: 0.64" title="gapped (×3)">W</span><span class="char char-gapped" data-patterns="35,43" style="opacity: 0.55" title="gapped (×3)">2</span><span class="char">C</span><span class="char">Q</span><span class="char">M</span><span class="char">G</span><span class="char char-gapped" data-patterns="35" style="opacity: 0.55" title="gapped">4</span><span class="char char-hot_k1" data-patterns="54" style="opacity: 0.82" title="hot_k1">V</span><span class="char char-gapped" data-patterns="36,37,38" style="opacity: 0.64" title="gapped">A</span><span class="char">G</span><span class="char char-gapped" data-patterns="36,37,38,45" style="opacity: 0.82" title="gapped">3</span><span class="char char-exact" data-patterns="45" style="opacity: 0.55" title="exact">U</span><span class="char char-hot_k1" data-patterns="52" style="opacity: 0.64" title="hot_k1">K</span><span class="char">Z</span><span class="char char-gapped" data-patterns="35,49" style="opacity: 0.91" title="gapped (×4)">Y</span><span class="char char-hot_k1" data-patterns="50" style="opacity: 0.82" title="hot_k1 (×4)">M</span><span class="char char-gapped" data-patterns="36,37,38,50" style="opacity: 0.82" title="gapped (×4)">M</span><span class="char">J</span><span class="char char-gapped" data-patterns="41,42" style="opacity: 0.73" title="gapped">M</span><span class="char">E</span><span class="char char-exact" data-patterns="46" style="opacity: 0.73" title="exact">A</span><span class="char char-exact" data-patterns="46,47" style="opacity: 1.00" title="exact (×8)">R</span><span class="char">K</span><span class="char char-gapped" data-patterns="36,37,38,51" style="opacity: 0.82" title="gapped (×4)">P</span><span class="char char-hot_k1" data-patterns="55" style="opacity: 0.82" title="hot_k1">H</span><span class="char char-hot_k1" data-patterns="47" style="opacity: 0.91" title="hot_k1 (×8)">R</span><span class="char char-hot_k1" data-patterns="47" style="opacity: 1.00" title="hot_k1 (×8)">R</span><span class="char char-exact" data-patterns="43,48" style="opacity: 1.00" title="exact (×7)">W</span><span class="char char-quad_repeat" data-patterns="34,37,38,39,40,41,42,43" style="opacity: 1.00" title="quad_repeat (×3)">2</span><span class="char char-quad_repeat" data-patterns="34,38,39,40,41,42" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="34,39,40,42" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="34,42" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-gapped" data-patterns="40,41" style="opacity: 0.55" title="gapped">B</span><span class="char char-hot_k1" data-patterns="48" style="opacity: 0.82" title="hot_k1 (×7)">W</span><span class="char">T</span><span class="char char-gapped" data-patterns="39,40,47" style="opacity: 0.82" title="gapped (×8)">R</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="55" style="opacity: 0.55" title="hot_k1">H</span><span class="char char-hot_k1" data-patterns="51" style="opacity: 0.64" title="hot_k1 (×4)">P</span><span class="char char-hot_k1" data-patterns="49" style="opacity: 0.73" title="hot_k1 (×4)">Y</span><span class="char char-gapped" data-patterns="42,47" style="opacity: 0.55" title="gapped (×8)">R</span><span class="char">U</span><span class="char char-hot_k1" data-patterns="54" style="opacity: 0.73" title="hot_k1">V</span><span class="char char-hot_k1" data-patterns="48" style="opacity: 0.73" title="hot_k1 (×7)">W</span><span class="char char-gapped" data-patterns="35" style="opacity: 0.55" title="gapped">K</span><span class="char char-gapped" data-patterns="35,43,48" style="opacity: 0.91" title="gapped (×7)">W</span><span class="char char-gapped" data-patterns="35,43" style="opacity: 0.64" title="gapped (×3)">2</span><span class="char">I</span><span class="char char-gapped" data-patterns="36,37,38" style="opacity: 1.00" title="gapped">A</span><span class="char char-hot_k1" data-patterns="53" style="opacity: 0.64" title="hot_k1">J</span><span class="char char-gapped" data-patterns="36,37,38" style="opacity: 0.48" title="gapped">3</span><span class="char char-gapped" data-patterns="35" style="opacity: 0.48" title="gapped">4</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="56" style="opacity: 0.82" title="hot_k1">N</span><span class="char char-hot_k1" data-patterns="56" style="opacity: 0.82" title="hot_k1">N</span><span class="char">S</span><span class="char char-gapped" data-patterns="36,37,38,41,42,44,50" style="opacity: 0.82" title="gapped (×4)">M</span><span class="char char-exact" data-patterns="44,48" style="opacity: 0.82" title="exact (×7)">W</span><span class="char">7</span><span class="char char-gapped" data-patterns="35,49" style="opacity: 0.55" title="gapped (×4)">Y</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="49" style="opacity: 0.64" title="hot_k1 (×4)">Y</span><span class="char char-hot_k1" data-patterns="48" style="opacity: 0.82" title="hot_k1 (×7)">W</span><span class="char char-gapped" data-patterns="36,37,38,51" style="opacity: 0.73" title="gapped (×4)">P</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="51" style="opacity: 0.82" title="hot_k1 (×4)">P</span><span class="char char-gapped" data-patterns="41,42" style="opacity: 1.00" title="gapped">2</span><span class="char char-gapped" data-patterns="39,40,41,42" style="opacity: 1.00" title="gapped">2</span><span class="char char-gapped" data-patterns="37,38,39,40,42" style="opacity: 1.00" title="gapped">2</span><span class="char char-gapped" data-patterns="38,39,40,42" style="opacity: 1.00" title="gapped">2</span><span class="char">H</span><span class="char char-gapped" data-patterns="40" style="opacity: 0.82" title="gapped">B</span><span class="char">4</span><span class="char char-hot_k1" data-patterns="53" style="opacity: 0.64" title="hot_k1">J</span><span class="char">N</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="47" style="opacity: 0.64" title="hot_k1 (×8)">R</span><span class="char">Z</span><span class="char char-gapped" data-patterns="42,47" style="opacity: 0.73" title="gapped (×8)">R</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 70, 71, 22, 30, 25, 62, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 70, 71, 43, 83, 22, 62, 25, 30, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [37, 40, 43, 45, 22, 55, 25, 27], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 41, 10, 15, 22, 25, 26, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [79, 80, 81, 82, 28, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [0, 1, 37, 38, 61, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [1, 2, 27, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [8, 9, 84, 85], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 25, 13, 14], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [46, 45, 38, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 67, 3, 69, 75], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [89, 34, 36, 53], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [56, 46], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2023-09-11T04:47:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 70, 71, 22, 30, 25, 62, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 70, 71, 43, 83, 22, 62, 25, 30, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [37, 40, 43, 45, 22, 55, 25, 27], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 41, 10, 15, 22, 25, 26, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [79, 80, 81, 82, 28, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [0, 1, 37, 38, 61, 62], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [1, 2, 27, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [8, 9, 84, 85], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 25, 13, 14], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [46, 45, 38, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 67, 3, 69, 75], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [89, 34, 36, 53], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [56, 46], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="JCAKH7XIHANYI6BSPQZ4KMCF6BNCAALSDVTRTJCRCBBBBCRQDYX6ETYJRNUTQJC6ZBKKNKLSOXUKOOGAAAABHAOLKTGU" title="JC (Group 4)">●</span><span>20230911 04:47 METHODIST</span></div>
             <div class="message-display"><span class="char char-exact" data-patterns="64" style="opacity: 0.42" title="exact (×3)">J</span><span class="char char-exact" data-patterns="64,65" style="opacity: 0.42" title="exact (×3)">C</span><span class="char char-exact" data-patterns="65" style="opacity: 0.55" title="exact">A</span><span class="char char-hot_k1" data-patterns="69" style="opacity: 0.64" title="hot_k1 (×5)">K</span><span class="char">H</span><span class="char">7</span><span class="char">X</span><span class="char">I</span><span class="char char-exact" data-patterns="66" style="opacity: 0.55" title="exact">H</span><span class="char char-exact" data-patterns="66" style="opacity: 0.73" title="exact">A</span><span class="char char-gapped" data-patterns="62" style="opacity: 0.48" title="gapped">N</span><span class="char">Y</span><span class="char">I</span><span class="char char-exact" data-patterns="67" style="opacity: 0.64" title="exact">6</span><span class="char char-exact" data-patterns="67" style="opacity: 0.55" title="exact">B</span><span class="char char-gapped" data-patterns="62" style="opacity: 0.48" title="gapped">S</span><span class="char">P</span><span class="char">Q</span><span class="char">Z</span><span class="char">4</span><span class="char">K</span><span class="char">M</span><span class="char char-gapped" data-patterns="59,60,61,62" style="opacity: 0.55" title="gapped">C</span><span class="char">F</span><span class="char char-exact" data-patterns="67" style="opacity: 0.55" title="exact">6</span><span class="char char-gapped" data-patterns="59,60,61,62,67" style="opacity: 0.64" title="gapped">B</span><span class="char char-gapped" data-patterns="62" style="opacity: 0.55" title="gapped">N</span><span class="char char-gapped" data-patterns="61,65" style="opacity: 0.91" title="gapped">C</span><span class="char char-exact" data-patterns="63,65" style="opacity: 0.82" title="exact (×4)">A</span><span class="char char-exact" data-patterns="63" style="opacity: 0.82" title="exact (×4)">A</span><span class="char char-gapped" data-patterns="59,60" style="opacity: 0.48" title="gapped">L</span><span class="char char-gapped" data-patterns="59,60,62" style="opacity: 0.73" title="gapped">S</span><span class="char">D</span><span class="char">V</span><span class="char char-hot_k1" data-patterns="70" style="opacity: 1.00" title="hot_k1 (×4)">T</span><span class="char">R</span><span class="char char-hot_k1" data-patterns="70" style="opacity: 0.82" title="hot_k1 (×4)">T</span><span class="char char-gapped" data-patterns="61,64" style="opacity: 0.82" title="gapped (×3)">J</span><span class="char char-gapped" data-patterns="62,64,68" style="opacity: 0.91" title="gapped (×3)">C</span><span class="char char-exact" data-patterns="68" style="opacity: 1.00" title="exact">R</span><span class="char char-gapped" data-patterns="61" style="opacity: 1.00" title="gapped">C</span><span class="char char-quad_repeat" data-patterns="57,62" style="opacity: 1.00" title="quad_repeat">B</span><span class="char char-quad_repeat" data-patterns="57" style="opacity: 1.00" title="quad_repeat">B</span><span class="char char-quad_repeat" data-patterns="57,60,61" style="opacity: 1.00" title="quad_repeat">B</span><span class="char char-quad_repeat" data-patterns="57" style="opacity: 1.00" title="quad_repeat">B</span><span class="char char-gapped" data-patterns="61,68" style="opacity: 0.55" title="gapped">C</span><span class="char char-exact" data-patterns="68,71" style="opacity: 0.82" title="exact">R</span><span class="char">Q</span><span class="char">D</span><span class="char">Y</span><span class="char">X</span><span class="char">6</span><span class="char">E</span><span class="char char-hot_k1" data-patterns="70" style="opacity: 0.55" title="hot_k1 (×4)">T</span><span class="char">Y</span><span class="char char-gapped" data-patterns="61" style="opacity: 0.73" title="gapped">J</span><span class="char char-hot_k1" data-patterns="71" style="opacity: 0.73" title="hot_k1">R</span><span class="char">N</span><span class="char">U</span><span class="char">T</span><span class="char">Q</span><span class="char char-exact" data-patterns="64" style="opacity: 1.00" title="exact (×3)">J</span><span class="char char-gapped" data-patterns="59,60,64" style="opacity: 0.64" title="gapped (×3)">C</span><span class="char">6</span><span class="char">Z</span><span class="char char-gapped" data-patterns="59,60" style="opacity: 0.55" title="gapped">B</span><span class="char char-hot_k1" data-patterns="69" style="opacity: 0.82" title="hot_k1 (×5)">K</span><span class="char char-hot_k1" data-patterns="69" style="opacity: 0.82" title="hot_k1 (×5)">K</span><span class="char">N</span><span class="char char-hot_k1" data-patterns="69" style="opacity: 0.82" title="hot_k1 (×5)">K</span><span class="char char-gapped" data-patterns="59,60" style="opacity: 0.82" title="gapped">L</span><span class="char char-gapped" data-patterns="59,60" style="opacity: 0.42" title="gapped">S</span><span class="char">O</span><span class="char">X</span><span class="char">U</span><span class="char char-hot_k1" data-patterns="69" style="opacity: 0.82" title="hot_k1 (×5)">K</span><span class="char">O</span><span class="char">O</span><span class="char">G</span><span class="char char-quad_repeat" data-patterns="58,63" style="opacity: 1.00" title="quad_repeat (×4)">A</span><span class="char char-quad_repeat" data-patterns="58,63" style="opacity: 1.00" title="quad_repeat (×4)">A</span><span class="char char-quad_repeat" data-patterns="58,63" style="opacity: 1.00" title="quad_repeat (×4)">A</span><span class="char char-quad_repeat" data-patterns="58,63" style="opacity: 1.00" title="quad_repeat (×4)">A</span><span class="char char-gapped" data-patterns="60" style="opacity: 0.55" title="gapped">B</span><span class="char char-exact" data-patterns="66" style="opacity: 0.82" title="exact">H</span><span class="char char-exact" data-patterns="66" style="opacity: 0.64" title="exact">A</span><span class="char">O</span><span class="char">L</span><span class="char">K</span><span class="char char-hot_k1" data-patterns="70" style="opacity: 0.64" title="hot_k1 (×4)">T</span><span class="char">G</span><span class="char">U</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 70, 40, 78, 17, 22, 55, 60], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 70, 40, 78, 47, 17, 85, 22, 55, 60], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 67, 10, 44, 21, 22, 55, 56], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 67, 49, 83, 21, 22, 55, 56], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 39, 30, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 34, 85, 86], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 35, 36, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [41, 42, 43, 44, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 51, 76, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [56, 28, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [48, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [84, 7], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [16, 5], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 52], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2023-12-23T16:16:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 70, 40, 78, 17, 22, 55, 60], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 70, 40, 78, 47, 17, 85, 22, 55, 60], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 67, 10, 44, 21, 22, 55, 56], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 67, 49, 83, 21, 22, 55, 56], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 39, 30, 31], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 34, 85, 86], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 35, 36, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [41, 42, 43, 44, 59], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 51, 76, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [56, 28, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [48, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [84, 7], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [16, 5], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 52], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="JOVC4A567DLZLIVLACTS6CKL7A4FKAFIKX2I2IFI2LLLLMZXSQIHXTOCK5HLKHRPEPVXXKKPOHE3H42NNNNQ6X2ENUIS" title="JO (Group 4)">●</span><span>20231223 16:16 BEST IDEA</span></div>
             <div class="message-display"><span class="char">J</span><span class="char">O</span><span class="char">V</span><span class="char">C</span><span class="char">4</span><span class="char char-hot_k1" data-patterns="86" style="opacity: 0.73" title="hot_k1">A</span><span class="char">5</span><span class="char char-hot_k1" data-patterns="85" style="opacity: 0.55" title="hot_k1">6</span><span class="char">7</span><span class="char">D</span><span class="char char-gapped" data-patterns="76" style="opacity: 0.48" title="gapped">L</span><span class="char">Z</span><span class="char">L</span><span class="char">I</span><span class="char">V</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="86" style="opacity: 0.55" title="hot_k1">A</span><span class="char char-gapped" data-patterns="74,75" style="opacity: 0.55" title="gapped">C</span><span class="char">T</span><span class="char">S</span><span class="char">6</span><span class="char char-gapped" data-patterns="76,77" style="opacity: 0.64" title="gapped">C</span><span class="char char-gapped" data-patterns="74,75,76,77" style="opacity: 0.55" title="gapped">K</span><span class="char">L</span><span class="char">7</span><span class="char">A</span><span class="char">4</span><span class="char">F</span><span class="char char-hot_k1" data-patterns="83" style="opacity: 0.82" title="hot_k1 (×4)">K</span><span class="char">A</span><span class="char char-exact" data-patterns="78" style="opacity: 0.48" title="exact">F</span><span class="char char-exact" data-patterns="78" style="opacity: 0.73" title="exact">I</span><span class="char char-gapped" data-patterns="74,75" style="opacity: 0.64" title="gapped">K</span><span class="char char-gapped" data-patterns="76,77,79,88" style="opacity: 0.73" title="gapped">X</span><span class="char char-exact" data-patterns="79,80" style="opacity: 1.00" title="exact">2</span><span class="char char-exact" data-patterns="80" style="opacity: 0.55" title="exact">I</span><span class="char char-exact" data-patterns="80" style="opacity: 0.82" title="exact">2</span><span class="char char-exact" data-patterns="80,87" style="opacity: 0.82" title="exact">I</span><span class="char char-exact" data-patterns="78" style="opacity: 0.91" title="exact">F</span><span class="char char-exact" data-patterns="78" style="opacity: 1.00" title="exact">I</span><span class="char char-gapped" data-patterns="74,75" style="opacity: 1.00" title="gapped">2</span><span class="char char-quad_repeat" data-patterns="72,81" style="opacity: 1.00" title="quad_repeat (×5)">L</span><span class="char char-quad_repeat" data-patterns="72,81" style="opacity: 1.00" title="quad_repeat (×5)">L</span><span class="char char-quad_repeat" data-patterns="72,81" style="opacity: 1.00" title="quad_repeat (×5)">L</span><span class="char char-quad_repeat" data-patterns="72,76,81" style="opacity: 1.00" title="quad_repeat (×5)">L</span><span class="char">M</span><span class="char">Z</span><span class="char char-gapped" data-patterns="75" style="opacity: 0.55" title="gapped">X</span><span class="char char-hot_k1" data-patterns="84" style="opacity: 0.82" title="hot_k1">S</span><span class="char char-gapped" data-patterns="77" style="opacity: 0.42" title="gapped">Q</span><span class="char char-hot_k1" data-patterns="87" style="opacity: 0.55" title="hot_k1">I</span><span class="char char-hot_k1" data-patterns="82" style="opacity: 0.64" title="hot_k1 (×4)">H</span><span class="char char-hot_k1" data-patterns="88" style="opacity: 0.73" title="hot_k1">X</span><span class="char">T</span><span class="char">O</span><span class="char char-gapped" data-patterns="74,75,76,77" style="opacity: 0.73" title="gapped">C</span><span class="char char-gapped" data-patterns="76,77,83" style="opacity: 0.73" title="gapped (×4)">K</span><span class="char">5</span><span class="char char-hot_k1" data-patterns="82" style="opacity: 0.91" title="hot_k1 (×4)">H</span><span class="char char-hot_k1" data-patterns="81" style="opacity: 0.64" title="hot_k1 (×5)">L</span><span class="char char-gapped" data-patterns="74,75" style="opacity: 0.55" title="gapped">K</span><span class="char char-hot_k1" data-patterns="82" style="opacity: 1.00" title="hot_k1 (×4)">H</span><span class="char">R</span><span class="char">P</span><span class="char">E</span><span class="char">P</span><span class="char">V</span><span class="char char-gapped" data-patterns="76,77" style="opacity: 0.82" title="gapped">X</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="83" style="opacity: 0.82" title="hot_k1 (×4)">K</span><span class="char char-gapped" data-patterns="74,75,83" style="opacity: 0.82" title="gapped (×4)">K</span><span class="char">P</span><span class="char">O</span><span class="char">H</span><span class="char">E</span><span class="char">3</span><span class="char char-hot_k1" data-patterns="82" style="opacity: 0.73" title="hot_k1 (×4)">H</span><span class="char">4</span><span class="char char-gapped" data-patterns="74,75" style="opacity: 0.82" title="gapped">2</span><span class="char char-quad_repeat" data-patterns="73" style="opacity: 1.00" title="quad_repeat">N</span><span class="char char-quad_repeat" data-patterns="73" style="opacity: 1.00" title="quad_repeat">N</span><span class="char char-quad_repeat" data-patterns="73" style="opacity: 1.00" title="quad_repeat">N</span><span class="char char-quad_repeat" data-patterns="73" style="opacity: 1.00" title="quad_repeat">N</span><span class="char char-gapped" data-patterns="77" style="opacity: 0.55" title="gapped">Q</span><span class="char char-hot_k1" data-patterns="85" style="opacity: 0.82" title="hot_k1">6</span><span class="char char-gapped" data-patterns="75,79" style="opacity: 0.64" title="gapped">X</span><span class="char char-exact" data-patterns="79" style="opacity: 0.64" title="exact">2</span><span class="char">E</span><span class="char">N</span><span class="char">U</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="84" style="opacity: 0.73" title="hot_k1">S</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 46, 60, 78, 51, 83, 26, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 66, 67, 68, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [75, 76, 77, 78], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 20, 39, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 27, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 38], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2024-05-09T21:22:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 46, 60, 78, 51, 83, 26, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 66, 67, 68, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [75, 76, 77, 78], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 20, 39, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 27, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 38], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="BHWNI64RUXZ6ER6K2FL7OYIOVS43Y3B232OPPEUOUWWWWZAZ4X7F7NEXM44VY4KUYNN5NN5GQXLFAFAQQQQFEVTDGGLL" title="BH (Group 4)">●</span><span>20240509 21:22 ROOM RENT</span></div>
             <div class="message-display"><span class="char">B</span><span class="char">H</span><span class="char">W</span><span class="char">N</span><span class="char">I</span><span class="char">6</span><span class="char">4</span><span class="char">R</span><span class="char">U</span><span class="char">X</span><span class="char">Z</span><span class="char">6</span><span class="char">E</span><span class="char">R</span><span class="char">6</span><span class="char">K</span><span class="char">2</span><span class="char">F</span><span class="char">L</span><span class="char">7</span><span class="char char-hot_k1" data-patterns="94" style="opacity: 0.82" title="hot_k1 (×4)">O</span><span class="char">Y</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="94" style="opacity: 0.82" title="hot_k1 (×4)">O</span><span class="char">V</span><span class="char">S</span><span class="char char-gapped" data-patterns="91" style="opacity: 0.55" title="gapped">4</span><span class="char char-hot_k1" data-patterns="95" style="opacity: 0.91" title="hot_k1 (×3)">3</span><span class="char char-gapped" data-patterns="91" style="opacity: 0.82" title="gapped">Y</span><span class="char char-hot_k1" data-patterns="95" style="opacity: 0.82" title="hot_k1 (×3)">3</span><span class="char">B</span><span class="char">2</span><span class="char char-hot_k1" data-patterns="95" style="opacity: 0.64" title="hot_k1 (×3)">3</span><span class="char">2</span><span class="char char-hot_k1" data-patterns="94" style="opacity: 1.00" title="hot_k1 (×4)">O</span><span class="char">P</span><span class="char">P</span><span class="char">E</span><span class="char char-hot_k1" data-patterns="97" style="opacity: 0.91" title="hot_k1">U</span><span class="char char-hot_k1" data-patterns="94" style="opacity: 1.00" title="hot_k1 (×4)">O</span><span class="char char-hot_k1" data-patterns="97" style="opacity: 1.00" title="hot_k1">U</span><span class="char char-quad_repeat" data-patterns="89" style="opacity: 1.00" title="quad_repeat">W</span><span class="char char-quad_repeat" data-patterns="89" style="opacity: 1.00" title="quad_repeat">W</span><span class="char char-quad_repeat" data-patterns="89" style="opacity: 1.00" title="quad_repeat">W</span><span class="char char-quad_repeat" data-patterns="89" style="opacity: 1.00" title="quad_repeat">W</span><span class="char">Z</span><span class="char char-gapped" data-patterns="91" style="opacity: 0.82" title="gapped">A</span><span class="char">Z</span><span class="char">4</span><span class="char">X</span><span class="char">7</span><span class="char char-gapped" data-patterns="91" style="opacity: 0.64" title="gapped">F</span><span class="char">7</span><span class="char">N</span><span class="char">E</span><span class="char">X</span><span class="char">M</span><span class="char">4</span><span class="char char-gapped" data-patterns="91,96" style="opacity: 0.91" title="gapped">4</span><span class="char">V</span><span class="char char-gapped" data-patterns="91" style="opacity: 0.55" title="gapped">Y</span><span class="char char-hot_k1" data-patterns="96" style="opacity: 1.00" title="hot_k1">4</span><span class="char">K</span><span class="char">U</span><span class="char">Y</span><span class="char char-exact" data-patterns="92" style="opacity: 0.55" title="exact">N</span><span class="char char-exact" data-patterns="92" style="opacity: 0.82" title="exact">N</span><span class="char char-exact" data-patterns="92" style="opacity: 0.82" title="exact">5</span><span class="char char-exact" data-patterns="92" style="opacity: 0.55" title="exact">N</span><span class="char char-exact" data-patterns="92" style="opacity: 0.82" title="exact">N</span><span class="char char-exact" data-patterns="92" style="opacity: 0.82" title="exact">5</span><span class="char">G</span><span class="char">Q</span><span class="char">X</span><span class="char">L</span><span class="char char-exact" data-patterns="93" style="opacity: 0.82" title="exact">F</span><span class="char char-exact" data-patterns="93" style="opacity: 0.73" title="exact">A</span><span class="char char-exact" data-patterns="93" style="opacity: 0.48" title="exact">F</span><span class="char char-gapped" data-patterns="91,93" style="opacity: 0.82" title="gapped">A</span><span class="char char-quad_repeat" data-patterns="90" style="opacity: 1.00" title="quad_repeat">Q</span><span class="char char-quad_repeat" data-patterns="90" style="opacity: 1.00" title="quad_repeat">Q</span><span class="char char-quad_repeat" data-patterns="90" style="opacity: 1.00" title="quad_repeat">Q</span><span class="char char-quad_repeat" data-patterns="90" style="opacity: 1.00" title="quad_repeat">Q</span><span class="char char-gapped" data-patterns="91" style="opacity: 0.55" title="gapped">F</span><span class="char">E</span><span class="char">V</span><span class="char">T</span><span class="char">D</span><span class="char">G</span><span class="char">G</span><span class="char">L</span><span class="char">L</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 66, 67, 68, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 37, 21, 22], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [48, 26, 27, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [75, 76, 77, 78], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [5, 79, 16, 81, 80, 82], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 74, 27, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 89, 38], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [20, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 91], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2024-09-01T21:14:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [65, 66, 67, 68, 69, 70], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 37, 21, 22], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [48, 26, 27, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [75, 76, 77, 78], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [5, 79, 16, 81, 80, 82], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 74, 27, 29], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 89, 38], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [20, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [58, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [33, 52], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 91], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="ROTCGBAERZJM3ZALBJUKQNXQDKPH4HDFHTKEENXKX2222FRPHRTLTQSHUIW7ZWRJWII6II6F3QHNCNCBBBBV77HCXXDZ" title="RO (Group 4)">●</span><span>20240901 21:14 FLATWARE</span></div>
             <div class="message-display"><span class="char">R</span><span class="char">O</span><span class="char">T</span><span class="char">C</span><span class="char">G</span><span class="char char-hot_k1" data-patterns="104" style="opacity: 0.73" title="hot_k1 (×6)">B</span><span class="char">A</span><span class="char">E</span><span class="char">R</span><span class="char char-hot_k1" data-patterns="111" style="opacity: 0.73" title="hot_k1">Z</span><span class="char">J</span><span class="char">M</span><span class="char">3</span><span class="char">Z</span><span class="char">A</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="104" style="opacity: 0.55" title="hot_k1 (×6)">B</span><span class="char">J</span><span class="char">U</span><span class="char">K</span><span class="char char-hot_k1" data-patterns="107" style="opacity: 0.82" title="hot_k1">Q</span><span class="char char-exact" data-patterns="101" style="opacity: 0.64" title="exact">N</span><span class="char char-exact" data-patterns="101" style="opacity: 0.55" title="exact">X</span><span class="char char-hot_k1" data-patterns="107" style="opacity: 0.82" title="hot_k1">Q</span><span class="char">D</span><span class="char">K</span><span class="char char-exact" data-patterns="102" style="opacity: 0.55" title="exact">P</span><span class="char char-exact" data-patterns="102,105" style="opacity: 0.91" title="exact (×4)">H</span><span class="char">4</span><span class="char char-hot_k1" data-patterns="105" style="opacity: 0.82" title="hot_k1 (×4)">H</span><span class="char">D</span><span class="char">F</span><span class="char char-hot_k1" data-patterns="105" style="opacity: 0.64" title="hot_k1 (×4)">H</span><span class="char char-hot_k1" data-patterns="110" style="opacity: 0.73" title="hot_k1">T</span><span class="char char-hot_k1" data-patterns="109" style="opacity: 1.00" title="hot_k1">K</span><span class="char">E</span><span class="char">E</span><span class="char char-exact" data-patterns="101" style="opacity: 0.82" title="exact">N</span><span class="char char-exact" data-patterns="101,106" style="opacity: 0.91" title="exact (×3)">X</span><span class="char char-hot_k1" data-patterns="109" style="opacity: 1.00" title="hot_k1">K</span><span class="char char-hot_k1" data-patterns="106" style="opacity: 1.00" title="hot_k1 (×3)">X</span><span class="char char-quad_repeat" data-patterns="98" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="98" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="98" style="opacity: 1.00" title="quad_repeat">2</span><span class="char char-quad_repeat" data-patterns="98" style="opacity: 1.00" title="quad_repeat">2</span><span class="char">F</span><span class="char">R</span><span class="char char-exact" data-patterns="102" style="opacity: 0.55" title="exact">P</span><span class="char char-exact" data-patterns="102" style="opacity: 0.82" title="exact">H</span><span class="char">R</span><span class="char">T</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="110" style="opacity: 0.73" title="hot_k1">T</span><span class="char">Q</span><span class="char">S</span><span class="char">H</span><span class="char">U</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="108" style="opacity: 0.91" title="hot_k1">W</span><span class="char">7</span><span class="char">Z</span><span class="char char-hot_k1" data-patterns="108" style="opacity: 1.00" title="hot_k1">W</span><span class="char">R</span><span class="char">J</span><span class="char">W</span><span class="char char-exact" data-patterns="100" style="opacity: 0.55" title="exact">I</span><span class="char char-exact" data-patterns="100" style="opacity: 0.82" title="exact">I</span><span class="char char-exact" data-patterns="100" style="opacity: 0.82" title="exact">6</span><span class="char char-exact" data-patterns="100" style="opacity: 0.55" title="exact">I</span><span class="char char-exact" data-patterns="100" style="opacity: 0.82" title="exact">I</span><span class="char char-exact" data-patterns="100" style="opacity: 0.82" title="exact">6</span><span class="char">F</span><span class="char">3</span><span class="char">Q</span><span class="char char-hot_k1" data-patterns="105" style="opacity: 0.64" title="hot_k1 (×4)">H</span><span class="char char-exact" data-patterns="103" style="opacity: 0.82" title="exact">N</span><span class="char char-exact" data-patterns="103" style="opacity: 0.73" title="exact">C</span><span class="char char-exact" data-patterns="103" style="opacity: 0.48" title="exact">N</span><span class="char char-exact" data-patterns="103" style="opacity: 0.82" title="exact">C</span><span class="char char-quad_repeat" data-patterns="99,104" style="opacity: 1.00" title="quad_repeat (×6)">B</span><span class="char char-quad_repeat" data-patterns="99,104" style="opacity: 1.00" title="quad_repeat (×6)">B</span><span class="char char-quad_repeat" data-patterns="99,104" style="opacity: 1.00" title="quad_repeat (×6)">B</span><span class="char char-quad_repeat" data-patterns="99,104" style="opacity: 1.00" title="quad_repeat (×6)">B</span><span class="char">V</span><span class="char">7</span><span class="char">7</span><span class="char">H</span><span class="char">C</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="106" style="opacity: 0.64" title="hot_k1 (×3)">X</span><span class="char">D</span><span class="char char-hot_k1" data-patterns="111" style="opacity: 0.73" title="hot_k1">Z</span></div>
         </div>
-        <div class="message-block" data-group="4" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 35, 68, 37, 42, 11, 48, 17], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [85, 12, 13, 84], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [57, 58, 38, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 79, 80, 81, 82, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 20, 23, 58, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [56, 75, 46], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [25, 12], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 36], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [72, 74], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [27, 29], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2024-09-16T21:55:00" data-patterns="[{&quot;positions&quot;: [41, 42, 43, 44], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [80, 81, 82, 79], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [66, 35, 68, 37, 42, 11, 48, 17], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [85, 12, 13, 84], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [57, 58, 38, 39], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 79, 80, 81, 82, 91], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 20, 23, 58, 61], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [56, 75, 46], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [25, 12], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [34, 36], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [72, 74], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [27, 29], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="ROE6X6OJNWGI2NYDV3MGZ3PZX2GHZH3NZ7FAFS4ZZIIIIZKB3JH4WOODK4ZFOZR3YJASS5EFX7XKJXEWWWWK2NGYCJRW" title="RO (Group 4)">●</span><span>20240916 21:55 FURLOUGH</span></div>
             <div class="message-display"><span class="char">R</span><span class="char">O</span><span class="char">E</span><span class="char">6</span><span class="char">X</span><span class="char">6</span><span class="char">O</span><span class="char">J</span><span class="char">N</span><span class="char char-hot_k1" data-patterns="117" style="opacity: 0.73" title="hot_k1 (×6)">W</span><span class="char">G</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.42" title="gapped">I</span><span class="char char-exact" data-patterns="115,120" style="opacity: 0.55" title="exact">2</span><span class="char char-exact" data-patterns="115" style="opacity: 0.64" title="exact">N</span><span class="char">Y</span><span class="char">D</span><span class="char">V</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.55" title="gapped">3</span><span class="char">M</span><span class="char">G</span><span class="char char-hot_k1" data-patterns="118" style="opacity: 0.82" title="hot_k1 (×5)">Z</span><span class="char">3</span><span class="char">P</span><span class="char char-hot_k1" data-patterns="118" style="opacity: 0.82" title="hot_k1 (×5)">Z</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="120" style="opacity: 0.64" title="hot_k1">2</span><span class="char">G</span><span class="char char-hot_k1" data-patterns="123" style="opacity: 0.91" title="hot_k1">H</span><span class="char">Z</span><span class="char char-hot_k1" data-patterns="123" style="opacity: 0.82" title="hot_k1">H</span><span class="char">3</span><span class="char">N</span><span class="char">Z</span><span class="char">7</span><span class="char char-hot_k1" data-patterns="121" style="opacity: 1.00" title="hot_k1">F</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.55" title="gapped">A</span><span class="char char-hot_k1" data-patterns="121" style="opacity: 0.82" title="hot_k1">F</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.82" title="gapped">S</span><span class="char char-exact" data-patterns="116" style="opacity: 0.91" title="exact">4</span><span class="char char-exact" data-patterns="116" style="opacity: 1.00" title="exact">Z</span><span class="char char-hot_k1" data-patterns="118" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char char-quad_repeat" data-patterns="112" style="opacity: 1.00" title="quad_repeat">I</span><span class="char char-quad_repeat" data-patterns="112,114" style="opacity: 1.00" title="quad_repeat">I</span><span class="char char-quad_repeat" data-patterns="112" style="opacity: 1.00" title="quad_repeat">I</span><span class="char char-quad_repeat" data-patterns="112" style="opacity: 1.00" title="quad_repeat">I</span><span class="char">Z</span><span class="char char-hot_k1" data-patterns="119" style="opacity: 0.82" title="hot_k1 (×3)">K</span><span class="char">B</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.82" title="gapped">3</span><span class="char">J</span><span class="char">H</span><span class="char">4</span><span class="char">W</span><span class="char">O</span><span class="char">O</span><span class="char">D</span><span class="char char-hot_k1" data-patterns="119" style="opacity: 0.73" title="hot_k1 (×3)">K</span><span class="char char-exact" data-patterns="116" style="opacity: 0.55" title="exact">4</span><span class="char char-exact" data-patterns="116,118" style="opacity: 0.91" title="exact (×5)">Z</span><span class="char">F</span><span class="char">O</span><span class="char char-hot_k1" data-patterns="118" style="opacity: 1.00" title="hot_k1 (×5)">Z</span><span class="char">R</span><span class="char">3</span><span class="char">Y</span><span class="char">J</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.82" title="gapped">A</span><span class="char">S</span><span class="char char-gapped" data-patterns="114" style="opacity: 0.55" title="gapped">S</span><span class="char">5</span><span class="char">E</span><span class="char">F</span><span class="char char-hot_k1" data-patterns="122" style="opacity: 0.55" title="hot_k1">X</span><span class="char">7</span><span class="char char-hot_k1" data-patterns="122" style="opacity: 0.64" title="hot_k1">X</span><span class="char char-hot_k1" data-patterns="119" style="opacity: 0.82" title="hot_k1 (×3)">K</span><span class="char">J</span><span class="char">X</span><span class="char">E</span><span class="char char-quad_repeat" data-patterns="113,117" style="opacity: 1.00" title="quad_repeat (×6)">W</span><span class="char char-quad_repeat" data-patterns="113,117" style="opacity: 1.00" title="quad_repeat (×6)">W</span><span class="char char-quad_repeat" data-patterns="113,117" style="opacity: 1.00" title="quad_repeat (×6)">W</span><span class="char char-quad_repeat" data-patterns="113,117" style="opacity: 1.00" title="quad_repeat (×6)">W</span><span class="char">K</span><span class="char char-exact" data-patterns="115" style="opacity: 0.82" title="exact">2</span><span class="char char-exact" data-patterns="115" style="opacity: 0.64" title="exact">N</span><span class="char">G</span><span class="char">Y</span><span class="char">C</span><span class="char">J</span><span class="char">R</span><span class="char char-hot_k1" data-patterns="117" style="opacity: 0.73" title="hot_k1 (×6)">W</span></div>
         </div>
+    </div>
 
     <script>
         // Track currently selected pattern
@@ -549,13 +667,11 @@
         const heatmapCells = document.querySelectorAll('.heatmap-cell');
 
         function updateHeatmapAndVisibility() {
-            console.log('updateHeatmapAndVisibility called');
-
             // Get checked groups
             const checkedGroups = new Set();
 
-            // Check groups 1-4
-            for (let i = 1; i <= 4; i++) {
+            // Check groups 1-5
+            for (let i = 1; i <= 5; i++) {
                 const checkbox = document.getElementById('filter-group-' + i);
                 if (checkbox && checkbox.checked) {
                     checkedGroups.add(String(i));
@@ -567,8 +683,6 @@
             if (unclassifiedCheckbox && unclassifiedCheckbox.checked) {
                 checkedGroups.add('unclassified');
             }
-
-            console.log('Checked groups:', Array.from(checkedGroups));
 
             // Show/hide messages based on filters
             const messageBlocks = document.querySelectorAll('.message-block');
@@ -585,7 +699,22 @@
                 }
             });
 
-            console.log('Visible messages:', visibleMessages.length, 'of', messageBlocks.length);
+            // Show/hide group headings based on checked groups
+            document.querySelectorAll('.group-heading').forEach(heading => {
+                // Extract group number/type from heading class
+                const classList = Array.from(heading.classList);
+                const groupClass = classList.find(c => c.startsWith('group-heading-'));
+
+                if (groupClass) {
+                    const group = groupClass.replace('group-heading-', '');
+
+                    if (checkedGroups.has(group)) {
+                        heading.classList.remove('hidden');
+                    } else {
+                        heading.classList.add('hidden');
+                    }
+                }
+            });
 
             // Recalculate aggregate heatmap
             const positionCounts = new Array(messageLength).fill(0);
@@ -616,7 +745,7 @@
                         });
                     }
                 } catch (e) {
-                    console.error('Error parsing pattern data:', e, patternDataStr);
+                    // Silent error handling
                 }
             });
 
@@ -638,22 +767,102 @@
                 heatmapCells[i].style.backgroundColor = color;
                 heatmapCells[i].title = 'Position ' + (i + 1) + ': ' + count.toFixed(1) + ' weighted messages';
             });
-
-            console.log('Heatmap updated');
         }
 
         // Add event listeners to all checkboxes
-        console.log('Setting up checkbox event listeners...');
         const filterCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
-        console.log('Found checkboxes:', filterCheckboxes.length);
-
         filterCheckboxes.forEach(checkbox => {
-            console.log('Adding listener to:', checkbox.id);
-            checkbox.addEventListener('change', function() {
-                console.log('Checkbox changed:', this.id, 'checked:', this.checked);
-                updateHeatmapAndVisibility();
-            });
+            checkbox.addEventListener('change', updateHeatmapAndVisibility);
         });
+
+        // Sorting functionality
+        const messagesContainer = document.getElementById('messages-container');
+        let currentSortMode = 'grouped';  // Default to grouped
+
+        function sortMessages(mode) {
+            const messageBlocks = Array.from(document.querySelectorAll('.message-block'));
+
+            // Remove all existing group headings
+            document.querySelectorAll('.group-heading').forEach(h => h.remove());
+
+            if (mode === 'chronological') {
+                // Sort by timestamp
+                messageBlocks.sort((a, b) => {
+                    const tsA = a.getAttribute('data-timestamp');
+                    const tsB = b.getAttribute('data-timestamp');
+                    return tsA.localeCompare(tsB);
+                });
+
+                // Clear container and re-append in chronological order
+                messagesContainer.innerHTML = '';
+                messageBlocks.forEach(block => messagesContainer.appendChild(block));
+
+            } else if (mode === 'grouped') {
+                // Sort by group first, then by timestamp within each group
+                messageBlocks.sort((a, b) => {
+                    const groupA = a.getAttribute('data-group');
+                    const groupB = b.getAttribute('data-group');
+
+                    // Define group order: 1, 2, 3, 4, 5, unclassified
+                    const groupOrder = {'1': 0, '2': 1, '3': 2, '4': 3, '5': 4, 'unclassified': 5};
+                    const orderA = groupOrder[groupA] !== undefined ? groupOrder[groupA] : 6;
+                    const orderB = groupOrder[groupB] !== undefined ? groupOrder[groupB] : 6;
+
+                    if (orderA !== orderB) {
+                        return orderA - orderB;
+                    }
+
+                    // Within same group, sort by timestamp
+                    const tsA = a.getAttribute('data-timestamp');
+                    const tsB = b.getAttribute('data-timestamp');
+                    return tsA.localeCompare(tsB);
+                });
+
+                // Clear container
+                messagesContainer.innerHTML = '';
+
+                // Group messages and add headings
+                let currentGroup = null;
+                messageBlocks.forEach(block => {
+                    const group = block.getAttribute('data-group');
+
+                    if (group !== currentGroup) {
+                        currentGroup = group;
+                        const heading = document.createElement('div');
+                        heading.className = 'group-heading group-heading-' + group;
+
+                        let groupName = 'Group ' + group;
+                        if (group === 'unclassified') {
+                            groupName = 'Unknown Classification';
+                        }
+
+                        heading.textContent = groupName;
+                        messagesContainer.appendChild(heading);
+                    }
+
+                    messagesContainer.appendChild(block);
+                });
+            }
+
+            currentSortMode = mode;
+            updateHeatmapAndVisibility();  // Update visibility after sorting
+        }
+
+        // Sort button event listeners
+        document.getElementById('sort-grouped').addEventListener('click', function() {
+            document.getElementById('sort-grouped').classList.add('active');
+            document.getElementById('sort-chronological').classList.remove('active');
+            sortMessages('grouped');
+        });
+
+        document.getElementById('sort-chronological').addEventListener('click', function() {
+            document.getElementById('sort-chronological').classList.add('active');
+            document.getElementById('sort-grouped').classList.remove('active');
+            sortMessages('chronological');
+        });
+
+        // Initialize with grouped view (default)
+        sortMessages('grouped');
     </script>
 </body>
 </html>
