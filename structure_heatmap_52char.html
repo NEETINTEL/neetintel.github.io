@@ -125,6 +125,12 @@
             color: #000000;
         }
 
+        .char-quad_repeat {
+            background-color: #ff4444;
+            color: #000000;
+            font-weight: bold;
+        }
+
         .char-selected {
             outline: 3px solid #ffffff;
             outline-offset: -3px;
@@ -171,6 +177,57 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
+
+        .filter-controls {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #4a9eff;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .filter-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .filter-checkbox label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .group-label {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .group-label-1 { background-color: #06b050; color: #000; }
+        .group-label-2 { background-color: #ed7d32; color: #000; }
+        .group-label-3 { background-color: #ffcc00; color: #000; }
+        .group-label-4 { background-color: #ff0467; color: #fff; }
+        .group-label-unclassified { background-color: #555; color: #fff; }
+
+        .message-block.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -181,6 +238,7 @@
         <strong>Total Messages:</strong> 15<br>
         <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
         <strong>Pattern Types:</strong>
+        <span style="color: #ff4444; font-weight: bold;">Quadruple Repeats</span>,
         <span style="color: #51cf66; font-weight: bold;">Gapped</span>,
         <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>,
         <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
@@ -201,60 +259,75 @@
         </div>
     </div>
 
+    <div class="filter-controls">
+        <strong>Filter by Group:</strong>
+        <div class="filter-group">
+            <div class="filter-checkbox">
+                <input type="checkbox" id="filter-group-2" checked>
+                <label for="filter-group-2"><span class="group-label group-label-2">Group 2</span></label>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="filter-group-3" checked>
+                <label for="filter-group-3"><span class="group-label group-label-3">Group 3</span></label>
+            </div>
+        </div>
+    </div>
+
+
     <div class="heatmap-container">
         <div class="heatmap-bar">
-            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 1: 0 messages"></div>
-            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 2: 0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 3: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(73, 36, 0);" title="Position 4: 5 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 5: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 6: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 7: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 8: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 9: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 10: 3 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 11: 3 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 12: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 13: 3 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 14: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 15: 14 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(53, 26, 0);" title="Position 16: 4 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 17: 3 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 18: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 19: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 20: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 21: 0 messages"></div>
-            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 22: 0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(236, 118, 0);" title="Position 23: 13 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(73, 36, 0);" title="Position 24: 5 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 25: 3 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 26: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 27: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 28: 3 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 29: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 30: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 31: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 32: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 33: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 34: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 35: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 36: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 37: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 38: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 39: 1 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(53, 26, 0);" title="Position 40: 4 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 41: 14 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 42: 14 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(216, 108, 0);" title="Position 43: 12 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 44: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 45: 14 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(53, 26, 0);" title="Position 46: 4 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 47: 14 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 48: 14 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(216, 108, 0);" title="Position 49: 12 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 50: 2 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(236, 118, 0);" title="Position 51: 13 messages"></div>
-            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 52: 0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 1: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 2: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 3: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(73, 36, 0);" title="Position 4: 5.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 5: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 6: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 7: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 8: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 9: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 10: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 11: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 12: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 13: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 14: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 15: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(53, 26, 0);" title="Position 16: 4.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 17: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 18: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 19: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 20: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 21: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 22: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(236, 118, 0);" title="Position 23: 13.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(73, 36, 0);" title="Position 24: 5.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 25: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 26: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 27: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 28: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 29: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 30: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 31: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 32: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 33: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 34: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 35: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 36: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 37: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 38: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 39: 1.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(53, 26, 0);" title="Position 40: 4.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 41: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 42: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(216, 108, 0);" title="Position 43: 12.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 44: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 45: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(53, 26, 0);" title="Position 46: 4.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 47: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 48: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(216, 108, 0);" title="Position 49: 12.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(17, 8, 0);" title="Position 50: 2.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(236, 118, 0);" title="Position 51: 13.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 52: 0.0 messages"></div>
         </div>
         <div class="position-ruler">
             <div class="position-label">01</div>
@@ -312,63 +385,63 @@
         </div>
     </div>
 
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [24, 23, 6, 7], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [41, 10, 11, 42], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 46, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [43, 44, 45], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 44], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="F6DO2HIWVHEDPSGQW7QPNXGIWOGNWG6TQTAM4IZH4EDAAA4ETCAJ" title="F6 (Group 2)">●</span><span>20230725 06:52 NEON SIGN</span></div>
             <div class="message-display"><span class="char">F</span><span class="char">6</span><span class="char">D</span><span class="char">O</span><span class="char">2</span><span class="char">H</span><span class="char char-exact" data-patterns="1" style="opacity: 0.41">I</span><span class="char char-exact" data-patterns="1" style="opacity: 0.44">W</span><span class="char">V</span><span class="char">H</span><span class="char char-exact" data-patterns="2" style="opacity: 0.48">E</span><span class="char char-exact" data-patterns="2" style="opacity: 0.41">D</span><span class="char">P</span><span class="char">S</span><span class="char char-hot_k1" data-patterns="5" style="opacity: 1.00">G</span><span class="char">Q</span><span class="char">W</span><span class="char">7</span><span class="char">Q</span><span class="char">P</span><span class="char">N</span><span class="char">X</span><span class="char char-hot_k1" data-patterns="5" style="opacity: 0.96">G</span><span class="char char-exact" data-patterns="1" style="opacity: 0.57">I</span><span class="char char-exact" data-patterns="1" style="opacity: 0.48">W</span><span class="char">O</span><span class="char">G</span><span class="char">N</span><span class="char">W</span><span class="char">G</span><span class="char">6</span><span class="char">T</span><span class="char">Q</span><span class="char">T</span><span class="char">A</span><span class="char">M</span><span class="char">4</span><span class="char">I</span><span class="char">Z</span><span class="char">H</span><span class="char char-exact" data-patterns="3" style="opacity: 1.00">4</span><span class="char char-exact" data-patterns="2,3" style="opacity: 1.00">E</span><span class="char char-exact" data-patterns="2" style="opacity: 0.91">D</span><span class="char char-exact" data-patterns="4" style="opacity: 0.44">A</span><span class="char char-exact" data-patterns="4,6" style="opacity: 1.00">A</span><span class="char char-exact" data-patterns="4" style="opacity: 0.53">A</span><span class="char char-exact" data-patterns="3" style="opacity: 1.00">4</span><span class="char char-exact" data-patterns="3" style="opacity: 1.00">E</span><span class="char">T</span><span class="char">C</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 0.96">A</span><span class="char">J</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="QKLHKRNYIO6Y6REGZUJPBVEFSHGCZCG6ADXMR7DLWRHPIFWRHUIM" title="QK (Group 2)">●</span><span>20230921 15:29 VAN DYKE</span></div>
             <div class="message-display"><span class="char">Q</span><span class="char">K</span><span class="char">L</span><span class="char">H</span><span class="char">K</span><span class="char">R</span><span class="char">N</span><span class="char">Y</span><span class="char">I</span><span class="char">O</span><span class="char">6</span><span class="char">Y</span><span class="char">6</span><span class="char">R</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 1.00">E</span><span class="char">G</span><span class="char">Z</span><span class="char">U</span><span class="char">J</span><span class="char">P</span><span class="char">B</span><span class="char">V</span><span class="char char-hot_k1" data-patterns="8" style="opacity: 0.96">E</span><span class="char">F</span><span class="char">S</span><span class="char">H</span><span class="char">G</span><span class="char">C</span><span class="char">Z</span><span class="char">C</span><span class="char">G</span><span class="char">6</span><span class="char">A</span><span class="char">D</span><span class="char">X</span><span class="char">M</span><span class="char">R</span><span class="char">7</span><span class="char">D</span><span class="char">L</span><span class="char char-gapped" data-patterns="7" style="opacity: 1.00">W</span><span class="char char-gapped" data-patterns="7" style="opacity: 1.00">R</span><span class="char char-gapped" data-patterns="7" style="opacity: 0.91">H</span><span class="char">P</span><span class="char char-gapped" data-patterns="7" style="opacity: 1.00">I</span><span class="char">F</span><span class="char char-gapped" data-patterns="7" style="opacity: 1.00">W</span><span class="char char-gapped" data-patterns="7" style="opacity: 1.00">R</span><span class="char char-gapped" data-patterns="7" style="opacity: 0.91">H</span><span class="char">U</span><span class="char char-gapped" data-patterns="7" style="opacity: 0.96">I</span><span class="char">M</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [26, 27, 14, 15], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 46, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 42], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 44], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="EGGJ3SL4MZ4RI334STBTJN36O234YVYS5IUQDYXQ6E6L7A6E2H7F" title="EG (Group 2)">●</span><span>20230928 23:11 CRAZYWEED</span></div>
             <div class="message-display"><span class="char">E</span><span class="char">G</span><span class="char">G</span><span class="char">J</span><span class="char">3</span><span class="char">S</span><span class="char">L</span><span class="char">4</span><span class="char">M</span><span class="char">Z</span><span class="char">4</span><span class="char">R</span><span class="char">I</span><span class="char">3</span><span class="char char-exact" data-patterns="9,12" style="opacity: 1.00">3</span><span class="char char-exact" data-patterns="9" style="opacity: 0.53">4</span><span class="char">S</span><span class="char">T</span><span class="char">B</span><span class="char">T</span><span class="char">J</span><span class="char">N</span><span class="char char-hot_k1" data-patterns="12" style="opacity: 0.96">3</span><span class="char">6</span><span class="char">O</span><span class="char">2</span><span class="char char-exact" data-patterns="9" style="opacity: 0.44">3</span><span class="char char-exact" data-patterns="9" style="opacity: 0.48">4</span><span class="char">Y</span><span class="char">V</span><span class="char">Y</span><span class="char">S</span><span class="char">5</span><span class="char">I</span><span class="char">U</span><span class="char">Q</span><span class="char">D</span><span class="char">Y</span><span class="char">X</span><span class="char">Q</span><span class="char char-exact" data-patterns="10,11" style="opacity: 1.00">6</span><span class="char char-exact" data-patterns="10" style="opacity: 1.00">E</span><span class="char char-hot_k1" data-patterns="11" style="opacity: 0.91">6</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 1.00">7</span><span class="char">A</span><span class="char char-exact" data-patterns="10" style="opacity: 1.00">6</span><span class="char char-exact" data-patterns="10" style="opacity: 1.00">E</span><span class="char">2</span><span class="char">H</span><span class="char char-hot_k1" data-patterns="13" style="opacity: 0.96">7</span><span class="char">F</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [22, 23, 14, 15], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [48, 49, 30, 31], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="CQ6WZXGE2YWBKAXSLZ72HVXSQHCEDGF4QTJSFAB4MUFD3BMUF43D" title="CQ (Group 2)">●</span><span>20231109 16:30 BASEBALL</span></div>
             <div class="message-display"><span class="char">C</span><span class="char">Q</span><span class="char">6</span><span class="char">W</span><span class="char">Z</span><span class="char">X</span><span class="char">G</span><span class="char">E</span><span class="char">2</span><span class="char">Y</span><span class="char">W</span><span class="char">B</span><span class="char">K</span><span class="char">A</span><span class="char char-exact" data-patterns="15" style="opacity: 1.00">X</span><span class="char char-exact" data-patterns="15" style="opacity: 0.53">S</span><span class="char">L</span><span class="char">Z</span><span class="char">7</span><span class="char">2</span><span class="char">H</span><span class="char">V</span><span class="char char-exact" data-patterns="15" style="opacity: 0.96">X</span><span class="char char-exact" data-patterns="15" style="opacity: 0.57">S</span><span class="char">Q</span><span class="char">H</span><span class="char">C</span><span class="char">E</span><span class="char">D</span><span class="char">G</span><span class="char char-exact" data-patterns="16" style="opacity: 0.44">F</span><span class="char char-exact" data-patterns="16" style="opacity: 0.41">4</span><span class="char">Q</span><span class="char">T</span><span class="char">J</span><span class="char">S</span><span class="char">F</span><span class="char">A</span><span class="char">B</span><span class="char">4</span><span class="char char-gapped" data-patterns="14" style="opacity: 1.00">M</span><span class="char char-gapped" data-patterns="14" style="opacity: 1.00">U</span><span class="char char-gapped" data-patterns="14" style="opacity: 0.91">F</span><span class="char">D</span><span class="char char-gapped" data-patterns="14" style="opacity: 1.00">3</span><span class="char">B</span><span class="char char-gapped" data-patterns="14" style="opacity: 1.00">M</span><span class="char char-gapped" data-patterns="14" style="opacity: 1.00">U</span><span class="char char-gapped" data-patterns="14,16" style="opacity: 0.91">F</span><span class="char char-exact" data-patterns="16" style="opacity: 0.44">4</span><span class="char char-gapped" data-patterns="14" style="opacity: 0.96">3</span><span class="char">D</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [32, 3, 5, 39, 12, 19, 23, 25], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 25, 3, 4], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="DCLETTULJTZ775WXV23URQWEETVVSWFN74BG2ZHUJBJNPCJBJEPR" title="DC (Group 2)">●</span><span>20231214 16:14 ROYALIST</span></div>
             <div class="message-display"><span class="char">D</span><span class="char">C</span><span class="char">L</span><span class="char char-gapped" data-patterns="17,19" style="opacity: 0.57">E</span><span class="char char-exact" data-patterns="19" style="opacity: 0.44">T</span><span class="char char-gapped" data-patterns="17" style="opacity: 0.41">T</span><span class="char">U</span><span class="char">L</span><span class="char">J</span><span class="char">T</span><span class="char">Z</span><span class="char">7</span><span class="char char-gapped" data-patterns="17" style="opacity: 0.48">7</span><span class="char">5</span><span class="char char-hot_k1" data-patterns="20" style="opacity: 1.00">W</span><span class="char">X</span><span class="char">V</span><span class="char">2</span><span class="char">3</span><span class="char char-gapped" data-patterns="17" style="opacity: 0.41">U</span><span class="char">R</span><span class="char">Q</span><span class="char char-hot_k1" data-patterns="20" style="opacity: 0.96">W</span><span class="char char-gapped" data-patterns="17" style="opacity: 0.57">E</span><span class="char char-exact" data-patterns="19" style="opacity: 0.48">E</span><span class="char char-gapped" data-patterns="17,19" style="opacity: 0.41">T</span><span class="char">V</span><span class="char">V</span><span class="char">S</span><span class="char">W</span><span class="char">F</span><span class="char">N</span><span class="char char-gapped" data-patterns="17" style="opacity: 0.44">7</span><span class="char">4</span><span class="char">B</span><span class="char">G</span><span class="char">2</span><span class="char">Z</span><span class="char">H</span><span class="char char-gapped" data-patterns="17" style="opacity: 0.53">U</span><span class="char char-gapped" data-patterns="18" style="opacity: 1.00">J</span><span class="char char-gapped" data-patterns="18" style="opacity: 1.00">B</span><span class="char char-gapped" data-patterns="18" style="opacity: 0.91">J</span><span class="char">N</span><span class="char char-gapped" data-patterns="18" style="opacity: 1.00">P</span><span class="char">C</span><span class="char char-gapped" data-patterns="18" style="opacity: 1.00">J</span><span class="char char-gapped" data-patterns="18" style="opacity: 1.00">B</span><span class="char char-gapped" data-patterns="18" style="opacity: 0.91">J</span><span class="char">E</span><span class="char char-gapped" data-patterns="18" style="opacity: 0.96">P</span><span class="char">R</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="DCNJ3DSZST5IKQMMWQZJITM3QPYHUOWNFQYG4PBSVDVIJNVDV2JQ" title="DC (Group 2)">●</span><span>20231221 16:27 ASTRO CAP</span></div>
             <div class="message-display"><span class="char">D</span><span class="char">C</span><span class="char">N</span><span class="char">J</span><span class="char">3</span><span class="char">D</span><span class="char">S</span><span class="char">Z</span><span class="char">S</span><span class="char">T</span><span class="char">5</span><span class="char">I</span><span class="char">K</span><span class="char">Q</span><span class="char char-hot_k1" data-patterns="22" style="opacity: 1.00">M</span><span class="char">M</span><span class="char">W</span><span class="char">Q</span><span class="char">Z</span><span class="char">J</span><span class="char">I</span><span class="char">T</span><span class="char char-hot_k1" data-patterns="22" style="opacity: 0.96">M</span><span class="char">3</span><span class="char">Q</span><span class="char">P</span><span class="char">Y</span><span class="char">H</span><span class="char">U</span><span class="char">O</span><span class="char">W</span><span class="char">N</span><span class="char">F</span><span class="char">Q</span><span class="char">Y</span><span class="char">G</span><span class="char">4</span><span class="char">P</span><span class="char">B</span><span class="char">S</span><span class="char char-gapped" data-patterns="21" style="opacity: 1.00">V</span><span class="char char-gapped" data-patterns="21" style="opacity: 1.00">D</span><span class="char char-gapped" data-patterns="21" style="opacity: 0.91">V</span><span class="char">I</span><span class="char char-gapped" data-patterns="21" style="opacity: 1.00">J</span><span class="char">N</span><span class="char char-gapped" data-patterns="21" style="opacity: 1.00">V</span><span class="char char-gapped" data-patterns="21" style="opacity: 1.00">D</span><span class="char char-gapped" data-patterns="21" style="opacity: 0.91">V</span><span class="char">2</span><span class="char char-gapped" data-patterns="21" style="opacity: 0.96">J</span><span class="char">Q</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [24, 26, 27, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="DCKQXLFEIAAIO26CUEBUOZ6VTSVT4JOJ6IE2G5DSCRCZYUCRCLYT" title="DC (Group 2)">●</span><span>20240118 16:18 TRANSFIX</span></div>
             <div class="message-display"><span class="char">D</span><span class="char">C</span><span class="char">K</span><span class="char">Q</span><span class="char">X</span><span class="char">L</span><span class="char">F</span><span class="char">E</span><span class="char">I</span><span class="char">A</span><span class="char">A</span><span class="char">I</span><span class="char">O</span><span class="char">2</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 1.00">6</span><span class="char">C</span><span class="char">U</span><span class="char">E</span><span class="char">B</span><span class="char">U</span><span class="char">O</span><span class="char">Z</span><span class="char char-hot_k1" data-patterns="25" style="opacity: 0.96">6</span><span class="char char-exact" data-patterns="24" style="opacity: 0.57">V</span><span class="char char-exact" data-patterns="24" style="opacity: 0.48">T</span><span class="char">S</span><span class="char char-exact" data-patterns="24" style="opacity: 0.44">V</span><span class="char char-exact" data-patterns="24" style="opacity: 0.48">T</span><span class="char">4</span><span class="char">J</span><span class="char">O</span><span class="char">J</span><span class="char">6</span><span class="char">I</span><span class="char">E</span><span class="char">2</span><span class="char">G</span><span class="char">5</span><span class="char">D</span><span class="char">S</span><span class="char char-gapped" data-patterns="23" style="opacity: 1.00">C</span><span class="char char-gapped" data-patterns="23" style="opacity: 1.00">R</span><span class="char char-gapped" data-patterns="23" style="opacity: 0.91">C</span><span class="char">Z</span><span class="char char-gapped" data-patterns="23" style="opacity: 1.00">Y</span><span class="char">U</span><span class="char char-gapped" data-patterns="23" style="opacity: 1.00">C</span><span class="char char-gapped" data-patterns="23" style="opacity: 1.00">R</span><span class="char char-gapped" data-patterns="23" style="opacity: 0.91">C</span><span class="char">L</span><span class="char char-gapped" data-patterns="23" style="opacity: 0.96">Y</span><span class="char">T</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [39, 40, 41, 42, 45, 46, 47, 48], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [39, 40, 41, 42, 44, 45, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [35, 2, 3, 36], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [8, 9, 16, 15], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [48, 49, 12, 13], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="Z2UMGIUE477L7IJ47WPXG7JR3DUPPC7QQCGUMC5B7674SB767ISU" title="Z2 (Group 2)">●</span><span>20240206 16:51 TONEDEAF</span></div>
             <div class="message-display"><span class="char">Z</span><span class="char">2</span><span class="char char-exact" data-patterns="28" style="opacity: 0.44">U</span><span class="char char-exact" data-patterns="28" style="opacity: 0.57">M</span><span class="char">G</span><span class="char">I</span><span class="char">U</span><span class="char">E</span><span class="char char-exact" data-patterns="29" style="opacity: 0.41">4</span><span class="char char-exact" data-patterns="29" style="opacity: 0.48">7</span><span class="char">7</span><span class="char">L</span><span class="char char-exact" data-patterns="30" style="opacity: 0.48">7</span><span class="char char-exact" data-patterns="30" style="opacity: 0.44">I</span><span class="char char-hot_k1" data-patterns="31" style="opacity: 1.00">J</span><span class="char char-exact" data-patterns="29" style="opacity: 0.53">4</span><span class="char char-exact" data-patterns="29" style="opacity: 0.48">7</span><span class="char">W</span><span class="char">P</span><span class="char">X</span><span class="char">G</span><span class="char">7</span><span class="char char-hot_k1" data-patterns="31" style="opacity: 0.96">J</span><span class="char">R</span><span class="char">3</span><span class="char">D</span><span class="char">U</span><span class="char">P</span><span class="char">P</span><span class="char">C</span><span class="char">7</span><span class="char">Q</span><span class="char">Q</span><span class="char">C</span><span class="char">G</span><span class="char char-exact" data-patterns="28" style="opacity: 0.44">U</span><span class="char char-exact" data-patterns="28" style="opacity: 0.44">M</span><span class="char">C</span><span class="char">5</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 0.53">B</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 1.00">7</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 1.00">6</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 0.91">7</span><span class="char">4</span><span class="char char-gapped" data-patterns="27" style="opacity: 1.00">S</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 0.53">B</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 1.00">7</span><span class="char char-gapped" data-patterns="26,27" style="opacity: 1.00">6</span><span class="char char-gapped" data-patterns="26,27,30" style="opacity: 0.91">7</span><span class="char char-exact" data-patterns="30" style="opacity: 0.44">I</span><span class="char char-gapped" data-patterns="27" style="opacity: 0.96">S</span><span class="char">U</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [17, 18, 36, 37], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [38, 39, 22, 23], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="Z2ZPE7E4ELEP37YWOTKC6DYXN36ZDBEVJFS6TKYXPGPYP4PGP7PS" title="Z2 (Group 2)">●</span><span>20240222 16:47 FIVE SPOT</span></div>
             <div class="message-display"><span class="char">Z</span><span class="char">2</span><span class="char">Z</span><span class="char">P</span><span class="char">E</span><span class="char">7</span><span class="char">E</span><span class="char">4</span><span class="char">E</span><span class="char">L</span><span class="char">E</span><span class="char">P</span><span class="char">3</span><span class="char">7</span><span class="char char-hot_k1" data-patterns="35" style="opacity: 1.00">Y</span><span class="char">W</span><span class="char">O</span><span class="char char-exact" data-patterns="33" style="opacity: 0.44">T</span><span class="char char-exact" data-patterns="33" style="opacity: 0.41">K</span><span class="char">C</span><span class="char">6</span><span class="char">D</span><span class="char char-exact" data-patterns="34,35" style="opacity: 0.96">Y</span><span class="char char-exact" data-patterns="34" style="opacity: 0.57">X</span><span class="char">N</span><span class="char">3</span><span class="char">6</span><span class="char">Z</span><span class="char">D</span><span class="char">B</span><span class="char">E</span><span class="char">V</span><span class="char">J</span><span class="char">F</span><span class="char">S</span><span class="char">6</span><span class="char char-exact" data-patterns="33" style="opacity: 0.44">T</span><span class="char char-exact" data-patterns="33" style="opacity: 0.41">K</span><span class="char char-exact" data-patterns="34" style="opacity: 0.41">Y</span><span class="char char-exact" data-patterns="34" style="opacity: 0.53">X</span><span class="char char-gapped" data-patterns="32" style="opacity: 1.00">P</span><span class="char char-gapped" data-patterns="32" style="opacity: 1.00">G</span><span class="char char-gapped" data-patterns="32" style="opacity: 0.91">P</span><span class="char">Y</span><span class="char char-gapped" data-patterns="32" style="opacity: 1.00">P</span><span class="char">4</span><span class="char char-gapped" data-patterns="32" style="opacity: 1.00">P</span><span class="char char-gapped" data-patterns="32" style="opacity: 1.00">G</span><span class="char char-gapped" data-patterns="32" style="opacity: 0.91">P</span><span class="char">7</span><span class="char char-gapped" data-patterns="32" style="opacity: 0.96">P</span><span class="char">S</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="MGGRQIWGANSEJTMIBK2OUHMEYPAODAIZ5BEPCZHUVGVSZIVGVXZV" title="MG (Group 2)">●</span><span>20240305 14:10 FLY BALL</span></div>
             <div class="message-display"><span class="char">M</span><span class="char">G</span><span class="char">G</span><span class="char">R</span><span class="char">Q</span><span class="char">I</span><span class="char">W</span><span class="char">G</span><span class="char">A</span><span class="char">N</span><span class="char">S</span><span class="char">E</span><span class="char">J</span><span class="char">T</span><span class="char char-hot_k1" data-patterns="37" style="opacity: 1.00">M</span><span class="char">I</span><span class="char">B</span><span class="char">K</span><span class="char">2</span><span class="char">O</span><span class="char">U</span><span class="char">H</span><span class="char char-hot_k1" data-patterns="37" style="opacity: 0.96">M</span><span class="char">E</span><span class="char">Y</span><span class="char">P</span><span class="char">A</span><span class="char">O</span><span class="char">D</span><span class="char">A</span><span class="char">I</span><span class="char">Z</span><span class="char">5</span><span class="char">B</span><span class="char">E</span><span class="char">P</span><span class="char">C</span><span class="char">Z</span><span class="char">H</span><span class="char">U</span><span class="char char-gapped" data-patterns="36" style="opacity: 1.00">V</span><span class="char char-gapped" data-patterns="36" style="opacity: 1.00">G</span><span class="char char-gapped" data-patterns="36" style="opacity: 0.91">V</span><span class="char">S</span><span class="char char-gapped" data-patterns="36" style="opacity: 1.00">Z</span><span class="char">I</span><span class="char char-gapped" data-patterns="36" style="opacity: 1.00">V</span><span class="char char-gapped" data-patterns="36" style="opacity: 1.00">G</span><span class="char char-gapped" data-patterns="36" style="opacity: 0.91">V</span><span class="char">X</span><span class="char char-gapped" data-patterns="36" style="opacity: 0.96">Z</span><span class="char">V</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [32, 34, 3, 35, 7, 9, 10, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 42, 44, 46, 47, 48, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [28, 27, 12, 13], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="ZZ2XC33XJEDNIXGCQRKKVBGZYGQIX46BXXEDMHC5HLHGA2HLHVAC" title="ZZ (Group 2)">●</span><span>20240402 15:33 LONG TERM</span></div>
             <div class="message-display"><span class="char">Z</span><span class="char">Z</span><span class="char">2</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.57">X</span><span class="char">C</span><span class="char">3</span><span class="char">3</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.44">X</span><span class="char">J</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.48">E</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.48">D</span><span class="char">N</span><span class="char char-exact" data-patterns="40" style="opacity: 0.48">I</span><span class="char char-exact" data-patterns="40" style="opacity: 0.44">X</span><span class="char char-hot_k1" data-patterns="41" style="opacity: 1.00">G</span><span class="char">C</span><span class="char">Q</span><span class="char">R</span><span class="char">K</span><span class="char">K</span><span class="char">V</span><span class="char">B</span><span class="char char-hot_k1" data-patterns="41" style="opacity: 0.96">G</span><span class="char">Z</span><span class="char">Y</span><span class="char">G</span><span class="char">Q</span><span class="char char-exact" data-patterns="40" style="opacity: 0.48">I</span><span class="char char-gapped" data-patterns="38,40" style="opacity: 0.44">X</span><span class="char">4</span><span class="char">6</span><span class="char">B</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.44">X</span><span class="char">X</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.41">E</span><span class="char char-gapped" data-patterns="38" style="opacity: 0.44">D</span><span class="char">M</span><span class="char">H</span><span class="char">C</span><span class="char">5</span><span class="char char-gapped" data-patterns="39" style="opacity: 1.00">H</span><span class="char char-gapped" data-patterns="39" style="opacity: 1.00">L</span><span class="char char-gapped" data-patterns="39" style="opacity: 0.91">H</span><span class="char">G</span><span class="char char-gapped" data-patterns="39" style="opacity: 1.00">A</span><span class="char">2</span><span class="char char-gapped" data-patterns="39" style="opacity: 1.00">H</span><span class="char char-gapped" data-patterns="39" style="opacity: 1.00">L</span><span class="char char-gapped" data-patterns="39" style="opacity: 0.91">H</span><span class="char">V</span><span class="char char-gapped" data-patterns="39" style="opacity: 0.96">A</span><span class="char">C</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [39, 40, 41, 44, 45, 46, 47, 50], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 48], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="XS7GIPBOBUTPSFS6DQPC6BSNNCXFHK3MRZA2OQFPYAGFMPYAYCMJ" title="XS (Group 2)">●</span><span>20240606 15:02 DILIGENT</span></div>
             <div class="message-display"><span class="char">X</span><span class="char">S</span><span class="char">7</span><span class="char">G</span><span class="char">I</span><span class="char">P</span><span class="char">B</span><span class="char">O</span><span class="char">B</span><span class="char">U</span><span class="char">T</span><span class="char">P</span><span class="char">S</span><span class="char">F</span><span class="char char-hot_k1" data-patterns="44" style="opacity: 1.00">S</span><span class="char">6</span><span class="char">D</span><span class="char">Q</span><span class="char">P</span><span class="char">C</span><span class="char">6</span><span class="char">B</span><span class="char char-hot_k1" data-patterns="44" style="opacity: 0.96">S</span><span class="char">N</span><span class="char">N</span><span class="char">C</span><span class="char">X</span><span class="char">F</span><span class="char">H</span><span class="char">K</span><span class="char">3</span><span class="char">M</span><span class="char">R</span><span class="char">Z</span><span class="char">A</span><span class="char">2</span><span class="char">O</span><span class="char">Q</span><span class="char">F</span><span class="char char-gapped" data-patterns="42" style="opacity: 0.53">P</span><span class="char char-gapped" data-patterns="42,43" style="opacity: 1.00">Y</span><span class="char char-gapped" data-patterns="42" style="opacity: 1.00">A</span><span class="char">G</span><span class="char">F</span><span class="char char-gapped" data-patterns="42" style="opacity: 1.00">M</span><span class="char char-gapped" data-patterns="42" style="opacity: 0.53">P</span><span class="char char-gapped" data-patterns="42" style="opacity: 1.00">Y</span><span class="char char-gapped" data-patterns="42" style="opacity: 1.00">A</span><span class="char char-hot_k1" data-patterns="43" style="opacity: 0.91">Y</span><span class="char">C</span><span class="char char-gapped" data-patterns="42" style="opacity: 0.96">M</span><span class="char">J</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[{&quot;positions&quot;: [16, 17, 2, 3], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 46, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 48], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [14, 22], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [50, 44], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="BQCDUJIQYVHL3NU3CDM5F7UAKFGJJ3JPT3T77I4HNB4LSSNBNGSU" title="BQ (Group 2)">●</span><span>20240822 15:11 SPY SONG</span></div>
             <div class="message-display"><span class="char">B</span><span class="char">Q</span><span class="char char-exact" data-patterns="45" style="opacity: 0.44">C</span><span class="char char-exact" data-patterns="45" style="opacity: 0.57">D</span><span class="char">U</span><span class="char">J</span><span class="char">I</span><span class="char">Q</span><span class="char">Y</span><span class="char">V</span><span class="char">H</span><span class="char">L</span><span class="char">3</span><span class="char">N</span><span class="char char-hot_k1" data-patterns="48" style="opacity: 1.00">U</span><span class="char">3</span><span class="char char-exact" data-patterns="45" style="opacity: 0.48">C</span><span class="char char-exact" data-patterns="45" style="opacity: 0.44">D</span><span class="char">M</span><span class="char">5</span><span class="char">F</span><span class="char">7</span><span class="char char-hot_k1" data-patterns="48" style="opacity: 0.96">U</span><span class="char">A</span><span class="char">K</span><span class="char">F</span><span class="char">G</span><span class="char">J</span><span class="char">J</span><span class="char">3</span><span class="char">J</span><span class="char">P</span><span class="char">T</span><span class="char">3</span><span class="char">T</span><span class="char">7</span><span class="char">7</span><span class="char">I</span><span class="char">4</span><span class="char">H</span><span class="char char-exact" data-patterns="46,47" style="opacity: 1.00">N</span><span class="char char-exact" data-patterns="46" style="opacity: 1.00">B</span><span class="char">4</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="49" style="opacity: 1.00">S</span><span class="char">S</span><span class="char char-exact" data-patterns="46" style="opacity: 1.00">N</span><span class="char char-exact" data-patterns="46" style="opacity: 1.00">B</span><span class="char char-hot_k1" data-patterns="47" style="opacity: 0.91">N</span><span class="char">G</span><span class="char char-hot_k1" data-patterns="49" style="opacity: 0.96">S</span><span class="char">U</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="3" data-patterns="[{&quot;positions&quot;: [33, 43, 44, 45, 48, 28, 29, 30], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [40, 41, 42, 45, 46, 47], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [16, 3, 4, 15], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [9, 10, 14, 15], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-3-dot" data-message="2OXA2N7JO6AS466A2HXQNBIJCSS7PLKM4LVKGRLJKQBPLKQBLMT5" title="2O (Group 3)">●</span><span>20240920 15:29 BUSHPILOT</span></div>
             <div class="message-display"><span class="char">2</span><span class="char">O</span><span class="char">X</span><span class="char char-exact" data-patterns="52" style="opacity: 0.57">A</span><span class="char char-exact" data-patterns="52" style="opacity: 0.44">2</span><span class="char">N</span><span class="char">7</span><span class="char">J</span><span class="char">O</span><span class="char char-exact" data-patterns="53" style="opacity: 0.48">6</span><span class="char char-exact" data-patterns="53" style="opacity: 0.48">A</span><span class="char">S</span><span class="char">4</span><span class="char">6</span><span class="char char-exact" data-patterns="53" style="opacity: 1.00">6</span><span class="char char-exact" data-patterns="52,53" style="opacity: 0.53">A</span><span class="char char-exact" data-patterns="52" style="opacity: 0.48">2</span><span class="char">H</span><span class="char">X</span><span class="char">Q</span><span class="char">N</span><span class="char">B</span><span class="char">I</span><span class="char">J</span><span class="char">C</span><span class="char">S</span><span class="char">S</span><span class="char">7</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.44">P</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.41">L</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.44">K</span><span class="char">M</span><span class="char">4</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.41">L</span><span class="char">V</span><span class="char">K</span><span class="char">G</span><span class="char">R</span><span class="char">L</span><span class="char">J</span><span class="char char-exact" data-patterns="51" style="opacity: 1.00">K</span><span class="char char-exact" data-patterns="51" style="opacity: 1.00">Q</span><span class="char char-exact" data-patterns="51" style="opacity: 0.91">B</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.44">P</span><span class="char char-gapped" data-patterns="50" style="opacity: 1.00">L</span><span class="char char-gapped" data-patterns="50,51" style="opacity: 0.53">K</span><span class="char char-exact" data-patterns="51" style="opacity: 1.00">Q</span><span class="char char-exact" data-patterns="51" style="opacity: 1.00">B</span><span class="char char-gapped" data-patterns="50" style="opacity: 0.91">L</span><span class="char">M</span><span class="char">T</span><span class="char">5</span></div>
         </div>
-        <div class="message-block">
+        <div class="message-block" data-group="2" data-patterns="[]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="NZTYXFJNYJOU6YYLUVATASN7G4ILN4DZO3Y2JLGCOZM4XLYO27V7" title="NZ (Group 2)">●</span><span>20250706 15:03 WIRE ROPE</span></div>
             <div class="message-display"><span class="char">N</span><span class="char">Z</span><span class="char">T</span><span class="char">Y</span><span class="char">X</span><span class="char">F</span><span class="char">J</span><span class="char">N</span><span class="char">Y</span><span class="char">J</span><span class="char">O</span><span class="char">U</span><span class="char">6</span><span class="char">Y</span><span class="char">Y</span><span class="char">L</span><span class="char">U</span><span class="char">V</span><span class="char">A</span><span class="char">T</span><span class="char">A</span><span class="char">S</span><span class="char">N</span><span class="char">7</span><span class="char">G</span><span class="char">4</span><span class="char">I</span><span class="char">L</span><span class="char">N</span><span class="char">4</span><span class="char">D</span><span class="char">Z</span><span class="char">O</span><span class="char">3</span><span class="char">Y</span><span class="char">2</span><span class="char">J</span><span class="char">L</span><span class="char">G</span><span class="char">C</span><span class="char">O</span><span class="char">Z</span><span class="char">M</span><span class="char">4</span><span class="char">X</span><span class="char">L</span><span class="char">Y</span><span class="char">O</span><span class="char">2</span><span class="char">7</span><span class="char">V</span><span class="char">7</span></div>
         </div>
@@ -390,7 +463,7 @@
                     return;
                 }
 
-                // Select the first pattern (highest priority)
+                // Select the first pattern
                 selectedPatternId = patterns[0];
 
                 // Deselect all first
@@ -430,6 +503,117 @@
                 navigator.clipboard.writeText(message).catch(err => {
                     console.error('Failed to copy:', err);
                 });
+            });
+        });
+
+        // Group filtering functionality
+        const messageLength = 52;
+        const heatmapCells = document.querySelectorAll('.heatmap-cell');
+
+        function updateHeatmapAndVisibility() {
+            console.log('updateHeatmapAndVisibility called');
+
+            // Get checked groups
+            const checkedGroups = new Set();
+
+            // Check groups 1-4
+            for (let i = 1; i <= 4; i++) {
+                const checkbox = document.getElementById('filter-group-' + i);
+                if (checkbox && checkbox.checked) {
+                    checkedGroups.add(String(i));
+                }
+            }
+
+            // Check unclassified
+            const unclassifiedCheckbox = document.getElementById('filter-group-unclassified');
+            if (unclassifiedCheckbox && unclassifiedCheckbox.checked) {
+                checkedGroups.add('unclassified');
+            }
+
+            console.log('Checked groups:', Array.from(checkedGroups));
+
+            // Show/hide messages based on filters
+            const messageBlocks = document.querySelectorAll('.message-block');
+            const visibleMessages = [];
+
+            messageBlocks.forEach(block => {
+                const group = block.getAttribute('data-group');
+
+                if (checkedGroups.has(group)) {
+                    block.classList.remove('hidden');
+                    visibleMessages.push(block);
+                } else {
+                    block.classList.add('hidden');
+                }
+            });
+
+            console.log('Visible messages:', visibleMessages.length, 'of', messageBlocks.length);
+
+            // Recalculate aggregate heatmap
+            const positionCounts = new Array(messageLength).fill(0);
+
+            visibleMessages.forEach(block => {
+                const patternDataStr = block.getAttribute('data-patterns');
+                if (!patternDataStr) return;
+
+                try {
+                    const patternData = JSON.parse(patternDataStr);
+                    if (Array.isArray(patternData)) {
+                        // Collect all positions covered by ANY pattern for this message
+                        // Each position should only be counted once per message
+                        const coveredPositions = new Set();
+                        patternData.forEach(pattern => {
+                            if (pattern.positions && Array.isArray(pattern.positions)) {
+                                pattern.positions.forEach(pos => {
+                                    if (pos >= 0 && pos < messageLength) {
+                                        coveredPositions.add(pos);
+                                    }
+                                });
+                            }
+                        });
+
+                        // Now increment count once per position
+                        coveredPositions.forEach(pos => {
+                            positionCounts[pos] += 1.0;
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing pattern data:', e, patternDataStr);
+                }
+            });
+
+            // Update heatmap cells with new colors
+            const maxCount = Math.max(...positionCounts, 1);
+
+            positionCounts.forEach((count, i) => {
+                if (i >= heatmapCells.length) return;
+
+                let color;
+                if (count === 0) {
+                    color = '#1a1a1a';
+                } else {
+                    const logRatio = Math.log(count + 1) / Math.log(maxCount + 1);
+                    const intensityRatio = Math.pow(logRatio, 3);
+                    const intensity = Math.floor(intensityRatio * 255);
+                    color = 'rgb(' + intensity + ', ' + Math.floor(intensity / 2) + ', 0)';
+                }
+                heatmapCells[i].style.backgroundColor = color;
+                heatmapCells[i].title = 'Position ' + (i + 1) + ': ' + count.toFixed(1) + ' weighted messages';
+            });
+
+            console.log('Heatmap updated');
+        }
+
+        // Add event listeners to all checkboxes
+        console.log('Setting up checkbox event listeners...');
+        const filterCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
+        console.log('Found checkboxes:', filterCheckboxes.length);
+
+        filterCheckboxes.forEach(checkbox => {
+            console.log('Adding listener to:', checkbox.id);
+            checkbox.addEventListener('change', function() {
+                console.log('Checkbox changed:', this.id, 'checked:', this.checked);
+                updateHeatmapAndVisibility();
             });
         });
     </script>
