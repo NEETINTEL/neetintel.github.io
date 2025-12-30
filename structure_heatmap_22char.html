@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>EAM Structure Heatmap - 22 Characters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Condensed:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            border-bottom: 3px solid #4a9eff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .heatmap-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: #0d0d0d;
+            padding: 15px 0;
+            margin-bottom: 5px;
+        }
+
+        .heatmap-bar {
+            display: flex;
+            gap: 0;
+            margin-bottom: 3px;
+        }
+
+        .heatmap-cell {
+            flex: 1;
+            height: 20px;
+            border-right: 1px solid #333;
+        }
+
+        .position-ruler {
+            display: flex;
+            gap: 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .position-label {
+            flex: 1;
+            text-align: center;
+        }
+
+        .message-block {
+            margin-bottom: 0px;
+            line-height: 1.2;
+        }
+
+        .message-meta {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 0px;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background-color: #333;
+            color: #aaa;
+            border: 1px solid #555;
+            border-radius: 2px;
+            padding: 0px 4px;
+            font-size: 8px;
+            cursor: pointer;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.2s;
+            line-height: 1;
+            height: 12px;
+        }
+
+        .copy-btn:hover {
+            background-color: #4a9eff;
+            color: #fff;
+            border-color: #4a9eff;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background-color: #51cf66;
+            color: #000;
+            border-color: #51cf66;
+        }
+
+        .message-display {
+            display: flex;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 1px;
+        }
+
+        .char {
+            flex: 1;
+            text-align: center;
+            color: #e0e0e0;
+            padding: 3px 0;
+        }
+
+        .char-exact {
+            background-color: #4a9eff;
+            color: #000000;
+        }
+
+        .char-gapped {
+            background-color: #51cf66;
+            color: #000000;
+        }
+
+        .char-hot_k1 {
+            background-color: #cc5de8;
+            color: #000000;
+        }
+
+        .char-selected {
+            outline: 3px solid #ffffff;
+            outline-offset: -3px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            position: relative;
+            opacity: 1.0 !important;
+        }
+
+        .char[data-patterns] {
+            cursor: pointer;
+        }
+
+        .info-box {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #4a9eff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: #4a9eff;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>EAM Structure Heatmap - 22-Character Messages</h1>
+
+    <div class="info-box">
+        <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
+        <strong>Total Messages:</strong> 60<br>
+        <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
+        <strong>Pattern Types:</strong>
+        <span style="color: #51cf66; font-weight: bold;">Gapped</span>,
+        <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>,
+        <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Hot Position Pairs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">13</div>
+            <div class="stat-label">Messages with Patterns</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">14</div>
+            <div class="stat-label">Total Patterns Found</div>
+        </div>
+    </div>
+
+    <div class="heatmap-container">
+        <div class="heatmap-bar">
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 1: 1 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 2: 1 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(58, 29, 0);" title="Position 3: 2 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(184, 92, 0);" title="Position 4: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(184, 92, 0);" title="Position 5: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(184, 92, 0);" title="Position 6: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(118, 59, 0);" title="Position 7: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 8: 1 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(184, 92, 0);" title="Position 9: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(184, 92, 0);" title="Position 10: 4 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(58, 29, 0);" title="Position 11: 2 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 12: 1 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 13: 1 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(118, 59, 0);" title="Position 14: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 15: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 16: 5 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(118, 59, 0);" title="Position 17: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(58, 29, 0);" title="Position 18: 2 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(118, 59, 0);" title="Position 19: 3 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(58, 29, 0);" title="Position 20: 2 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 21: 0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 22: 0 messages"></div>
+        </div>
+        <div class="position-ruler">
+            <div class="position-label">01</div>
+            <div class="position-label">02</div>
+            <div class="position-label">03</div>
+            <div class="position-label">04</div>
+            <div class="position-label">05</div>
+            <div class="position-label">06</div>
+            <div class="position-label">07</div>
+            <div class="position-label">08</div>
+            <div class="position-label">09</div>
+            <div class="position-label">10</div>
+            <div class="position-label">11</div>
+            <div class="position-label">12</div>
+            <div class="position-label">13</div>
+            <div class="position-label">14</div>
+            <div class="position-label">15</div>
+            <div class="position-label">16</div>
+            <div class="position-label">17</div>
+            <div class="position-label">18</div>
+            <div class="position-label">19</div>
+            <div class="position-label">20</div>
+            <div class="position-label">21</div>
+            <div class="position-label">22</div>
+        </div>
+    </div>
+
+        <div class="message-block">
+            <div class="message-meta"><span>20241002 03:53 XYLOPHONE</span><button class="copy-btn" data-message="FJUY4JGWQEZ3VGGV6LLF7K">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">U</span><span class="char">Y</span><span class="char">4</span><span class="char">J</span><span class="char">G</span><span class="char">W</span><span class="char">Q</span><span class="char">E</span><span class="char">Z</span><span class="char">3</span><span class="char">V</span><span class="char">G</span><span class="char">G</span><span class="char">V</span><span class="char">6</span><span class="char">L</span><span class="char">L</span><span class="char">F</span><span class="char">7</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241003 06:02 SANDUSKY</span><button class="copy-btn" data-message="FJR4ZEMUNCEGGHGHKNCZRU">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">R</span><span class="char">4</span><span class="char">Z</span><span class="char">E</span><span class="char">M</span><span class="char">U</span><span class="char char-exact" data-patterns="1" style="opacity: 0.83">N</span><span class="char char-exact" data-patterns="1" style="opacity: 0.83">C</span><span class="char">E</span><span class="char">G</span><span class="char char-exact" data-patterns="2" style="opacity: 0.43">G</span><span class="char char-exact" data-patterns="2" style="opacity: 0.68">H</span><span class="char char-exact" data-patterns="2" style="opacity: 1.00">G</span><span class="char char-exact" data-patterns="2" style="opacity: 1.00">H</span><span class="char">K</span><span class="char char-exact" data-patterns="1" style="opacity: 0.54">N</span><span class="char char-exact" data-patterns="1" style="opacity: 0.68">C</span><span class="char">Z</span><span class="char">R</span><span class="char">U</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241004 04:42 DOCKYARD</span><button class="copy-btn" data-message="FJ3GDHEJAJIMP73DH7VWJU">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">3</span><span class="char">G</span><span class="char char-exact" data-patterns="3" style="opacity: 0.83">D</span><span class="char char-exact" data-patterns="3" style="opacity: 0.83">H</span><span class="char">E</span><span class="char">J</span><span class="char">A</span><span class="char">J</span><span class="char">I</span><span class="char">M</span><span class="char">P</span><span class="char">7</span><span class="char">3</span><span class="char char-exact" data-patterns="3" style="opacity: 1.00">D</span><span class="char char-exact" data-patterns="3" style="opacity: 0.68">H</span><span class="char">7</span><span class="char">V</span><span class="char">W</span><span class="char">J</span><span class="char">U</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241004 06:12 DOCKYARD</span><button class="copy-btn" data-message="FJYNAFTDAXRUUEQKFAQ3ZH">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">Y</span><span class="char">N</span><span class="char">A</span><span class="char">F</span><span class="char">T</span><span class="char">D</span><span class="char">A</span><span class="char">X</span><span class="char">R</span><span class="char">U</span><span class="char">U</span><span class="char">E</span><span class="char">Q</span><span class="char">K</span><span class="char">F</span><span class="char">A</span><span class="char">Q</span><span class="char">3</span><span class="char">Z</span><span class="char">H</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241006 13:17 REINDEER</span><button class="copy-btn" data-message="FJ5OXBZKR3VH5PER3FK5EJ">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">5</span><span class="char">O</span><span class="char">X</span><span class="char">B</span><span class="char">Z</span><span class="char">K</span><span class="char char-exact" data-patterns="4" style="opacity: 0.83">R</span><span class="char char-exact" data-patterns="4" style="opacity: 0.83">3</span><span class="char">V</span><span class="char">H</span><span class="char">5</span><span class="char">P</span><span class="char">E</span><span class="char char-exact" data-patterns="4" style="opacity: 1.00">R</span><span class="char char-exact" data-patterns="4" style="opacity: 0.68">3</span><span class="char">F</span><span class="char">K</span><span class="char">5</span><span class="char">E</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241006 13:45 REINDEER</span><button class="copy-btn" data-message="FJSE2O63QQQT4SVYQX3YRF">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">S</span><span class="char">E</span><span class="char">2</span><span class="char">O</span><span class="char">6</span><span class="char">3</span><span class="char char-exact" data-patterns="5" style="opacity: 0.83">Q</span><span class="char char-exact" data-patterns="5" style="opacity: 0.83">Q</span><span class="char char-exact" data-patterns="5" style="opacity: 0.54">Q</span><span class="char">T</span><span class="char">4</span><span class="char">S</span><span class="char">V</span><span class="char">Y</span><span class="char">Q</span><span class="char">X</span><span class="char">3</span><span class="char">Y</span><span class="char">R</span><span class="char">F</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241006 14:36 REINDEER</span><button class="copy-btn" data-message="FJTQU3ODBLN4I7BMH734TC">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">T</span><span class="char">Q</span><span class="char">U</span><span class="char">3</span><span class="char">O</span><span class="char">D</span><span class="char">B</span><span class="char">L</span><span class="char">N</span><span class="char">4</span><span class="char">I</span><span class="char">7</span><span class="char">B</span><span class="char">M</span><span class="char">H</span><span class="char">7</span><span class="char">3</span><span class="char">4</span><span class="char">T</span><span class="char">C</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241008 21:28 HOME TEAM</span><button class="copy-btn" data-message="FJYISW7X2XF6BUISBOXY2W">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">Y</span><span class="char char-exact" data-patterns="6" style="opacity: 0.83">I</span><span class="char char-exact" data-patterns="6" style="opacity: 0.83">S</span><span class="char">W</span><span class="char">7</span><span class="char">X</span><span class="char">2</span><span class="char">X</span><span class="char">F</span><span class="char">6</span><span class="char">B</span><span class="char">U</span><span class="char char-exact" data-patterns="6" style="opacity: 1.00">I</span><span class="char char-exact" data-patterns="6" style="opacity: 1.00">S</span><span class="char">B</span><span class="char">O</span><span class="char">X</span><span class="char">Y</span><span class="char">2</span><span class="char">W</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241015 21:29 POCKMARK</span><button class="copy-btn" data-message="FJZCW7IEDE5K3ERF433RXQ">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">Z</span><span class="char">C</span><span class="char">W</span><span class="char">7</span><span class="char">I</span><span class="char">E</span><span class="char">D</span><span class="char">E</span><span class="char">5</span><span class="char">K</span><span class="char">3</span><span class="char">E</span><span class="char">R</span><span class="char">F</span><span class="char">4</span><span class="char">3</span><span class="char">3</span><span class="char">R</span><span class="char">X</span><span class="char">Q</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241029 14:27 OPAL RING</span><button class="copy-btn" data-message="FJJUJHFI6JWHLSANUPKFYV">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">J</span><span class="char">U</span><span class="char">J</span><span class="char">H</span><span class="char">F</span><span class="char">I</span><span class="char">6</span><span class="char">J</span><span class="char">W</span><span class="char">H</span><span class="char">L</span><span class="char">S</span><span class="char">A</span><span class="char">N</span><span class="char">U</span><span class="char">P</span><span class="char">K</span><span class="char">F</span><span class="char">Y</span><span class="char">V</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241029 15:30 OPAL RING</span><button class="copy-btn" data-message="FJEQP2JYMM3G7Q5ABOQ5R7">copy</button></div>
+            <div class="message-display"><span class="char">F</span><span class="char">J</span><span class="char">E</span><span class="char">Q</span><span class="char">P</span><span class="char">2</span><span class="char">J</span><span class="char">Y</span><span class="char">M</span><span class="char">M</span><span class="char">3</span><span class="char">G</span><span class="char">7</span><span class="char char-exact" data-patterns="7" style="opacity: 0.68">Q</span><span class="char char-exact" data-patterns="7" style="opacity: 1.00">5</span><span class="char">A</span><span class="char">B</span><span class="char">O</span><span class="char char-exact" data-patterns="7" style="opacity: 0.68">Q</span><span class="char char-exact" data-patterns="7" style="opacity: 0.54">5</span><span class="char">R</span><span class="char">7</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241030 16:12 KNOWLEDGE</span><button class="copy-btn" data-message="DX5SP2NISLSDIEP7KFDGZV">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">5</span><span class="char">S</span><span class="char">P</span><span class="char">2</span><span class="char">N</span><span class="char">I</span><span class="char">S</span><span class="char">L</span><span class="char">S</span><span class="char">D</span><span class="char">I</span><span class="char">E</span><span class="char">P</span><span class="char">7</span><span class="char">K</span><span class="char">F</span><span class="char">D</span><span class="char">G</span><span class="char">Z</span><span class="char">V</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241102 04:34 MILLINER</span><button class="copy-btn" data-message="DXQCRSZJ42YKOV4YTIMWTV">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">Q</span><span class="char">C</span><span class="char">R</span><span class="char">S</span><span class="char">Z</span><span class="char">J</span><span class="char">4</span><span class="char">2</span><span class="char">Y</span><span class="char">K</span><span class="char">O</span><span class="char">V</span><span class="char">4</span><span class="char">Y</span><span class="char">T</span><span class="char">I</span><span class="char">M</span><span class="char">W</span><span class="char">T</span><span class="char">V</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241104 14:47 BAJA BOB</span><button class="copy-btn" data-message="DXEUQBDM4S3GZIQKZLCPP4">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">E</span><span class="char">U</span><span class="char">Q</span><span class="char">B</span><span class="char">D</span><span class="char">M</span><span class="char">4</span><span class="char">S</span><span class="char">3</span><span class="char">G</span><span class="char">Z</span><span class="char">I</span><span class="char">Q</span><span class="char">K</span><span class="char">Z</span><span class="char">L</span><span class="char">C</span><span class="char">P</span><span class="char">P</span><span class="char">4</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241112 21:27 BRUNETTE</span><button class="copy-btn" data-message="DXJPOUDH6MEIENKUWMGCZS">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">J</span><span class="char">P</span><span class="char">O</span><span class="char">U</span><span class="char">D</span><span class="char">H</span><span class="char">6</span><span class="char">M</span><span class="char">E</span><span class="char">I</span><span class="char">E</span><span class="char">N</span><span class="char">K</span><span class="char">U</span><span class="char">W</span><span class="char">M</span><span class="char">G</span><span class="char">C</span><span class="char">Z</span><span class="char">S</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241116 02:37 HELLFIRE</span><button class="copy-btn" data-message="DXXCSM4FWCH42NK24ITLJQ">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">X</span><span class="char">C</span><span class="char">S</span><span class="char">M</span><span class="char">4</span><span class="char">F</span><span class="char">W</span><span class="char">C</span><span class="char">H</span><span class="char">4</span><span class="char">2</span><span class="char">N</span><span class="char">K</span><span class="char">2</span><span class="char">4</span><span class="char">I</span><span class="char">T</span><span class="char">L</span><span class="char">J</span><span class="char">Q</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241116 20:27 HELLFIRE</span><button class="copy-btn" data-message="DX7XYPK4QKFGUZZ75XQMZX">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">7</span><span class="char">X</span><span class="char">Y</span><span class="char">P</span><span class="char">K</span><span class="char">4</span><span class="char">Q</span><span class="char">K</span><span class="char">F</span><span class="char">G</span><span class="char">U</span><span class="char">Z</span><span class="char">Z</span><span class="char">7</span><span class="char">5</span><span class="char">X</span><span class="char">Q</span><span class="char">M</span><span class="char">Z</span><span class="char">X</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241116 21:13 HELLFIRE</span><button class="copy-btn" data-message="DXA2NVJAUPL2DYO2QN7M4F">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">A</span><span class="char">2</span><span class="char">N</span><span class="char">V</span><span class="char">J</span><span class="char">A</span><span class="char">U</span><span class="char">P</span><span class="char">L</span><span class="char">2</span><span class="char">D</span><span class="char">Y</span><span class="char">O</span><span class="char">2</span><span class="char">Q</span><span class="char">N</span><span class="char">7</span><span class="char">M</span><span class="char">4</span><span class="char">F</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241116 22:23 HELLFIRE</span><button class="copy-btn" data-message="DXCYXZD4G624Y267GEXNEJ">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">C</span><span class="char">Y</span><span class="char">X</span><span class="char">Z</span><span class="char">D</span><span class="char">4</span><span class="char">G</span><span class="char">6</span><span class="char">2</span><span class="char">4</span><span class="char">Y</span><span class="char">2</span><span class="char">6</span><span class="char">7</span><span class="char">G</span><span class="char">E</span><span class="char">X</span><span class="char">N</span><span class="char">E</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241118 05:30 LORD JIM</span><button class="copy-btn" data-message="DXXLHMJUON7EBB6WUJM7KK">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">X</span><span class="char">L</span><span class="char">H</span><span class="char">M</span><span class="char">J</span><span class="char">U</span><span class="char">O</span><span class="char">N</span><span class="char">7</span><span class="char">E</span><span class="char">B</span><span class="char">B</span><span class="char">6</span><span class="char">W</span><span class="char">U</span><span class="char">J</span><span class="char">M</span><span class="char">7</span><span class="char">K</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241119 22:35 RHETORIC</span><button class="copy-btn" data-message="DXDM5CLDCGD3JYGGEJGG4A">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">D</span><span class="char">M</span><span class="char">5</span><span class="char">C</span><span class="char">L</span><span class="char">D</span><span class="char">C</span><span class="char">G</span><span class="char">D</span><span class="char">3</span><span class="char">J</span><span class="char">Y</span><span class="char char-exact" data-patterns="8" style="opacity: 1.00">G</span><span class="char char-exact" data-patterns="8" style="opacity: 1.00">G</span><span class="char">E</span><span class="char">J</span><span class="char char-exact" data-patterns="8" style="opacity: 0.68">G</span><span class="char char-exact" data-patterns="8" style="opacity: 0.54">G</span><span class="char">4</span><span class="char">A</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241122 10:04 COLLAPSE</span><button class="copy-btn" data-message="DXIMQ3HGLJJMCJIILCX6EZ">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">X</span><span class="char">I</span><span class="char">M</span><span class="char">Q</span><span class="char">3</span><span class="char">H</span><span class="char">G</span><span class="char">L</span><span class="char">J</span><span class="char">J</span><span class="char">M</span><span class="char">C</span><span class="char">J</span><span class="char">I</span><span class="char">I</span><span class="char">L</span><span class="char">C</span><span class="char">X</span><span class="char">6</span><span class="char">E</span><span class="char">Z</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241122 11:23 COLLAPSE</span><button class="copy-btn" data-message="L6ML4NERRU34G3UPDZTLCP">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">M</span><span class="char">L</span><span class="char">4</span><span class="char">N</span><span class="char">E</span><span class="char">R</span><span class="char">R</span><span class="char">U</span><span class="char">3</span><span class="char">4</span><span class="char">G</span><span class="char">3</span><span class="char">U</span><span class="char">P</span><span class="char">D</span><span class="char">Z</span><span class="char">T</span><span class="char">L</span><span class="char">C</span><span class="char">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241123 06:03 NIGHTFALL</span><button class="copy-btn" data-message="L66Y7NJMPWAA5SWGJHRQTX">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">6</span><span class="char">Y</span><span class="char">7</span><span class="char">N</span><span class="char">J</span><span class="char">M</span><span class="char">P</span><span class="char">W</span><span class="char">A</span><span class="char">A</span><span class="char">5</span><span class="char">S</span><span class="char">W</span><span class="char">G</span><span class="char">J</span><span class="char">H</span><span class="char">R</span><span class="char">Q</span><span class="char">T</span><span class="char">X</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241123 13:48 NIGHTFALL</span><button class="copy-btn" data-message="L6GEA4MPUVHKAVKVXT5UBY">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">G</span><span class="char">E</span><span class="char">A</span><span class="char">4</span><span class="char">M</span><span class="char">P</span><span class="char">U</span><span class="char">V</span><span class="char">H</span><span class="char">K</span><span class="char">A</span><span class="char">V</span><span class="char">K</span><span class="char">V</span><span class="char">X</span><span class="char">T</span><span class="char">5</span><span class="char">U</span><span class="char">B</span><span class="char">Y</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241124 21:20 CLERICAL</span><button class="copy-btn" data-message="L6QTTU5NRYBF2FPXF3CXG2">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">Q</span><span class="char">T</span><span class="char">T</span><span class="char">U</span><span class="char">5</span><span class="char">N</span><span class="char">R</span><span class="char">Y</span><span class="char">B</span><span class="char">F</span><span class="char">2</span><span class="char">F</span><span class="char">P</span><span class="char">X</span><span class="char">F</span><span class="char">3</span><span class="char">C</span><span class="char">X</span><span class="char">G</span><span class="char">2</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241125 06:16 TELEGRAM</span><button class="copy-btn" data-message="L6AINCEYO72CAMNFLDCGMF">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">A</span><span class="char">I</span><span class="char">N</span><span class="char">C</span><span class="char">E</span><span class="char">Y</span><span class="char">O</span><span class="char">7</span><span class="char">2</span><span class="char">C</span><span class="char">A</span><span class="char">M</span><span class="char">N</span><span class="char">F</span><span class="char">L</span><span class="char">D</span><span class="char">C</span><span class="char">G</span><span class="char">M</span><span class="char">F</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241126 15:41 PULMOTOR</span><button class="copy-btn" data-message="L6RIKIHHO3DERQVZ2DPAOG">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">R</span><span class="char">I</span><span class="char">K</span><span class="char">I</span><span class="char">H</span><span class="char">H</span><span class="char">O</span><span class="char">3</span><span class="char">D</span><span class="char">E</span><span class="char">R</span><span class="char">Q</span><span class="char">V</span><span class="char">Z</span><span class="char">2</span><span class="char">D</span><span class="char">P</span><span class="char">A</span><span class="char">O</span><span class="char">G</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241203 16:16 FOOTWORK</span><button class="copy-btn" data-message="L6GJRKOELX5VCFHR4GEMKL">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">G</span><span class="char">J</span><span class="char">R</span><span class="char">K</span><span class="char">O</span><span class="char">E</span><span class="char">L</span><span class="char">X</span><span class="char">5</span><span class="char">V</span><span class="char">C</span><span class="char">F</span><span class="char">H</span><span class="char">R</span><span class="char">4</span><span class="char">G</span><span class="char">E</span><span class="char">M</span><span class="char">K</span><span class="char">L</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241206 05:17 AUTOCRAT</span><button class="copy-btn" data-message="L627TUCTMVGPWVILLR6DH6">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">2</span><span class="char">7</span><span class="char">T</span><span class="char">U</span><span class="char">C</span><span class="char">T</span><span class="char">M</span><span class="char">V</span><span class="char">G</span><span class="char">P</span><span class="char">W</span><span class="char">V</span><span class="char">I</span><span class="char">L</span><span class="char">L</span><span class="char">R</span><span class="char">6</span><span class="char">D</span><span class="char">H</span><span class="char">6</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241210 02:04 FEARLESS</span><button class="copy-btn" data-message="L6KD635IYQCFKVMYXT7RAP">copy</button></div>
+            <div class="message-display"><span class="char">L</span><span class="char">6</span><span class="char">K</span><span class="char">D</span><span class="char">6</span><span class="char">3</span><span class="char">5</span><span class="char">I</span><span class="char">Y</span><span class="char">Q</span><span class="char">C</span><span class="char">F</span><span class="char">K</span><span class="char">V</span><span class="char">M</span><span class="char">Y</span><span class="char">X</span><span class="char">T</span><span class="char">7</span><span class="char">R</span><span class="char">A</span><span class="char">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241212 17:09 EAR GUARD</span><button class="copy-btn" data-message="L6NWRL6B5AH6IIRFFI7RWJ">copy</button></div>
+            <div class="message-display"><span class="char char-exact" data-patterns="9" style="opacity: 0.43">L</span><span class="char char-exact" data-patterns="9" style="opacity: 0.43">6</span><span class="char">N</span><span class="char">W</span><span class="char">R</span><span class="char char-exact" data-patterns="9" style="opacity: 0.83">L</span><span class="char char-exact" data-patterns="9" style="opacity: 0.68">6</span><span class="char">B</span><span class="char">5</span><span class="char">A</span><span class="char">H</span><span class="char">6</span><span class="char">I</span><span class="char">I</span><span class="char">R</span><span class="char">F</span><span class="char">F</span><span class="char">I</span><span class="char">7</span><span class="char">R</span><span class="char">W</span><span class="char">J</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241213 17:12 DUNGAREE</span><button class="copy-btn" data-message="DQT6UEI7YY7PBIZ4ZHTGQA">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">Q</span><span class="char">T</span><span class="char">6</span><span class="char">U</span><span class="char">E</span><span class="char">I</span><span class="char">7</span><span class="char">Y</span><span class="char">Y</span><span class="char">7</span><span class="char">P</span><span class="char">B</span><span class="char">I</span><span class="char">Z</span><span class="char">4</span><span class="char">Z</span><span class="char">H</span><span class="char">T</span><span class="char">G</span><span class="char">Q</span><span class="char">A</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241214 19:58 STAFF CAR</span><button class="copy-btn" data-message="DQPHYJMFWKVBDDULATHONL">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">Q</span><span class="char">P</span><span class="char">H</span><span class="char">Y</span><span class="char">J</span><span class="char">M</span><span class="char">F</span><span class="char">W</span><span class="char">K</span><span class="char">V</span><span class="char">B</span><span class="char">D</span><span class="char">D</span><span class="char">U</span><span class="char">L</span><span class="char">A</span><span class="char">T</span><span class="char">H</span><span class="char">O</span><span class="char">N</span><span class="char">L</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20241229 14:29 CORN BELT</span><button class="copy-btn" data-message="DQ2SPZJHNXLN562ALDHK2T">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">Q</span><span class="char">2</span><span class="char">S</span><span class="char">P</span><span class="char">Z</span><span class="char">J</span><span class="char">H</span><span class="char">N</span><span class="char">X</span><span class="char">L</span><span class="char">N</span><span class="char">5</span><span class="char">6</span><span class="char">2</span><span class="char">A</span><span class="char">L</span><span class="char">D</span><span class="char">H</span><span class="char">K</span><span class="char">2</span><span class="char">T</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250105 22:09 SWAN LAKE</span><button class="copy-btn" data-message="DQA6K3T5AU5TABXV26U23I">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">Q</span><span class="char">A</span><span class="char">6</span><span class="char">K</span><span class="char">3</span><span class="char">T</span><span class="char">5</span><span class="char">A</span><span class="char">U</span><span class="char">5</span><span class="char">T</span><span class="char">A</span><span class="char">B</span><span class="char">X</span><span class="char">V</span><span class="char">2</span><span class="char">6</span><span class="char">U</span><span class="char">2</span><span class="char">3</span><span class="char">I</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250107 06:05 HANDMAID</span><button class="copy-btn" data-message="DQB6AGXLFYFTONCZZSZGQO">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">Q</span><span class="char">B</span><span class="char">6</span><span class="char">A</span><span class="char">G</span><span class="char">X</span><span class="char">L</span><span class="char">F</span><span class="char">Y</span><span class="char">F</span><span class="char">T</span><span class="char">O</span><span class="char">N</span><span class="char">C</span><span class="char">Z</span><span class="char">Z</span><span class="char">S</span><span class="char">Z</span><span class="char">G</span><span class="char">Q</span><span class="char">O</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250113 20:14 MACKINAW</span><button class="copy-btn" data-message="5GX2AHQ6DHELKPPQPXDBIK">copy</button></div>
+            <div class="message-display"><span class="char">5</span><span class="char">G</span><span class="char">X</span><span class="char">2</span><span class="char">A</span><span class="char">H</span><span class="char">Q</span><span class="char">6</span><span class="char">D</span><span class="char">H</span><span class="char">E</span><span class="char">L</span><span class="char">K</span><span class="char">P</span><span class="char">P</span><span class="char">Q</span><span class="char">P</span><span class="char">X</span><span class="char">D</span><span class="char">B</span><span class="char">I</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250114 15:32 LONG TERM</span><button class="copy-btn" data-message="5G5KCKCSYWGGWRREFMFI3A">copy</button></div>
+            <div class="message-display"><span class="char">5</span><span class="char">G</span><span class="char">5</span><span class="char char-exact" data-patterns="10" style="opacity: 0.83">K</span><span class="char char-exact" data-patterns="10" style="opacity: 0.83">C</span><span class="char char-exact" data-patterns="10" style="opacity: 0.83">K</span><span class="char char-exact" data-patterns="10" style="opacity: 0.68">C</span><span class="char">S</span><span class="char">Y</span><span class="char">W</span><span class="char">G</span><span class="char">G</span><span class="char">W</span><span class="char">R</span><span class="char">R</span><span class="char">E</span><span class="char">F</span><span class="char">M</span><span class="char">F</span><span class="char">I</span><span class="char">3</span><span class="char">A</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250528 19:26 OIL TANK</span><button class="copy-btn" data-message="WJGNRKJ7TVJLGVW2TTGKAU">copy</button></div>
+            <div class="message-display"><span class="char">W</span><span class="char">J</span><span class="char">G</span><span class="char">N</span><span class="char">R</span><span class="char">K</span><span class="char">J</span><span class="char">7</span><span class="char">T</span><span class="char">V</span><span class="char">J</span><span class="char">L</span><span class="char">G</span><span class="char">V</span><span class="char">W</span><span class="char">2</span><span class="char">T</span><span class="char">T</span><span class="char">G</span><span class="char">K</span><span class="char">A</span><span class="char">U</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250528 20:42 OIL TANK</span><button class="copy-btn" data-message="WJTDI6WDX23UUNZLPJK3GX">copy</button></div>
+            <div class="message-display"><span class="char">W</span><span class="char">J</span><span class="char">T</span><span class="char">D</span><span class="char">I</span><span class="char">6</span><span class="char">W</span><span class="char">D</span><span class="char">X</span><span class="char">2</span><span class="char">3</span><span class="char">U</span><span class="char">U</span><span class="char">N</span><span class="char">Z</span><span class="char">L</span><span class="char">P</span><span class="char">J</span><span class="char">K</span><span class="char">3</span><span class="char">G</span><span class="char">X</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250528 22:14 OIL TANK</span><button class="copy-btn" data-message="WJEWEWLJFMIZRDNAEOB26K">copy</button></div>
+            <div class="message-display"><span class="char">W</span><span class="char">J</span><span class="char char-exact" data-patterns="11" style="opacity: 0.54">E</span><span class="char char-exact" data-patterns="11" style="opacity: 0.83">W</span><span class="char char-exact" data-patterns="11" style="opacity: 0.83">E</span><span class="char char-exact" data-patterns="11" style="opacity: 0.83">W</span><span class="char">L</span><span class="char">J</span><span class="char">F</span><span class="char">M</span><span class="char">I</span><span class="char">Z</span><span class="char">R</span><span class="char">D</span><span class="char">N</span><span class="char">A</span><span class="char">E</span><span class="char">O</span><span class="char">B</span><span class="char">2</span><span class="char">6</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250528 23:34 OIL TANK</span><button class="copy-btn" data-message="WJ6UVHQ4KAN4W5LB757IWQ">copy</button></div>
+            <div class="message-display"><span class="char">W</span><span class="char">J</span><span class="char">6</span><span class="char">U</span><span class="char">V</span><span class="char">H</span><span class="char">Q</span><span class="char">4</span><span class="char">K</span><span class="char">A</span><span class="char">N</span><span class="char">4</span><span class="char">W</span><span class="char">5</span><span class="char">L</span><span class="char">B</span><span class="char">7</span><span class="char">5</span><span class="char">7</span><span class="char">I</span><span class="char">W</span><span class="char">Q</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250628 14:08 ENCHILADA</span><button class="copy-btn" data-message="DPP2ZAEKWUITPU33CSNJZN">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">P</span><span class="char">2</span><span class="char">Z</span><span class="char">A</span><span class="char">E</span><span class="char">K</span><span class="char">W</span><span class="char">U</span><span class="char">I</span><span class="char">T</span><span class="char">P</span><span class="char">U</span><span class="char">3</span><span class="char">3</span><span class="char">C</span><span class="char">S</span><span class="char">N</span><span class="char">J</span><span class="char">Z</span><span class="char">N</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250630 04:00 PANHURST</span><button class="copy-btn" data-message="DPP342VLMMSTRFJ3CLGCYW">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">P</span><span class="char">3</span><span class="char">4</span><span class="char">2</span><span class="char">V</span><span class="char">L</span><span class="char">M</span><span class="char">M</span><span class="char">S</span><span class="char">T</span><span class="char">R</span><span class="char">F</span><span class="char">J</span><span class="char">3</span><span class="char">C</span><span class="char">L</span><span class="char">G</span><span class="char">C</span><span class="char">Y</span><span class="char">W</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250630 04:46 PANHURST</span><button class="copy-btn" data-message="DPNSLP5PYJF7KEQ727PHWB">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">N</span><span class="char">S</span><span class="char">L</span><span class="char">P</span><span class="char">5</span><span class="char">P</span><span class="char">Y</span><span class="char">J</span><span class="char">F</span><span class="char">7</span><span class="char">K</span><span class="char">E</span><span class="char">Q</span><span class="char">7</span><span class="char">2</span><span class="char">7</span><span class="char">P</span><span class="char">H</span><span class="char">W</span><span class="char">B</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250630 05:55 PANHURST</span><button class="copy-btn" data-message="DPDWISW3KLVMUFYPUNQDQP">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">D</span><span class="char">W</span><span class="char">I</span><span class="char">S</span><span class="char">W</span><span class="char">3</span><span class="char">K</span><span class="char">L</span><span class="char">V</span><span class="char">M</span><span class="char">U</span><span class="char">F</span><span class="char">Y</span><span class="char">P</span><span class="char">U</span><span class="char">N</span><span class="char">Q</span><span class="char">D</span><span class="char">Q</span><span class="char">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250703 03:47 SAWBLADE</span><button class="copy-btn" data-message="DPY42Q3HIZ32SHGS7KDQUI">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">Y</span><span class="char">4</span><span class="char">2</span><span class="char">Q</span><span class="char">3</span><span class="char">H</span><span class="char">I</span><span class="char">Z</span><span class="char">3</span><span class="char">2</span><span class="char">S</span><span class="char">H</span><span class="char">G</span><span class="char">S</span><span class="char">7</span><span class="char">K</span><span class="char">D</span><span class="char">Q</span><span class="char">U</span><span class="char">I</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250710 14:56 BASS HORN</span><button class="copy-btn" data-message="DPCXTNXQD56EKL3HCLTTYD">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">C</span><span class="char">X</span><span class="char">T</span><span class="char">N</span><span class="char">X</span><span class="char">Q</span><span class="char">D</span><span class="char">5</span><span class="char">6</span><span class="char">E</span><span class="char">K</span><span class="char">L</span><span class="char">3</span><span class="char">H</span><span class="char">C</span><span class="char">L</span><span class="char">T</span><span class="char">T</span><span class="char">Y</span><span class="char">D</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250711 21:44 REKINDLE</span><button class="copy-btn" data-message="DPIFHZZRGNEJO6DNRRSHWP">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">I</span><span class="char">F</span><span class="char">H</span><span class="char">Z</span><span class="char">Z</span><span class="char">R</span><span class="char">G</span><span class="char">N</span><span class="char">E</span><span class="char">J</span><span class="char">O</span><span class="char">6</span><span class="char">D</span><span class="char">N</span><span class="char">R</span><span class="char">R</span><span class="char">S</span><span class="char">H</span><span class="char">W</span><span class="char">P</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250712 04:24 LONG JOHN</span><button class="copy-btn" data-message="DPAB4M5GZ3ERKRFIVUO2US">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">A</span><span class="char">B</span><span class="char">4</span><span class="char">M</span><span class="char">5</span><span class="char">G</span><span class="char">Z</span><span class="char">3</span><span class="char">E</span><span class="char">R</span><span class="char">K</span><span class="char">R</span><span class="char">F</span><span class="char">I</span><span class="char">V</span><span class="char">U</span><span class="char">O</span><span class="char">2</span><span class="char">U</span><span class="char">S</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250712 04:56 LONG JOHN</span><button class="copy-btn" data-message="DPSL7IXDLLFCJ3KJROMAC7">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">S</span><span class="char">L</span><span class="char">7</span><span class="char">I</span><span class="char">X</span><span class="char">D</span><span class="char">L</span><span class="char">L</span><span class="char">F</span><span class="char">C</span><span class="char">J</span><span class="char">3</span><span class="char">K</span><span class="char">J</span><span class="char">R</span><span class="char">O</span><span class="char">M</span><span class="char">A</span><span class="char">C</span><span class="char">7</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250712 05:28 LONG JOHN</span><button class="copy-btn" data-message="DPMC3IAWMRCKULSYL4OXMI">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">M</span><span class="char">C</span><span class="char">3</span><span class="char">I</span><span class="char">A</span><span class="char">W</span><span class="char">M</span><span class="char">R</span><span class="char">C</span><span class="char">K</span><span class="char">U</span><span class="char">L</span><span class="char">S</span><span class="char">Y</span><span class="char">L</span><span class="char">4</span><span class="char">O</span><span class="char">X</span><span class="char">M</span><span class="char">I</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250722 21:12 NEW MOON</span><button class="copy-btn" data-message="DPX7S4PZWHWHCDBA3Q3MYT">copy</button></div>
+            <div class="message-display"><span class="char">D</span><span class="char">P</span><span class="char">X</span><span class="char">7</span><span class="char">S</span><span class="char">4</span><span class="char">P</span><span class="char">Z</span><span class="char char-exact" data-patterns="12" style="opacity: 0.83">W</span><span class="char char-exact" data-patterns="12" style="opacity: 0.83">H</span><span class="char char-exact" data-patterns="12" style="opacity: 0.54">W</span><span class="char char-exact" data-patterns="12" style="opacity: 0.43">H</span><span class="char">C</span><span class="char">D</span><span class="char">B</span><span class="char">A</span><span class="char">3</span><span class="char">Q</span><span class="char">3</span><span class="char">M</span><span class="char">Y</span><span class="char">T</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250723 07:22 JUNE DAY</span><button class="copy-btn" data-message="GV2EQ3Z64EU6OJOLRYZ4XC">copy</button></div>
+            <div class="message-display"><span class="char">G</span><span class="char">V</span><span class="char">2</span><span class="char">E</span><span class="char">Q</span><span class="char">3</span><span class="char">Z</span><span class="char">6</span><span class="char">4</span><span class="char">E</span><span class="char">U</span><span class="char">6</span><span class="char">O</span><span class="char">J</span><span class="char">O</span><span class="char">L</span><span class="char">R</span><span class="char">Y</span><span class="char">Z</span><span class="char">4</span><span class="char">X</span><span class="char">C</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250729 15:00 BLUETICK</span><button class="copy-btn" data-message="GVHOPTZIL2HXCZIUIAM6AN">copy</button></div>
+            <div class="message-display"><span class="char">G</span><span class="char">V</span><span class="char">H</span><span class="char">O</span><span class="char">P</span><span class="char">T</span><span class="char char-exact" data-patterns="13" style="opacity: 0.68">Z</span><span class="char char-exact" data-patterns="13" style="opacity: 0.43">I</span><span class="char">L</span><span class="char">2</span><span class="char">H</span><span class="char">X</span><span class="char">C</span><span class="char char-exact" data-patterns="13" style="opacity: 0.68">Z</span><span class="char char-exact" data-patterns="13" style="opacity: 1.00">I</span><span class="char">U</span><span class="char">I</span><span class="char">A</span><span class="char">M</span><span class="char">6</span><span class="char">A</span><span class="char">N</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250731 04:48 LOOPHOLE</span><button class="copy-btn" data-message="GVNGELNXK6RSSLHPNGXMD4">copy</button></div>
+            <div class="message-display"><span class="char">G</span><span class="char">V</span><span class="char char-exact" data-patterns="14" style="opacity: 0.54">N</span><span class="char char-exact" data-patterns="14" style="opacity: 0.83">G</span><span class="char">E</span><span class="char">L</span><span class="char">N</span><span class="char">X</span><span class="char">K</span><span class="char">6</span><span class="char">R</span><span class="char">S</span><span class="char">S</span><span class="char">L</span><span class="char">H</span><span class="char">P</span><span class="char char-exact" data-patterns="14" style="opacity: 0.68">N</span><span class="char char-exact" data-patterns="14" style="opacity: 0.54">G</span><span class="char">X</span><span class="char">M</span><span class="char">D</span><span class="char">4</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250731 05:16 LOOPHOLE</span><button class="copy-btn" data-message="GVSET7ZSQMZ6E2P7BD5VDA">copy</button></div>
+            <div class="message-display"><span class="char">G</span><span class="char">V</span><span class="char">S</span><span class="char">E</span><span class="char">T</span><span class="char">7</span><span class="char">Z</span><span class="char">S</span><span class="char">Q</span><span class="char">M</span><span class="char">Z</span><span class="char">6</span><span class="char">E</span><span class="char">2</span><span class="char">P</span><span class="char">7</span><span class="char">B</span><span class="char">D</span><span class="char">5</span><span class="char">V</span><span class="char">D</span><span class="char">A</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250731 05:48 LOOPHOLE</span><button class="copy-btn" data-message="GVIRVRAKIQWKSHIXRY7HBK">copy</button></div>
+            <div class="message-display"><span class="char">G</span><span class="char">V</span><span class="char">I</span><span class="char">R</span><span class="char">V</span><span class="char">R</span><span class="char">A</span><span class="char">K</span><span class="char">I</span><span class="char">Q</span><span class="char">W</span><span class="char">K</span><span class="char">S</span><span class="char">H</span><span class="char">I</span><span class="char">X</span><span class="char">R</span><span class="char">Y</span><span class="char">7</span><span class="char">H</span><span class="char">B</span><span class="char">K</span></div>
+        </div>
+        <div class="message-block">
+            <div class="message-meta"><span>20250823 12:49 BENEDICT</span><button class="copy-btn" data-message="GVHAHQHKJ47BLF3TDSJCL2">copy</button></div>
+            <div class="message-display"><span class="char">G</span><span class="char">V</span><span class="char">H</span><span class="char">A</span><span class="char">H</span><span class="char">Q</span><span class="char">H</span><span class="char">K</span><span class="char">J</span><span class="char">4</span><span class="char">7</span><span class="char">B</span><span class="char">L</span><span class="char">F</span><span class="char">3</span><span class="char">T</span><span class="char">D</span><span class="char">S</span><span class="char">J</span><span class="char">C</span><span class="char">L</span><span class="char">2</span></div>
+        </div>
+
+    <script>
+        // Track currently selected pattern
+        let selectedPatternId = null;
+
+        // Add click handler to all characters
+        document.querySelectorAll('.char[data-patterns]').forEach(char => {
+            char.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const patterns = this.getAttribute('data-patterns').split(',');
+
+                // If clicking the same pattern, deselect
+                if (selectedPatternId && patterns.includes(selectedPatternId)) {
+                    deselectAll();
+                    selectedPatternId = null;
+                    return;
+                }
+
+                // Select the first pattern (highest priority)
+                selectedPatternId = patterns[0];
+
+                // Deselect all first
+                deselectAll();
+
+                // Highlight all characters with this pattern ID
+                document.querySelectorAll('.char[data-patterns]').forEach(otherChar => {
+                    const otherPatterns = otherChar.getAttribute('data-patterns').split(',');
+                    if (otherPatterns.includes(selectedPatternId)) {
+                        otherChar.classList.add('char-selected');
+                    }
+                });
+            });
+        });
+
+        function deselectAll() {
+            document.querySelectorAll('.char-selected').forEach(char => {
+                char.classList.remove('char-selected');
+            });
+        }
+
+        // Click outside to deselect
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('char') && !e.target.classList.contains('copy-btn')) {
+                deselectAll();
+                selectedPatternId = null;
+            }
+        });
+
+        // Copy button functionality
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const message = this.getAttribute('data-message');
+
+                // Copy to clipboard
+                navigator.clipboard.writeText(message).then(() => {
+                    // Visual feedback
+                    const originalText = this.textContent;
+                    this.textContent = '✓';
+                    this.classList.add('copied');
+
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.classList.remove('copied');
+                    }, 1000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    this.textContent = '✗';
+                    setTimeout(() => {
+                        this.textContent = 'copy';
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
