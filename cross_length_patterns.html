@@ -1,0 +1,2884 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cross-Length Hot Position Pair Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            border-bottom: 3px solid #4a9eff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #4a9eff;
+            margin-top: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+        }
+
+        .info-box {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4a9eff;
+            margin-bottom: 20px;
+        }
+
+        .filter-controls {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .filter-controls label {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .filter-controls input[type="number"] {
+            width: 60px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .pair-card {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4a9eff;
+        }
+
+        .pair-card.hidden {
+            display: none;
+        }
+
+        .pair-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #4a9eff;
+            margin-bottom: 10px;
+        }
+
+        .pair-info {
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .length-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .length-item {
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 3px;
+            border-left: 3px solid;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .length-item:hover {
+            background-color: #333;
+        }
+
+        .length-grid a {
+            color: inherit;
+            text-decoration: none !important;
+            display: block;
+        }
+
+        .length-grid a:hover .length-title {
+            color: #4a9eff;
+        }
+
+        .freq-very-high { border-left-color: #06b050; }
+        .freq-high { border-left-color: #ffcc00; }
+        .freq-medium { border-left-color: #ff9000; }
+        .freq-low { border-left-color: #ff0467; }
+
+        .length-title {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .length-stats {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: #4a9eff;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .legend {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 10px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .delta-badge {
+            display: inline-block;
+            background-color: #2a2a2a;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            color: #4a9eff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cross-Length Hot Position Pair Analysis</h1>
+
+    <div class="info-box">
+        <strong>Analysis Summary:</strong> This visualization shows position pairs that are structurally significant (hot pairs)
+        across multiple message lengths. A position pair is "hot" if ≥30% of messages show any character repeating at those two positions.
+        Finding the same position pair hot across multiple message lengths suggests fundamental structural rules in message construction.
+    </div>
+
+    <div class="summary-stats">
+        <div class="stat-card">
+            <div class="stat-value">43</div>
+            <div class="stat-label">Message Lengths Analyzed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">183</div>
+            <div class="stat-label">Cross-Length Position Pairs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">(17, 22)</div>
+            <div class="stat-label">Most Common Pair</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Max Lengths for One Pair</div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <strong>Frequency Legend:</strong><br>
+        <div class="legend-item">
+            <span class="legend-color freq-very-high" style="background-color: #06b050;"></span>
+            Very High (≥80%)
+        </div>
+        <div class="legend-item">
+            <span class="legend-color freq-high" style="background-color: #ffcc00;"></span>
+            High (60-79%)
+        </div>
+        <div class="legend-item">
+            <span class="legend-color freq-medium" style="background-color: #ff9000;"></span>
+            Medium (40-59%)
+        </div>
+        <div class="legend-item">
+            <span class="legend-color freq-low" style="background-color: #ff0467;"></span>
+            Low (30-39%)
+        </div>
+    </div>
+
+    <div class="filter-controls">
+        <strong>Filter Options:</strong><br>
+        <label>
+            Min number of lengths: <input type="number" id="minLengths" value="2" min="2" max="20">
+        </label>
+        <label style="margin-left: 20px;">
+            <input type="checkbox" id="showDelta5" checked> Show only Δ5 patterns
+        </label>
+        <button onclick="applyFilters()" style="margin-left: 20px; padding: 8px 15px; background-color: #4a9eff; border: none; color: #000; border-radius: 3px; cursor: pointer; font-weight: bold;">Apply Filters</button>
+    </div>
+
+    <h2>Position Pairs Across Multiple Message Lengths</h2>
+
+    <div id="pairs-container">
+        <div class="pair-card" data-num-lengths="12" data-delta="5">
+            <div class="pair-header">
+                Position 18→23 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 12 message lengths: 27, 32, 39, 43, 47, 51, 55, 56, 60, 63, 68, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_27char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">27-char messages</div>
+                        <div class="length-stats">21/58 (36.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_32char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">32-char messages</div>
+                        <div class="length-stats">10/30 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_39char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">39-char messages</div>
+                        <div class="length-stats">47/62 (75.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_43char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">43-char messages</div>
+                        <div class="length-stats">15/23 (65.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_47char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">47-char messages</div>
+                        <div class="length-stats">11/16 (68.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_51char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">51-char messages</div>
+                        <div class="length-stats">28/39 (71.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">14/24 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">11/23 (47.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">7/17 (41.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">3/5 (60.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="11" data-delta="3">
+            <div class="pair-header">
+                Position 21→24 (1-indexed)
+                <span class="delta-badge">Δ3</span>
+            </div>
+            <div class="pair-info">
+                Found in 11 message lengths: 62, 68, 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_62char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">62-char messages</div>
+                        <div class="length-stats">6/8 (75.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">7/17 (41.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">4/8 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">27/30 (90.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">30/35 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">10/17 (58.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">10/12 (83.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">14/14 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">3/5 (60.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="10" data-delta="1">
+            <div class="pair-header">
+                Position 42→43 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 10 message lengths: 54, 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_54char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">54-char messages</div>
+                        <div class="length-stats">3/7 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">27/30 (90.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">35/35 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">17/17 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="10" data-delta="2">
+            <div class="pair-header">
+                Position 43→45 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 10 message lengths: 54, 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_54char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">54-char messages</div>
+                        <div class="length-stats">3/7 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="10" data-delta="3">
+            <div class="pair-header">
+                Position 42→45 (1-indexed)
+                <span class="delta-badge">Δ3</span>
+            </div>
+            <div class="pair-info">
+                Found in 10 message lengths: 54, 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_54char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">54-char messages</div>
+                        <div class="length-stats">3/7 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="9" data-delta="2">
+            <div class="pair-header">
+                Position 42→44 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 9 message lengths: 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="9" data-delta="1">
+            <div class="pair-header">
+                Position 43→44 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 9 message lengths: 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="9" data-delta="1">
+            <div class="pair-header">
+                Position 44→45 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 9 message lengths: 92, 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">23/30 (76.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">7/14 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="5">
+            <div class="pair-header">
+                Position 19→24 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 27, 39, 43, 47, 51, 55, 56, 68
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_27char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">27-char messages</div>
+                        <div class="length-stats">21/58 (36.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_39char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">39-char messages</div>
+                        <div class="length-stats">46/62 (74.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_43char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">43-char messages</div>
+                        <div class="length-stats">14/23 (60.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_47char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">47-char messages</div>
+                        <div class="length-stats">12/16 (75.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_51char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">51-char messages</div>
+                        <div class="length-stats">24/39 (61.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">12/24 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">11/23 (47.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">7/17 (41.2%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="5">
+            <div class="pair-header">
+                Position 20→25 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 39, 43, 47, 51, 55, 56, 60, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_39char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">39-char messages</div>
+                        <div class="length-stats">23/62 (37.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_43char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">43-char messages</div>
+                        <div class="length-stats">11/23 (47.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_47char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">47-char messages</div>
+                        <div class="length-stats">7/16 (43.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_51char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">51-char messages</div>
+                        <div class="length-stats">30/39 (76.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">12/24 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">9/23 (39.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">8/12 (66.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="2">
+            <div class="pair-header">
+                Position 65→67 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="3">
+            <div class="pair-header">
+                Position 108→111 (1-indexed)
+                <span class="delta-badge">Δ3</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">23/30 (76.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 109→110 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 87→88 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 110→111 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">23/30 (76.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">12/12 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 64→65 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">27/30 (90.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">35/35 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">17/17 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="3">
+            <div class="pair-header">
+                Position 86→89 (1-indexed)
+                <span class="delta-badge">Δ3</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 65→66 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="2">
+            <div class="pair-header">
+                Position 108→110 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 88→89 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">23/30 (76.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">12/12 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 66→67 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">24/30 (80.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">7/7 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="2">
+            <div class="pair-header">
+                Position 86→88 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="3">
+            <div class="pair-header">
+                Position 64→67 (1-indexed)
+                <span class="delta-badge">Δ3</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="2">
+            <div class="pair-header">
+                Position 109→111 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">7/14 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 108→109 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">27/30 (90.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">35/35 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">17/17 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">12/12 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="2">
+            <div class="pair-header">
+                Position 87→89 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">7/14 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="1">
+            <div class="pair-header">
+                Position 86→87 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">27/30 (90.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">35/35 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">17/17 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">7/8 (87.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="8" data-delta="2">
+            <div class="pair-header">
+                Position 64→66 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 8 message lengths: 120, 142, 164, 166, 172, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">34/35 (97.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">11/12 (91.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="7" data-delta="5">
+            <div class="pair-header">
+                Position 17→22 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 7 message lengths: 27, 32, 40, 45, 60, 63, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_27char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">27-char messages</div>
+                        <div class="length-stats">22/58 (37.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_32char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">32-char messages</div>
+                        <div class="length-stats">9/30 (30.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_40char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">40-char messages</div>
+                        <div class="length-stats">22/53 (41.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_45char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">45-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">6/12 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="6" data-delta="5">
+            <div class="pair-header">
+                Position 22→27 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 6 message lengths: 32, 41, 56, 60, 68, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_32char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">32-char messages</div>
+                        <div class="length-stats">22/30 (73.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_41char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">41-char messages</div>
+                        <div class="length-stats">4/12 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">13/23 (56.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">7/17 (41.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">3/5 (60.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="6" data-delta="5">
+            <div class="pair-header">
+                Position 24→29 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 6 message lengths: 32, 37, 45, 56, 60, 68
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_32char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">32-char messages</div>
+                        <div class="length-stats">18/30 (60.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_37char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">37-char messages</div>
+                        <div class="length-stats">9/29 (31.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_45char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">45-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">12/23 (52.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">4/12 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">6/17 (35.3%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="5" data-delta="5">
+            <div class="pair-header">
+                Position 23→28 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 5 message lengths: 32, 56, 60, 68, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_32char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">32-char messages</div>
+                        <div class="length-stats">20/30 (66.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">13/23 (56.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">6/12 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">6/17 (35.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">3/5 (60.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="5" data-delta="5">
+            <div class="pair-header">
+                Position 16→21 (1-indexed)
+                <span class="delta-badge">Δ5</span>
+            </div>
+            <div class="pair-info">
+                Found in 5 message lengths: 40, 45, 60, 63, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_40char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">40-char messages</div>
+                        <div class="length-stats">22/53 (41.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_45char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">45-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="5" data-delta="15">
+            <div class="pair-header">
+                Position 37→52 (1-indexed)
+                <span class="delta-badge">Δ15</span>
+            </div>
+            <div class="pair-info">
+                Found in 5 message lengths: 53, 55, 59, 60, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_53char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">53-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">9/24 (37.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_59char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">59-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="5" data-delta="15">
+            <div class="pair-header">
+                Position 38→53 (1-indexed)
+                <span class="delta-badge">Δ15</span>
+            </div>
+            <div class="pair-info">
+                Found in 5 message lengths: 55, 59, 60, 63, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">11/24 (45.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_59char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">59-char messages</div>
+                        <div class="length-stats">5/6 (83.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="5" data-delta="2">
+            <div class="pair-header">
+                Position 80→82 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 5 message lengths: 92, 166, 172, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_92char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">92-char messages</div>
+                        <div class="length-stats">8/8 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">6/12 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">6/7 (85.7%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">4/8 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="5" data-delta="1">
+            <div class="pair-header">
+                Position 132→133 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 5 message lengths: 142, 164, 216, 246, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">33/35 (94.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_246char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">246-char messages</div>
+                        <div class="length-stats">5/8 (62.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="1">
+            <div class="pair-header">
+                Position 23→24 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 29, 31, 36, 59
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_29char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">29-char messages</div>
+                        <div class="length-stats">6/6 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_31char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">31-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_36char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">36-char messages</div>
+                        <div class="length-stats">3/8 (37.5%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_59char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">59-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="14">
+            <div class="pair-header">
+                Position 27→41 (1-indexed)
+                <span class="delta-badge">Δ14</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 45, 48, 59, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_45char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">45-char messages</div>
+                        <div class="length-stats">5/6 (83.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_48char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">48-char messages</div>
+                        <div class="length-stats">4/12 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_59char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">59-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="4">
+            <div class="pair-header">
+                Position 28→32 (1-indexed)
+                <span class="delta-badge">Δ4</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 47, 120, 166, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_47char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">47-char messages</div>
+                        <div class="length-stats">5/16 (31.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_120char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">120-char messages</div>
+                        <div class="length-stats">9/30 (30.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">4/12 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">3/5 (60.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="1">
+            <div class="pair-header">
+                Position 31→32 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 50, 75, 166, 172
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_50char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">50-char messages</div>
+                        <div class="length-stats">9/25 (36.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_166char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">166-char messages</div>
+                        <div class="length-stats">6/12 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_172char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">172-char messages</div>
+                        <div class="length-stats">4/7 (57.1%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="15">
+            <div class="pair-header">
+                Position 36→51 (1-indexed)
+                <span class="delta-badge">Δ15</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 55, 60, 63, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">8/24 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="15">
+            <div class="pair-header">
+                Position 39→54 (1-indexed)
+                <span class="delta-badge">Δ15</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 55, 60, 63, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_55char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">55-char messages</div>
+                        <div class="length-stats">8/24 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="10">
+            <div class="pair-header">
+                Position 18→28 (1-indexed)
+                <span class="delta-badge">Δ10</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 56, 60, 68, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_56char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">56-char messages</div>
+                        <div class="length-stats">11/23 (47.8%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">6/12 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_68char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">68-char messages</div>
+                        <div class="length-stats">7/17 (41.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="15">
+            <div class="pair-header">
+                Position 42→57 (1-indexed)
+                <span class="delta-badge">Δ15</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 59, 60, 63, 75
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_59char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">59-char messages</div>
+                        <div class="length-stats">2/6 (33.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_60char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">60-char messages</div>
+                        <div class="length-stats">7/12 (58.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_63char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">63-char messages</div>
+                        <div class="length-stats">3/6 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_75char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">75-char messages</div>
+                        <div class="length-stats">5/5 (100.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="2">
+            <div class="pair-header">
+                Position 130→132 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 142, 164, 216, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">26/35 (74.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="2">
+            <div class="pair-header">
+                Position 139→141 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 142, 164, 216, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">15/35 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-low">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">6/17 (35.3%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">8/14 (57.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="2">
+            <div class="pair-header">
+                Position 131→133 (1-indexed)
+                <span class="delta-badge">Δ2</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 142, 164, 216, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">24/35 (68.6%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">15/17 (88.2%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">7/14 (50.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="1">
+            <div class="pair-header">
+                Position 130→131 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 142, 164, 216, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">25/35 (71.4%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">17/17 (100.0%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="pair-card" data-num-lengths="4" data-delta="1">
+            <div class="pair-header">
+                Position 131→132 (1-indexed)
+                <span class="delta-badge">Δ1</span>
+            </div>
+            <div class="pair-info">
+                Found in 4 message lengths: 142, 164, 216, 268
+            </div>
+            <div class="length-grid">
+                <a href="structure_heatmap_142char.html" target="_blank">
+                    <div class="length-item freq-high">
+                        <div class="length-title">142-char messages</div>
+                        <div class="length-stats">24/35 (68.6%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_164char.html" target="_blank">
+                    <div class="length-item freq-very-high">
+                        <div class="length-title">164-char messages</div>
+                        <div class="length-stats">16/17 (94.1%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_216char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">216-char messages</div>
+                        <div class="length-stats">6/14 (42.9%)</div>
+                    </div>
+                </a>
+                <a href="structure_heatmap_268char.html" target="_blank">
+                    <div class="length-item freq-medium">
+                        <div class="length-title">268-char messages</div>
+                        <div class="length-stats">2/5 (40.0%)</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function applyFilters() {
+            const minLengths = parseInt(document.getElementById('minLengths').value);
+            const showDelta5Only = document.getElementById('showDelta5').checked;
+
+            const cards = document.querySelectorAll('.pair-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const numLengths = parseInt(card.getAttribute('data-num-lengths'));
+                const delta = parseInt(card.getAttribute('data-delta'));
+
+                let shouldShow = true;
+
+                if (numLengths < minLengths) {
+                    shouldShow = false;
+                }
+
+                if (showDelta5Only && delta !== 5) {
+                    shouldShow = false;
+                }
+
+                if (shouldShow) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            console.log(`Showing ${visibleCount} of ${cards.length} pairs`);
+        }
+
+        // Apply filters on load
+        applyFilters();
+    </script>
+</body>
+</html>

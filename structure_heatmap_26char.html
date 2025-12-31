@@ -56,10 +56,45 @@
         }
 
         .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1em;
+        }
+
+        .nav-center a {
             color: #4a9eff;
+            text-decoration: none;
             font-weight: bold;
+        }
+
+        .nav-center a:hover {
+            color: #6dd77d;
+        }
+
+        .nav-jump {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-jump select {
+            padding: 5px 8px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .nav-jump select:focus {
+            outline: none;
+            border-color: #4a9eff;
+        }
+
+        .nav-jump select:hover {
+            background-color: #333;
         }
 
         .heatmap-container {
@@ -345,12 +380,78 @@
 </head>
 <body>
     <div class="nav-box">
-        <a href="structure_heatmap_25char.html" class="nav-link">← 25-char</a>
-        <div class="nav-center">26-Character Messages</div>
-        <a href="structure_heatmap_27char.html" class="nav-link">27-char →</a>
+        <a href="structure_heatmap_25char.html" class="nav-link">← 25</a>
+        <div class="nav-center">
+            <a href="index.html">Home</a>
+            <span>|</span>
+            <div class="nav-jump">
+                <label for="length-jump">Go to:</label>
+                <select id="length-jump">
+                    <option value="" selected>--</option>
+                    <option value="25">25</option>
+                    <option value="26" selected>26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                    <option value="60">60</option>
+                    <option value="61">61</option>
+                    <option value="62">62</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                    <option value="67">67</option>
+                    <option value="68">68</option>
+                    <option value="69">69</option>
+                    <option value="70">70</option>
+                    <option value="72">72</option>
+                    <option value="75">75</option>
+                    <option value="76">76</option>
+                    <option value="78">78</option>
+                    <option value="79">79</option>
+                    <option value="84">84</option>
+                    <option value="85">85</option>
+                    <option value="86">86</option>
+                    <option value="87">87</option>
+                    <option value="89">89</option>
+                    <option value="92">92</option>
+                </select>
+            </div>
+        </div>
+        <a href="structure_heatmap_27char.html" class="nav-link">27 →</a>
     </div>
 
-    <h1>EAM Structure Heatmap - 26-Character Messages</h1>
+    <h1>EAM Structure Heatmap - 26 Character Messages</h1>
 
     <!-- Horizontal layout: Info box + 3 stat cards -->
     <div class="top-section">
@@ -361,25 +462,25 @@
             <strong>Pattern Types:</strong> <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>, <span style="color: #51cf66; font-weight: bold;">Gapped</span>, <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>, <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
         </div>
         <div class="stat-card">
-            <div class="stat-value">3</div>
+            <div class="stat-value">2</div>
             <div class="stat-label">Hot Position Pairs</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value">6</div>
+            <div class="stat-value">4</div>
             <div class="stat-label">Messages with Patterns</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value">6</div>
+            <div class="stat-value">4</div>
             <div class="stat-label">Total Patterns Found</div>
         </div>
     </div>
 
     <div class="controls-container">
         <div class="sort-controls">
-            <strong>Sort Order:</strong>
+            <strong>Display Mode:</strong>
             <div class="sort-buttons">
                 <button class="sort-btn active" id="sort-grouped">Grouped by Classification</button>
-                <button class="sort-btn" id="sort-chronological">Chronological</button>
+                <button class="sort-btn" id="sort-chronological">Ungrouped</button>
             </div>
         </div>
 
@@ -459,60 +560,93 @@
     </div>
 
     <div id="messages-container">
-        <div class="message-block" data-group="4" data-timestamp="2023-04-17T04:31:00" data-patterns="[{&quot;positions&quot;: [10, 15], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="4" data-timestamp="2023-04-17T04:31:00" data-patterns="[]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="PCBEUTBTXQLC2JVLRXX2Y7S3KW" title="PC (Group 4)">●</span><span>20230417 04:31 DAYS END</span></div>
-            <div class="message-display"><span class="char">P</span><span class="char">C</span><span class="char">B</span><span class="char">E</span><span class="char">U</span><span class="char">T</span><span class="char">B</span><span class="char">T</span><span class="char">X</span><span class="char">Q</span><span class="char char-hot_k1" data-patterns="1" style="opacity: 0.59" title="hot_k1">L</span><span class="char">C</span><span class="char">2</span><span class="char">J</span><span class="char">V</span><span class="char char-hot_k1" data-patterns="1" style="opacity: 1.00" title="hot_k1">L</span><span class="char">R</span><span class="char">X</span><span class="char">X</span><span class="char">2</span><span class="char">Y</span><span class="char">7</span><span class="char">S</span><span class="char">3</span><span class="char">K</span><span class="char">W</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">P</span><span class="char" data-position="1" data-highlight-sig="">C</span><span class="char" data-position="2" data-highlight-sig="">B</span><span class="char" data-position="3" data-highlight-sig="">E</span><span class="char" data-position="4" data-highlight-sig="">U</span><span class="char" data-position="5" data-highlight-sig="">T</span><span class="char" data-position="6" data-highlight-sig="">B</span><span class="char" data-position="7" data-highlight-sig="">T</span><span class="char" data-position="8" data-highlight-sig="">X</span><span class="char" data-position="9" data-highlight-sig="">Q</span><span class="char" data-position="10" data-highlight-sig="">L</span><span class="char" data-position="11" data-highlight-sig="">C</span><span class="char" data-position="12" data-highlight-sig="">2</span><span class="char" data-position="13" data-highlight-sig="">J</span><span class="char" data-position="14" data-highlight-sig="">V</span><span class="char" data-position="15" data-highlight-sig="">L</span><span class="char" data-position="16" data-highlight-sig="">R</span><span class="char" data-position="17" data-highlight-sig="">X</span><span class="char" data-position="18" data-highlight-sig="">X</span><span class="char" data-position="19" data-highlight-sig="">2</span><span class="char" data-position="20" data-highlight-sig="">Y</span><span class="char" data-position="21" data-highlight-sig="">7</span><span class="char" data-position="22" data-highlight-sig="">S</span><span class="char" data-position="23" data-highlight-sig="">3</span><span class="char" data-position="24" data-highlight-sig="">K</span><span class="char" data-position="25" data-highlight-sig="">W</span></div>
         </div>
         <div class="message-block" data-group="2" data-timestamp="2024-05-06T21:32:00" data-patterns="[{&quot;positions&quot;: [22, 15], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="6VIWAE7G7HZKEF6DULPN3EDPPK" title="6V (Group 2)">●</span><span>20240506 21:32 OAK CREEK</span></div>
-            <div class="message-display"><span class="char">6</span><span class="char">V</span><span class="char">I</span><span class="char">W</span><span class="char">A</span><span class="char">E</span><span class="char">7</span><span class="char">G</span><span class="char">7</span><span class="char">H</span><span class="char">Z</span><span class="char">K</span><span class="char">E</span><span class="char">F</span><span class="char">6</span><span class="char char-hot_k1" data-patterns="2" style="opacity: 1.00" title="hot_k1">D</span><span class="char">U</span><span class="char">L</span><span class="char">P</span><span class="char">N</span><span class="char">3</span><span class="char">E</span><span class="char char-hot_k1" data-patterns="2" style="opacity: 0.59" title="hot_k1">D</span><span class="char">P</span><span class="char">P</span><span class="char">K</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">6</span><span class="char" data-position="1" data-highlight-sig="">V</span><span class="char" data-position="2" data-highlight-sig="">I</span><span class="char" data-position="3" data-highlight-sig="">W</span><span class="char" data-position="4" data-highlight-sig="">A</span><span class="char" data-position="5" data-highlight-sig="">E</span><span class="char" data-position="6" data-highlight-sig="">7</span><span class="char" data-position="7" data-highlight-sig="">G</span><span class="char" data-position="8" data-highlight-sig="">7</span><span class="char" data-position="9" data-highlight-sig="">H</span><span class="char" data-position="10" data-highlight-sig="">Z</span><span class="char" data-position="11" data-highlight-sig="">K</span><span class="char" data-position="12" data-highlight-sig="">E</span><span class="char" data-position="13" data-highlight-sig="">F</span><span class="char" data-position="14" data-highlight-sig="">6</span><span class="char char-hot_k1" data-patterns="1" data-position="15" data-highlight-sig="15,22" style="opacity: 1.00" title="hot_k1">D</span><span class="char" data-position="16" data-highlight-sig="">U</span><span class="char" data-position="17" data-highlight-sig="">L</span><span class="char" data-position="18" data-highlight-sig="">P</span><span class="char" data-position="19" data-highlight-sig="">N</span><span class="char" data-position="20" data-highlight-sig="">3</span><span class="char" data-position="21" data-highlight-sig="">E</span><span class="char char-hot_k1" data-patterns="1" data-position="22" data-highlight-sig="15,22" style="opacity: 0.59" title="hot_k1">D</span><span class="char" data-position="23" data-highlight-sig="">P</span><span class="char" data-position="24" data-highlight-sig="">P</span><span class="char" data-position="25" data-highlight-sig="">K</span></div>
         </div>
         <div class="message-block" data-group="2" data-timestamp="2024-06-09T16:46:00" data-patterns="[{&quot;positions&quot;: [8, 9, 7], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="XS5SMNGVVVFLDWVCUDYBJEXLNN" title="XS (Group 2)">●</span><span>20240609 16:46 BENEFICE</span></div>
-            <div class="message-display"><span class="char">X</span><span class="char">S</span><span class="char">5</span><span class="char">S</span><span class="char">M</span><span class="char">N</span><span class="char">G</span><span class="char char-exact" data-patterns="3" style="opacity: 0.45" title="exact">V</span><span class="char char-exact" data-patterns="3" style="opacity: 0.59" title="exact">V</span><span class="char char-exact" data-patterns="3" style="opacity: 0.59" title="exact">V</span><span class="char">F</span><span class="char">L</span><span class="char">D</span><span class="char">W</span><span class="char">V</span><span class="char">C</span><span class="char">U</span><span class="char">D</span><span class="char">Y</span><span class="char">B</span><span class="char">J</span><span class="char">E</span><span class="char">X</span><span class="char">L</span><span class="char">N</span><span class="char">N</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">X</span><span class="char" data-position="1" data-highlight-sig="">S</span><span class="char" data-position="2" data-highlight-sig="">5</span><span class="char" data-position="3" data-highlight-sig="">S</span><span class="char" data-position="4" data-highlight-sig="">M</span><span class="char" data-position="5" data-highlight-sig="">N</span><span class="char" data-position="6" data-highlight-sig="">G</span><span class="char char-exact" data-patterns="2" data-position="7" data-highlight-sig="7,8,9" style="opacity: 0.45" title="exact">V</span><span class="char char-exact" data-patterns="2" data-position="8" data-highlight-sig="7,8,9" style="opacity: 0.59" title="exact">V</span><span class="char char-exact" data-patterns="2" data-position="9" data-highlight-sig="7,8,9" style="opacity: 0.59" title="exact">V</span><span class="char" data-position="10" data-highlight-sig="">F</span><span class="char" data-position="11" data-highlight-sig="">L</span><span class="char" data-position="12" data-highlight-sig="">D</span><span class="char" data-position="13" data-highlight-sig="">W</span><span class="char" data-position="14" data-highlight-sig="">V</span><span class="char" data-position="15" data-highlight-sig="">C</span><span class="char" data-position="16" data-highlight-sig="">U</span><span class="char" data-position="17" data-highlight-sig="">D</span><span class="char" data-position="18" data-highlight-sig="">Y</span><span class="char" data-position="19" data-highlight-sig="">B</span><span class="char" data-position="20" data-highlight-sig="">J</span><span class="char" data-position="21" data-highlight-sig="">E</span><span class="char" data-position="22" data-highlight-sig="">X</span><span class="char" data-position="23" data-highlight-sig="">L</span><span class="char" data-position="24" data-highlight-sig="">N</span><span class="char" data-position="25" data-highlight-sig="">N</span></div>
         </div>
         <div class="message-block" data-group="2" data-timestamp="2024-06-09T20:03:00" data-patterns="[{&quot;positions&quot;: [22, 15], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="XS6Z3Z7QZ4OOCOIVISH2YLVENR" title="XS (Group 2)">●</span><span>20240609 20:03 BENEFICE</span></div>
-            <div class="message-display"><span class="char">X</span><span class="char">S</span><span class="char">6</span><span class="char">Z</span><span class="char">3</span><span class="char">Z</span><span class="char">7</span><span class="char">Q</span><span class="char">Z</span><span class="char">4</span><span class="char">O</span><span class="char">O</span><span class="char">C</span><span class="char">O</span><span class="char">I</span><span class="char char-hot_k1" data-patterns="4" style="opacity: 1.00" title="hot_k1">V</span><span class="char">I</span><span class="char">S</span><span class="char">H</span><span class="char">2</span><span class="char">Y</span><span class="char">L</span><span class="char char-hot_k1" data-patterns="4" style="opacity: 0.59" title="hot_k1">V</span><span class="char">E</span><span class="char">N</span><span class="char">R</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">X</span><span class="char" data-position="1" data-highlight-sig="">S</span><span class="char" data-position="2" data-highlight-sig="">6</span><span class="char" data-position="3" data-highlight-sig="">Z</span><span class="char" data-position="4" data-highlight-sig="">3</span><span class="char" data-position="5" data-highlight-sig="">Z</span><span class="char" data-position="6" data-highlight-sig="">7</span><span class="char" data-position="7" data-highlight-sig="">Q</span><span class="char" data-position="8" data-highlight-sig="">Z</span><span class="char" data-position="9" data-highlight-sig="">4</span><span class="char" data-position="10" data-highlight-sig="">O</span><span class="char" data-position="11" data-highlight-sig="">O</span><span class="char" data-position="12" data-highlight-sig="">C</span><span class="char" data-position="13" data-highlight-sig="">O</span><span class="char" data-position="14" data-highlight-sig="">I</span><span class="char char-hot_k1" data-patterns="3" data-position="15" data-highlight-sig="15,22" style="opacity: 1.00" title="hot_k1">V</span><span class="char" data-position="16" data-highlight-sig="">I</span><span class="char" data-position="17" data-highlight-sig="">S</span><span class="char" data-position="18" data-highlight-sig="">H</span><span class="char" data-position="19" data-highlight-sig="">2</span><span class="char" data-position="20" data-highlight-sig="">Y</span><span class="char" data-position="21" data-highlight-sig="">L</span><span class="char char-hot_k1" data-patterns="3" data-position="22" data-highlight-sig="15,22" style="opacity: 0.59" title="hot_k1">V</span><span class="char" data-position="23" data-highlight-sig="">E</span><span class="char" data-position="24" data-highlight-sig="">N</span><span class="char" data-position="25" data-highlight-sig="">R</span></div>
         </div>
         <div class="message-block" data-group="2" data-timestamp="2024-06-23T07:32:00" data-patterns="[{&quot;positions&quot;: [8, 9], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="N3EKGYHAPPFGDII4R7TS4CAVOS" title="N3 (Group 2)">●</span><span>20240623 07:32 UNDULATE</span></div>
-            <div class="message-display"><span class="char">N</span><span class="char">3</span><span class="char">E</span><span class="char">K</span><span class="char">G</span><span class="char">Y</span><span class="char">H</span><span class="char">A</span><span class="char char-hot_k1" data-patterns="5" style="opacity: 0.59" title="hot_k1">P</span><span class="char char-hot_k1" data-patterns="5" style="opacity: 0.59" title="hot_k1">P</span><span class="char">F</span><span class="char">G</span><span class="char">D</span><span class="char">I</span><span class="char">I</span><span class="char">4</span><span class="char">R</span><span class="char">7</span><span class="char">T</span><span class="char">S</span><span class="char">4</span><span class="char">C</span><span class="char">A</span><span class="char">V</span><span class="char">O</span><span class="char">S</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">N</span><span class="char" data-position="1" data-highlight-sig="">3</span><span class="char" data-position="2" data-highlight-sig="">E</span><span class="char" data-position="3" data-highlight-sig="">K</span><span class="char" data-position="4" data-highlight-sig="">G</span><span class="char" data-position="5" data-highlight-sig="">Y</span><span class="char" data-position="6" data-highlight-sig="">H</span><span class="char" data-position="7" data-highlight-sig="">A</span><span class="char char-hot_k1" data-patterns="4" data-position="8" data-highlight-sig="8,9" style="opacity: 0.59" title="hot_k1">P</span><span class="char char-hot_k1" data-patterns="4" data-position="9" data-highlight-sig="8,9" style="opacity: 0.59" title="hot_k1">P</span><span class="char" data-position="10" data-highlight-sig="">F</span><span class="char" data-position="11" data-highlight-sig="">G</span><span class="char" data-position="12" data-highlight-sig="">D</span><span class="char" data-position="13" data-highlight-sig="">I</span><span class="char" data-position="14" data-highlight-sig="">I</span><span class="char" data-position="15" data-highlight-sig="">4</span><span class="char" data-position="16" data-highlight-sig="">R</span><span class="char" data-position="17" data-highlight-sig="">7</span><span class="char" data-position="18" data-highlight-sig="">T</span><span class="char" data-position="19" data-highlight-sig="">S</span><span class="char" data-position="20" data-highlight-sig="">4</span><span class="char" data-position="21" data-highlight-sig="">C</span><span class="char" data-position="22" data-highlight-sig="">A</span><span class="char" data-position="23" data-highlight-sig="">V</span><span class="char" data-position="24" data-highlight-sig="">O</span><span class="char" data-position="25" data-highlight-sig="">S</span></div>
         </div>
-        <div class="message-block" data-group="2" data-timestamp="2024-06-23T08:34:00" data-patterns="[{&quot;positions&quot;: [10, 15], &quot;weight&quot;: 1.0}]">
+        <div class="message-block" data-group="2" data-timestamp="2024-06-23T08:34:00" data-patterns="[]">
             <div class="message-meta"><span class="dot group-2-dot" data-message="N35E22IEHA4EJJW4B4DYD6YLHJ" title="N3 (Group 2)">●</span><span>20240623 08:34 LOOKOUT44</span></div>
-            <div class="message-display"><span class="char">N</span><span class="char">3</span><span class="char">5</span><span class="char">E</span><span class="char">2</span><span class="char">2</span><span class="char">I</span><span class="char">E</span><span class="char">H</span><span class="char">A</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 0.59" title="hot_k1">4</span><span class="char">E</span><span class="char">J</span><span class="char">J</span><span class="char">W</span><span class="char char-hot_k1" data-patterns="6" style="opacity: 1.00" title="hot_k1">4</span><span class="char">B</span><span class="char">4</span><span class="char">D</span><span class="char">Y</span><span class="char">D</span><span class="char">6</span><span class="char">Y</span><span class="char">L</span><span class="char">H</span><span class="char">J</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">N</span><span class="char" data-position="1" data-highlight-sig="">3</span><span class="char" data-position="2" data-highlight-sig="">5</span><span class="char" data-position="3" data-highlight-sig="">E</span><span class="char" data-position="4" data-highlight-sig="">2</span><span class="char" data-position="5" data-highlight-sig="">2</span><span class="char" data-position="6" data-highlight-sig="">I</span><span class="char" data-position="7" data-highlight-sig="">E</span><span class="char" data-position="8" data-highlight-sig="">H</span><span class="char" data-position="9" data-highlight-sig="">A</span><span class="char" data-position="10" data-highlight-sig="">4</span><span class="char" data-position="11" data-highlight-sig="">E</span><span class="char" data-position="12" data-highlight-sig="">J</span><span class="char" data-position="13" data-highlight-sig="">J</span><span class="char" data-position="14" data-highlight-sig="">W</span><span class="char" data-position="15" data-highlight-sig="">4</span><span class="char" data-position="16" data-highlight-sig="">B</span><span class="char" data-position="17" data-highlight-sig="">4</span><span class="char" data-position="18" data-highlight-sig="">D</span><span class="char" data-position="19" data-highlight-sig="">Y</span><span class="char" data-position="20" data-highlight-sig="">D</span><span class="char" data-position="21" data-highlight-sig="">6</span><span class="char" data-position="22" data-highlight-sig="">Y</span><span class="char" data-position="23" data-highlight-sig="">L</span><span class="char" data-position="24" data-highlight-sig="">H</span><span class="char" data-position="25" data-highlight-sig="">J</span></div>
         </div>
     </div>
 
     <script>
-        // Track currently selected pattern
-        let selectedPatternId = null;
+        // Track currently selected position and signature
+        let selectedPosition = null;
+        let selectedSignature = null;
 
-        // Add click handler to all characters
-        document.querySelectorAll('.char[data-patterns]').forEach(char => {
+        // Add click handler to all characters with position data
+        document.querySelectorAll('.char[data-position]').forEach(char => {
             char.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const patterns = this.getAttribute('data-patterns').split(',');
+                const position = this.getAttribute('data-position');
+                const signature = this.getAttribute('data-highlight-sig');
 
-                // If clicking the same pattern, deselect
-                if (selectedPatternId && patterns.includes(selectedPatternId)) {
-                    deselectAll();
-                    selectedPatternId = null;
+                // Skip if no signature (shouldn't happen, but be safe)
+                if (signature === null) {
                     return;
                 }
 
-                // Select the first pattern
-                selectedPatternId = patterns[0];
+                // If clicking the same position+signature, deselect
+                if (selectedPosition === position && selectedSignature === signature) {
+                    deselectAll();
+                    selectedPosition = null;
+                    selectedSignature = null;
+                    return;
+                }
+
+                // Select this position+signature combination
+                selectedPosition = position;
+                selectedSignature = signature;
 
                 // Deselect all first
                 deselectAll();
 
-                // Highlight all characters with this pattern ID
-                document.querySelectorAll('.char[data-patterns]').forEach(otherChar => {
-                    const otherPatterns = otherChar.getAttribute('data-patterns').split(',');
-                    if (otherPatterns.includes(selectedPatternId)) {
-                        otherChar.classList.add('char-selected');
+                // If signature is empty (non-patterned character), do nothing
+                if (signature === '') {
+                    return;
+                }
+
+                // Get the positions to highlight from the signature
+                const positionsToHighlight = signature.split(',').map(p => p.trim()).filter(p => p !== '');
+
+                // Find all message blocks
+                document.querySelectorAll('.message-block').forEach(messageBlock => {
+                    // Get all characters in this message
+                    const chars = messageBlock.querySelectorAll('.char');
+
+                    // Check if this message has the same pattern at the same position
+                    const posInt = parseInt(position);
+                    if (posInt < chars.length) {
+                        const charAtPosition = chars[posInt];
+                        const charSignature = charAtPosition.getAttribute('data-highlight-sig');
+
+                        // If this character has the same signature (and it's not empty), highlight the pattern
+                        if (charSignature === signature && charSignature !== '') {
+                            // Highlight all positions in the signature for this message
+                            positionsToHighlight.forEach(pos => {
+                                const posToHighlight = parseInt(pos);
+                                if (posToHighlight < chars.length) {
+                                    chars[posToHighlight].classList.add('char-selected');
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -528,7 +662,8 @@
         document.addEventListener('click', function(e) {
             if (!e.target.classList.contains('char') && !e.target.classList.contains('dot')) {
                 deselectAll();
-                selectedPatternId = null;
+                selectedPosition = null;
+                selectedSignature = null;
             }
         });
 
@@ -746,6 +881,32 @@
 
         // Initialize with grouped view (default)
         sortMessages('grouped');
+
+        // Navigation jump handler
+        const lengthJump = document.getElementById('length-jump');
+        if (lengthJump) {
+            if (lengthJump.tagName === 'SELECT') {
+                // Dropdown handler
+                lengthJump.addEventListener('change', function() {
+                    const targetLength = this.value;
+                    if (targetLength) {
+                        const targetUrl = `structure_heatmap_${targetLength}char.html`;
+                        window.location.href = targetUrl;
+                    }
+                });
+            } else {
+                // Input field handler (fallback)
+                lengthJump.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const targetLength = parseInt(this.value);
+                        if (targetLength > 0) {
+                            const targetUrl = `structure_heatmap_${targetLength}char.html`;
+                            window.location.href = targetUrl;
+                        }
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>
