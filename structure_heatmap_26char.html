@@ -382,12 +382,21 @@
     <div class="nav-box">
         <a href="structure_heatmap_25char.html" class="nav-link">← 25</a>
         <div class="nav-center">
-            <a href="index.html">Home</a>
+            <a href="index.html">Index</a>
             <span>|</span>
             <div class="nav-jump">
                 <label for="length-jump">Go to:</label>
                 <select id="length-jump">
                     <option value="" selected>--</option>
+                    <option value="1">1</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="16">16</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="24">24</option>
                     <option value="25">25</option>
                     <option value="26" selected>26</option>
                     <option value="27">27</option>
@@ -445,6 +454,41 @@
                     <option value="87">87</option>
                     <option value="89">89</option>
                     <option value="92">92</option>
+                    <option value="102">102</option>
+                    <option value="108">108</option>
+                    <option value="111">111</option>
+                    <option value="115">115</option>
+                    <option value="118">118</option>
+                    <option value="120">120</option>
+                    <option value="142">142</option>
+                    <option value="152">152</option>
+                    <option value="158">158</option>
+                    <option value="160">160</option>
+                    <option value="163">163</option>
+                    <option value="164">164</option>
+                    <option value="166">166</option>
+                    <option value="172">172</option>
+                    <option value="176">176</option>
+                    <option value="182">182</option>
+                    <option value="186">186</option>
+                    <option value="188">188</option>
+                    <option value="194">194</option>
+                    <option value="196">196</option>
+                    <option value="198">198</option>
+                    <option value="202">202</option>
+                    <option value="204">204</option>
+                    <option value="210">210</option>
+                    <option value="216">216</option>
+                    <option value="220">220</option>
+                    <option value="222">222</option>
+                    <option value="224">224</option>
+                    <option value="227">227</option>
+                    <option value="246">246</option>
+                    <option value="268">268</option>
+                    <option value="285">285</option>
+                    <option value="286">286</option>
+                    <option value="290">290</option>
+                    <option value="292">292</option>
                 </select>
             </div>
         </div>
@@ -587,6 +631,26 @@
     </div>
 
     <script>
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Ignore if user is typing in an input/select element
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            if (e.key === 'ArrowLeft') {
+                const prevLink = document.querySelector('a.nav-link[href*="char.html"]:first-of-type');
+                if (prevLink && !prevLink.classList.contains('disabled')) {
+                    window.location.href = prevLink.href;
+                }
+            } else if (e.key === 'ArrowRight') {
+                const nextLink = document.querySelector('a.nav-link[href*="char.html"]:last-of-type');
+                if (nextLink && !nextLink.classList.contains('disabled')) {
+                    window.location.href = nextLink.href;
+                }
+            }
+        });
+
         // Track currently selected position and signature
         let selectedPosition = null;
         let selectedSignature = null;
