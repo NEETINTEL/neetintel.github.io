@@ -336,6 +336,163 @@
     .group-indicator-5 { background-color: #9063cd; }
     .group-indicator-unclassified { background-color: #555; }
 
+    /* SKYMASTERs tab styles */
+    .skymaster-list .entry {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sm-date {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #4ade80;
+      white-space: nowrap;
+      flex: 0 0 5.5rem;
+    }
+
+    .sm-event {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #4ade80;
+      flex: 1;
+    }
+
+    .sm-day {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #ed7d32;
+      font-style: italic;
+      text-align: right;
+      flex: 0 0 5rem;
+    }
+
+    /* Forecast list has wider date column */
+    .skymaster-list.forecast .sm-date {
+      flex: 0 0 12rem;
+    }
+
+    /* Subtabs for SKYMASTERs */
+    .subtabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .subtab {
+      padding: 0.4rem 1rem;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .subtab:hover {
+      color: var(--hover);
+      border-color: var(--hover);
+    }
+
+    .subtab.active {
+      color: #4ade80;
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.1);
+    }
+
+    .subtab-content {
+      display: none;
+    }
+
+    .subtab-content.active {
+      display: block;
+    }
+
+    /* Fakemaster styling - lighter green */
+    .entry.fakemaster .sm-date,
+    .entry.fakemaster .sm-event {
+      color: #86efac;
+    }
+
+    /* Hover effects */
+    .skymaster-list .entry.skymaster:hover {
+      background: rgba(74, 222, 128, 0.12);
+    }
+
+    .skymaster-list .entry.fakemaster:hover {
+      background: rgba(134, 239, 172, 0.12);
+    }
+
+    .forecast-header {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin: 1rem 0 0.5rem 0;
+      font-style: italic;
+    }
+
+    .skymaster-list.forecast {
+      opacity: 0.85;
+    }
+
+    .skymaster-list.forecast .sm-date,
+    .skymaster-list.forecast .sm-event {
+      color: #86efac;
+    }
+
+    /* Compare table */
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.85rem;
+    }
+
+    .compare-table thead {
+      background: rgba(122, 162, 255, 0.08);
+    }
+
+    .compare-table th {
+      padding: 0.5rem 0.75rem;
+      text-align: center;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-table td {
+      padding: 0.4rem 0.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      color: #4ade80;
+    }
+
+    .compare-table td.fakemaster {
+      color: #86efac;
+    }
+
+    .compare-table td:empty {
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .compare-table tr:hover td:not(:empty) {
+      background: rgba(74, 222, 128, 0.12);
+    }
+
+    .compare-table tr:hover td.fakemaster {
+      background: rgba(134, 239, 172, 0.12);
+    }
+
     /* Mobile responsive styles */
     @media (max-width: 640px) {
       main {
@@ -448,6 +605,45 @@
       .tab-content h2 {
         font-size: 1rem;
       }
+
+      .skymaster-list .entry {
+        flex-direction: row;
+        align-items: center;
+        font-size: 0.75rem;
+        gap: 0.5rem;
+        padding: 0.4rem 0.65rem;
+      }
+
+      .sm-date {
+        flex: 0 0 4rem;
+      }
+
+      .sm-day {
+        flex: 0 0 3.5rem;
+        font-size: 0.7rem;
+      }
+
+      .skymaster-list.forecast .sm-date {
+        flex: 0 0 7rem;
+      }
+
+      .subtabs {
+        gap: 0.35rem;
+      }
+
+      .subtab {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      .compare-table {
+        font-size: 0.7rem;
+      }
+
+      .compare-table th,
+      .compare-table td {
+        padding: 0.35rem 0.25rem;
+      }
     }
 
     @media (max-width: 400px) {
@@ -464,6 +660,34 @@
       .crypto-address {
         font-size: 0.65rem;
       }
+
+      .skymaster-list .entry {
+        flex-direction: row;
+        font-size: 0.65rem;
+        gap: 0.4rem;
+        padding: 0.35rem 0.5rem;
+      }
+
+      .sm-date {
+        flex: 0 0 3.5rem;
+      }
+
+      .sm-day {
+        display: none;
+      }
+
+      .skymaster-list.forecast .sm-date {
+        flex: 0 0 5.5rem;
+      }
+
+      .compare-table {
+        font-size: 0.6rem;
+      }
+
+      .compare-table th,
+      .compare-table td {
+        padding: 0.3rem 0.2rem;
+      }
     }
   </style>
 </head>
@@ -473,6 +697,7 @@
 
     <div class="tabs">
       <button class="tab active" onclick="showTab('heatmaps')">EAM Structure Analysis</button>
+      <button class="tab" onclick="showTab('skymasters')">SKYMASTERs</button>
       <button class="tab" onclick="showTab('misc')">Miscellaneous</button>
       <button class="tab" onclick="showTab('youtube')">NEET INTEL YouTube</button>
       <button class="tab" onclick="showTab('wiki')">HFGCS Wiki</button>
@@ -1153,6 +1378,162 @@
         </div>
       </li>
       </ul>
+    </div>
+
+    <div id="skymasters" class="tab-content">
+      <h2>SKYMASTER Events</h2>
+
+      <div class="subtabs">
+        <button class="subtab active" onclick="showSubtab('sky-2023')">2023</button>
+        <button class="subtab" onclick="showSubtab('sky-2024')">2024</button>
+        <button class="subtab" onclick="showSubtab('sky-2025')">2025</button>
+        <button class="subtab" onclick="showSubtab('sky-2026')">2026</button>
+        <button class="subtab" onclick="showSubtab('sky-compare')">Compare</button>
+      </div>
+
+      <div id="sky-2023" class="subtab-content active">
+        <ul class="skymaster-list">
+          <li><div class="entry skymaster"><span class="sm-date">230111</span><span class="sm-event">JANUARY SKYMASTER</span><span class="sm-day">2nd Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">230201</span><span class="sm-event">FEBRUARY SKYMASTER</span><span class="sm-day">1st Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">230416</span><span class="sm-event">APRIL SKYMASTER I</span><span class="sm-day">3rd Sun</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">230421</span><span class="sm-event">APRIL SKYMASTER II</span><span class="sm-day">3rd Fri</span></div></li>
+          <li><div class="entry fakemaster"><span class="sm-date">230711</span><span class="sm-event">GLOBAL STORM 23 FAKEMASTER</span><span class="sm-day">2nd Tue</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">230830</span><span class="sm-event">AUGUST SKYMASTER</span><span class="sm-day">5th Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">230927</span><span class="sm-event">SEPTEMBER SKYMASTER</span><span class="sm-day">4th Wed</span></div></li>
+        </ul>
+      </div>
+
+      <div id="sky-2024" class="subtab-content">
+        <ul class="skymaster-list">
+          <li><div class="entry skymaster"><span class="sm-date">240110</span><span class="sm-event">JANUARY SKYMASTER</span><span class="sm-day">2nd Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">240207</span><span class="sm-event">FAROE ISLANDS SKYMASTER</span><span class="sm-day">1st Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">240412</span><span class="sm-event">APRIL SKYMASTER I (PRAIRIE VIGILANCE?)</span><span class="sm-day">2nd Fri</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">240418</span><span class="sm-event">APRIL SKYMASTER II</span><span class="sm-day">3rd Thu</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">240515</span><span class="sm-event">EAST COAST MINI-SKYMASTER</span><span class="sm-day">3rd Wed</span></div></li>
+          <li><div class="entry fakemaster"><span class="sm-date">240623</span><span class="sm-event">NORWAY FAKEMASTER</span><span class="sm-day">4th Sun</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">240821</span><span class="sm-event">AUGUST SKYMASTER</span><span class="sm-day">3rd Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">240925</span><span class="sm-event">SEPTEMBER SKYMASTER</span><span class="sm-day">4th Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">241024</span><span class="sm-event">GLOBAL THUNDER 25 SKYMASTER</span><span class="sm-day">4th Thu</span></div></li>
+        </ul>
+      </div>
+
+      <div id="sky-2025" class="subtab-content">
+        <ul class="skymaster-list">
+          <li><div class="entry skymaster"><span class="sm-date">250108</span><span class="sm-event">JANUARY SKYMASTER</span><span class="sm-day">2nd Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">250416</span><span class="sm-event">APRIL SKYMASTER</span><span class="sm-day">3rd Wed</span></div></li>
+          <li><div class="entry fakemaster"><span class="sm-date">250430</span><span class="sm-event">APRIL NOTHINGMASTER</span><span class="sm-day">5th Wed</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">250528</span><span class="sm-event">MAY MINI-SKYMASTER</span><span class="sm-day">4th Wed</span></div></li>
+          <li><div class="entry fakemaster"><span class="sm-date">250706</span><span class="sm-event">LAJES FAKEMASTER</span><span class="sm-day">1st Sun</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">250820</span><span class="sm-event">GREENLAND SKYMASTER</span><span class="sm-day">3rd Wed</span></div></li>
+          <li><div class="entry fakemaster"><span class="sm-date">250822</span><span class="sm-event">GREENLAND FAKEMASTER</span><span class="sm-day">4th Fri</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">250924</span><span class="sm-event">FAROE ISLANDS SKYMASTER</span><span class="sm-day">4th Fri</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">251026</span><span class="sm-event">GLOBAL THUNDER 26 SKYMASTER I</span><span class="sm-day">4th Sun</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">251029</span><span class="sm-event">GLOBAL THUNDER 26 SKYMASTER II</span><span class="sm-day">5th Wed</span></div></li>
+        </ul>
+      </div>
+
+      <div id="sky-2026" class="subtab-content">
+        <ul class="skymaster-list">
+          <li><div class="entry skymaster"><span class="sm-date">260114</span><span class="sm-event">JANUARY SKYMASTER</span><span class="sm-day">2nd Wed</span></div></li>
+        </ul>
+        <h4 class="forecast-header">Forecasts</h4>
+        <ul class="skymaster-list forecast">
+          <li><div class="entry skymaster"><span class="sm-date">260204 / 260211</span><span class="sm-event">EUROPEAN SKYMASTER</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">2604##</span><span class="sm-event">APRIL MESS</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">260520 / 260527</span><span class="sm-event">mini-SKYMASTER</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">260622 ~ 260628</span><span class="sm-event">GLOBAL STORM 26[?] {not SKYMASTER but still..}</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">260819 / 260827</span><span class="sm-event">August SKYMASTER</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">260923 / 260930</span><span class="sm-event">September SKYMASTER</span></div></li>
+          <li><div class="entry skymaster"><span class="sm-date">2610## - 2611##</span><span class="sm-event">GLOBAL THUNDER 27 SKYMASTER</span></div></li>
+        </ul>
+      </div>
+
+      <div id="sky-compare" class="subtab-content">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>2023</th>
+              <th>2024</th>
+              <th>2025</th>
+              <th>2026</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="sm-date">230111</td>
+              <td class="sm-date">240110</td>
+              <td class="sm-date">250108</td>
+              <td class="sm-date">260114</td>
+            </tr>
+            <tr>
+              <td class="sm-date">230201</td>
+              <td class="sm-date">240207</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="sm-date">230416</td>
+              <td class="sm-date">240412</td>
+              <td class="sm-date">250416</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="sm-date">230421</td>
+              <td class="sm-date">240418</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="sm-date fakemaster">250430</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="sm-date">240515</td>
+              <td class="sm-date">250528</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="sm-date fakemaster">230711</td>
+              <td class="sm-date fakemaster">240623</td>
+              <td class="sm-date fakemaster">250706</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="sm-date">230830</td>
+              <td class="sm-date">240821</td>
+              <td class="sm-date">250820</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="sm-date fakemaster">250822</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="sm-date">230927</td>
+              <td class="sm-date">240925</td>
+              <td class="sm-date">250924</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="sm-date">241024</td>
+              <td class="sm-date">251026</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="sm-date">251029</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div id="misc" class="tab-content">
@@ -3068,6 +3449,98 @@
   </main>
 
   <script>
+    // Handle URL parameters for direct tab navigation
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const tabMap = {
+        'heatmap': 'heatmaps',
+        'heatmaps': 'heatmaps',
+        'skymaster': 'skymasters',
+        'skymasters': 'skymasters',
+        'misc': 'misc',
+        'youtube': 'youtube',
+        'wiki': 'wiki',
+        'contact': 'support',
+        'support': 'support'
+      };
+
+      const subtabMap = {
+        '2023': 'sky-2023',
+        '2024': 'sky-2024',
+        '2025': 'sky-2025',
+        '2026': 'sky-2026',
+        'compare': 'sky-compare'
+      };
+
+      let targetTab = null;
+      let targetSubtab = null;
+
+      for (const key of params.keys()) {
+        const lowerKey = key.toLowerCase();
+        if (tabMap[lowerKey]) {
+          targetTab = tabMap[lowerKey];
+        }
+        if (subtabMap[lowerKey]) {
+          targetSubtab = subtabMap[lowerKey];
+          // If subtab specified without main tab, assume skymasters
+          if (!targetTab) targetTab = 'skymasters';
+        }
+      }
+
+      if (targetTab) {
+        document.addEventListener('DOMContentLoaded', function() {
+          // Hide all tab contents
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+
+          // Remove active class from all tabs
+          document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+          });
+
+          // Show selected tab content
+          document.getElementById(targetTab).classList.add('active');
+
+          // Activate corresponding tab button
+          document.querySelectorAll('.tab').forEach(tab => {
+            if (tab.getAttribute('onclick') && tab.getAttribute('onclick').includes(targetTab)) {
+              tab.classList.add('active');
+            }
+          });
+
+          // Handle subtab if specified
+          if (targetSubtab) {
+            const parentTab = document.getElementById(targetTab);
+            if (parentTab) {
+              // Hide all subtab contents within this parent
+              parentTab.querySelectorAll('.subtab-content').forEach(content => {
+                content.classList.remove('active');
+              });
+
+              // Remove active class from all subtabs within this parent
+              parentTab.querySelectorAll('.subtab').forEach(subtab => {
+                subtab.classList.remove('active');
+              });
+
+              // Show selected subtab content
+              const subtabContent = document.getElementById(targetSubtab);
+              if (subtabContent) {
+                subtabContent.classList.add('active');
+              }
+
+              // Activate corresponding subtab button
+              parentTab.querySelectorAll('.subtab').forEach(subtab => {
+                if (subtab.getAttribute('onclick') && subtab.getAttribute('onclick').includes(targetSubtab)) {
+                  subtab.classList.add('active');
+                }
+              });
+            }
+          }
+        });
+      }
+    })();
+
     // Reveal email as CAPTCHA-style canvas image (anti-OCR)
     function revealEmail() {
       const parts = ['02', '_', '0279', String.fromCharCode(64), 'proton', String.fromCharCode(46), 'me'];
@@ -3207,6 +3680,28 @@
       document.getElementById(tabName).classList.add('active');
 
       // Activate clicked tab button
+      event.target.classList.add('active');
+    }
+
+    // Subtab switching functionality
+    function showSubtab(subtabName) {
+      // Find the parent tab content
+      const parentTab = event.target.closest('.tab-content');
+
+      // Hide all subtab contents within this parent
+      parentTab.querySelectorAll('.subtab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      // Remove active class from all subtabs within this parent
+      parentTab.querySelectorAll('.subtab').forEach(subtab => {
+        subtab.classList.remove('active');
+      });
+
+      // Show selected subtab content
+      document.getElementById(subtabName).classList.add('active');
+
+      // Activate clicked subtab button
       event.target.classList.add('active');
     }
 
