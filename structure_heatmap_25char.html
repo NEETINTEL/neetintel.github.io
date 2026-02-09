@@ -459,7 +459,7 @@
     <div class="top-section">
         <div class="info-box">
             <strong>Analysis Type:</strong> Hot position pairs + consolidated pattern detection<br>
-            <strong>Total Messages:</strong> 30<br>
+            <strong>Total Messages:</strong> 31<br>
             <strong>Hot Pairs Threshold:</strong> ≥30% of messages<br>
             <strong>Pattern Types:</strong> <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>, <span style="color: #51cf66; font-weight: bold;">Gapped</span>, <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>, <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
         </div>
@@ -496,6 +496,10 @@
             <div class="filter-checkbox">
                 <input type="checkbox" id="filter-group-3" checked>
                 <label for="filter-group-3"><span class="group-label group-label-3">Group 3</span></label>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="filter-group-5" checked>
+                <label for="filter-group-5"><span class="group-label group-label-5">Group 5</span></label>
             </div>
             </div>
         </div>
@@ -679,6 +683,10 @@
         <div class="message-block" data-group="3" data-timestamp="2026-01-10T15:14:00" data-patterns="[{&quot;positions&quot;: [16, 18, 19, 15], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [16, 13], &quot;weight&quot;: 1.0}]">
             <div class="message-meta"><span class="dot group-3-dot" data-message="D55OFKZIPXZC4HXWHOWH3ZEI3" title="D5 (Group 3)">●</span><span>20260110 15:14 AID FIRST</span></div>
             <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">D</span><span class="char" data-position="1" data-highlight-sig="">5</span><span class="char" data-position="2" data-highlight-sig="">5</span><span class="char" data-position="3" data-highlight-sig="">O</span><span class="char" data-position="4" data-highlight-sig="">F</span><span class="char" data-position="5" data-highlight-sig="">K</span><span class="char" data-position="6" data-highlight-sig="">Z</span><span class="char" data-position="7" data-highlight-sig="">I</span><span class="char" data-position="8" data-highlight-sig="">P</span><span class="char" data-position="9" data-highlight-sig="">X</span><span class="char" data-position="10" data-highlight-sig="">Z</span><span class="char" data-position="11" data-highlight-sig="">C</span><span class="char" data-position="12" data-highlight-sig="">4</span><span class="char char-hot_k1" data-patterns="58" data-position="13" data-highlight-sig="13,16" style="opacity: 1.00" title="hot_k1">H</span><span class="char" data-position="14" data-highlight-sig="">X</span><span class="char char-exact" data-patterns="57" data-position="15" data-highlight-sig="15,16,18,19" style="opacity: 0.84" title="exact">W</span><span class="char char-exact" data-patterns="57,58" data-position="16" data-highlight-sig="13,15,16,18,19" style="opacity: 1.00" title="exact">H</span><span class="char" data-position="17" data-highlight-sig="">O</span><span class="char char-exact" data-patterns="57" data-position="18" data-highlight-sig="15,16,18,19" style="opacity: 0.84" title="exact">W</span><span class="char char-exact" data-patterns="57" data-position="19" data-highlight-sig="15,16,18,19" style="opacity: 0.47" title="exact">H</span><span class="char" data-position="20" data-highlight-sig="">3</span><span class="char" data-position="21" data-highlight-sig="">Z</span><span class="char" data-position="22" data-highlight-sig="">E</span><span class="char" data-position="23" data-highlight-sig="">I</span><span class="char" data-position="24" data-highlight-sig="">3</span></div>
+        </div>
+        <div class="message-block" data-group="5" data-timestamp="2026-01-27T19:00:00" data-patterns="[]">
+            <div class="message-meta"><span class="dot group-5-dot" data-message="FWDE3ZJ7HTRXCB2F13E9G5ZOC" title="FW (Group 5)">●</span><span>20260127 19:00 MAINSAIL</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">F</span><span class="char" data-position="1" data-highlight-sig="">W</span><span class="char" data-position="2" data-highlight-sig="">D</span><span class="char" data-position="3" data-highlight-sig="">E</span><span class="char" data-position="4" data-highlight-sig="">3</span><span class="char" data-position="5" data-highlight-sig="">Z</span><span class="char" data-position="6" data-highlight-sig="">J</span><span class="char" data-position="7" data-highlight-sig="">7</span><span class="char" data-position="8" data-highlight-sig="">H</span><span class="char" data-position="9" data-highlight-sig="">T</span><span class="char" data-position="10" data-highlight-sig="">R</span><span class="char" data-position="11" data-highlight-sig="">X</span><span class="char" data-position="12" data-highlight-sig="">C</span><span class="char" data-position="13" data-highlight-sig="">B</span><span class="char" data-position="14" data-highlight-sig="">2</span><span class="char" data-position="15" data-highlight-sig="">F</span><span class="char" data-position="16" data-highlight-sig="">1</span><span class="char" data-position="17" data-highlight-sig="">3</span><span class="char" data-position="18" data-highlight-sig="">E</span><span class="char" data-position="19" data-highlight-sig="">9</span><span class="char" data-position="20" data-highlight-sig="">G</span><span class="char" data-position="21" data-highlight-sig="">5</span><span class="char" data-position="22" data-highlight-sig="">Z</span><span class="char" data-position="23" data-highlight-sig="">O</span><span class="char" data-position="24" data-highlight-sig="">C</span></div>
         </div>
     </div>
 
@@ -990,21 +998,26 @@
             updateHeatmapAndVisibility();  // Update visibility after sorting
         }
 
-        // Sort button event listeners
-        document.getElementById('sort-grouped').addEventListener('click', function() {
-            document.getElementById('sort-grouped').classList.add('active');
-            document.getElementById('sort-chronological').classList.remove('active');
+        // Sort button event listeners (only if they exist)
+        const sortGroupedBtn = document.getElementById('sort-grouped');
+        const sortChronologicalBtn = document.getElementById('sort-chronological');
+
+        if (sortGroupedBtn && sortChronologicalBtn) {
+            sortGroupedBtn.addEventListener('click', function() {
+                sortGroupedBtn.classList.add('active');
+                sortChronologicalBtn.classList.remove('active');
+                sortMessages('grouped');
+            });
+
+            sortChronologicalBtn.addEventListener('click', function() {
+                sortChronologicalBtn.classList.add('active');
+                sortGroupedBtn.classList.remove('active');
+                sortMessages('chronological');
+            });
+
+            // Initialize with grouped view (default)
             sortMessages('grouped');
-        });
-
-        document.getElementById('sort-chronological').addEventListener('click', function() {
-            document.getElementById('sort-chronological').classList.add('active');
-            document.getElementById('sort-grouped').classList.remove('active');
-            sortMessages('chronological');
-        });
-
-        // Initialize with grouped view (default)
-        sortMessages('grouped');
+        }
 
         // Navigation jump handler
         const lengthJump = document.getElementById('length-jump');

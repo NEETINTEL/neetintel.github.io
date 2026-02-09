@@ -939,21 +939,26 @@
             updateHeatmapAndVisibility();  // Update visibility after sorting
         }
 
-        // Sort button event listeners
-        document.getElementById('sort-grouped').addEventListener('click', function() {
-            document.getElementById('sort-grouped').classList.add('active');
-            document.getElementById('sort-chronological').classList.remove('active');
+        // Sort button event listeners (only if they exist)
+        const sortGroupedBtn = document.getElementById('sort-grouped');
+        const sortChronologicalBtn = document.getElementById('sort-chronological');
+
+        if (sortGroupedBtn && sortChronologicalBtn) {
+            sortGroupedBtn.addEventListener('click', function() {
+                sortGroupedBtn.classList.add('active');
+                sortChronologicalBtn.classList.remove('active');
+                sortMessages('grouped');
+            });
+
+            sortChronologicalBtn.addEventListener('click', function() {
+                sortChronologicalBtn.classList.add('active');
+                sortGroupedBtn.classList.remove('active');
+                sortMessages('chronological');
+            });
+
+            // Initialize with grouped view (default)
             sortMessages('grouped');
-        });
-
-        document.getElementById('sort-chronological').addEventListener('click', function() {
-            document.getElementById('sort-chronological').classList.add('active');
-            document.getElementById('sort-grouped').classList.remove('active');
-            sortMessages('chronological');
-        });
-
-        // Initialize with grouped view (default)
-        sortMessages('grouped');
+        }
 
         // Navigation jump handler
         const lengthJump = document.getElementById('length-jump');
