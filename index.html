@@ -73,7 +73,7 @@
       display: block;
     }
 
-    .wiki-intro, .youtube-intro {
+    .wiki-intro, .youtube-intro, .heatmap-intro {
       max-width: 900px;
       margin: 0 auto 2rem;
       padding: 1rem;
@@ -82,6 +82,7 @@
       border-radius: 6px;
       line-height: 1.6;
       color: var(--fg);
+      font-size: 0.85rem;
     }
 
     .tab-content h2 {
@@ -526,9 +527,9 @@
         background: rgba(122, 162, 255, 0.1);
       }
 
-      .wiki-intro, .youtube-intro {
+      .wiki-intro, .youtube-intro, .heatmap-intro {
         padding: 0.75rem;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         line-height: 1.5;
       }
 
@@ -697,14 +698,18 @@
 
     <div class="tabs">
       <button class="tab active" onclick="showTab('heatmaps')">EAM Structure Analysis</button>
-      <button class="tab" onclick="showTab('skymasters')">SKYMASTERs</button>
       <button class="tab" onclick="showTab('misc')">Miscellaneous</button>
+      <button class="tab" onclick="showTab('skymasters')">SKYMASTERs</button>
       <button class="tab" onclick="showTab('youtube')">NEET INTEL YouTube</button>
       <button class="tab" onclick="showTab('wiki')">HFGCS Wiki</button>
       <button class="tab" onclick="showTab('support')">Contact and Support</button>
     </div>
 
     <div id="heatmaps" class="tab-content active">
+      <div class="heatmap-intro">
+        <p style="margin: 0 0 10px 0;">Emergency Action Messages are known to be highly structured. These pages group EAMs by character length and analyze them for repeating segments to identify candidate structural elements. Colored positions indicate possible pattern segments across messages. Click any colored position to highlight all instances of that pattern.</p>
+        <p style="margin: 0;">Note that if the browser is unable to display the entire text of messages, the display automatically switches from individual characters to an abstract timeline view where colored segments represent pattern positions. Note also that this analysis process currently appears to 'break' for messages beyond a given length and will routinely identify too many 'false positive' candidates.</p>
+      </div>
       <ul>
       <li>
         <div class="entry">
@@ -3679,9 +3684,48 @@
       // Show selected tab content
       document.getElementById(tabName).classList.add('active');
 
-      // Activate clicked tab button
-      event.target.classList.add('active');
+      // Activate the corresponding tab button
+      const tabButtons = document.querySelectorAll('.tab');
+      tabButtons.forEach(tab => {
+        if (tab.getAttribute('onclick').includes(tabName)) {
+          tab.classList.add('active');
+        }
+      });
     }
+
+    // Keyboard navigation for tabs
+    const tabOrder = ['heatmaps', 'misc', 'skymasters', 'youtube', 'wiki', 'support'];
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        // Find currently active tab
+        const activeContent = document.querySelector('.tab-content.active');
+        if (!activeContent) return;
+
+        const currentTab = activeContent.id;
+        const currentIndex = tabOrder.indexOf(currentTab);
+
+        if (currentIndex === -1) return;
+
+        let newIndex = null;
+        if (e.key === 'ArrowLeft') {
+          // Don't wrap around at the beginning
+          if (currentIndex > 0) {
+            newIndex = currentIndex - 1;
+          }
+        } else {
+          // Don't wrap around at the end
+          if (currentIndex < tabOrder.length - 1) {
+            newIndex = currentIndex + 1;
+          }
+        }
+
+        if (newIndex !== null) {
+          showTab(tabOrder[newIndex]);
+          e.preventDefault();
+        }
+      }
+    });
 
     // Subtab switching functionality
     function showSubtab(subtabName) {
