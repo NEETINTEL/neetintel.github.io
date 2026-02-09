@@ -25,7 +25,9 @@
             border-bottom: 3px solid #4a9eff;
             padding-bottom: 10px;
             margin-bottom: 20px;
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         /* Navigation */
@@ -368,7 +370,10 @@
         /* Mobile styles */
         @media (max-width: 768px) {
             body { padding: 12px; }
-            h1 { font-size: 1.2rem; }
+            h1 {
+                font-size: clamp(0.9rem, 5vw, 1.2rem);
+                letter-spacing: -0.02em;
+            }
 
             .nav-box {
                 padding: 10px;
@@ -499,6 +504,8 @@
                     <option value="87">87</option>
                     <option value="89">89</option>
                     <option value="92">92</option>
+                    <option value="108">108</option>
+                    <option value="142">142</option>
                 </select>
             </div>
         </div>
