@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About These Heatmaps</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+            background-color: #0d0d0d;
+            color: #ccc;
+            margin: 0;
+            padding: 30px 20px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-box {
+            background-color: #1a1a1a;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 2px solid #4a9eff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4a9eff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-link:hover { background-color: #6bb6ff; }
+
+        .lang-btn {
+            display: inline-block;
+            padding: 6px 14px;
+            background-color: #2a2a2a;
+            color: #999;
+            border: 1px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+            transition: all 0.2s;
+            float: right;
+        }
+
+        .lang-btn:hover {
+            background-color: #333;
+            color: #ccc;
+            border-color: #555;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #4a9eff;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.15rem;
+            margin-top: 45px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        h3 {
+            color: #ddd;
+            font-size: 1rem;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+
+        p { margin: 12px 0; }
+
+        a { color: #4a9eff; }
+        a:hover { color: #6bb6ff; }
+
+        strong { color: #e0e0e0; }
+        em { color: #ddd; }
+
+        ol, ul {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        li { margin-bottom: 8px; }
+
+        code {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #1a1a1a;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.92em;
+            color: #e0e0e0;
+        }
+
+        .example {
+            background-color: #111;
+            border-left: 3px solid #333;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 2;
+            overflow-x: auto;
+            color: #888;
+        }
+
+        .example .caption {
+            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+            font-size: 0.82rem;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .c {
+            padding: 1px 4px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .c-blue { background-color: #4a9eff; }
+        .c-green { background-color: #51cf66; }
+        .c-purple { background-color: #cc5de8; }
+        .c-pink { background-color: #ff69b4; }
+        .c-coral { background-color: #ed727f; }
+
+        .t-blue { color: #4a9eff; }
+        .t-green { color: #51cf66; }
+        .t-purple { color: #cc5de8; }
+        .t-pink { color: #ff69b4; }
+        .t-coral { color: #ed727f; }
+
+        .note {
+            background-color: rgba(255, 193, 7, 0.08);
+            border-left: 3px solid #ffc107;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .note strong { color: #ffc107; }
+
+        .color-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .color-list li {
+            margin-bottom: 6px;
+            padding: 8px 12px;
+            background-color: #111;
+            border-radius: 4px;
+        }
+
+        .swatch {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .group-dots span {
+            margin-right: 12px;
+            white-space: nowrap;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #222;
+            margin: 40px 0;
+        }
+
+        .footer {
+            text-align: center;
+            color: #444;
+            font-size: 0.82rem;
+            margin-top: 50px;
+            padding-bottom: 20px;
+        }
+
+        /* Language toggle */
+        .jp { display: none; }
+        body.show-jp .en { display: none; }
+        body.show-jp .jp { display: block; }
+
+        @media (max-width: 600px) {
+            body { padding: 16px 14px; font-size: 14px; }
+            h1 { font-size: 1.25rem; }
+            .example { font-size: 0.82rem; padding: 10px 12px; }
+            .nav-box { padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+
+<div class="nav-box">
+    <a href="index.html" class="nav-link">Index</a>
+</div>
+<div style="text-align: right; margin-bottom: 20px;">
+    <button class="lang-btn" onclick="toggleLang()">JP</button>
+</div>
+
+<!-- ==================== ENGLISH ==================== -->
+<div class="en">
+
+<h1>How to Read These Heatmaps</h1>
+
+<div class="note" style="margin-bottom: 25px;">
+    <strong>Note:</strong> This page was generated with AI assistance and may contain inaccuracies or oversimplifications. It is intended as a general introduction, not a definitive reference.
+</div>
+
+<h2>What Are EAMs?</h2>
+
+<p><strong>EAM</strong> stands for <strong>Emergency Action Message</strong>. These are coded messages broadcast over high-frequency (HF) radio by the United States military's <strong>High Frequency Global Communications System (HFGCS)</strong>, a network of transmitter stations that can reach receivers anywhere in the world.</p>
+
+<p>Each EAM is a string of uppercase letters and numbers. They are transmitted in the clear (unencrypted at the radio level), but their contents are encoded&mdash;only the intended recipients know what a given message means. Radio hobbyists routinely log these broadcasts, and over time a large collection accumulates.</p>
+
+<p>These heatmaps are a tool for exploring <em>structural patterns</em> in that collection: recurring regularities that suggest the messages follow an underlying format rather than being purely random.</p>
+
+<h2>What This Tool Does</h2>
+
+<p>Each heatmap page shows all logged EAMs that share the same character length. The "55 Character EAMs" page, for example, shows every message that is exactly 55 characters long.</p>
+
+<p>The tool analyzes these same-length messages as a group and looks for places where the same characters, sequences, or relationships appear again and again&mdash;across different messages or within individual ones&mdash;in ways that are unlikely to happen by chance. When it finds patterns, it highlights them with colors. Each color represents a different type of pattern.</p>
+
+<h2>The Heatmap Bar</h2>
+
+<p>At the top of each page is a horizontal bar that stays visible as you scroll. This is the aggregate heatmap. Each column represents one character position (position 1, position 2, etc.), and the brightness of each column reflects how much pattern activity was detected at that position across <em>all</em> messages on the page.</p>
+
+<p><strong>Dark columns</strong> indicate few or no patterns. Those positions likely hold unpredictable data&mdash;encrypted content, random identifiers, and so on.</p>
+
+<p><strong>Bright columns</strong> indicate many messages share structural patterns at that position. This suggests the position has a defined role in the message format: a fixed field, a check character, a predictable delimiter.</p>
+
+<h2>Pattern Colors</h2>
+
+<p>When a character is part of a detected pattern, it is highlighted in one of five colors:</p>
+
+<ul class="color-list">
+    <li><span class="swatch" style="background:#4a9eff;"></span><strong class="t-blue">Blue &mdash; Exact Repeat.</strong> A sequence of two or more characters that appears more than once in the same message.</li>
+    <li><span class="swatch" style="background:#51cf66;"></span><strong class="t-green">Green &mdash; Gapped Repeat.</strong> A sequence that repeats within the message, but with one or more wildcard positions (characters that differ between the two occurrences).</li>
+    <li><span class="swatch" style="background:#cc5de8;"></span><strong class="t-purple">Purple &mdash; Hot Position Pair.</strong> Single characters at two positions that match each other across many different messages.</li>
+    <li><span class="swatch" style="background:#ff69b4;"></span><strong class="t-pink">Pink &mdash; Quadruple Repeat.</strong> Four or more identical characters in a row.</li>
+    <li><span class="swatch" style="background:#ed727f;"></span><strong class="t-coral">Coral &mdash; Partial Quad.</strong> Two or three identical characters in a row, at a position where other messages tend to have quadruple repeats.</li>
+</ul>
+
+<hr>
+
+<h3>Exact Repeats <span class="t-blue">(Blue)</span></h3>
+
+<p>The most common pattern type. The tool scans each message for substrings&mdash;sequences of consecutive characters&mdash;that appear more than once within that same message. In bioinformatics, a substring of length <em>k</em> is called a <strong>k-mer</strong> ("mer" just means "part," so a 3-mer is a three-character part).</p>
+
+<div class="example">
+    <div class="caption">The 2-character sequence "WF" appears at two places in this message:</div>
+    ...QHXXI<span class="c c-blue">W</span><span class="c c-blue">F</span>NJ2UL...URA<span class="c c-blue">W</span><span class="c c-blue">F</span>2PH...
+</div>
+
+<p>Longer repeats are generally more significant. A 2-character match in a long message could easily happen by chance, while a 5-character match is far less likely to be coincidental. The tool uses a confidence score to account for this (see <a href="#confidence-en">Confidence Filtering</a> below).</p>
+
+<h3>Gapped Repeats <span class="t-green">(Green)</span></h3>
+
+<p>Similar to exact repeats, but with flexibility. A gapped pattern is a sequence that repeats in the message where most characters match, but one or more positions act as wildcards&mdash;they can differ between the two occurrences.</p>
+
+<div class="example">
+    <div class="caption">"A_CD" repeats&mdash;the second character differs, but the rest matches:</div>
+    ...<span class="c c-green">A</span><span style="color:#666;">X</span><span class="c c-green">C</span><span class="c c-green">D</span>......<span class="c c-green">A</span><span style="color:#666;">Y</span><span class="c c-green">C</span><span class="c c-green">D</span>...
+</div>
+
+<p>The wildcard characters (X and Y above) are not highlighted&mdash;only the matching positions get green. These patterns must be at least four characters long and often reflect structured fields where some positions are fixed and others vary, like a template with fill-in-the-blank slots.</p>
+
+<h3>Hot Position Pairs <span class="t-purple">(Purple)</span></h3>
+
+<p>This is the only pattern type that looks <em>across</em> messages rather than within a single one. The tool compares all messages of the same length and asks: are there two positions that tend to hold the same character as each other, message after message?</p>
+
+<div class="example">
+    <div class="caption">Position 15 and position 28 match in most messages:</div>
+    Msg 1: ...pos 15 = <span class="c c-purple">F</span> ... pos 28 = <span class="c c-purple">F</span><br>
+    Msg 2: ...pos 15 = <span class="c c-purple">A</span> ... pos 28 = <span class="c c-purple">A</span><br>
+    Msg 3: ...pos 15 = <span class="c c-purple">2</span> ... pos 28 = <span class="c c-purple">2</span><br>
+    <span style="color:#555;">Msg 4: ...pos 15 = X ... pos 28 = Q (no match, no highlight)</span>
+</div>
+
+<p>The threshold is 30%: the characters at the two positions must match in at least 30% of messages within a group to qualify. The specific character changes from message to message, but the <em>relationship</em> persists&mdash;the two positions are structurally linked. This suggests they may be computed from the same input, or one is derived from the other.</p>
+
+<h3>Quadruple Repeats <span class="t-pink">(Pink)</span></h3>
+
+<p>The simplest pattern: four or more of the same character in a row (e.g., <code>AAAA</code>). In a random 36-character alphabet (A&ndash;Z plus 0&ndash;9), a run of four identical characters is quite rare. When it happens, it likely reflects something deliberate in the encoding&mdash;padding, a separator, or a special marker.</p>
+
+<h3>Partial Quads <span class="t-coral">(Coral)</span></h3>
+
+<p>Sometimes a message has a double or triple repeat (like <code>AA</code> or <code>BBB</code>) at a position where other messages of the same length tend to have full quadruple repeats. The coral highlight means: "this position is a known quad-repeat zone, and this message has a partial match here." A double repeat at an arbitrary position would <em>not</em> be highlighted&mdash;it only triggers when the position is structurally significant across the broader message set.</p>
+
+<hr>
+
+<h2>How the Analysis Works</h2>
+
+<ol>
+    <li><strong>Group by length.</strong> All logged EAMs are sorted by character count. Each unique length gets its own page. Position-based analysis only makes sense when position 15 in one message corresponds to position 15 in another, so same-length grouping is essential.</li>
+    <li><strong>Identify hot position pairs.</strong> Within each group, the tool checks every possible pair of positions to see if they tend to hold matching characters. Pairs that match in at least 30% of messages are flagged as "hot." This is a cross-message analysis.</li>
+    <li><strong>Scan each message for within-message patterns.</strong> Each individual message is checked for exact repeating substrings, gapped repeats, quadruple runs, and partial quads.</li>
+    <li><strong>Score confidence.</strong> Short repeats in long messages are often coincidental&mdash;the <a href="https://www.britannica.com/science/birthday-problem" target="_blank">birthday paradox</a> makes collisions surprisingly likely. The tool estimates the probability of each pattern occurring by chance and assigns a confidence weight accordingly. Low-confidence patterns appear dimmer; very weak ones are filtered out.</li>
+    <li><strong>Consolidate and prioritize.</strong> When multiple patterns overlap at the same position, the most informative one is displayed. Priority order, highest to lowest: <span class="t-pink">Quad Repeat</span> &gt; <span class="t-coral">Partial Quad</span> &gt; <span class="t-green">Gapped</span> &gt; <span class="t-blue">Exact</span> &gt; <span class="t-purple">Hot Pair</span>. In certain cases, a strong hot pair can override a weaker exact repeat when the exact repeat isn't fully corroborated by cross-message evidence.</li>
+    <li><strong>Render.</strong> The results are assembled into the interactive page, with the aggregate bar at top and per-message colored characters below.</li>
+</ol>
+
+<h2>Interacting with the Pages</h2>
+
+<p><strong>Click a highlighted character</strong> in any message. Every other message that shares the same pattern at that position will light up with a white outline, and non-matching messages will dim. This is the fastest way to see how widespread a pattern is. For purple (hot pair) patterns, clicking is especially useful: it shows every message where the two linked positions match.</p>
+
+<p><strong>Click a dot</strong> (the colored circle to the left of each message). This highlights all messages in the same group, so you can see which messages were classified together.</p>
+
+<p><strong>Filter controls</strong> let you show or hide specific groups using checkboxes. Useful for isolating one group at a time.</p>
+
+<p><strong>Sort controls</strong> let you switch between grouped ordering (messages organized by group, then by time) and chronological ordering (all messages in time order).</p>
+
+<p><strong>Navigation:</strong> arrows move to adjacent message lengths, the dropdown jumps to a specific length, and the "Index" link returns to the overview page.</p>
+
+<h2>Groups and Dots</h2>
+
+<p>Messages of the same length are further divided into groups based on shared characteristics. Grouping helps identify families of messages that may follow different sub-formats within the same overall length.</p>
+
+<p class="group-dots">
+    <span style="color: #06b050; font-weight: bold;">&#9679; Group 1</span>
+    <span style="color: #ed7d32; font-weight: bold;">&#9679; Group 2</span>
+    <span style="color: #ffcc00; font-weight: bold;">&#9679; Group 3</span>
+    <span style="color: #ff0467; font-weight: bold;">&#9679; Group 4</span>
+    <span style="color: #9063cd; font-weight: bold;">&#9679; Group 5</span>
+    <span style="color: #555; font-weight: bold;">&#9679; Unclassified</span>
+</p>
+
+<p>The dot next to each message reflects its group. Messages that couldn't be confidently assigned get a gray dot and are labeled "Unclassified."</p>
+
+<h2 id="confidence-en">Confidence Filtering</h2>
+
+<p>Not all detected patterns are equally meaningful. A 2-character substring repeating in a 142-character message is not very surprising&mdash;with that many characters and only 36 possible values, short collisions are statistically expected. A 5-character repeat in the same message is far more noteworthy.</p>
+
+<p>The tool handles this with two tiers of scoring:</p>
+
+<p><strong>Tier 1 &mdash; Statistical baseline.</strong> The tool estimates how likely a repeat of a given length is to occur by chance in a message of a given size (using a concept from probability theory called the <a href="https://www.britannica.com/science/birthday-problem" target="_blank">birthday paradox</a>). Shorter repeats in longer messages score lower.</p>
+
+<p><strong>Tier 2 &mdash; Cross-message corroboration.</strong> If the positions where a repeat occurs also show up as hot pairs across the full set of messages, the tool boosts confidence. A repeat that aligns with a known structural relationship is less likely to be a coincidence.</p>
+
+<p>Low-confidence patterns appear at reduced opacity (more transparent). Brighter, more opaque highlights are the ones most worth paying attention to.</p>
+
+<h2>Tips for Reading the Data</h2>
+
+<p><strong>Start with the heatmap bar.</strong> Look for bright columns&mdash;those are the structurally active positions. Positions that stay dark across many message lengths likely carry unpredictable data.</p>
+
+<p><strong>Look for consistency across messages.</strong> A pattern that appears in one message might be coincidence. A pattern at the same positions across dozens of messages is almost certainly structural. Click highlighted characters to check how many messages share the pattern.</p>
+
+<p><strong>Compare across lengths.</strong> Some structural features may persist across different message lengths (e.g., the first few positions might always serve as a callsign field). Jump between length pages to check.</p>
+
+<p><strong>Pay attention to opacity.</strong> Bright, solid highlights are high-confidence. Faint, transparent highlights are statistically weaker.</p>
+
+<p><strong>Purple is special.</strong> Purple highlights are the only ones validated across the entire message corpus rather than within a single message. They represent structural relationships between positions&mdash;arguably the most interesting finding, because they suggest the encoding scheme has internal dependencies where one part of the message is determined by another.</p>
+
+<div class="note">
+    <strong>A note on interpretation.</strong> These heatmaps reveal correlations and structural regularities&mdash;the "shape" of the format&mdash;without decoding or breaking any encryption. Think of it like noticing that every sentence in a foreign language ends with a period, without understanding what the sentences say.
+</div>
+
+</div>
+
+<!-- ==================== JAPANESE ==================== -->
+<div class="jp">
+
+<h1>ヒートマップの読み方</h1>
+
+<div class="note" style="margin-bottom: 25px;">
+    <strong>注意：</strong>このページはAIの支援を受けて作成されており、不正確な記述や過度な簡略化が含まれている可能性があります。あくまで一般的な入門資料としてご参照ください。
+</div>
+
+<h2>EAMとは</h2>
+
+<p><strong>EAM</strong>は<strong>Emergency Action Message（緊急行動メッセージ）</strong>の略称です。アメリカ軍の<strong>高周波グローバル通信システム（HFGCS）</strong>&mdash;世界中の受信機に到達可能な送信局ネットワーク&mdash;を通じて、高周波（HF）無線で放送される暗号化メッセージです。</p>
+
+<p>各EAMは大文字のアルファベットと数字で構成された文字列です。電波自体は暗号化されずに送信されますが、内容は符号化されており、意図された受信者のみがメッセージの意味を理解できます。無線愛好家がこれらの放送を日常的に記録しており、時間の経過とともに大量のメッセージが蓄積されています。</p>
+
+<p>このヒートマップは、蓄積されたメッセージの中に存在する<em>構造的パターン</em>&mdash;メッセージが純粋にランダムではなく、何らかのフォーマットに従っていることを示唆する規則性&mdash;を探索するためのツールです。</p>
+
+<h2>このツールの機能</h2>
+
+<p>各ヒートマップページは、同じ文字数を持つすべてのEAMを表示します。たとえば「55文字のEAM」ページには、ちょうど55文字のメッセージがすべて表示されます。</p>
+
+<p>ツールはこれらの同一文字数のメッセージをグループとして分析し、同じ文字、配列、または関係性が偶然とは考えにくい形で繰り返し出現する箇所を探します。パターンが見つかると、色で強調表示されます。各色は異なる種類のパターンを表しています。</p>
+
+<h2>ヒートマップバー</h2>
+
+<p>各ページの上部には、スクロールしても表示され続ける横長のバーがあります。これが集約ヒートマップです。各列はメッセージの1つの文字位置（位置1、位置2など）に対応し、列の明るさはページ上の<em>すべての</em>メッセージにおいて、その位置でどれだけのパターンが検出されたかを反映しています。</p>
+
+<p><strong>暗い列</strong>は、パターンがほとんどまたは全く検出されなかったことを示します。おそらく暗号化されたデータやランダムな識別子など、予測不可能なデータが含まれている位置です。</p>
+
+<p><strong>明るい列</strong>は、多くのメッセージがその位置で構造的パターンを共有していることを示します。その位置がメッセージフォーマットにおいて特定の役割（固定フィールド、チェック文字、予測可能な区切り文字など）を持っていることを示唆しています。</p>
+
+<h2>パターンの色分け</h2>
+
+<p>文字が検出されたパターンの一部である場合、5つの色のいずれかで強調表示されます。</p>
+
+<ul class="color-list">
+    <li><span class="swatch" style="background:#4a9eff;"></span><strong class="t-blue">青 &mdash; 完全一致リピート。</strong>同一メッセージ内で2回以上出現する、2文字以上の連続した配列。</li>
+    <li><span class="swatch" style="background:#51cf66;"></span><strong class="t-green">緑 &mdash; ギャップ付きリピート。</strong>メッセージ内で繰り返される配列だが、1つ以上の位置がワイルドカード（2つの出現箇所で異なる文字）として機能する。</li>
+    <li><span class="swatch" style="background:#cc5de8;"></span><strong class="t-purple">紫 &mdash; ホットポジションペア。</strong>多くの異なるメッセージにわたって、2つの位置の文字が互いに一致する。</li>
+    <li><span class="swatch" style="background:#ff69b4;"></span><strong class="t-pink">ピンク &mdash; 4連続リピート。</strong>同じ文字が4つ以上連続して出現する。</li>
+    <li><span class="swatch" style="background:#ed727f;"></span><strong class="t-coral">コーラル &mdash; 部分的4連続。</strong>他のメッセージで4連続リピートが頻出する位置において、同じ文字が2つまたは3つ連続して出現する。</li>
+</ul>
+
+<hr>
+
+<h3>完全一致リピート <span class="t-blue">（青）</span></h3>
+
+<p>最も一般的なパターンです。ツールは各メッセージを走査し、同じメッセージ内で2回以上出現する部分文字列（連続した文字の配列）を探します。バイオインフォマティクスでは、長さ<em>k</em>の部分文字列を<strong>k-mer</strong>（k連結文字）と呼びます（「mer」は「部分」の意味で、3-merは3文字の部分を指します）。</p>
+
+<div class="example">
+    <div class="caption">2文字の配列「WF」がメッセージ内の2箇所に出現：</div>
+    ...QHXXI<span class="c c-blue">W</span><span class="c c-blue">F</span>NJ2UL...URA<span class="c c-blue">W</span><span class="c c-blue">F</span>2PH...
+</div>
+
+<p>より長いリピートほど重要性が高くなります。長いメッセージでの2文字の一致は偶然起きやすい一方、5文字の一致が偶然である可能性ははるかに低くなります。ツールはこれを信頼度スコアで考慮しています（下記の<a href="#confidence-jp">信頼度フィルタリング</a>を参照）。</p>
+
+<h3>ギャップ付きリピート <span class="t-green">（緑）</span></h3>
+
+<p>完全一致リピートに似ていますが、柔軟性があります。ギャップ付きパターンは、ほとんどの文字は一致するが、1つ以上の位置がワイルドカードとして機能する（2つの出現箇所で異なりうる）配列です。</p>
+
+<div class="example">
+    <div class="caption">「A_CD」が繰り返される&mdash;2番目の文字は異なるが、残りは一致：</div>
+    ...<span class="c c-green">A</span><span style="color:#666;">X</span><span class="c c-green">C</span><span class="c c-green">D</span>......<span class="c c-green">A</span><span style="color:#666;">Y</span><span class="c c-green">C</span><span class="c c-green">D</span>...
+</div>
+
+<p>ワイルドカード文字（上の例ではXとY）は強調表示されません。一致する位置のみが緑色になります。これらのパターンは4文字以上の長さが必要で、一部の位置が固定で他が可変となる構造化フィールド（穴埋め式のテンプレートのようなもの）を反映していることが多いです。</p>
+
+<h3>ホットポジションペア <span class="t-purple">（紫）</span></h3>
+
+<p>単一メッセージ内ではなく、<em>メッセージ間</em>を横断して分析する唯一のパターンタイプです。ツールは同じ文字数のすべてのメッセージを比較し、次の問いに答えます：メッセージごとに、同じ文字を保持する傾向がある2つの位置は存在するか？</p>
+
+<div class="example">
+    <div class="caption">位置15と位置28がほとんどのメッセージで一致：</div>
+    Msg 1: ...pos 15 = <span class="c c-purple">F</span> ... pos 28 = <span class="c c-purple">F</span><br>
+    Msg 2: ...pos 15 = <span class="c c-purple">A</span> ... pos 28 = <span class="c c-purple">A</span><br>
+    Msg 3: ...pos 15 = <span class="c c-purple">2</span> ... pos 28 = <span class="c c-purple">2</span><br>
+    <span style="color:#555;">Msg 4: ...pos 15 = X ... pos 28 = Q（不一致、強調表示なし）</span>
+</div>
+
+<p>閾値は30%です。グループ内のメッセージの少なくとも30%で2つの位置の文字が一致する必要があります。具体的な文字はメッセージごとに変わりますが、<em>関係性</em>（2つの位置が等しいこと）は維持されます。これは2つの位置が構造的にリンクしていることを示唆しており、同じ入力から計算されるか、一方が他方から導出される可能性があります。</p>
+
+<h3>4連続リピート <span class="t-pink">（ピンク）</span></h3>
+
+<p>最も単純なパターンです。同じ文字が4つ以上連続して出現します（例：<code>AAAA</code>）。ランダムな36文字のアルファベット（A〜Zおよび0〜9）において、同じ文字が4つ連続する確率は非常に低いです。これが発生する場合、符号化における意図的な要素&mdash;パディング、区切り、特殊マーカーなど&mdash;を反映している可能性が高いです。</p>
+
+<h3>部分的4連続 <span class="t-coral">（コーラル）</span></h3>
+
+<p>同じ文字数の他のメッセージで完全な4連続リピートが頻出する位置に、2つまたは3つの連続する同一文字（例：<code>AA</code>や<code>BBB</code>）が存在する場合があります。コーラル色の強調は「この位置は4連続リピートが発生しやすい構造的に重要な場所であり、このメッセージにはそこに部分的な一致がある」ことを意味します。任意の位置にある2文字の繰り返しは強調表示<em>されません</em>&mdash;その位置がメッセージ集合全体にわたって構造的に重要である場合にのみ検出されます。</p>
+
+<hr>
+
+<h2>分析の仕組み</h2>
+
+<ol>
+    <li><strong>文字数でグループ化。</strong>すべてのEAMを文字数で分類します。各文字数が個別のページを持ちます。位置ベースの分析は、あるメッセージの位置15が別のメッセージの位置15と対応する場合にのみ意味を持つため、同一文字数でのグループ化は不可欠です。</li>
+    <li><strong>ホットポジションペアの特定。</strong>各グループ内で、すべての位置の組み合わせについて、一致する文字を持つ傾向があるかを確認します。メッセージの30%以上で一致するペアが「ホット」としてフラグ付けされます。これはメッセージ間の分析です。</li>
+    <li><strong>各メッセージのパターン走査。</strong>各メッセージについて、完全一致する部分文字列、ギャップ付きリピート、4連続リピート、部分的4連続を検出します。</li>
+    <li><strong>信頼度スコアリング。</strong>長いメッセージでの短いリピートは偶然の産物であることが多く、<a href="https://www.britannica.com/science/birthday-problem" target="_blank">誕生日のパラドックス</a>により衝突は驚くほど高い確率で発生します。ツールは各パターンが偶然発生する確率を推定し、信頼度の重みを付与します。低信頼度のパターンはより薄く表示され、非常に弱いものは除外されます。</li>
+    <li><strong>統合と優先順位付け。</strong>同じ位置に複数のパターンが重なる場合、最も情報量の多いものが表示されます。優先順位（高い順）：<span class="t-pink">4連続リピート</span> &gt; <span class="t-coral">部分的4連続</span> &gt; <span class="t-green">ギャップ付き</span> &gt; <span class="t-blue">完全一致</span> &gt; <span class="t-purple">ホットペア</span>。特定の状況では、強いホットペア（紫）がメッセージ間の証拠で十分に裏付けられていない弱い完全一致リピート（青）を上書きすることがあります。</li>
+    <li><strong>レンダリング。</strong>結果がインタラクティブなページに組み立てられ、上部に集約バー、下部にメッセージごとの色付き文字が表示されます。</li>
+</ol>
+
+<h2>ページの操作方法</h2>
+
+<p><strong>強調表示された文字をクリック</strong>すると、同じ位置で同じパターンを共有する他のすべてのメッセージが白い輪郭線で強調表示され、一致しないメッセージは薄くなります。パターンがどの程度広範に存在するかを確認する最も手軽な方法です。紫（ホットペア）パターンでは特に有用で、リンクされた2つの位置が一致するすべてのメッセージを表示します。</p>
+
+<p><strong>ドットをクリック</strong>（各メッセージの左にある色付きの丸）すると、同じグループのすべてのメッセージが強調表示されます。</p>
+
+<p><strong>フィルターコントロール</strong>では、チェックボックスを使って特定のグループの表示・非表示を切り替えることができます。</p>
+
+<p><strong>ソートコントロール</strong>では、グループ別の順序（グループごと、次に時系列）と時系列順序（グループに関係なく全メッセージを時間順に表示）を切り替えることができます。</p>
+
+<p><strong>ナビゲーション：</strong>矢印で隣接する文字数のページに移動し、ドロップダウンで特定の文字数にジャンプできます。「Index」リンクで全体の一覧ページに戻ります。</p>
+
+<h2>グループとドット</h2>
+
+<p>同じ文字数のメッセージは、共有する特徴に基づいてさらにグループに分類されます。グループ化により、同じ文字数の中でも異なるサブフォーマットに従うメッセージのファミリーを特定できます。</p>
+
+<p class="group-dots">
+    <span style="color: #06b050; font-weight: bold;">&#9679; グループ1</span>
+    <span style="color: #ed7d32; font-weight: bold;">&#9679; グループ2</span>
+    <span style="color: #ffcc00; font-weight: bold;">&#9679; グループ3</span>
+    <span style="color: #ff0467; font-weight: bold;">&#9679; グループ4</span>
+    <span style="color: #9063cd; font-weight: bold;">&#9679; グループ5</span>
+    <span style="color: #555; font-weight: bold;">&#9679; 未分類</span>
+</p>
+
+<p>各メッセージの横にあるドットはそのグループを反映しています。自信を持って分類できなかったメッセージは灰色のドットで「未分類」と表示されます。</p>
+
+<h2 id="confidence-jp">信頼度フィルタリング</h2>
+
+<p>検出されたパターンがすべて等しく意味があるわけではありません。142文字のメッセージ内で2文字の部分文字列が繰り返されても、それほど驚くことではありません&mdash;それだけの文字数と36種類の値しかない状況では、短い衝突は統計的に予想される範囲内です。一方、同じメッセージで5文字のリピートが見つかれば、はるかに注目に値します。</p>
+
+<p>ツールは2段階のスコアリングでこれに対応しています。</p>
+
+<p><strong>第1段階 &mdash; 統計的ベースライン。</strong>確率論の<a href="https://www.britannica.com/science/birthday-problem" target="_blank">誕生日のパラドックス</a>という概念を用いて、特定のサイズのメッセージで特定の長さのリピートが偶然発生する確率を推定します。長いメッセージでの短いリピートほどスコアが低くなります。</p>
+
+<p><strong>第2段階 &mdash; メッセージ間の裏付け。</strong>リピートが発生する位置がメッセージ集合全体でホットペアとしても検出される場合、ツールは信頼度を引き上げます。既知の構造的関係性と一致するリピートは、偶然である可能性が低いためです。</p>
+
+<p>低信頼度のパターンは透明度が高く（より薄く）表示されます。明るく不透明な強調表示ほど、注目する価値が高いパターンです。</p>
+
+<h2>データの読み方のコツ</h2>
+
+<p><strong>ヒートマップバーから始める。</strong>明るい列を探しましょう&mdash;それらが構造的に活発な位置です。多くの文字数にわたって暗いままの位置は、おそらく予測不可能なデータを含んでいます。</p>
+
+<p><strong>メッセージ間の一貫性を見る。</strong>1つのメッセージにしか現れないパターンは偶然かもしれません。数十のメッセージにわたって同じ位置に現れるパターンは、ほぼ確実に構造的なものです。強調表示された文字をクリックして、何件のメッセージがそのパターンを共有しているか確認しましょう。</p>
+
+<p><strong>文字数間で比較する。</strong>一部の構造的特徴は異なる文字数のメッセージ間で持続する場合があります（たとえば、最初の数位置が常にコールサインフィールドとして機能するなど）。文字数ページ間を移動して確認しましょう。</p>
+
+<p><strong>透明度に注意する。</strong>明るく不透明な強調表示は高信頼度です。薄く透明な強調表示は統計的に弱いものです。</p>
+
+<p><strong>紫は特別。</strong>紫の強調表示は、単一メッセージ内ではなく、メッセージ集合全体にわたって検証された唯一のパターンです。位置間の構造的関係性を表しており、符号化方式にメッセージの一部が別の部分によって決定される内部依存性があることを示唆しています&mdash;おそらく最も興味深い発見と言えるでしょう。</p>
+
+<div class="note">
+    <strong>解釈についての注意。</strong>これらのヒートマップは相関関係と構造的規則性&mdash;フォーマットの「形」&mdash;を明らかにしますが、メッセージを解読したり暗号を破ったりするものではありません。たとえて言えば、外国語のすべての文がピリオドで終わることに気づくようなもので、文の意味を理解しているわけではありません。
+</div>
+
+</div>
+
+<div class="footer">HFGCS EAM Structural Analysis</div>
+
+</div>
+
+<script>
+function toggleLang() {
+    var body = document.body;
+    var btn = document.querySelector('.lang-btn');
+    body.classList.toggle('show-jp');
+    btn.textContent = body.classList.contains('show-jp') ? 'EN' : 'JP';
+}
+</script>
+
+</body>
+</html>
