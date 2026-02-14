@@ -216,26 +216,15 @@
   <li>Record the offset that produces the maximum number of matches.</li>
 </ol>
 
-<div class="method-diagram">
+<div class="method-diagram" style="overflow-x:auto;">
   <div style="margin-bottom:4px; color:var(--text-dim); font-family:-apple-system,sans-serif; font-size:0.75rem;">
-    Example: two messages compared at offset +44
+    Example: two real messages from prefix RO, aligned at offset +44 (positions 82&ndash;115 shown)
   </div>
-  <div>
-    <span class="dim">Msg A: </span>
-    <span class="bright">P D M M A 7 K D S 3 7 3 I S I Y R T O 2 5 W 2 5 6 S J Z Q Q 2 Z T N 7 R 7 F X J D</span><span class="grn"> K K K K</span><span class="bright"> I 7 Q E J N P I N O Q H 4 H 4 H F Y</span><span class="grn"> Z Z Z Z</span><span class="bright"> G D K Q G ...</span>
-  </div>
-  <div>
-    <span class="dim">        </span>
-    <span class="dim">. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</span>
-    <span class="dim"> &larr;</span><span class="blu"> 44 positions </span><span class="dim">&rarr; </span>
-  </div>
-  <div>
-    <span class="dim">Msg B: </span>
-    <span class="dim">                                            </span>
-    <span class="bright">P D 2 B K 2 J T G Q I T 3 V O K A G 4 5 S J 2 S G V Q G N N C G 5 E S Q S A B M W</span><span class="grn"> V V V V</span><span class="bright"> F S A H W J U ...</span>
-  </div>
+  <pre style="margin:0; font-size:0.8rem; line-height:1.9; background:transparent; overflow-x:auto;"><span class="dim">Msg A: ...</span><span class="grn">K</span><span class="bright"> Z O </span><span class="grn">C C C C X 5 L G V</span><span class="bright"> O T O 5 Z </span><span class="grn">Q V H</span><span class="bright"> H 4 C K H </span><span class="grn">L L L L G 3 F A E</span>
+<span class="dim">          </span><span class="grn">|</span><span class="dim"> . . </span><span class="grn">| | | | | | | | |</span><span class="dim"> . . . . . </span><span class="grn">| | |</span><span class="dim"> . . . . . </span><span class="grn">| | | | | | | | |</span>
+<span class="dim">Msg B: ...</span><span class="grn">K</span><span class="bright"> 2 K </span><span class="grn">C C C C X 5 L G V</span><span class="bright"> W N 5 T J </span><span class="grn">Q V H</span><span class="bright"> 4 H P 4 I </span><span class="grn">L L L L G 3 F A E</span></pre>
   <div style="margin-top:6px; color:var(--text-dim); font-family:-apple-system,sans-serif; font-size:0.72rem;">
-    <span class="grn">Green</span> = matching characters at this offset. The question: why does offset 44 produce more matches than, say, offset 43 or 45?
+    <span class="grn">Green</span> = matching characters at this offset. 22 of 34 characters match in this window. The question: why does offset +44 produce so many more matches than, say, +43 or +45?
   </div>
 </div>
 
