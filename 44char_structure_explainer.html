@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cross-Message 44-Character Alignment Periodicity in HFGCS EAM Ciphertext</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --text: #c8c8d8;
+    --text-dim: #7a7a90;
+    --accent: #ff0467;
+    --match-color: #44ee88;
+    --offset-color: #4488ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.3rem; }
+  h2 {
+    color: #ddd; font-size: 1.1rem; margin: 2.5rem 0 0.8rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  }
+  h3 { color: #bbb; font-size: 0.95rem; margin: 1.5rem 0 0.6rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 2rem; }
+  p, li {
+    font-size: 0.83rem; margin-bottom: 0.6rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.7;
+  }
+  ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+  code { font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #ddd; }
+  strong { color: #eee; }
+
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem; margin: 1.2rem 0;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.8rem; text-align: center;
+  }
+  .stat-card .number {
+    font-size: 1.8rem; font-weight: bold; color: var(--accent);
+    font-family: 'SF Mono', monospace;
+  }
+  .stat-card .label {
+    font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem;
+    font-family: -apple-system, sans-serif;
+  }
+
+  /* Alignment pair visualization */
+  .pair-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0;
+    overflow-x: auto;
+  }
+  .pair-header {
+    font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.6rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .pair-header strong { color: var(--accent); }
+  .pair-header .offset-badge {
+    display: inline-block; background: rgba(68,136,255,0.2);
+    border: 1px solid rgba(68,136,255,0.4); border-radius: 4px;
+    padding: 1px 6px; color: var(--offset-color); font-weight: 600;
+    font-family: 'SF Mono', monospace; font-size: 0.78rem;
+  }
+  .pair-header .match-badge {
+    display: inline-block; background: rgba(68,238,136,0.15);
+    border: 1px solid rgba(68,238,136,0.3); border-radius: 4px;
+    padding: 1px 6px; color: var(--match-color); font-weight: 600;
+    font-family: 'SF Mono', monospace; font-size: 0.78rem;
+  }
+
+  .align-row {
+    display: flex; align-items: center; margin: 1px 0; white-space: nowrap;
+  }
+  .row-label {
+    width: 24px; font-size: 0.65rem; color: var(--text-dim);
+    flex-shrink: 0; text-align: right; padding-right: 4px;
+  }
+  .char-strip { display: flex; gap: 0; }
+  .ac {
+    width: 11px; height: 17px; display: flex; align-items: center;
+    justify-content: center; font-size: 9px; flex-shrink: 0;
+  }
+  .ac.normal { color: #555; }
+  .ac.match { color: #fff; background: rgba(68,238,136,0.3); font-weight: bold; }
+  .ac.spacer { }
+  .ac.bar { color: rgba(68,238,136,0.5); font-size: 7px; }
+  .ac.bar.hit { color: rgba(68,238,136,0.9); }
+
+  /* Histogram */
+  .histogram {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem; margin: 1.2rem 0;
+  }
+  .hist-bar-row {
+    display: flex; align-items: center; margin: 2px 0; font-size: 0.72rem;
+  }
+  .hist-label {
+    width: 60px; text-align: right; padding-right: 8px; color: var(--text-dim);
+    font-family: 'SF Mono', monospace; flex-shrink: 0;
+  }
+  .hist-bar-bg {
+    flex: 1; height: 18px; background: var(--surface2); border-radius: 3px;
+    position: relative; overflow: hidden;
+  }
+  .hist-bar-fill {
+    height: 100%; border-radius: 3px; position: absolute; left: 0; top: 0;
+  }
+  .hist-bar-fill.mul44 { background: var(--accent); }
+  .hist-bar-fill.mul22 { background: rgba(255,4,103,0.5); }
+  .hist-bar-fill.even { background: rgba(100,100,140,0.5); }
+  .hist-bar-fill.odd { background: rgba(60,60,80,0.5); }
+  .hist-value {
+    width: 70px; padding-left: 8px; color: var(--text-dim);
+    font-family: 'SF Mono', monospace; flex-shrink: 0;
+  }
+
+  .note {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    padding: 0.7rem 1rem; margin: 1rem 0; font-size: 0.8rem;
+    font-family: -apple-system, sans-serif;
+  }
+
+  table.stats {
+    border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem;
+  }
+  table.stats th, table.stats td {
+    padding: 0.35rem 0.7rem; border: 1px solid var(--border); text-align: right;
+  }
+  table.stats th {
+    background: var(--surface); color: #aaa; font-weight: 600;
+    font-family: -apple-system, sans-serif;
+  }
+  table.stats td { font-family: 'SF Mono', monospace; }
+  table.stats td.lc {
+    text-align: left; font-family: -apple-system, sans-serif; color: var(--text-dim);
+  }
+  .hl { background: rgba(255,4,103,0.08); }
+  .separator { border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .method-diagram {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem; margin: 1.2rem 0;
+    font-size: 0.8rem; line-height: 1.9;
+  }
+  .method-diagram .dim { color: #555; }
+  .method-diagram .bright { color: #fff; }
+  .method-diagram .grn { color: var(--match-color); }
+  .method-diagram .blu { color: var(--offset-color); }
+</style>
+</head>
+<body>
+
+<h1>Cross-Message Alignment Periodicity in HFGCS EAM Ciphertext</h1>
+<div class="subtitle">
+  Pairwise sliding comparison reveals 44-character structural periodicity across independent messages &mdash; NEET INTEL, 2026
+</div>
+
+<!-- ============================================================ -->
+<h2>1. What was found</h2>
+
+<p>
+  When two different HFGCS EAM messages are slid against each other character-by-character to find
+  the alignment offset that produces the most matching characters, the best-fit offsets
+  <strong>cluster at multiples of 22 and 44</strong> far beyond what random chance predicts.
+</p>
+<p>
+  This holds across messages from different prefix groups, different dates (spanning 2022&ndash;2026),
+  and different message lengths. The messages being compared are independent intercepts &mdash;
+  different content, different days, often different originators &mdash; yet they structurally
+  align at 44-character intervals.
+</p>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="number">1,512</div>
+    <div class="label">pairwise comparisons</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">10.5%</div>
+    <div class="label">best offset = &plusmn;22, &plusmn;44, or &plusmn;66</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">67.6%</div>
+    <div class="label">even offsets (vs 32.4% odd)</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">23.8%</div>
+    <div class="label">offsets divisible by 22</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>2. Method</h2>
+
+<p>
+  The technique is a standard sliding window comparison. For two messages A and B:
+</p>
+
+<ol>
+  <li>Try every possible horizontal offset (shifting B left or right relative to A).</li>
+  <li>At each offset, count how many character positions align to the same character.</li>
+  <li>Record the offset that produces the maximum number of matches.</li>
+</ol>
+
+<div class="method-diagram">
+  <div style="margin-bottom:4px; color:var(--text-dim); font-family:-apple-system,sans-serif; font-size:0.75rem;">
+    Example: two messages compared at offset +44
+  </div>
+  <div>
+    <span class="dim">Msg A: </span>
+    <span class="bright">P D M M A 7 K D S 3 7 3 I S I Y R T O 2 5 W 2 5 6 S J Z Q Q 2 Z T N 7 R 7 F X J D</span><span class="grn"> K K K K</span><span class="bright"> I 7 Q E J N P I N O Q H 4 H 4 H F Y</span><span class="grn"> Z Z Z Z</span><span class="bright"> G D K Q G ...</span>
+  </div>
+  <div>
+    <span class="dim">        </span>
+    <span class="dim">. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</span>
+    <span class="dim"> &larr;</span><span class="blu"> 44 positions </span><span class="dim">&rarr; </span>
+  </div>
+  <div>
+    <span class="dim">Msg B: </span>
+    <span class="dim">                                            </span>
+    <span class="bright">P D 2 B K 2 J T G Q I T 3 V O K A G 4 5 S J 2 S G V Q G N N C G 5 E S Q S A B M W</span><span class="grn"> V V V V</span><span class="bright"> F S A H W J U ...</span>
+  </div>
+  <div style="margin-top:6px; color:var(--text-dim); font-family:-apple-system,sans-serif; font-size:0.72rem;">
+    <span class="grn">Green</span> = matching characters at this offset. The question: why does offset 44 produce more matches than, say, offset 43 or 45?
+  </div>
+</div>
+
+<p>
+  This is performed within each prefix group (messages sharing the same 2-character prefix).
+  243 unique messages from 21 prefix groups yield 1,512 pairwise comparisons.
+</p>
+
+<!-- ============================================================ -->
+<h2>3. Offset distribution</h2>
+
+<p>
+  If message structure were unrelated to a 44-character period, best-fit offsets would scatter
+  roughly uniformly across all possible values. Instead, multiples of 22 dominate:
+</p>
+
+<div class="histogram">
+  <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:8px; font-family:-apple-system,sans-serif;">
+    Distribution of |best offset| &mdash; top 15 values.
+    <span style="color:var(--accent);">&block;</span> multiple of 44 &nbsp;
+    <span style="color:rgba(255,4,103,0.5);">&block;</span> multiple of 22 &nbsp;
+    <span style="color:rgba(100,100,140,0.5);">&block;</span> even &nbsp;
+    <span style="color:rgba(60,60,80,0.5);">&block;</span> odd
+  </div>
+
+  <div class="hist-bar-row">
+    <div class="hist-label">|0|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill mul44" style="width:100%"></div></div>
+    <div class="hist-value">172 (11.4%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|22|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill mul22" style="width:33.7%"></div></div>
+    <div class="hist-value">58 (3.8%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|44|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill mul44" style="width:30.8%"></div></div>
+    <div class="hist-value">53 (3.5%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|66|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill mul22" style="width:27.9%"></div></div>
+    <div class="hist-value">48 (3.2%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|12|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:19.2%"></div></div>
+    <div class="hist-value">33 (2.2%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|6|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:17.4%"></div></div>
+    <div class="hist-value">30 (2.0%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|18|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:16.9%"></div></div>
+    <div class="hist-value">29 (1.9%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|10|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:16.3%"></div></div>
+    <div class="hist-value">28 (1.9%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|2|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:15.7%"></div></div>
+    <div class="hist-value">27 (1.8%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|9|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill odd" style="width:15.1%"></div></div>
+    <div class="hist-value">26 (1.7%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|1|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill odd" style="width:14.5%"></div></div>
+    <div class="hist-value">25 (1.7%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|14|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:14.5%"></div></div>
+    <div class="hist-value">25 (1.7%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|5|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill odd" style="width:14.5%"></div></div>
+    <div class="hist-value">25 (1.7%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|4|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:12.8%"></div></div>
+    <div class="hist-value">22 (1.5%)</div>
+  </div>
+  <div class="hist-bar-row">
+    <div class="hist-label">|16|</div>
+    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:11.6%"></div></div>
+    <div class="hist-value">20 (1.3%)</div>
+  </div>
+</div>
+
+<p>
+  The three multiples of 22 (excluding zero) &mdash; |22|, |44|, |66| &mdash; account for
+  <strong>10.5%</strong> of all pairs despite representing only 3 out of ~200+ possible offset values.
+  Under uniform distribution, they would represent roughly 1.5%.
+</p>
+
+<div class="note">
+  <strong>Controlling for the obvious:</strong> Offset 0 is elevated partly because messages in the
+  same prefix group share their first 2 characters (the prefix itself). Stripping positions 0&ndash;1
+  from the match count reduces offset-0 dominance, but the &plusmn;22/&plusmn;44/&plusmn;66 peaks remain
+  because they are <em>not</em> explained by the shared prefix.
+</div>
+
+<!-- ============================================================ -->
+<h2>4. Real examples</h2>
+
+<p>
+  Below are actual message pairs whose best sliding alignment falls at offset &plusmn;44.
+  These are different messages, intercepted on different dates. Green characters are positions
+  that match at the given offset.
+</p>
+
+<!-- Example 1: RO +44, 85 matches, 51% density -->
+<div class="pair-box">
+  <div class="pair-header">
+    <strong>RO</strong> &mdash;
+    216 chars (2024-08-25) vs 166 chars (2024-09-18) &mdash;
+    <span class="offset-badge">offset +44</span>
+    <span class="match-badge">85 matches (51% density)</span>
+  </div>
+  <div class="align-row">
+    <div class="row-label">A</div>
+    <div class="char-strip" id="ex1a"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label"></div>
+    <div class="char-strip" id="ex1m"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label">B</div>
+    <div class="char-strip" id="ex1b"></div>
+  </div>
+</div>
+
+<!-- Example 2: LO -22, 96 matches, 64% density -->
+<div class="pair-box">
+  <div class="pair-header">
+    <strong>LO</strong> &mdash;
+    172 chars (2024-01-31) vs 194 chars (2024-02-10) &mdash;
+    <span class="offset-badge">offset &minus;22</span>
+    <span class="match-badge">96 matches (64% density)</span>
+    &mdash; <em style="color:var(--text-dim);">half-period alignment</em>
+  </div>
+  <div class="align-row">
+    <div class="row-label">A</div>
+    <div class="char-strip" id="ex2a"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label"></div>
+    <div class="char-strip" id="ex2m"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label">B</div>
+    <div class="char-strip" id="ex2b"></div>
+  </div>
+</div>
+
+<!-- Example 3: JC +44, 46 matches -->
+<div class="pair-box">
+  <div class="pair-header">
+    <strong>JC</strong> &mdash;
+    142 chars (2023-07-23) vs 194 chars (2023-08-19) &mdash;
+    <span class="offset-badge">offset +44</span>
+    <span class="match-badge">46 matches (47% density)</span>
+  </div>
+  <div class="align-row">
+    <div class="row-label">A</div>
+    <div class="char-strip" id="ex3a"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label"></div>
+    <div class="char-strip" id="ex3m"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label">B</div>
+    <div class="char-strip" id="ex3b"></div>
+  </div>
+</div>
+
+<!-- Example 4: RO +66, 62 matches -->
+<div class="pair-box">
+  <div class="pair-header">
+    <strong>RO</strong> &mdash;
+    290 chars (2024-08-24) vs 268 chars (2024-08-30) &mdash;
+    <span class="offset-badge">offset +66</span>
+    <span class="match-badge">62 matches</span>
+    &mdash; <em style="color:var(--text-dim);">3 &times; 22 alignment</em>
+  </div>
+  <div class="align-row">
+    <div class="row-label">A</div>
+    <div class="char-strip" id="ex4a"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label"></div>
+    <div class="char-strip" id="ex4m"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label">B</div>
+    <div class="char-strip" id="ex4b"></div>
+  </div>
+</div>
+
+<!-- Example 5: BV -44, 43 matches -->
+<div class="pair-box">
+  <div class="pair-header">
+    <strong>BV</strong> &mdash;
+    220 chars (2024-10-02) vs 142 chars (2025-01-04) &mdash;
+    <span class="offset-badge">offset &minus;44</span>
+    <span class="match-badge">43 matches (30% density)</span>
+    &mdash; <em style="color:var(--text-dim);">3 months apart</em>
+  </div>
+  <div class="align-row">
+    <div class="row-label">A</div>
+    <div class="char-strip" id="ex5a"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label"></div>
+    <div class="char-strip" id="ex5m"></div>
+  </div>
+  <div class="align-row">
+    <div class="row-label">B</div>
+    <div class="char-strip" id="ex5b"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>5. Even/odd asymmetry</h2>
+
+<p>
+  Beyond the 22/44 peaks, there is a broader structural signal: <strong>67.6% of all best-fit
+  offsets are even</strong>, versus 32.4% odd. Under random expectation, even and odd would
+  each be ~50%.
+</p>
+
+<table class="stats">
+  <tr><th>Category</th><th>Count</th><th>Percentage</th><th>Expected (uniform)</th></tr>
+  <tr class="hl"><td class="lc">Even offsets</td><td>1,022</td><td>67.6%</td><td>~50%</td></tr>
+  <tr><td class="lc">Odd offsets</td><td>490</td><td>32.4%</td><td>~50%</td></tr>
+  <tr class="hl"><td class="lc">Divisible by 22</td><td>360</td><td>23.8%</td><td>~2&ndash;3%</td></tr>
+  <tr class="hl"><td class="lc">Divisible by 44</td><td>242</td><td>16.0%</td><td>~1&ndash;2%</td></tr>
+</table>
+
+<p>
+  This even-offset dominance suggests a <strong>2-character subunit</strong> (character pair)
+  as a building block, with the 22-character and 44-character periods built from groups of
+  11 and 22 such pairs.
+</p>
+
+<!-- ============================================================ -->
+<h2>6. Cross-group consistency</h2>
+
+<p>
+  The 22/44-character periodicity appears across all 21 Group 4 prefix groups analyzed.
+  These prefixes are believed to represent different message originators, routing paths,
+  or message types. Despite different content and temporal separation, the structural
+  alignment period is the same.
+</p>
+
+<table class="stats">
+  <tr><th>Prefix</th><th>Messages</th><th>Pairs at &plusmn;44</th><th>Example</th></tr>
+  <tr><td class="lc">PD</td><td>6</td><td>3</td><td>31 matches, Nov 2022</td></tr>
+  <tr><td class="lc">6K</td><td>9</td><td>4</td><td>39 matches, Jun&ndash;Jul 2023</td></tr>
+  <tr><td class="lc">ET</td><td>9</td><td>2</td><td>13 matches, Jan&ndash;Feb 2023</td></tr>
+  <tr><td class="lc">BH</td><td>20</td><td>5</td><td>Visible in slider heatmap</td></tr>
+  <tr><td class="lc">BV</td><td>15</td><td>4</td><td>Visible in slider heatmap</td></tr>
+  <tr><td class="lc">JC</td><td>20</td><td>3</td><td>12&ndash;13 matches, Jul&ndash;Aug 2023</td></tr>
+  <tr><td class="lc">JO</td><td>18</td><td>4</td><td>Visible in slider heatmap</td></tr>
+  <tr><td class="lc" style="color:#666;">+ 14 others</td><td></td><td></td><td></td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2>7. What this implies</h2>
+
+<p>
+  The cross-message alignment at 44-character intervals means that structurally similar
+  positions recur every 44 characters not just within a single message, but
+  <strong>across different messages from different dates</strong>. This constrains the
+  possible explanations:
+</p>
+
+<ul>
+  <li><strong>Fixed-width field format:</strong> The underlying message format uses 44-character
+    records or fields. When two messages happen to share content in corresponding fields,
+    sliding by &plusmn;44 brings those fields into alignment.</li>
+  <li><strong>Key periodicity:</strong> If encryption uses a key or keystream with a period
+    related to 44, the same key positions would mask corresponding plaintext positions,
+    creating cross-message alignment when identical plaintext appears at corresponding
+    positions in different messages.</li>
+  <li><strong>Encoding block structure:</strong> A pre-encryption encoding step may group
+    data into 44-character blocks, introducing positional regularity that survives encryption.</li>
+</ul>
+
+<p>
+  The 22-character half-period (offset &plusmn;22 is also elevated, as is &plusmn;66 = 3&times;22)
+  suggests a possible <strong>22-character base unit</strong>, with 44 being a double period.
+  The even-offset asymmetry further suggests a <strong>2-character pairing</strong> as the
+  smallest structural element.
+</p>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>8. What this does NOT claim</h2>
+
+<ul>
+  <li>No plaintext has been recovered. This is <strong>not a decryption</strong>.</li>
+  <li>The specific cipher, encoding, or message format in use is <strong>not identified</strong>.</li>
+  <li>This is <strong>structural / traffic analysis</strong> of the ciphertext only.</li>
+  <li>The analysis is <strong>reproducible</strong>: code and intercept data available on request.</li>
+</ul>
+
+<div class="separator"></div>
+
+<div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
+  Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
+  243 unique Group 4 messages, 21 prefix groups, 1,512 pairwise comparisons.
+  Methodology and source code available on GitHub.
+</div>
+
+<script>
+// Compute matches dynamically — no hardcoded position arrays
+const examples = [
+  {
+    idA: 'ex1a', idM: 'ex1m', idB: 'ex1b',
+    msgA: 'ROSY6Y3CIA5ESDCVV3FGZ7YZX2GH4NZNA7HZZNSZHIIIIZKYYJD2D5EFZKK7NKXWWWWE3BTFRER7FF2WZWK2KCCCCRX5LGVWN5TJQVH4HP4ILLLLG3FAE2MFKYCGN3O37ORRRRFMWZHLYYH573BRQXIBI5B3YPPPPHVQIJDM3BI2NQDXV6QQQQQN7U3WC7SYFYQJOZLC7NNNNDPZXM6JMQJ3H4FD',
+    msgB: 'ROVJTCDV2SNVEOP7XGH4VUSVQ7TFJ7R7EF2WZWK2KCCCCX5LGVWN5TJQVH4HP4ILLLLG3FAE2MFKYCGN3O37ORRRRFMWZHLYYH573BRQXIBI5B3YPPPPHVQIJDM3BI2NQDXV6QQQQQN7U3WC7SYFYQJOZLC7NNNND',
+    offset: 44,
+  },
+  {
+    idA: 'ex2a', idM: 'ex2m', idB: 'ex2b',
+    msgA: 'LOEIVYAGPOPDEXLRVXPYH4WHQO6UTNDDQIUQWCDQTSSSS5WNMLBVWF2YXV2JPJCVVVV67RR47XZNOLB7YXB2CVXXXXYQGFYXNPRZPGYHV2R3VVVVDN4YZ7VP76WU2YZZ6TTTTSJNKTPY2Y67NQ5WLFFFFFFFFSQH6YP',
+    msgB: 'LOPXUT7MASPJDTNQX6YV7GT7EK23WXRMWT5S66XSV6666HGQ6SUNDSUIUQWWDCCSSSS5WNMWL42VBYXV2YPJCVVVV67RRR47XZNOLB7YXBC2CXXXXYQGFYX5PZZPGY2V2R3VVVVDN4YZJ6OP65T6222Z6TTTTSJ3VTAY2P6ZNQWLFFFFFFFFSQH6IYP',
+    offset: -22,
+  },
+  {
+    idA: 'ex3a', idM: 'ex3m', idB: 'ex3b',
+    msgA: 'JCP3HWKYEHEAV7A64IUN3JU3IA6TSKAKKG4BBE42OOOOO6MBYPS4PSO3HG6BSGRQQQQIJZZV5WQY5JHI663IWAAAAPLR7BL2NBLX7W33YVVHHHHZE7SPTMVEUTZGQ3VI',
+    msgB: 'JC7GEWUH755N4GPJ6CZEP4JPQWZV5NOW5JHI663IWAAAAPLR7BL2NBLX7W33YVVHHHHZE7SPTMVEUTZGQ3VICPPPPLGGLPSDSXJIB7AH6NJNT2222YXGQKWBUEYWOROSNXPPPPIXGKHIOU43WCHP7P7UFUXXXX23LU3HBWMIPYVHB4HWV2O',
+    offset: 44,
+  },
+  {
+    idA: 'ex4a', idM: 'ex4m', idB: 'ex4b',
+    msgA: 'RO6EO4OYBN4KKQ535NKWD3SDT74RXPTTKD7HQQYSHOOOOJZPR3PO6OIA7XIIYX2OOOOXWRRNV7NNFQB4BRKZSWDDDDXUGSKNGJJIWRCLBNMXUUUUP35FMJQXOMYQ3S4ZKMMMMPWJUFHXFMQR7YTSF5LLLLD7JTKZ4IR7SSW5HVP4444D4EF2SXXLNQZ5OB6TTTTBF2DG4CR3GBHQ7GD3HHHHX5NI5U2RVJHFIBGGGGQRLWT5IJCJT22TY6FFFFYUZVVFQ3V753YW',
+    msgB: 'RO7C57J6U3QV5NW4BUQKQO6QDKP4FBIH4T6K7EEIK2222SR2W6CIPDCFN3XQ7N3BBBBV72LXVEVMXKVUTSF5DLLLLD7JTKT4IR7SWW5HVP4444D4EF2SXXLNQZ5OB6TTTTBF2DG4CR3GBHQ7GD3HHHHX5NI5U2RVJHFIBGGGGQRLWT5IJCJT22TY6FFFFYUZVVFQ3V753YWRRRR4ESNYQFKQFRZ4I3Q3BBBB4C7QYLK4VSRW5VLIXXXXIY5OXFTKYZ',
+    offset: 66,
+  },
+  {
+    idA: 'ex5a', idM: 'ex5m', idB: 'ex5b',
+    msgA: 'BVGSEXMJQYPOU3V5VBX4YPJYVRJTTASVSMXRRWXRH7777OCS7IIOZP3TNIICCRNXXXX3YHNXDJXUGN2LLM7M77777NFF3DTKT6FB4TTWTTEDDDD63JRJXDSS3TR5U37UPNWGN4T7RJGE3N3CCS4CBNNNJLHDM2A7MBLALV7LIONJJXJJXXZTERSRSYYYYN7ZH2ZZEY562QUD6US6EGGXCKYZ3T72',
+    msgB: 'BVACKST6BBFIQ7ITCQVDK7AKFBREEII7ENWKKKSFFJJJJUK47PPDRDBZNRRRQNBZZZZYNTJTTVSVGMXRRRWDC7777OCS7II6N6TTNIII6NLXXXX3YHNXXDEEUN2LL33VY7777NFF3DD4HTWB4TTEDDDD',
+    offset: -44,
+  },
+];
+
+function renderPair(ex) {
+  const a = ex.msgA, b = ex.msgB, off = ex.offset;
+
+  // Compute spacers
+  let spacersA = 0, spacersB = 0;
+  if (off >= 0) { spacersB = off; }
+  else { spacersA = Math.abs(off); }
+  const totalCols = Math.max(a.length + spacersA, b.length + spacersB);
+
+  const rowA = [], rowB = [], rowM = [];
+  for (let col = 0; col < totalCols; col++) {
+    const posInA = col - spacersA;
+    const posInB = col - spacersB;
+    const charA = (posInA >= 0 && posInA < a.length) ? a[posInA] : null;
+    const charB = (posInB >= 0 && posInB < b.length) ? b[posInB] : null;
+
+    // Match = both chars present AND identical
+    const isMatch = charA !== null && charB !== null && charA === charB;
+
+    const spanA = document.createElement('span');
+    spanA.className = 'ac ' + (charA ? (isMatch ? 'match' : 'normal') : 'spacer');
+    spanA.textContent = charA || '';
+    rowA.push(spanA);
+
+    const spanM = document.createElement('span');
+    spanM.className = 'ac bar' + (isMatch ? ' hit' : '');
+    spanM.textContent = isMatch ? '|' : '';
+    rowM.push(spanM);
+
+    const spanB = document.createElement('span');
+    spanB.className = 'ac ' + (charB ? (isMatch ? 'match' : 'normal') : 'spacer');
+    spanB.textContent = charB || '';
+    rowB.push(spanB);
+  }
+
+  document.getElementById(ex.idA).append(...rowA);
+  document.getElementById(ex.idM).append(...rowM);
+  document.getElementById(ex.idB).append(...rowB);
+}
+
+examples.forEach(renderPair);
+</script>
+
+</body>
+</html>
