@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>44-Character Block Vocabulary</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --text: #c8c8d8;
+    --text-dim: #7a7a90;
+    --accent: #ff0467;
+    --match-color: #44ee88;
+    --offset-color: #4488ff;
+    --chain-color: #c084fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.3rem; }
+  h2 {
+    color: #ddd; font-size: 1.1rem; margin: 2.5rem 0 0.8rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  }
+  h3 { color: #bbb; font-size: 0.95rem; margin: 1.5rem 0 0.6rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 2rem; }
+  p, li {
+    font-size: 0.83rem; margin-bottom: 0.6rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.7;
+  }
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  code { font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #ddd; }
+  strong { color: #eee; }
+  .separator { border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .nav-bar {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-bar a { color: var(--offset-color); text-decoration: none; }
+  .nav-bar a:hover { text-decoration: underline; }
+  .nav-bar .nav-sep { color: var(--text-dim); margin: 0 0.5rem; }
+
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.8rem; margin: 1.2rem 0;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.8rem; text-align: center;
+  }
+  .stat-card .number {
+    font-size: 1.6rem; font-weight: bold; color: var(--accent);
+    font-family: 'SF Mono', monospace;
+  }
+  .stat-card .label {
+    font-size: 0.68rem; color: var(--text-dim); margin-top: 0.2rem;
+    font-family: -apple-system, sans-serif;
+  }
+
+  .note {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    padding: 0.7rem 1rem; margin: 1rem 0; font-size: 0.8rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .note.green { border-left-color: var(--match-color); }
+
+  /* Chain visualisation */
+  .chain-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0;
+    overflow-x: auto;
+  }
+  .chain-header {
+    font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.6rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .chain-header strong { color: var(--accent); }
+  .chain-header .date-range {
+    color: var(--text-dim); font-size: 0.72rem;
+  }
+
+  .block-type-card {
+    margin: 0.5rem 0; padding: 0.5rem 0.7rem; border-radius: 5px;
+    border: 1px solid var(--border); background: var(--surface2);
+  }
+  .block-type-label {
+    font-size: 0.68rem; margin-bottom: 0.3rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .block-type-label .tid { color: var(--chain-color); font-weight: 600; }
+  .block-type-label .pos-badge {
+    display: inline-block; background: rgba(68,136,255,0.15);
+    border: 1px solid rgba(68,136,255,0.3); border-radius: 3px;
+    padding: 0 5px; color: var(--offset-color); font-size: 0.65rem;
+    font-family: 'SF Mono', monospace; margin-left: 4px;
+  }
+  .block-type-label .size-badge {
+    display: inline-block; background: rgba(68,238,136,0.1);
+    border: 1px solid rgba(68,238,136,0.25); border-radius: 3px;
+    padding: 0 5px; color: var(--match-color); font-size: 0.65rem;
+    font-family: 'SF Mono', monospace; margin-left: 4px;
+  }
+
+  .block-instance {
+    display: flex; gap: 0; margin: 1px 0; white-space: nowrap;
+    font-size: 0.72rem; line-height: 1.4;
+  }
+  .block-instance .inst-label {
+    width: 120px; flex-shrink: 0; color: var(--text-dim);
+    font-size: 0.62rem; padding-right: 6px; text-align: right;
+    font-family: 'SF Mono', monospace; padding-top: 1px;
+  }
+  .block-instance .inst-chars { display: flex; gap: 0; }
+  .bc {
+    width: 11px; height: 16px; display: inline-flex; align-items: center;
+    justify-content: center; font-size: 9px; flex-shrink: 0;
+    font-family: 'SF Mono', monospace;
+  }
+  .bc.cons { color: var(--match-color); font-weight: bold; }
+  .bc.var { color: #555; }
+  .consensus-row { margin-top: 2px; border-top: 1px solid var(--border); padding-top: 2px; }
+  .consensus-row .inst-label { color: var(--chain-color); }
+
+  /* Tail chart */
+  .tail-chart {
+    display: flex; align-items: flex-end; gap: 2px; height: 80px;
+    margin: 1rem 0; padding: 0 0.5rem;
+  }
+  .tail-bar {
+    flex: 1; min-width: 14px; background: var(--accent);
+    border-radius: 2px 2px 0 0; position: relative;
+  }
+  .tail-bar .bar-label {
+    position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 0.55rem; color: var(--text-dim); font-family: 'SF Mono', monospace;
+    white-space: nowrap;
+  }
+  .tail-bar .bar-count {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    font-size: 0.58rem; color: var(--text-dim); font-family: 'SF Mono', monospace;
+  }
+  .tail-chart-container { margin-bottom: 2rem; }
+
+  /* Flow diagram */
+  .flow-row {
+    display: flex; align-items: center; gap: 4px; margin: 4px 0;
+    font-size: 0.72rem; font-family: 'SF Mono', monospace;
+  }
+  .flow-block {
+    padding: 3px 6px; border-radius: 4px; border: 1px solid;
+    font-size: 0.65rem; white-space: nowrap;
+  }
+  .flow-block.header { border-color: var(--offset-color); color: var(--offset-color); background: rgba(68,136,255,0.08); }
+  .flow-block.middle { border-color: var(--chain-color); color: var(--chain-color); background: rgba(192,132,252,0.08); }
+  .flow-block.trailer { border-color: var(--match-color); color: var(--match-color); background: rgba(68,238,136,0.08); }
+  .flow-arrow { color: var(--text-dim); font-size: 0.7rem; }
+  .flow-label {
+    font-size: 0.62rem; color: var(--text-dim); width: 60px;
+    font-family: -apple-system, sans-serif; flex-shrink: 0;
+  }
+
+  table.vocab-table {
+    border-collapse: collapse; margin: 1rem 0; font-size: 0.75rem; width: 100%;
+  }
+  table.vocab-table th, table.vocab-table td {
+    padding: 0.3rem 0.5rem; border: 1px solid var(--border);
+  }
+  table.vocab-table th {
+    background: var(--surface); color: #aaa; font-weight: 600;
+    font-family: -apple-system, sans-serif; font-size: 0.7rem; text-align: left;
+  }
+  table.vocab-table td { font-family: 'SF Mono', monospace; }
+  table.vocab-table td.lbl {
+    font-family: -apple-system, sans-serif; color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">&larr; Index</a>
+  <span class="nav-sep">|</span>
+  <a href="44char_structure_explainer.html">44-char alignment explainer</a>
+  <span class="nav-sep">|</span>
+  <a href="block_structure.html">Block structure evidence</a>
+</div>
+
+<h1>44-Character Block Vocabulary</h1>
+<div class="subtitle">
+  Extracting, clustering, and cataloguing the 44-character blocks that compose EAM messages &mdash; NEET INTEL, 2026
+</div>
+
+<!-- ============================================================ -->
+<h2>1. Approach</h2>
+
+<p>
+  The <a href="block_structure.html" style="color:var(--offset-color);">block structure analysis</a>
+  established that EAM messages are composed of discrete 44-character blocks, not governed by a
+  periodic cipher. This page takes the next step: <strong>extract every block, cluster similar blocks
+  into &ldquo;block types,&rdquo; and look for patterns in how blocks are ordered within messages.</strong>
+</p>
+
+<ol>
+  <li><strong>Extract:</strong> Chop each message into 44-character segments starting at position 0.
+    The final segment may be shorter (a &ldquo;tail&rdquo;).</li>
+  <li><strong>Cluster:</strong> Within each prefix group, compare every pair of full-length blocks.
+    Two blocks are the &ldquo;same type&rdquo; if &ge;35% of their characters match at corresponding
+    positions (well above the ~3% random baseline for a 32-character alphabet). Merge transitively.</li>
+  <li><strong>Cross-prefix check:</strong> After within-prefix clustering, compare consensus sequences
+    across prefixes to detect system-wide shared blocks.</li>
+  <li><strong>Catalogue:</strong> For each block type, record its position within messages, temporal
+    span, and relationships to other block types.</li>
+</ol>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="number">874</div>
+    <div class="label">total blocks extracted</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">636</div>
+    <div class="label">full 44-char blocks</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">576</div>
+    <div class="label">block types</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">52</div>
+    <div class="label">multi-instance types</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">91%</div>
+    <div class="label">singletons</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">0</div>
+    <div class="label">cross-prefix types</div>
+  </div>
+</div>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>2. Key findings</h2>
+
+<h3>Blocks are prefix-specific</h3>
+<p>
+  Zero block types were found across different prefix groups. Every shared block exists
+  strictly within a single prefix. This means the 2-character prefix genuinely marks distinct
+  message families with distinct block vocabularies &mdash; shared blocks encode prefix-specific
+  content, not system-wide structural elements.
+</p>
+
+<h3>Most blocks are unique</h3>
+<p>
+  91% of block types are singletons &mdash; they appear only once in the entire corpus. The 52
+  multi-instance types (9%) represent structurally significant shared blocks: headers, trailers,
+  and recurring content segments. Singleton dominance increases with block position (deeper in
+  the message = more likely unique), suggesting that earlier blocks carry more
+  reusable structural content while later blocks carry unique payload.
+</p>
+
+<h3>Blocks form chains</h3>
+<p>
+  Same-prefix messages that share blocks typically share 2&ndash;3 <em>consecutive</em> blocks,
+  forming chains. A message from prefix BV might share blocks at positions 0, 1, and 2 with
+  another BV message from weeks later, while their remaining blocks differ entirely.
+</p>
+
+<h3>All tail lengths are even</h3>
+<p>
+  Of the 238 tail blocks (shorter than 44 characters), <strong>every single one has an even
+  length</strong>. This is striking confirmation of the 2-character pairing subunit identified in
+  the <a href="44char_structure_explainer.html" style="color:var(--offset-color);">alignment
+  explainer</a>. The smallest structural element is a character pair, and message lengths always
+  contain a whole number of pairs.
+</p>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>3. Block chains: worked examples</h2>
+
+<p>
+  Below are three block chains from different prefix groups. Each shows a set of messages that
+  share consecutive blocks. Within each block type, characters that match the consensus are
+  <span style="color:var(--match-color);">green</span>; variant characters are
+  <span style="color:#555;">dimmed</span>.
+</p>
+
+<!-- Chain 1: BV -->
+<div class="chain-box" id="chain-bv">
+  <div class="chain-header">
+    <strong>BV</strong> &mdash; 4 messages sharing blocks at positions 0&ndash;2
+    <span class="date-range">&mdash; 2024-11-17 to 2025-01-22 (66 days)</span>
+  </div>
+</div>
+
+<!-- Chain 2: 3Q -->
+<div class="chain-box" id="chain-3q">
+  <div class="chain-header">
+    <strong>3Q</strong> &mdash; 2 messages sharing blocks at positions 0&ndash;2
+    <span class="date-range">&mdash; 2023-02-26 to 2023-03-26 (28 days)</span>
+  </div>
+</div>
+
+<!-- Chain 3: JC -->
+<div class="chain-box" id="chain-jc">
+  <div class="chain-header">
+    <strong>JC</strong> &mdash; 3 messages sharing blocks at positions 0&ndash;2
+    <span class="date-range">&mdash; 2023-08-08 to 2023-09-10 (33 days)</span>
+  </div>
+</div>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>4. Block ordering</h2>
+
+<p>
+  Block types are <strong>position-locked</strong>. Header blocks (position 0) always appear at
+  position 0; trailer blocks always appear at the final position. The block-type bigrams
+  (which type follows which) form consistent chains within each prefix, suggesting a fixed
+  ordering grammar.
+</p>
+
+<h3>Example chain orderings</h3>
+
+<div style="margin: 1rem 0;">
+  <div class="flow-row">
+    <div class="flow-label">BV:</div>
+    <div class="flow-block header">Type #2 (pos 0)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block middle">Type #0 (pos 1)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block trailer">Type #1 (pos 2)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block" style="border-color:var(--text-dim);color:var(--text-dim);">[unique blocks&hellip;]</div>
+  </div>
+  <div class="flow-row">
+    <div class="flow-label">3Q:</div>
+    <div class="flow-block header">Type #6 (pos 0)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block middle">Type #7 (pos 1)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block trailer">Type #8 (pos 2)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block" style="border-color:var(--text-dim);color:var(--text-dim);">[unique blocks&hellip;]</div>
+  </div>
+  <div class="flow-row">
+    <div class="flow-label">JC:</div>
+    <div class="flow-block header">Type #29 (pos 0)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block middle">Type #4 (pos 1)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block trailer">Type #30 (pos 2)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block" style="border-color:var(--text-dim);color:var(--text-dim);">[unique blocks&hellip;]</div>
+  </div>
+  <div class="flow-row">
+    <div class="flow-label">BW:</div>
+    <div class="flow-block header">Type #20 (pos 0)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block middle">Type #3 (pos 1)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block trailer">Type #21 (pos 2)</div>
+    <div class="flow-arrow">&rarr;</div>
+    <div class="flow-block" style="border-color:var(--text-dim);color:var(--text-dim);">[unique blocks&hellip;]</div>
+  </div>
+</div>
+
+<p>
+  The pattern is consistent: the first 2&ndash;3 blocks of a message are drawn from a small
+  prefix-specific vocabulary (the &ldquo;header chain&rdquo;), while subsequent blocks are unique.
+  This suggests the header chain encodes semi-persistent operational parameters (routing,
+  addressing, key material?) that remain stable for weeks to months, while the deeper blocks
+  carry per-message payload.
+</p>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>5. Tail length distribution</h2>
+
+<p>
+  Message lengths are not arbitrary. The remainder after dividing by 44 (the tail length)
+  clusters at specific values, with <strong>all tails having even length</strong>:
+</p>
+
+<div class="tail-chart-container" id="tail-chart-area"></div>
+
+<p>
+  The two dominant tail lengths are <strong>32</strong> (51 messages) and <strong>10</strong> (41
+  messages), together accounting for 39% of all messages. Combined with the all-even constraint,
+  this implies message construction follows rules that produce predictable total lengths &mdash;
+  consistent with a block-assembly model where each component contributes an even number of
+  characters.
+</p>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>6. Singleton position distribution</h2>
+
+<p>
+  The 524 singleton block types (blocks appearing only once) are concentrated at earlier positions,
+  simply because there are more blocks at earlier positions (every message has a block 0, fewer
+  messages are long enough to have a block 4 or 5). But the <em>rate</em> of singleton-ness
+  is actually fairly constant &mdash; unique content appears at every position:
+</p>
+
+<table class="vocab-table">
+  <thead>
+    <tr><th>Position</th><th>Total blocks</th><th>Singletons</th><th>Shared</th><th>Singleton rate</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>0</td><td>238</td><td>213</td><td>25</td><td>89%</td></tr>
+    <tr><td>1</td><td>180</td><td>133</td><td>47</td><td>74%</td></tr>
+    <tr><td>2</td><td>133</td><td>96</td><td>37</td><td>72%</td></tr>
+    <tr><td>3</td><td>52</td><td>49</td><td>3</td><td>94%</td></tr>
+    <tr><td>4</td><td>23</td><td>23</td><td>0</td><td>100%</td></tr>
+    <tr><td>5+</td><td>10</td><td>10</td><td>0</td><td>100%</td></tr>
+  </tbody>
+</table>
+
+<p>
+  Positions 1 and 2 have the lowest singleton rates (74% and 72%), meaning they are the most
+  likely to be shared across messages. Positions 4+ are always unique. This aligns with the
+  chain model: the shared &ldquo;header chain&rdquo; occupies positions 0&ndash;2, and everything
+  beyond is per-message content.
+</p>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>7. Implications</h2>
+
+<ul>
+  <li><strong>Block vocabularies are prefix-specific.</strong> No block types cross prefix
+    boundaries. The prefix is a genuine message-family identifier, not just a routing label.</li>
+  <li><strong>Messages have a header&ndash;payload structure.</strong> The first 2&ndash;3 blocks
+    form a semi-persistent header chain shared across messages in the same prefix over weeks
+    to months. Blocks at position 3+ are unique per-message.</li>
+  <li><strong>The 2-character pair is the atomic unit.</strong> All message lengths (and therefore
+    all tail lengths) are even, confirming the character-pair substructure.</li>
+  <li><strong>Header chains are temporally bounded.</strong> The most persistent chain (BV) spans
+    66 days; most span under a month. This suggests periodic key rotation or operational parameter
+    changes.</li>
+</ul>
+
+<div class="separator"></div>
+
+<div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
+  Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
+  Block vocabulary extracted from 241 messages across 23 prefix groups.
+  See also: <a href="44char_structure_explainer.html" style="color:var(--offset-color);">alignment explainer</a>,
+  <a href="block_structure.html" style="color:var(--offset-color);">block structure evidence</a>.
+</div>
+
+<script>
+// ── Block chain data ──────────────────────────────────────────────────────────
+
+const chains = [
+  {
+    id: 'chain-bv',
+    types: [
+      {
+        tid: 2, pos: 0, size: 3,
+        consensus: 'BVIULZ7YEL67TUECD4ZBJIQJUXTXEEOXDAE3EKQVQ777',
+        instances: [
+          { label: 'BVIULZ 2024-11-17', text: 'BVIULZ7YEL67TUECD4ZBJIQJUXTXEEOODAE3EEQVQ777' },
+          { label: 'BVMMLP 2024-12-14', text: 'BVMMLPRLHTPUU6YOD7HBJORLUXTXOUEXJAE33KF3L777' },
+          { label: 'BVD776 2024-12-31', text: 'BVD776CXX3J4ZGJTD4ZBJIQJUXTXVOJXKAE3QKQKE777' },
+        ]
+      },
+      {
+        tid: 0, pos: 1, size: 4,
+        consensus: '7EUCVFOOLFZLSYSSQY6FFFFIMU6GWWGS23DNRSHHREEE',
+        instances: [
+          { label: 'BVIULZ 2024-11-17', text: '7EUCVFOOLFZLSYSSSQ6FFFFIMU6GWWDS23DHRXGHREEE' },
+          { label: 'BVMMLP 2024-12-14', text: '7EUCVFLT7FBLSYYQQ3EFFFFIMU6G7SGAW3DNNSSXXEEE' },
+          { label: 'BVD776 2024-12-31', text: '7EUCVFBLFO6LSY7Q3YYFFFFIMU6GUWEWV3DNHSHSNEEE' },
+          { label: 'BV5R6C 2025-01-22', text: '7EUCVTQFTTZL73QSQYSFFFFIMU6SAGGS23HBSDHNGEEE' },
+        ]
+      },
+      {
+        tid: 1, pos: 2, size: 4,
+        consensus: 'EB4ZVT66ACBKUBBEC77FFFFHM4DIXSGVDMI2KICK4B2U',
+        instances: [
+          { label: 'BVIULZ 2024-11-17', text: 'EB4ZVT66BCBKUX3EC77FFFFHM4DXXSGVDGI2KICK4B2U' },
+          { label: 'BVMMLP 2024-12-14', text: 'EB4ZVT7CACWKUBBCC72FFFFHMHOI65VYPRASSIADBIII' },
+          { label: 'BVD776 2024-12-31', text: 'EB4ZVTW6FCUKUBXBHUEFFFFHM4DIHJZVDMO2K6BK4B2U' },
+          { label: 'BV5R6C 2025-01-22', text: 'EB4ZVCATAT6KX7BEH73FFFFHM4D4PUTVDMM2KIUK4B2U' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'chain-3q',
+    types: [
+      {
+        tid: 6, pos: 0, size: 2,
+        consensus: '3QF67JLCJZYJJOFVSGFJQLAQHYAHD5OOGSAGWAAZANNN',
+        instances: [
+          { label: '3QF67J 2023-02-26', text: '3QF67JLCJZYJJOFVSGFJQLAQHYAHD5OOGSAGWAAZANNN' },
+          { label: '3QPEPX 2023-03-26', text: '3QPEPXNR2I6BS3KISMCJQL5QHYAHDC4CCSAGGRAD7NNN' },
+        ]
+      },
+      {
+        tid: 7, pos: 1, size: 2,
+        consensus: 'NKDQPLZFSSY3GEHMCQFXXXXZFSGBEUVI23BRXBLZXAAA',
+        instances: [
+          { label: '3QF67J 2023-02-26', text: 'NKDQPLZFSSY3GEHMCQFXXXXZFSGBEUVI23BRXBLZXAAA' },
+          { label: '3QPEPX 2023-03-26', text: 'NKDQPLZSLZI3GEQCHE2XXXXZFSGBE42OE3BRUIXRIAAA' },
+        ]
+      },
+      {
+        tid: 8, pos: 2, size: 2,
+        consensus: 'AKRHQYKO4KXWTZ6GSJZHHHHCLI3RWNEZWVOUJWOWD777',
+        instances: [
+          { label: '3QF67J 2023-02-26', text: 'AKRHQYKO4KXWTZ6GSJZHHHHCLI3RWNEZWVOUJWOWD777' },
+          { label: '3QPEPX 2023-03-26', text: 'AKRHQYKPFP6WTZJOTOAHHHHCLI3RWH7N4VOUEHWOD777' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'chain-jc',
+    types: [
+      {
+        tid: 29, pos: 0, size: 2,
+        consensus: 'JCE3VE2B3LYNSA7KITXVHB6KWAT3ORRHQXVLG3V44BBB',
+        instances: [
+          { label: 'JCE3VE 2023-08-08', text: 'JCE3VE2B3LYNSA7KITXVHB6KWAT3ORRHQXVLG3V44BBB' },
+          { label: 'JCITHG 2023-09-10', text: 'JCITHGSKKA3RFBOTITZVHB6HWAT3A2AGGXL3Y4VY3BBB' },
+        ]
+      },
+      {
+        tid: 4, pos: 1, size: 3,
+        consensus: 'BROXNCDYSLPVTWXJWCXBBBBCRGZBUBLLQSOKLDOOMAAA',
+        instances: [
+          { label: 'JCE3VE 2023-08-08', text: 'BROXNCDYDLCVTWXJWCXBBBBCRGZBUBLLQSOKLMXOMAAA' },
+          { label: 'JC6ICJ 2023-08-17', text: 'BROXNCSSSYPVTRRJXSABBBBCRGZBKLPNYSOXXDOMDAAA' },
+          { label: 'JCITHG 2023-09-10', text: 'BROXNCHASJPVWCSCTJ7BBBBCWGZB74ULKSKDUDOKKAAA' },
+        ]
+      },
+      {
+        tid: 30, pos: 2, size: 2,
+        consensus: 'ABHMBDXGWST3PUY4YSIJJJJLIGP2NPXZ4JUQBYIWEOJF',
+        instances: [
+          { label: 'JCE3VE 2023-08-08', text: 'ABHMBDXGWST3PUY4YSIJJJJLIGP2NPXZ4JUQBYIWEOJF' },
+          { label: 'JCITHG 2023-09-10', text: 'ABWMBDWIDGW3USC4SCIJJJJLBGP5NTFZ4J6QBNWBEXPB' },
+        ]
+      },
+    ]
+  },
+];
+
+// ── Tail data ─────────────────────────────────────────────────────────────────
+const tailData = [
+  {len: 2, count: 3}, {len: 4, count: 15}, {len: 6, count: 22},
+  {len: 10, count: 41}, {len: 12, count: 10}, {len: 14, count: 1},
+  {len: 16, count: 2}, {len: 18, count: 11}, {len: 20, count: 6},
+  {len: 22, count: 4}, {len: 24, count: 10}, {len: 26, count: 16},
+  {len: 28, count: 6}, {len: 30, count: 2}, {len: 32, count: 51},
+  {len: 34, count: 13}, {len: 36, count: 2}, {len: 38, count: 1},
+  {len: 40, count: 22},
+];
+
+// ── Render chain ──────────────────────────────────────────────────────────────
+function renderChain(chain) {
+  const container = document.getElementById(chain.id);
+
+  chain.types.forEach(bt => {
+    const card = document.createElement('div');
+    card.className = 'block-type-card';
+
+    const label = document.createElement('div');
+    label.className = 'block-type-label';
+    label.innerHTML =
+      '<span class="tid">Type #' + bt.tid + '</span>' +
+      '<span class="pos-badge">pos ' + bt.pos + '</span>' +
+      '<span class="size-badge">' + bt.size + ' instances</span>';
+    card.appendChild(label);
+
+    // Render each instance
+    bt.instances.forEach(inst => {
+      const row = document.createElement('div');
+      row.className = 'block-instance';
+      const lbl = document.createElement('span');
+      lbl.className = 'inst-label';
+      lbl.textContent = inst.label;
+      row.appendChild(lbl);
+
+      const chars = document.createElement('span');
+      chars.className = 'inst-chars';
+      for (let i = 0; i < inst.text.length; i++) {
+        const span = document.createElement('span');
+        const matchesCons = i < bt.consensus.length && inst.text[i] === bt.consensus[i];
+        span.className = 'bc ' + (matchesCons ? 'cons' : 'var');
+        span.textContent = inst.text[i];
+        chars.appendChild(span);
+      }
+      row.appendChild(chars);
+      card.appendChild(row);
+    });
+
+    // Consensus row
+    const consRow = document.createElement('div');
+    consRow.className = 'block-instance consensus-row';
+    const consLbl = document.createElement('span');
+    consLbl.className = 'inst-label';
+    consLbl.textContent = 'consensus';
+    consRow.appendChild(consLbl);
+    const consChars = document.createElement('span');
+    consChars.className = 'inst-chars';
+    for (let i = 0; i < bt.consensus.length; i++) {
+      const span = document.createElement('span');
+      span.className = 'bc cons';
+      span.textContent = bt.consensus[i];
+      consChars.appendChild(span);
+    }
+    consRow.appendChild(consChars);
+    card.appendChild(consRow);
+
+    container.appendChild(card);
+  });
+}
+
+chains.forEach(renderChain);
+
+// ── Render tail chart ─────────────────────────────────────────────────────────
+const maxCount = Math.max(...tailData.map(d => d.count));
+const chartArea = document.getElementById('tail-chart-area');
+
+const chart = document.createElement('div');
+chart.className = 'tail-chart';
+chart.style.marginBottom = '30px';
+
+tailData.forEach(d => {
+  const bar = document.createElement('div');
+  bar.className = 'tail-bar';
+  bar.style.height = Math.max(2, (d.count / maxCount) * 80) + 'px';
+
+  const countLabel = document.createElement('span');
+  countLabel.className = 'bar-count';
+  countLabel.textContent = d.count;
+  bar.appendChild(countLabel);
+
+  const lenLabel = document.createElement('span');
+  lenLabel.className = 'bar-label';
+  lenLabel.textContent = d.len;
+  bar.appendChild(lenLabel);
+
+  chart.appendChild(bar);
+});
+chartArea.appendChild(chart);
+
+const chartNote = document.createElement('div');
+chartNote.style.cssText = 'font-size:0.65rem; color:var(--text-dim); font-family:-apple-system,sans-serif; margin-top: -20px;';
+chartNote.textContent = 'Tail length (chars) — all values are even.';
+chartArea.appendChild(chartNote);
+</script>
+
+</body>
+</html>
