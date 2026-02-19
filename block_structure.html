@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>44-Character Block Structure: Blocks vs. Periodic Cipher</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --text: #c8c8d8;
+    --text-dim: #7a7a90;
+    --accent: #ff0467;
+    --match-color: #44ee88;
+    --offset-color: #4488ff;
+    --shared-bg: rgba(68,238,136,0.06);
+    --shared-border: rgba(68,238,136,0.25);
+    --unshared-bg: rgba(100,100,140,0.04);
+    --unshared-border: rgba(100,100,140,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.3rem; }
+  h2 {
+    color: #ddd; font-size: 1.1rem; margin: 2.5rem 0 0.8rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  }
+  h3 { color: #bbb; font-size: 0.95rem; margin: 1.5rem 0 0.6rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 2rem; }
+  p, li {
+    font-size: 0.83rem; margin-bottom: 0.6rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.7;
+  }
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  code { font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #ddd; }
+  strong { color: #eee; }
+
+  .nav-bar {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-bar a { color: var(--offset-color); text-decoration: none; }
+  .nav-bar a:hover { text-decoration: underline; }
+  .nav-bar .nav-sep { color: var(--text-dim); margin: 0 0.5rem; }
+
+  .note {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    padding: 0.7rem 1rem; margin: 1rem 0; font-size: 0.8rem;
+    font-family: -apple-system, sans-serif;
+  }
+
+  .separator { border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* Block comparison visualisations */
+  .example-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0;
+  }
+  .example-header {
+    font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.8rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .example-header strong { color: var(--accent); }
+  .offset-badge {
+    display: inline-block; background: rgba(68,136,255,0.2);
+    border: 1px solid rgba(68,136,255,0.4); border-radius: 4px;
+    padding: 1px 6px; color: var(--offset-color); font-weight: 600;
+    font-family: 'SF Mono', monospace; font-size: 0.78rem;
+  }
+  .match-badge {
+    display: inline-block; background: rgba(68,238,136,0.15);
+    border: 1px solid rgba(68,238,136,0.3); border-radius: 4px;
+    padding: 1px 6px; color: var(--match-color); font-weight: 600;
+    font-family: 'SF Mono', monospace; font-size: 0.78rem;
+  }
+
+  .msg-layout {
+    margin: 0.8rem 0 1rem; overflow-x: auto;
+  }
+  .msg-label {
+    font-size: 0.7rem; color: var(--text-dim); margin-bottom: 2px;
+    font-family: -apple-system, sans-serif;
+  }
+  .block-row {
+    display: flex; gap: 2px; margin-bottom: 3px; flex-direction: column;
+  }
+  .block-chip {
+    font-size: 0.62rem; padding: 3px 5px; border-radius: 3px;
+    font-family: 'SF Mono', monospace; white-space: nowrap;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text-dim); max-width: 100%; overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .block-chip .block-num {
+    color: #666; font-size: 0.58rem; margin-right: 3px;
+  }
+
+  /* Block comparison cards */
+  .block-compare {
+    margin: 0.6rem 0; padding: 0.7rem 0.8rem; border-radius: 6px;
+    overflow-x: auto;
+  }
+  .block-compare.shared {
+    background: var(--shared-bg); border: 1px solid var(--shared-border);
+  }
+  .block-compare.unshared {
+    background: var(--unshared-bg); border: 1px solid var(--unshared-border);
+  }
+  .block-compare-header {
+    font-size: 0.72rem; margin-bottom: 0.4rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .block-compare-header .pct {
+    font-family: 'SF Mono', monospace; font-weight: 600;
+  }
+  .block-compare-header .pct.high { color: var(--match-color); }
+  .block-compare-header .pct.low { color: var(--text-dim); }
+  .block-compare-header .shared-tag {
+    font-size: 0.65rem; color: var(--match-color); font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .align-line {
+    display: flex; align-items: center; white-space: nowrap;
+    margin: 1px 0;
+  }
+  .align-line .lbl {
+    width: 18px; font-size: 0.62rem; color: var(--text-dim);
+    flex-shrink: 0; text-align: right; padding-right: 4px;
+    font-family: 'SF Mono', monospace;
+  }
+  .ch {
+    width: 11px; height: 17px; display: inline-flex; align-items: center;
+    justify-content: center; font-size: 9px; flex-shrink: 0;
+    font-family: 'SF Mono', monospace; color: #555;
+  }
+  .ch.hit { color: #fff; background: rgba(68,238,136,0.3); font-weight: bold; }
+  .ch.bar { color: rgba(68,238,136,0.4); font-size: 7px; }
+  .ch.bar.hit { color: rgba(68,238,136,0.9); }
+
+  .verdict-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0;
+  }
+  .verdict-box .v-label {
+    font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.3rem;
+    font-family: -apple-system, sans-serif; text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .verdict-box .v-text {
+    font-size: 0.88rem; color: var(--match-color); font-weight: 600;
+    font-family: -apple-system, sans-serif;
+  }
+
+  table.compare-table {
+    border-collapse: collapse; margin: 1rem 0; font-size: 0.78rem; width: 100%;
+  }
+  table.compare-table th, table.compare-table td {
+    padding: 0.35rem 0.6rem; border: 1px solid var(--border); text-align: center;
+  }
+  table.compare-table th {
+    background: var(--surface); color: #aaa; font-weight: 600;
+    font-family: -apple-system, sans-serif; font-size: 0.72rem;
+  }
+  table.compare-table td { font-family: 'SF Mono', monospace; }
+  table.compare-table td.lbl {
+    text-align: left; font-family: -apple-system, sans-serif; color: var(--text-dim);
+  }
+  table.compare-table .high { color: var(--match-color); font-weight: 600; }
+  table.compare-table .low { color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">&larr; Index</a>
+  <span class="nav-sep">|</span>
+  <a href="44char_structure_explainer.html">44-char alignment explainer</a>
+</div>
+
+<h1>44-Character Block Structure</h1>
+<div class="subtitle">
+  Discrete blocks, not a periodic cipher &mdash; block-by-block alignment evidence from five prefix groups &mdash; NEET INTEL, 2026
+</div>
+
+<!-- ============================================================ -->
+<h2>1. The question</h2>
+
+<p>
+  The <a href="44char_structure_explainer.html" style="color:var(--offset-color);">alignment explainer</a>
+  established that best-fit pairwise offsets between same-prefix EAM messages cluster at multiples of 44.
+  But <em>why</em> multiples of 44? Two hypotheses:
+</p>
+
+<ol>
+  <li><strong>Periodic cipher:</strong> A repeating key or mask with period 44. Position <em>i</em>
+    and position <em>i</em>+44 are always governed by the same key element.
+    Shifting by 44 re-aligns the key, so <em>all</em> overlapping blocks should match at
+    similar rates.</li>
+  <li><strong>Discrete block structure:</strong> Messages are composed of independent 44-character
+    blocks. Two messages share some blocks in common; a shift of &plusmn;44 brings a shared block
+    into alignment. Only the shared block pair matches well &mdash; the adjacent block pairs
+    are unrelated and match at near-random rates.</li>
+</ol>
+
+<p>
+  The discriminating test: when two messages align at offset &plusmn;44, <strong>do all block pairs
+  match at similar rates, or does one block pair dominate?</strong>
+</p>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>2. Five examples, five prefix groups</h2>
+
+<p>
+  Each example shows a message pair whose best sliding alignment is at a multiple of 44. The
+  overlapping region is broken into 44-character blocks and compared block-by-block. Green
+  highlighting marks shared blocks (high match rate); dimmed blocks are unrelated content
+  that happens to be adjacent.
+</p>
+
+<!-- ===== EXAMPLE 1: JC ===== -->
+<div class="example-box" id="ex-jc">
+  <div class="example-header">
+    <strong>JC</strong> &mdash;
+    194 chars (2023-08-19) vs 142 chars (2023-07-23) &mdash;
+    <span class="offset-badge">offset &minus;44</span>
+    <span class="match-badge">46 matches</span>
+  </div>
+
+  <div class="msg-layout">
+    <div class="msg-label">Msg A (JC7GEW&hellip;) &mdash; 194 chars, 4.4 blocks:</div>
+    <div class="block-row" id="jc-blocks-a"></div>
+    <div class="msg-label" style="margin-top:4px;">Msg B (JCP3HW&hellip;) &mdash; 142 chars, 3.2 blocks:</div>
+    <div class="block-row" id="jc-blocks-b"></div>
+  </div>
+</div>
+
+<!-- ===== EXAMPLE 2: BV ===== -->
+<div class="example-box" id="ex-bv">
+  <div class="example-header">
+    <strong>BV</strong> &mdash;
+    216 chars (2024-11-20) vs 142 chars (2024-12-22) &mdash;
+    <span class="offset-badge">offset &minus;44</span>
+    <span class="match-badge">42 matches</span>
+  </div>
+
+  <div class="msg-layout">
+    <div class="msg-label">Msg A (BVREUD&hellip;) &mdash; 216 chars, 4.9 blocks:</div>
+    <div class="block-row" id="bv-blocks-a"></div>
+    <div class="msg-label" style="margin-top:4px;">Msg B (BVXGWN&hellip;) &mdash; 142 chars, 3.2 blocks:</div>
+    <div class="block-row" id="bv-blocks-b"></div>
+  </div>
+</div>
+
+<!-- ===== EXAMPLE 3: YP ===== -->
+<div class="example-box" id="ex-yp">
+  <div class="example-header">
+    <strong>YP</strong> &mdash;
+    246 chars (2025-06-14) vs 216 chars (2025-07-15) &mdash;
+    <span class="offset-badge">offset &minus;44</span>
+    <span class="match-badge">49 matches</span>
+    &mdash; <em style="color:var(--text-dim);">1 month apart</em>
+  </div>
+
+  <div class="msg-layout">
+    <div class="msg-label">Msg A (YPNIX3&hellip;) &mdash; 246 chars, 5.6 blocks:</div>
+    <div class="block-row" id="yp-blocks-a"></div>
+    <div class="msg-label" style="margin-top:4px;">Msg B (YPXVAZ&hellip;) &mdash; 216 chars, 4.9 blocks:</div>
+    <div class="block-row" id="yp-blocks-b"></div>
+  </div>
+</div>
+
+<!-- ===== EXAMPLE 4: N2 ===== -->
+<div class="example-box" id="ex-n2">
+  <div class="example-header">
+    <strong>N2</strong> &mdash;
+    268 chars (2025-02-16) vs 164 chars (2025-02-04) &mdash;
+    <span class="offset-badge">offset +44</span>
+    <span class="match-badge">47 matches</span>
+  </div>
+
+  <div class="msg-layout">
+    <div class="msg-label">Msg A (N2ETDU&hellip;) &mdash; 268 chars, 6.1 blocks:</div>
+    <div class="block-row" id="n2-blocks-a"></div>
+    <div class="msg-label" style="margin-top:4px;">Msg B (N2HEFP&hellip;) &mdash; 164 chars, 3.7 blocks:</div>
+    <div class="block-row" id="n2-blocks-b"></div>
+  </div>
+</div>
+
+<!-- ===== EXAMPLE 5: LO ===== -->
+<div class="example-box" id="ex-lo">
+  <div class="example-header">
+    <strong>LO</strong> &mdash;
+    172 chars (2024-01-31) vs 142 chars (2024-02-14) &mdash;
+    <span class="offset-badge">offset +44</span>
+    <span class="match-badge">33 matches</span>
+  </div>
+
+  <div class="msg-layout">
+    <div class="msg-label">Msg A (LOEIVY&hellip;) &mdash; 172 chars, 3.9 blocks:</div>
+    <div class="block-row" id="lo-blocks-a"></div>
+    <div class="msg-label" style="margin-top:4px;">Msg B (LOX7XZ&hellip;) &mdash; 142 chars, 3.2 blocks:</div>
+    <div class="block-row" id="lo-blocks-b"></div>
+  </div>
+</div>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>3. Summary across all five examples</h2>
+
+<p>
+  In every case, the match rate is concentrated in one or two block pairs; the rest fall to
+  near-random levels (~3% expected for a 32-character alphabet). A periodic cipher would
+  produce roughly uniform match rates across all block pairs.
+</p>
+
+<table class="compare-table" id="summary-table">
+  <thead>
+    <tr>
+      <th>Prefix</th>
+      <th>Offset</th>
+      <th>Block pair</th>
+      <th>Match rate</th>
+      <th>Shared?</th>
+    </tr>
+  </thead>
+  <tbody id="summary-body">
+  </tbody>
+</table>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>4. Conclusion</h2>
+
+<div class="verdict-box">
+  <div class="v-label">Verdict</div>
+  <div class="v-text">Discrete 44-character block structure, not a periodic cipher.</div>
+</div>
+
+<p>
+  The evidence shows that EAM messages are composed of sequences of 44-character blocks.
+  Messages with the same prefix share some blocks in common, but these shared blocks can appear
+  at different positions within each message. A shift of &plusmn;44 brings a shared block into
+  alignment, producing a spike in the match count &mdash; but only for that specific block pair.
+</p>
+
+<p>
+  This rules out a simple periodic cipher with period 44: such a cipher would re-align its key
+  at every &plusmn;44 shift, making <em>all</em> overlapping positions equally likely to match, not
+  just one block-sized region.
+</p>
+
+<p>
+  The picture that emerges: messages are built from a vocabulary of 44-character blocks, with
+  block insertion or deletion shifting shared blocks to different positions across messages.
+</p>
+
+<div class="separator"></div>
+
+<div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
+  Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
+  Block-by-block decomposition of pairwise alignment at multiples of 44.
+  See also: <a href="44char_structure_explainer.html" style="color:var(--offset-color);">44-char alignment explainer</a>.
+</div>
+
+<script>
+// ── Example data ──────────────────────────────────────────────────────────────
+const examples = [
+  {
+    id: 'jc', prefix: 'JC', offset: -44,
+    msgA: 'JC7GEWUH755N4GPJ6CZEP4JPQWZV5NOW5JHI663IWAAAAPLR7BL2NBLX7W33YVVHHHHZE7SPTMVEUTZGXGZHYGGGGOBPNST63T4NEXBXSX4XXXXNJDLUQYOQUWBZUZ7AARRRR7QQRU4KHW4B7GMFJMB6DFVSHBC6YRJTXJCYQRFPTIXLGIYBPA7S4OYOBW2VVA',
+    msgB: 'JCP3HWKYEHEAV7A64IUN3JU3IA6TSKAKKG4BBE42OOOOO6MBYPS4PSO3HG6BSGRQQQQIJZZV5WQY5JHI65WI5AAAAPLR7BLN2N3X7W3V7VZHHHHZE7SPTVIMUTZGXLDZEGGGGOBGDTUCU7',
+  },
+  {
+    id: 'bv', prefix: 'BV', offset: -44,
+    msgA: 'BVREUDXKG25JSQGPIPVZ3GV3OC7II6TOETNIAI2ACXXXX3YHNXXDOEEN2L33RR37777NFF3DDTWTWB4T7TMT4DDDD63BAGGDGRLPU2S232SCCCCF4ZL222XW2IHVTTTTOTTTT2D2DKKBJVK6XSJJJXJJJJJFZVPOQJQIIJLQGDIGMUBNKZJJO3GJACEGLVC2Z4HRF6PYZXGSB2ARPWNZRPNA',
+    msgB: 'BVXGWN2GYUM2B7KRMX3ORMVRPU7PPDDBPZNRRRB44ZZZZYNTJTTVSVRMXRRR4XE7777OCS7II6Z63TNIIICGHXXXX3YHNXXDBDYN2LLL72E7777NFF3DDTUU6B4TT77YMDDDD63JR6RBZY',
+  },
+  {
+    id: 'yp', prefix: 'YP', offset: -44,
+    msgA: 'YPNIX3WH4PRJDNATO6QCJHVJMCQFHISI73S656QSQRRRR7JQR5JFQSIFLJSJ3SXYYYYRHSRKCUVBZHBKCFFS4JJJJVAYKOJ4YFFYTRXKOLQNNNNK4E4ZPAGFQDU52XI2G6GFMMLI4ZL33OG3ETTTT3ATZTXX2XXS7JP22JE2222DNGZSCCYSYWCURPCRPGGGG2FJF2D5TW5SA43RBEBKKKKNVXUHPPOVNFA47T2762IUUW56WICIY6',
+    msgB: 'YPXVAZUQQUVORF7KTJGVSJISLFDB7BJSUJK22MYEKVVVV5YP6U2WXPBR7EESBQESSSSEQYQFGDDFI3GWWWSUGRRRR7JQR5QI5IXFCAAAKKPYYYYRHSRKBZBL4HTSSS4K2JJJJVAYKO7FOOHYLOOOQKTNNNNK4E4FIF5FQYA52XA2GO72TZNXB2ASLZ46W2CSNCFVL4IURE5B3PG3HFKX6GWI',
+  },
+  {
+    id: 'n2', prefix: 'N2', offset: 44,
+    msgA: 'N2ETDU3XZWJHSXR3FNXRNZWNICJVSKRVYONTZRENPVVVVJKBUSZPZPZETZIFWFZPPPPNBMZP6KJUKA6KRURVVOOOOJUA53QWOBY3EZYWGVWTTTT45GONTEEWBY3OZD33A5555PN36HZ4OXI6T2GNOVTUUUUOFSBPCIPTBKZAK7LKI6JV234SS3YHVH5FVCCCCLZPJ47PNONDHR6RFTH6666TF3ED5F6UY3GC7CIFUVVVV2DKGULKZTKZKXJXGKXEEEEYXCPGYLQX',
+    msgB: 'N2HEFPRKBKN7YB6EK4X3SC5SGLZPKJKUSA6RWUQKROOOOJUA53WBBWO3EYGVLCVTTTT45GONENYITY3O33DE35555PN36HXHH4V6T2TGTGGUUUUOFNJVSVK3I3Y2YHFH5CCCCLZPJ4D4ZPPDH7HRFHT6666TFHVACPSO',
+  },
+  {
+    id: 'lo', prefix: 'LO', offset: 44,
+    msgA: 'LOEIVYAGPOPDEXLRVXPYH4WHQO6UTNDDQIUQWCDQTSSSS5WNMLBVWF2YXV2JPJCVVVV67RR47XZNOLB7K7CG4PPPPWJHB4O5DPITF2O2VCVVVVVDNCUVVCFDMO7KPGBP6FNECYD7UQSE2ZFD4ZRJU6JWQ7ILDSW7U3OMRBUV7OUJ',
+    msgB: 'LOX7XZP6QJA2LC3BIKTGGVLGDNR47XOOHLB7KG47CPPPPWJHB4O5PC7TF2OZ5Z6VVVVDN4YZSOPFM5T6S6H2KTTTTSJ3VT26QPAZNQLQY2Y6666CEJO77NGEOETVML2M42FDDARPDX6XNE',
+  },
+];
+
+// ── Render functions ──────────────────────────────────────────────────────────
+
+function chunkMessage(msg, size) {
+  const blocks = [];
+  for (let i = 0; i < msg.length; i += size) {
+    blocks.push(msg.slice(i, i + size));
+  }
+  return blocks;
+}
+
+function renderBlockChips(containerId, msg) {
+  const container = document.getElementById(containerId);
+  const blocks = chunkMessage(msg, 44);
+  blocks.forEach((blk, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'block-chip';
+    const num = document.createElement('span');
+    num.className = 'block-num';
+    num.textContent = i + ':';
+    chip.appendChild(num);
+    chip.appendChild(document.createTextNode(blk));
+    container.appendChild(chip);
+  });
+}
+
+function computeBlockComparisons(ex) {
+  const a = ex.msgA, b = ex.msgB, off = ex.offset;
+  let aStart, bStart;
+  if (off >= 0) { aStart = off; bStart = 0; }
+  else { aStart = 0; bStart = -off; }
+  const overlapLen = Math.min(a.length - aStart, b.length - bStart);
+
+  const comparisons = [];
+  for (let blkOff = 0; blkOff < overlapLen; blkOff += 44) {
+    const blkEnd = Math.min(blkOff + 44, overlapLen);
+    const chunkA = a.slice(aStart + blkOff, aStart + blkEnd);
+    const chunkB = b.slice(bStart + blkOff, bStart + blkEnd);
+    let matches = 0;
+    for (let k = 0; k < chunkA.length; k++) {
+      if (chunkA[k] === chunkB[k]) matches++;
+    }
+    const pct = matches / chunkA.length;
+    comparisons.push({
+      aBlock: Math.floor((aStart + blkOff) / 44),
+      bBlock: Math.floor((bStart + blkOff) / 44),
+      chunkA, chunkB, matches,
+      total: chunkA.length, pct,
+      shared: pct > 0.35,
+    });
+  }
+  return comparisons;
+}
+
+function renderBlockComparison(parentEl, comp) {
+  const div = document.createElement('div');
+  div.className = 'block-compare ' + (comp.shared ? 'shared' : 'unshared');
+
+  const header = document.createElement('div');
+  header.className = 'block-compare-header';
+  const pctStr = Math.round(comp.pct * 100) + '%';
+  header.innerHTML =
+    'A-block ' + comp.aBlock + ' vs B-block ' + comp.bBlock + ': ' +
+    '<span class="pct ' + (comp.shared ? 'high' : 'low') + '">' +
+    comp.matches + '/' + comp.total + ' (' + pctStr + ')</span>' +
+    (comp.shared ? '<span class="shared-tag">SHARED BLOCK</span>' : '');
+  div.appendChild(header);
+
+  // Row A
+  const lineA = document.createElement('div');
+  lineA.className = 'align-line';
+  lineA.innerHTML = '<span class="lbl">A</span>';
+  for (let k = 0; k < comp.chunkA.length; k++) {
+    const hit = comp.chunkA[k] === comp.chunkB[k];
+    lineA.innerHTML += '<span class="ch' + (hit ? ' hit' : '') + '">' + comp.chunkA[k] + '</span>';
+  }
+  div.appendChild(lineA);
+
+  // Match row
+  const lineM = document.createElement('div');
+  lineM.className = 'align-line';
+  lineM.innerHTML = '<span class="lbl"></span>';
+  for (let k = 0; k < comp.chunkA.length; k++) {
+    const hit = comp.chunkA[k] === comp.chunkB[k];
+    lineM.innerHTML += '<span class="ch bar' + (hit ? ' hit' : '') + '">' + (hit ? '|' : '\u00b7') + '</span>';
+  }
+  div.appendChild(lineM);
+
+  // Row B
+  const lineB = document.createElement('div');
+  lineB.className = 'align-line';
+  lineB.innerHTML = '<span class="lbl">B</span>';
+  for (let k = 0; k < comp.chunkB.length; k++) {
+    const hit = comp.chunkA[k] === comp.chunkB[k];
+    lineB.innerHTML += '<span class="ch' + (hit ? ' hit' : '') + '">' + comp.chunkB[k] + '</span>';
+  }
+  div.appendChild(lineB);
+
+  parentEl.appendChild(div);
+}
+
+function renderExample(ex) {
+  const box = document.getElementById('ex-' + ex.id);
+  renderBlockChips(ex.id + '-blocks-a', ex.msgA);
+  renderBlockChips(ex.id + '-blocks-b', ex.msgB);
+
+  const comps = computeBlockComparisons(ex);
+
+  // Insert comparison cards into the example box
+  const compSection = document.createElement('div');
+  compSection.style.marginTop = '0.8rem';
+
+  const compLabel = document.createElement('div');
+  compLabel.style.cssText = 'font-size:0.72rem; color:var(--text-dim); margin-bottom:0.4rem; font-family:-apple-system,sans-serif;';
+  compLabel.textContent = 'Block-by-block comparison at offset ' + ex.offset + ':';
+  compSection.appendChild(compLabel);
+
+  comps.forEach(c => renderBlockComparison(compSection, c));
+  box.appendChild(compSection);
+
+  return comps; // for summary table
+}
+
+// ── Summary table ─────────────────────────────────────────────────────────────
+const tbody = document.getElementById('summary-body');
+const allComps = [];
+
+examples.forEach(ex => {
+  const comps = renderExample(ex);
+  comps.forEach(c => {
+    allComps.push({ prefix: ex.prefix, offset: ex.offset, ...c });
+  });
+});
+
+allComps.forEach(c => {
+  const tr = document.createElement('tr');
+  const pctStr = Math.round(c.pct * 100) + '%';
+  tr.innerHTML =
+    '<td class="lbl">' + c.prefix + '</td>' +
+    '<td>' + (c.offset > 0 ? '+' : '') + c.offset + '</td>' +
+    '<td>A' + c.aBlock + ' vs B' + c.bBlock + '</td>' +
+    '<td class="' + (c.shared ? 'high' : 'low') + '">' + pctStr + '</td>' +
+    '<td>' + (c.shared ? '&#x2714;' : '&mdash;') + '</td>';
+  tbody.appendChild(tr);
+});
+</script>
+
+</body>
+</html>

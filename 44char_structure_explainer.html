@@ -160,9 +160,24 @@
   .method-diagram .bright { color: #fff; }
   .method-diagram .grn { color: var(--match-color); }
   .method-diagram .blu { color: var(--offset-color); }
+
+  .nav-bar {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-bar a { color: var(--offset-color); text-decoration: none; }
+  .nav-bar a:hover { text-decoration: underline; }
+  .nav-bar .nav-sep { color: var(--text-dim); margin: 0 0.5rem; }
 </style>
 </head>
 <body>
+
+<div class="nav-bar">
+  <a href="index.html">&larr; Index</a>
+  <span class="nav-sep">|</span>
+  <a href="block_structure.html">Block structure evidence</a>
+</div>
 
 <h1>Cross-Message Alignment Periodicity in HFGCS EAM Ciphertext</h1>
 <div class="subtitle">
@@ -546,6 +561,28 @@
   <li>The specific cipher, encoding, or message format in use is <strong>not identified</strong>.</li>
   <li>This is <strong>structural / traffic analysis</strong> of the ciphertext only.</li>
 </ul>
+
+<div class="separator"></div>
+
+<!-- ============================================================ -->
+<h2>9. Block structure</h2>
+
+<p>
+  A follow-up analysis asks: is the 44-character periodicity a <strong>repeating cipher key</strong>
+  (where position <em>i</em> and position <em>i</em>+44 are always governed by the same rule), or a
+  <strong>discrete block structure</strong> (where messages are composed of independent 44-character blocks)?
+</p>
+<p>
+  The discriminating test: when two messages align at offset &plusmn;44, a periodic cipher predicts all
+  overlapping block pairs should match at similar rates. Instead, the match rate is concentrated in one
+  or two specific block pairs, with adjacent blocks falling to near-random levels. This pattern is
+  consistent across all prefix groups examined.
+</p>
+
+<div class="note">
+  Block-by-block alignment evidence with five worked examples:
+  <a href="block_structure.html" style="color:var(--offset-color);">block_structure.html</a>
+</div>
 
 <div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
   Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
