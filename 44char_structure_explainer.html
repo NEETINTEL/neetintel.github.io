@@ -550,6 +550,62 @@
 
 <div class="separator"></div>
 
+<!-- ============================================================ -->
+<h2>9. Decomposing the 44-character block</h2>
+
+<p>
+  Given the 44-character periodicity, the next question is: <strong>what is inside the block?</strong>
+  A follow-up analysis decomposes the 44-position structure from two angles:
+</p>
+
+<h3>Pairwise match density by position</h3>
+<p>
+  At the best alignment offset for each message pair, which positions within the 44-char block
+  contribute matches, and which don't? Folding the match/no-match observations from all 1,485
+  pairwise comparisons modulo 44 reveals that match density is <strong>not uniform</strong> across
+  the block &mdash; certain positions consistently match more than others.
+</p>
+<p>
+  Crucially, this signal is <strong>strongest at period 44</strong>: the variance of match density
+  across folded positions is 0.00155 at P=44, versus 0.00140 at P=22 (half-period), 0.00119 at
+  P=43, and 0.00113 at P=45. The nearest non-divisor controls are ~25% weaker. Sub-periods
+  P=2 and P=4 show essentially zero variance (0.00003), confirming the periodicity is not an
+  artifact of a simpler pattern.
+</p>
+
+<h3>Global entropy analysis</h3>
+<p>
+  A complementary approach folds all character positions modulo candidate periods and computes
+  Shannon entropy at each folded slot. When messages from all prefixes are pooled globally, the
+  entropy signal at P=44 is <em>not</em> clearly dominant over controls &mdash; entropy variance
+  ratio is only 1.14x. This is itself informative: it indicates the 44-char periodicity is
+  <strong>prefix-specific</strong>, not a universal positional pattern. Different prefix groups
+  may use the same 44-char block structure but with different phase offsets, which cancels out
+  in a global pool but is preserved in within-prefix pairwise analysis.
+</p>
+
+<h3>Character alphabet</h3>
+<p>
+  At each of the 44 folded positions, all 32 characters in the EAM alphabet (A&ndash;Z plus
+  digits 2&ndash;7) appear. No position is restricted to digits-only or letters-only. The
+  effective alphabet size is uniformly 32 across all positions. This rules out simple
+  character-type segmentation (e.g., alternating digit/letter fields) within the 44-char block.
+</p>
+
+<h3>Sub-periodicity</h3>
+<p>
+  Autocorrelation of the 44-position entropy profile at sub-periods 2, 4, 11, and 22 is
+  near zero. The 44-char block does not decompose into obvious repeating sub-blocks at any
+  divisor of 44.
+</p>
+
+<div class="note">
+  Full decomposition report with interactive visualizations:
+  <a href="periodicity_decomposition.html" style="color:var(--offset-color);">periodicity_decomposition.html</a>
+</div>
+
+<div class="separator"></div>
+
 <div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
   Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
   243 unique Group 4 messages, 21 prefix groups, 1,512 pairwise comparisons.
