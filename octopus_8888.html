@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8888 Messages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after { box-sizing: inherit; }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.2em;
+            font-weight: 600;
+            border-bottom: 3px solid #4eff80;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-bar {
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .nav-bar a { color: #4eff80; text-decoration: none; }
+        .nav-bar a:hover { text-decoration: underline; }
+
+        .info-box {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4eff80;
+            margin-bottom: 24px;
+            line-height: 1.7;
+            font-size: 0.82em;
+            color: #aaa;
+        }
+        .info-box strong { color: #4eff80; }
+        .info-box em     { color: #888; font-style: italic; }
+        .info-box code   { color: #e0e0e0; }
+        .info-box cite   { color: #f48f42; font-style: italic; }
+        .info-box a      { color: #f48f42; text-decoration: none; }
+        .info-box a:hover { text-decoration: underline; }
+
+        /* ── Timeline ─────────────────────────────────────────── */
+
+        .tl-section {
+            padding: 20px 0 32px;
+            margin-bottom: 28px;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .tl-section h3 {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #bbb;
+            margin: 0 0 3px 0;
+        }
+        .tl-subtitle {
+            font-size: 0.65em;
+            color: #aaa;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+        }
+        .tl-body {
+            display: flex;
+            align-items: flex-start;
+        }
+        .tl-label-col {
+            width: 36px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .tl-lane-label {
+            position: absolute;
+            left: 0;
+            width: 32px;
+            display: flex;
+            align-items: center;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            font-size: 0.6em;
+            font-weight: 600;
+            letter-spacing: 0.07em;
+        }
+        .tl-chart {
+            flex: 1;
+            position: relative;
+            cursor: default;
+            user-select: none;
+        }
+        .tl-lane {
+            position: absolute;
+            left: 0; right: 0;
+        }
+        .tl-tick {
+            position: absolute;
+            width: 2px;
+            transform: translateX(-50%);
+            border-radius: 1px;
+            cursor: pointer;
+            transition: filter 0.1s, opacity 0.1s;
+        }
+        .tl-tick:hover {
+            filter: brightness(2) !important;
+            opacity: 1 !important;
+            z-index: 30;
+        }
+        .tl-tick-hinata:hover {
+            filter: brightness(1.6) drop-shadow(0 0 4px #7cc8e9) drop-shadow(0 0 10px #7cc8e9) !important;
+            opacity: 1 !important;
+            z-index: 30;
+        }
+        .tl-pub-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            opacity: 0.45;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+        .tl-pub-label {
+            position: absolute;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            font-size: 0.54em;
+            color: #999;
+            white-space: nowrap;
+            letter-spacing: 0.04em;
+            cursor: default;
+        }
+        .tl-pub-label:hover { color: #ccc; }
+        .tl-evt-label {
+            position: absolute;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            font-size: 0.54em;
+            color: #999;
+            white-space: nowrap;
+            letter-spacing: 0.04em;
+            cursor: default;
+        }
+        .tl-evt-label:hover { color: #ccc; }
+        .hinata-row:hover, .hinata-row.tl-highlighted {
+            background-color: rgba(124, 200, 233, 0.07) !important;
+            outline: 1px solid rgba(124, 200, 233, 0.25) !important;
+        }
+        .tl-year-row {
+            margin-left: 36px;
+            position: relative;
+            height: 20px;
+            margin-top: 4px;
+        }
+        .tl-year-tick {
+            position: absolute;
+            top: 0;
+            width: 1px;
+            height: 4px;
+            background: #bbb;
+            pointer-events: none;
+        }
+        .tl-year-label {
+            position: absolute;
+            top: 7px;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            font-size: 0.61em;
+            color: #bbb;
+            transform: translateX(-50%);
+            letter-spacing: 0.03em;
+            pointer-events: none;
+        }
+        .tl-legend {
+            display: flex;
+            gap: 20px;
+            font-size: 0.68em;
+            color: #444;
+            margin-top: 14px;
+            margin-left: 36px;
+            align-items: center;
+        }
+        .tl-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .tl-legend-swatch {
+            display: inline-block;
+            width: 18px;
+            height: 2px;
+            border-radius: 1px;
+        }
+        .tl-legend-pub-dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            opacity: 0.45;
+            flex-shrink: 0;
+        }
+        .tl-legend em { font-style: italic; }
+        #tlTooltip {
+            position: fixed;
+            display: none;
+            background: #1a1a1a;
+            border: 1px solid #252525;
+            border-radius: 2px;
+            padding: 8px 12px;
+            font-size: 0.74em;
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 320px;
+            line-height: 1.6;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+        }
+        .tt-date   { color: #666; display: block; margin-bottom: 2px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 0.88em; }
+        .tt-medium { font-weight: 600; padding: 1px 5px; border-radius: 2px; font-size: 0.78em; letter-spacing: 0.05em; font-family: 'IBM Plex Mono', 'Courier New', monospace; display: inline-block; margin-bottom: 3px; }
+        .tt-medium.hf  { background: #0d2210; color: #4eff80; }
+        .tt-medium.vlf { background: #0d1f2d; color: #42c8ff; }
+        .tt-medium.pub { background: #1e1e1e; color: #e0e0e0; }
+        .tt-cs     { color: #ccc; font-weight: 600; display: block; margin-top: 2px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 1.05em; }
+        .tt-msg    { color: #4eff80; display: block; font-size: 0.92em; margin-top: 1px; word-break: break-all; font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+        .tt-notes  { color: #666; display: block; margin-top: 3px; font-size: 0.9em; font-style: italic; }
+        .tt-desc   { color: #888; display: block; margin-top: 6px; font-size: 0.88em; line-height: 1.55; max-width: 260px; white-space: normal; }
+        .tt-struck { text-decoration: line-through; text-decoration-thickness: 2px; }
+
+        /* ── Table ────────────────────────────────────────────── */
+
+        .table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #1e1e1e;
+            border-radius: 6px;
+            padding: 4px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.84em;
+            min-width: 600px;
+        }
+
+        thead th {
+            background-color: #1e1e1e;
+            color: #4eff80;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+            font-size: 0.78em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #262626;
+            transition: background 0.1s;
+        }
+        tbody tr:hover, tbody tr.tl-highlighted { background-color: #252525; }
+        tbody tr.tl-highlighted { outline: 1px solid #2a4a2a; }
+        tbody td { padding: 8px 14px; vertical-align: top; }
+
+        /* Disregarded: strikethrough on callsign + message, dimmed text */
+        tr.disregarded .callsign-cell,
+        tr.disregarded .message-cell {
+            text-decoration: line-through;
+            text-decoration-color: rgba(78, 255, 128, 0.6);
+            text-decoration-thickness: 2px;
+            color: #555;
+        }
+
+        code { font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+
+        .date-cell     { white-space: nowrap; font-variant-numeric: tabular-nums; color: #777; font-size: 0.88em; }
+        .utc-cell      { white-space: nowrap; font-size: 0.85em; color: #666; }
+        .callsign-cell { white-space: nowrap; font-weight: 600; color: #4eff80; font-size: 0.88em; font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+        .message-cell  { font-size: 0.88em; color: #4eff80; letter-spacing: 0.03em; white-space: nowrap; font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+        .notes-cell    { color: #888; font-size: 0.8em; line-height: 1.5; max-width: 260px; }
+
+        .source-cell a {
+            color: #f48f42;
+            font-style: italic;
+            text-decoration: none;
+            font-size: 0.75em;
+            word-break: break-all;
+            display: block;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+        }
+        .source-cell a:hover { text-decoration: underline; }
+        .source-cell .no-source { color: #3a3a3a; font-size: 0.78em; }
+        .source-author {
+            display: block;
+            font-family: 'IBM Plex Sans Condensed', 'Arial Narrow', Arial, sans-serif;
+            font-style: normal;
+            font-size: 0.72em;
+            font-weight: 600;
+            color: #666;
+            letter-spacing: 0.04em;
+            margin-bottom: 2px;
+        }
+
+        .hex-badge {
+            display: inline-block;
+            padding: 1px 7px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-decoration: none;
+            vertical-align: middle;
+            white-space: nowrap;
+            background: #2a1200;
+            color: #f48f42;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+        }
+        .hex-badge:hover { opacity: 0.8; }
+
+        .badge { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 0.75em; font-weight: 600; letter-spacing: 0.06em; font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+        .badge-hf  { background-color: #0d2210; color: #4eff80; }
+        .badge-vlf { background-color: #0d1f2d; color: #42c8ff; }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 12px;
+            border-top: 1px solid #2a2a2a;
+            font-size: 0.75em;
+            color: #444;
+            text-align: right;
+        }
+
+        /* ── Mobile ───────────────────────────────────────────── */
+        @media (max-width: 680px) {
+            h1 { font-size: 1.5em; }
+            body { padding: 12px; }
+
+            /* Reflow table as stacked cards — no horizontal scroll */
+            .table-wrap {
+                overflow-x: visible;
+                background: transparent;
+                border-radius: 0;
+                padding: 0;
+            }
+            table { min-width: 0; font-size: 0.8em; }
+            thead { display: none; }
+            tbody tr {
+                display: block;
+                border: 1px solid #252525;
+                border-radius: 4px;
+                margin-bottom: 10px;
+                padding: 9px 0 6px;
+                background-color: #1a1a1a;
+            }
+            tbody tr:hover, tbody tr.tl-highlighted { background-color: #232323; }
+            tbody td { display: block; padding: 1px 12px; border: none; }
+            .utc-cell { display: none; }
+            .date-cell {
+                font-size: 0.8em;
+                color: #666;
+                font-family: 'IBM Plex Mono', 'Courier New', monospace;
+                padding-bottom: 3px;
+            }
+            .callsign-cell { font-size: 1.05em; }
+            .message-cell {
+                white-space: normal;
+                word-break: break-all;
+                font-size: 0.85em;
+                color: #888;
+            }
+            .notes-cell { font-size: 0.82em; padding-top: 4px; color: #888; }
+            .source-cell { padding-top: 5px; padding-bottom: 4px; }
+            .source-cell a {
+                font-size: 0.78em;
+                word-break: break-all;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="index.html">&larr; Index</a>
+    </div>
+
+    <h1>8888 Messages</h1>
+
+    <div class="info-box">
+        8888 messages &mdash; also called <strong>Quad 8s</strong> or
+        <strong>octopus messages</strong> &mdash; are most likely <em>not</em> standard EAMs, and
+        probably should not be broadcast on HFGCS. They are conspicuous: EAMs contain neither 0 nor 8,
+        using a 32-character set (26 letters plus 9 digits, both 0 and 8 excluded &mdash; significant
+        for encoding). A message opening <code>888800</code> is therefore immediately anomalous. Structure
+        is consistent: the <code>888800</code> prefix, followed in most cases by a timestamp and a standard
+        character sequence ending in <code>8888</code>.
+        <br><br>
+        In 2023, NEET INTEL published a <cite><a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank" rel="noopener">video</a></cite>
+        cataloging only 11 documented instances of 8888 messages in nearly 20 years of records.
+        The video discusses suspected huge gaps and deficiencies in monitoring, and some proposals to
+        improve monitoring are advanced. Since then, the count has more than doubled. On VLF, 8888 messages
+        appear fairly regularly; on HF, far less so, and most HF broadcasts are disregarded. What they represent
+        remains ambiguous; the same operators who transmit them would recognize a mistake, and unusual terminations
+        like the disregarded <i>&#8220;oh I see&#8221;</i> 8888 (2023.06.13) raise more questions than they answer.
+    </div>
+
+    <!-- Timeline -->
+    <div class="tl-section">
+        <h3>Observation Timeline</h3>
+        <div class="tl-subtitle">HF &amp; VLF &middot; 1999&ndash;present</div>
+        <div class="tl-body">
+            <div class="tl-label-col" id="tlLabelCol"></div>
+            <div class="tl-chart" id="tlChart"></div>
+        </div>
+        <div class="tl-year-row" id="tlYearRow"></div>
+        <div class="tl-legend">
+            <div class="tl-legend-item"><span class="tl-legend-swatch" style="background:#4eff80;"></span>HF</div>
+            <div class="tl-legend-item"><span class="tl-legend-swatch" style="background:#42c8ff;"></span>VLF</div>
+            <div class="tl-legend-item"><span class="tl-legend-pub-dot"></span>Publication</div>
+        </div>
+    </div>
+    <div id="tlTooltip"></div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>UTC</th>
+                    <th>Callsign</th>
+                    <th>Message</th>
+                    <th>Medium</th>
+                    <th>Notes</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="tl-row-0">
+                    <td class="date-cell">1999.04.19</td>
+                    <td class="utc-cell">??:??</td>
+                    <td class="callsign-cell">?</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"><em>&#8220;Back during the week of 19 Apr 99 they ran similar 888800 strings with embedded minutestamps of 15, 20, 30 and 40&#8221;</em></td>
+                    <td class="source-cell"><span class="source-author">WORLDWIDE UTE NEWS Club</span><a href="https://udxf.nl/WUN-v09.pdf" target="_blank" rel="noopener">https://udxf.nl/WUN-v09.pdf</a></td>
+                </tr>
+                <tr id="tl-row-1">
+                    <td class="date-cell">2003.12.01</td>
+                    <td class="utc-cell">01:26</td>
+                    <td class="callsign-cell">SCULPTOR</td>
+                    <td class="message-cell">888800010715GGKKLLMMNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><span class="source-author">WORLDWIDE UTE NEWS Club</span><a href="https://udxf.nl/WUN-v09.pdf" target="_blank" rel="noopener">https://udxf.nl/WUN-v09.pdf</a></td>
+                </tr>
+                <tr id="tl-row-2">
+                    <td class="date-cell">2003.12.01</td>
+                    <td class="utc-cell">01:37</td>
+                    <td class="callsign-cell">SCULPTOR</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"><em>&#8220;etc.&#8221;</em><br><em>didn&#8217;t transcribe full message</em></td>
+                    <td class="source-cell"><span class="source-author">WORLDWIDE UTE NEWS Club</span><a href="https://udxf.nl/WUN-v09.pdf" target="_blank" rel="noopener">https://udxf.nl/WUN-v09.pdf</a></td>
+                </tr>
+                <tr id="tl-row-3">
+                    <td class="date-cell">2003.12.01</td>
+                    <td class="utc-cell">03:47</td>
+                    <td class="callsign-cell">GERANIUM</td>
+                    <td class="message-cell">888800020315GGKKLLMMNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><span class="source-author">WORLDWIDE UTE NEWS Club</span><a href="https://udxf.nl/WUN-v09.pdf" target="_blank" rel="noopener">https://udxf.nl/WUN-v09.pdf</a></td>
+                </tr>
+                <tr id="tl-row-4">
+                    <td class="date-cell">2003.12.01</td>
+                    <td class="utc-cell">04:15</td>
+                    <td class="callsign-cell">GERANIUM</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"><em>&#8220;etc.&#8221;</em><br><em>didn&#8217;t transcribe full message</em></td>
+                    <td class="source-cell"><span class="source-author">WORLDWIDE UTE NEWS Club</span><a href="https://udxf.nl/WUN-v09.pdf" target="_blank" rel="noopener">https://udxf.nl/WUN-v09.pdf</a></td>
+                </tr>
+                <tr id="tl-row-5">
+                    <td class="date-cell">2004.02.23</td>
+                    <td class="utc-cell">23:46</td>
+                    <td class="callsign-cell">?</td>
+                    <td class="message-cell">888800232346GGKK??MRNNXXZ?AABBCC8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><span class="source-author">WORLDWIDE UTE NEWS Club</span><a href="http://www.udxf.nl/WUN-v10.pdf" target="_blank" rel="noopener">http://www.udxf.nl/WUN-v10.pdf</a></td>
+                </tr>
+                <tr id="tl-row-6">
+                    <td class="date-cell">2007.06.26</td>
+                    <td class="utc-cell">01:25</td>
+                    <td class="callsign-cell">?</td>
+                    <td class="message-cell">88880025I600AAE6GG00NNXXZZ8886</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><span class="source-author">Utility Planet</span><a href="https://mt-utility.blogspot.com/2007/07/what-happened-on-june-26.html" target="_blank" rel="noopener">https://mt-utility.blogspot.com/2007/07/what-happened-on-june-26.html</a></td>
+                </tr>
+                <tr id="tl-row-7" class="disregarded">
+                    <td class="date-cell">2018.03.13</td>
+                    <td class="utc-cell">05:37</td>
+                    <td class="callsign-cell">WILD BUCK</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">Radio Scanner RU</span><a href="http://www.radioscanner.ru/forum/topic49425-28.html" target="_blank" rel="noopener">http://www.radioscanner.ru/forum/topic49425-28.html</a></td>
+                </tr>
+                <tr id="tl-row-8">
+                    <td class="date-cell">2018.05.01</td>
+                    <td class="utc-cell">17:17</td>
+                    <td class="callsign-cell">CALM LAKE</td>
+                    <td class="message-cell">888800011657OOTT11KKNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><span class="source-author">Radio Scanner RU</span><a href="https://archive.is/tSrDZ#msg1373944" target="_blank" rel="noopener">https://archive.is/tSrDZ#msg1373944</a></td>
+                </tr>
+                <tr id="tl-row-9" class="disregarded">
+                    <td class="date-cell">2019.07.12</td>
+                    <td class="utc-cell">18:09</td>
+                    <td class="callsign-cell">MACKINAW</td>
+                    <td class="message-cell">888800121757AAEEGGKK</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><a href="https://eam.watch/view/a6368f3b-0db5-4e9b-9990-131f149bb58a" target="_blank" rel="noopener">https://eam.watch/view/a6368f3b-0db5-4e9b-9990-131f149bb58a</a></td>
+                </tr>
+                <tr id="tl-row-10">
+                    <td class="date-cell">2022.11.18</td>
+                    <td class="utc-cell">18:01</td>
+                    <td class="callsign-cell">RETALIATE</td>
+                    <td class="message-cell">888800181754AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><a href="https://archive.4plebs.org/pol/thread/404986392/#405017700" target="_blank" rel="noopener">https://archive.4plebs.org/pol/thread/404986392/#405017700</a></td>
+                </tr>
+                <tr id="tl-row-11">
+                    <td class="date-cell">2022.11.18</td>
+                    <td class="utc-cell">18:36</td>
+                    <td class="callsign-cell">RETALIATE</td>
+                    <td class="message-cell">888800181831AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><a href="https://archive.4plebs.org/pol/thread/404986392/#405011276" target="_blank" rel="noopener">https://archive.4plebs.org/pol/thread/404986392/#405011276</a></td>
+                </tr>
+                <tr id="tl-row-12">
+                    <td class="date-cell">2022.11.22</td>
+                    <td class="utc-cell">16:50</td>
+                    <td class="callsign-cell">FINNEGAN</td>
+                    <td class="message-cell">888800221650AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell"></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://youtube.com/live/leafcmjy35s?si=g9UgVqX7PlN6vIaS&t=974" target="_blank" rel="noopener">https://youtube.com/live/leafcmjy35s?si=g9UgVqX7PlN6vIaS&amp;t=974</a></td>
+                </tr>
+                <tr id="tl-row-13" class="disregarded">
+                    <td class="date-cell">2023.03.12</td>
+                    <td class="utc-cell">03:12</td>
+                    <td class="callsign-cell">STOCKYARD</td>
+                    <td class="message-cell">8888000</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><a href="https://archive.4plebs.org/pol/thread/419340386/#419359874" target="_blank" rel="noopener">https://archive.4plebs.org/pol/thread/419340386/#419359874</a></td>
+                </tr>
+                <tr id="tl-row-14" class="disregarded">
+                    <td class="date-cell">2023.06.13</td>
+                    <td class="utc-cell">20:06</td>
+                    <td class="callsign-cell">SYMBOLIC</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED<br><strong>&#8220;oh I see&#8221;</strong> 8888</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL (uploaded to eam.watch)</span><a href="https://eam.watch/view/0ccd2ff4-94ff-4d27-9810-f2aeac389707" target="_blank" rel="noopener">https://eam.watch/view/0ccd2ff4-94ff-4d27-9810-f2aeac389707</a></td>
+                </tr>
+                <tr id="tl-row-15" class="disregarded">
+                    <td class="date-cell">2023.08.21</td>
+                    <td class="utc-cell">13:13</td>
+                    <td class="callsign-cell">BAG FEED</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><a href="https://eam.watch/view/b81da111-a0c8-4578-a93c-f4b82677de20" target="_blank" rel="noopener">https://eam.watch/view/b81da111-a0c8-4578-a93c-f4b82677de20</a></td>
+                </tr>
+                <tr id="tl-row-16">
+                    <td class="date-cell">2023.12.21</td>
+                    <td class="utc-cell">??:??</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800211852AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb3&amp;showTrace=2023-12-21" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB3</a></td>
+                    <td class="source-cell"><span class="source-author">Thenewarea51</span><a href="https://x.com/thenewarea51/status/1737933789999833407" target="_blank" rel="noopener">https://x.com/thenewarea51/status/1737933789999833407</a></td>
+                </tr>
+                <tr id="tl-row-17" class="disregarded">
+                    <td class="date-cell">2024.03.13</td>
+                    <td class="utc-cell">20:01</td>
+                    <td class="callsign-cell">MUSCULAR</td>
+                    <td class="message-cell">8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/1768005207500210279" target="_blank" rel="noopener">https://x.com/neetintel/status/1768005207500210279</a></td>
+                </tr>
+                <tr id="tl-row-18">
+                    <td class="date-cell">2024.04.25</td>
+                    <td class="utc-cell">16:24</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800251618AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb6&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-04-25&amp;timestamp=1714062240" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB6</a></td>
+                    <td class="source-cell"><span class="source-author">pdgls</span><a href="https://www.youtube.com/watch?v=RUBKT_MQD9o&t=0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=RUBKT_MQD9o&t=0</a></td>
+                </tr>
+                <tr id="tl-row-19">
+                    <td class="date-cell">2024.05.17</td>
+                    <td class="utc-cell">19:39</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800171939AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb4&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-05-17&amp;timestamp=1715974740" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB4</a></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/1791558374418485383" target="_blank" rel="noopener">https://x.com/neetintel/status/1791558374418485383</a></td>
+                </tr>
+                <tr id="tl-row-20">
+                    <td class="date-cell">2024.05.17</td>
+                    <td class="utc-cell">19:56</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800171956AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb4&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-05-17&amp;timestamp=1715975760" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB4</a></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/4gKVWtgSJzU?si=Q26-mO9XhLmTllK2&amp;t=14320" target="_blank" rel="noopener">https://www.youtube.com/live/4gKVWtgSJzU?si=Q26-mO9XhLmTllK2&amp;t=14320</a></td>
+                </tr>
+                <tr id="tl-row-21">
+                    <td class="date-cell">2024.05.17</td>
+                    <td class="utc-cell">20:20</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800172020AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb4&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-05-17&amp;timestamp=1715977200" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB4</a></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/4gKVWtgSJzU?si=IIdXzf9be2iCrLnN&amp;t=14566" target="_blank" rel="noopener">https://www.youtube.com/live/4gKVWtgSJzU?si=IIdXzf9be2iCrLnN&amp;t=14566</a></td>
+                </tr>
+                <tr id="tl-row-22">
+                    <td class="date-cell">2024.09.10</td>
+                    <td class="utc-cell">18:35</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">*</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell"><b>Suspected</b> VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb4&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-09-10&amp;timestamp=1725993300" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB4</a><br><em>(Strong conviction 8888s missed on this day)</em></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/1833640931716960501" target="_blank" rel="noopener">https://x.com/neetintel/status/1833640931716960501</a></td>
+                </tr>
+                <tr id="tl-row-23">
+                    <td class="date-cell">2024.09.13</td>
+                    <td class="utc-cell">19:00</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800131824AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=adfeb4&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-09-13&amp;timestamp=1726254000" target="_blank" rel="noopener" class="hex-badge e4">E4&nbsp;ADFEB4</a></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/cq7MWihvmJ8?si=iRwof0Rc8hrAJwxg&amp;t=10792" target="_blank" rel="noopener">https://www.youtube.com/live/cq7MWihvmJ8?si=iRwof0Rc8hrAJwxg&amp;t=10792</a></td>
+                </tr>
+                <tr id="tl-row-24">
+                    <td class="date-cell">2024.09.22</td>
+                    <td class="utc-cell">16:05</td>
+                    <td class="callsign-cell">PHOSPHATE</td>
+                    <td class="message-cell">888800221601AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=ae0412&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-09-22&amp;timestamp=1727021100" target="_blank" rel="noopener" class="hex-badge e6">E6&nbsp;AE0412</a><br><em>no &#8216;data cloud&#8217; afterward<br>(Radio callsign PHOSPHATE; no HF EAMs heard)</em></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/1837887652382589332" target="_blank" rel="noopener">https://x.com/neetintel/status/1837887652382589332</a></td>
+                </tr>
+                <tr id="tl-row-25">
+                    <td class="date-cell">2024.09.23</td>
+                    <td class="utc-cell">21:03</td>
+                    <td class="callsign-cell">(WEPS13)</td>
+                    <td class="message-cell">888800DDHHMMAAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=ae0414&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-09-23&amp;timestamp=1727125380" target="_blank" rel="noopener" class="hex-badge e6">E6&nbsp;AE0414</a></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/IReel-USC-4?si=pEF-QtOQdsDgvwTV&amp;t=21910" target="_blank" rel="noopener">https://www.youtube.com/live/IReel-USC-4?si=pEF-QtOQdsDgvwTV&amp;t=21910</a></td>
+                </tr>
+                <tr id="tl-row-26" class="disregarded">
+                    <td class="date-cell">2024.10.07</td>
+                    <td class="utc-cell">15:37</td>
+                    <td class="callsign-cell">KINGPIN</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/1843316661840990357" target="_blank" rel="noopener">https://x.com/neetintel/status/1843316661840990357</a></td>
+                </tr>
+                <tr id="tl-row-27">
+                    <td class="date-cell">2024.11.25</td>
+                    <td class="utc-cell">14:34</td>
+                    <td class="callsign-cell">DIVINITY</td>
+                    <td class="message-cell">888800DDHHMMAAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=ae0412&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-11-25&amp;timestamp=1732545240" target="_blank" rel="noopener" class="hex-badge e6">E6&nbsp;AE0412</a><br><em>no &#8216;data cloud&#8217; afterward</em></td>
+                    <td class="source-cell"><span class="source-author">null</span><a href="https://www.youtube.com/watch?v=eb8e-6AUTR0&t=0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=eb8e-6AUTR0&t=0</a></td>
+                </tr>
+                <tr id="tl-row-28">
+                    <td class="date-cell">2024.11.27</td>
+                    <td class="utc-cell">00:09</td>
+                    <td class="callsign-cell">&mdash;</td>
+                    <td class="message-cell">888800262343AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=ae040e&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2024-11-27&amp;timestamp=1732666140" target="_blank" rel="noopener" class="hex-badge e6">E6&nbsp;AE040E</a><br><em>no &#8216;data cloud&#8217; afterward</em></td>
+                    <td class="source-cell"><span class="source-author">null</span><a href="https://www.youtube.com/watch?v=e___D2SPERw&t=0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=e___D2SPERw&t=0</a></td>
+                </tr>
+                <tr id="tl-row-29" class="disregarded">
+                    <td class="date-cell">2025.02.08</td>
+                    <td class="utc-cell">22:48</td>
+                    <td class="callsign-cell">PAWN SHOP</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/1888366560886022378" target="_blank" rel="noopener">https://x.com/neetintel/status/1888366560886022378</a></td>
+                </tr>
+                <tr id="tl-row-30" class="disregarded">
+                    <td class="date-cell">2025.04.15</td>
+                    <td class="utc-cell">12:20</td>
+                    <td class="callsign-cell">IMPLICATE</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/NdSJLdjpBzA?si=tr8IyrBYe3iTUChl&amp;t=29993" target="_blank" rel="noopener">https://www.youtube.com/live/NdSJLdjpBzA?si=tr8IyrBYe3iTUChl&amp;t=29993</a></td>
+                </tr>
+                <tr id="tl-row-31" class="disregarded hinata-row">
+                    <td class="date-cell">2025.09.04</td>
+                    <td class="utc-cell">11:43</td>
+                    <td class="callsign-cell">YOUNG BOY</td>
+                    <td class="message-cell">888800041141AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED<br><strong>Shogenji Yoko 8888</strong></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/Z2hCgIX4fIw?si=Zwijh9ECjCzV5BPd&amp;t=41951" target="_blank" rel="noopener">https://www.youtube.com/live/Z2hCgIX4fIw?si=Zwijh9ECjCzV5BPd&amp;t=41951</a></td>
+                </tr>
+                <tr id="tl-row-32">
+                    <td class="date-cell">2025.09.23</td>
+                    <td class="utc-cell">17:15</td>
+                    <td class="callsign-cell">ORE MINE</td>
+                    <td class="message-cell">888800231704AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-vlf">VLF</span></td>
+                    <td class="notes-cell">VLF broadcast by <a href="https://globe.adsbexchange.com/?icao=af54bb&amp;lat=38.0&amp;lon=-97.0&amp;zoom=4.5&amp;showTrace=2025-09-23&amp;timestamp=1758647700" target="_blank" rel="noopener" class="hex-badge e6">E6&nbsp;AF54BB</a><br><em>(AE0413?)</em></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/cVkeVjG7HiY?si=Gs5qjFAEs04zGnSt&amp;t=18934" target="_blank" rel="noopener">https://www.youtube.com/live/cVkeVjG7HiY?si=Gs5qjFAEs04zGnSt&amp;t=18934</a></td>
+                </tr>
+                <tr id="tl-row-33" class="disregarded">
+                    <td class="date-cell">2025.09.23</td>
+                    <td class="utc-cell">09:03</td>
+                    <td class="callsign-cell">TEST KIT</td>
+                    <td class="message-cell">888800260901AAEEGGKKNNXXZZ8888</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED<br><em>Only some hours before 251026 SKYMASTER!</em></td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/PRZTZltlC0k?si=mDiGT9LXEAGTT9mO&amp;t=32615" target="_blank" rel="noopener">https://www.youtube.com/live/PRZTZltlC0k?si=mDiGT9LXEAGTT9mO&amp;t=32615</a></td>
+                </tr>
+                <tr id="tl-row-34" class="disregarded">
+                    <td class="date-cell">2025.11.06</td>
+                    <td class="utc-cell">19:54</td>
+                    <td class="callsign-cell">NEIGHBOR</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/nUMDrYGP-v0?si=j6PE45s9UQ5x3ykI&amp;t=28474" target="_blank" rel="noopener">https://www.youtube.com/live/nUMDrYGP-v0?si=j6PE45s9UQ5x3ykI&amp;t=28474</a></td>
+                </tr>
+                <tr id="tl-row-35" class="disregarded">
+                    <td class="date-cell">2025.11.18</td>
+                    <td class="utc-cell">21:21</td>
+                    <td class="callsign-cell">COLD DUCK</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://www.youtube.com/live/8QQ_kXUMqMY?si=NckPFNJUMVPBHgjz&amp;t=33691" target="_blank" rel="noopener">https://www.youtube.com/live/8QQ_kXUMqMY?si=NckPFNJUMVPBHgjz&amp;t=33691</a></td>
+                </tr>
+                <tr id="tl-row-36" class="disregarded">
+                    <td class="date-cell">2026.02.06</td>
+                    <td class="utc-cell">16:37</td>
+                    <td class="callsign-cell">ABSENTEE</td>
+                    <td class="message-cell">888800061633AAEE</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/2019845014172397677" target="_blank" rel="noopener">https://x.com/neetintel/status/2019845014172397677</a></td>
+                </tr>
+                <tr id="tl-row-37" class="disregarded">
+                    <td class="date-cell">2026.02.27</td>
+                    <td class="utc-cell">18:42</td>
+                    <td class="callsign-cell">AMBITION</td>
+                    <td class="message-cell">888800</td>
+                    <td><span class="badge badge-hf">HF</span></td>
+                    <td class="notes-cell">DISREGARDED</td>
+                    <td class="source-cell"><span class="source-author">NEET INTEL</span><a href="https://x.com/neetintel/status/2027498895475986924" target="_blank" rel="noopener">https://x.com/neetintel/status/2027498895475986924</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="footer">Last updated 27 February 2026</div>
+
+    <script>
+    (function () {
+        // ── layout constants (px) ────────────────────────────────────
+        const HF_TOP      = 36;  // raised to leave room for event labels above HF ribbon
+        const LANE_H      = 26;
+        const LANE_GAP    = 14;
+        const VLF_TOP     = HF_TOP + LANE_H + LANE_GAP;                 // 76
+        const PUB_DOT_Y   = HF_TOP + LANE_H + Math.round(LANE_GAP / 2); // 69 — gap centre
+        const PUB_DOT_R   = 4;
+        const LEADER_Y    = VLF_TOP + LANE_H + 14;                      // 116
+        const CHART_H     = LEADER_Y + 18;                              // 134
+        const EVT_LABEL_Y = 4;      // CSS top for HF event labels (px from chart top)
+        const EVT_LINE_Y1 = 16;     // SVG y: line start (below label text)
+        const EVT_LINE_Y2 = HF_TOP; // SVG y: line end (top of HF ribbon)
+
+        // ── date range ───────────────────────────────────────────────
+        const CHART_START = new Date('1999-01-01').getTime();
+        const CHART_END   = new Date('2027-01-01').getTime();
+        const CHART_SPAN  = CHART_END - CHART_START;
+
+        function pct(dateStr) {
+            return (new Date(dateStr).getTime() - CHART_START) / CHART_SPAN * 100;
+        }
+        function esc(s) {
+            return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        const EVENTS = [
+            { date:'1999-04-19', medium:'HF',  dis:false, cs:'?',         msg:'888800',                               notes:'' },
+            { date:'2003-12-01', medium:'HF',  dis:false, cs:'SCULPTOR',  msg:'888800010715GGKKLLMMNNXXZZ8888',       notes:'' },
+            { date:'2003-12-01', medium:'HF',  dis:false, cs:'SCULPTOR',  msg:'888800',                               notes:"didn't transcribe full message" },
+            { date:'2003-12-01', medium:'HF',  dis:false, cs:'GERANIUM',  msg:'888800020315GGKKLLMMNNXXZZ8888',       notes:'' },
+            { date:'2003-12-01', medium:'HF',  dis:false, cs:'GERANIUM',  msg:'888800',                               notes:"didn't transcribe full message" },
+            { date:'2004-02-23', medium:'HF',  dis:false, cs:'?',         msg:'888800232346GGKK??MRNNXXZ?AABBCC8888', notes:'' },
+            { date:'2007-06-26', medium:'HF',  dis:false, cs:'?',         msg:'88880025I600AAE6GG00NNXXZZ8886',       notes:'' },
+            { date:'2018-03-13', medium:'HF',  dis:true,  cs:'WILD BUCK', msg:'888800',                               notes:'' },
+            { date:'2018-05-01', medium:'HF',  dis:false, cs:'CALM LAKE', msg:'888800011657OOTT11KKNNXXZZ8888',       notes:'' },
+            { date:'2019-07-12', medium:'HF',  dis:true,  cs:'MACKINAW',  msg:'888800121757AAEEGGKK',                 notes:'' },
+            { date:'2022-11-18', medium:'HF',  dis:false, cs:'RETALIATE', msg:'888800181754AAEEGGKKNNXXZZ8888',       notes:'' },
+            { date:'2022-11-18', medium:'HF',  dis:false, cs:'RETALIATE', msg:'888800181831AAEEGGKKNNXXZZ8888',       notes:'' },
+            { date:'2022-11-22', medium:'HF',  dis:false, cs:'FINNEGAN',  msg:'888800221650AAEEGGKKNNXXZZ8888',       notes:'' },
+            { date:'2023-03-12', medium:'HF',  dis:true,  cs:'STOCKYARD', msg:'8888000',                              notes:'' },
+            { date:'2023-06-13', medium:'HF',  dis:true,  cs:'SYMBOLIC',  msg:'888800',                               notes:'the "oh I see" 8888',
+              anecdote:'Before disregarding this message, the operator reading it could be heard saying "oh I see" in response to something a second voice said in the background.' },
+            { date:'2023-08-21', medium:'HF',  dis:true,  cs:'BAG FEED',  msg:'888800',                               notes:'' },
+            { date:'2023-12-21', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800211852AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB3' },
+            { date:'2024-03-13', medium:'HF',  dis:true,  cs:'MUSCULAR',  msg:'8888',                                 notes:'' },
+            { date:'2024-04-25', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800251618AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB6' },
+            { date:'2024-05-17', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800171939AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
+            { date:'2024-05-17', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800171956AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
+            { date:'2024-05-17', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800172020AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
+            { date:'2024-09-10', medium:'VLF', dis:false, cs:'\u2014',    msg:'*',                                    notes:'Likely E4 ADFEB4 (missed?)' },
+            { date:'2024-09-13', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800131824AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
+            { date:'2024-09-22', medium:'VLF', dis:false, cs:'PHOSPHATE', msg:'888800221601AAEEGGKKNNXXZZ8888',       notes:'E6 AE0412' },
+            { date:'2024-09-23', medium:'VLF', dis:false, cs:'(WEPS13)',  msg:'888800DDHHMMAAEEGGKKNNXXZZ8888',       notes:'E6 AE0414' },
+            { date:'2024-10-07', medium:'HF',  dis:true,  cs:'KINGPIN',   msg:'888800',                               notes:'' },
+            { date:'2024-11-25', medium:'VLF', dis:false, cs:'DIVINITY',  msg:'888800DDHHMMAAEEGGKKNNXXZZ8888',       notes:'E6 AE0412' },
+            { date:'2024-11-27', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800262343AAEEGGKKNNXXZZ8888',       notes:'E6 AE040E' },
+            { date:'2025-02-08', medium:'HF',  dis:true,  cs:'PAWN SHOP', msg:'888800',                               notes:'' },
+            { date:'2025-04-15', medium:'HF',  dis:true,  cs:'IMPLICATE', msg:'888800',                               notes:'' },
+            { date:'2025-09-04', medium:'HF',  dis:true,  cs:'YOUNG BOY', msg:'888800041141AAEEGGKKNNXXZZ8888',       notes:'Shogenji Yoko 8888',
+              anecdote:'It\'s the Shogenji Yoko 8888 message!' },
+            { date:'2025-09-23', medium:'VLF', dis:false, cs:'ORE MINE',  msg:'888800231704AAEEGGKKNNXXZZ8888',       notes:'E6 AF54BB (AE0413?)' },
+            { date:'2025-09-23', medium:'HF',  dis:true,  cs:'TEST KIT',  msg:'888800260901AAEEGGKKNNXXZZ8888',       notes:'before SKYMASTER 251026' },
+            { date:'2025-11-06', medium:'HF',  dis:true,  cs:'NEIGHBOR',  msg:'888800',                               notes:'' },
+            { date:'2025-11-18', medium:'HF',  dis:true,  cs:'COLD DUCK', msg:'888800',                               notes:'' },
+            { date:'2026-02-06', medium:'HF',  dis:true,  cs:'ABSENTEE',  msg:'888800061633AAEE',                     notes:'' },
+            { date:'2026-02-27', medium:'HF',  dis:true,  cs:'AMBITION',  msg:'888800',                               notes:'' },
+            { date:'2012-01-01', type:'pub', cs:'2012 Gouge Book', msg:'', notes:'', label:'2012 Gouge Book',
+              desc:'Internal instructions for STRATCOMWING ONE; "Quad 8\'s" are mentioned in a \'PRE OPAREA\' checklist.'},
+            { date:'2023-10-01', type:'pub', cs:'8888 Messages',   msg:'', notes:'NEET INTEL', label:'8888 Messages (NEET INTEL)',
+              desc:'YouTube video by NEET INTEL cataloging only 11 documented instances over nearly 20 years of records.' },
+        ];
+
+        // ── build ────────────────────────────────────────────────────
+        const chart    = document.getElementById('tlChart');
+        const yearRow  = document.getElementById('tlYearRow');
+        const labelCol = document.getElementById('tlLabelCol');
+        const tooltip  = document.getElementById('tlTooltip');
+        let highlighted = null;
+
+        chart.style.height    = CHART_H + 'px';
+        labelCol.style.height = CHART_H + 'px';
+
+        // lane backgrounds
+        function makeLane(top, color) {
+            const el = document.createElement('div');
+            el.className = 'tl-lane';
+            el.style.cssText =
+                'top:'    + top    + 'px;' +
+                'height:' + LANE_H + 'px;' +
+                'background:' + color + ';' +
+                'border-top:1px solid '    + color.replace(/[\d.]+\)$/, '0.18)') + ';' +
+                'border-bottom:1px solid ' + color.replace(/[\d.]+\)$/, '0.10)') + ';';
+            chart.appendChild(el);
+        }
+        makeLane(HF_TOP,  'rgba(78,255,128,0.05)');
+        makeLane(VLF_TOP, 'rgba(66,200,255,0.04)');
+
+        // lane labels
+        function makeLabel(text, top, color) {
+            const el = document.createElement('div');
+            el.className = 'tl-lane-label';
+            el.style.top    = top + 'px';
+            el.style.height = LANE_H + 'px';
+            el.style.color  = color;
+            el.textContent  = text;
+            labelCol.appendChild(el);
+        }
+        makeLabel('HF',  HF_TOP,  'rgba(78,255,128,0.45)');
+        makeLabel('VLF', VLF_TOP, 'rgba(66,200,255,0.40)');
+
+        // SVG overlay for publication leader lines (behind ticks)
+        const pubSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        pubSvg.setAttribute('viewBox', '0 0 1000 ' + CHART_H);
+        pubSvg.setAttribute('preserveAspectRatio', 'none');
+        pubSvg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:' + CHART_H + 'px;pointer-events:none;overflow:visible;';
+        chart.appendChild(pubSvg);
+
+        // events
+        EVENTS.forEach((ev, rowIdx) => {
+            const isPub    = ev.type === 'pub';
+            const isVlf    = ev.medium === 'VLF';
+            const isHinata = !isPub && ev.cs === 'YOUNG BOY' && ev.date === '2025-09-04';
+            const leftPct  = pct(ev.date);
+
+            if (isPub) {
+                const svgX = leftPct * 10;                   // SVG x-coord (viewBox 0–1000)
+
+                // straight vertical line from dot to label
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d',
+                    'M ' + svgX + ' ' + PUB_DOT_Y +
+                    ' L ' + svgX + ' ' + LEADER_Y);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#e0e0e0');
+                path.setAttribute('stroke-opacity', '0.3');
+                path.setAttribute('vector-effect', 'non-scaling-stroke');
+                path.setAttribute('stroke-width', '1');
+                pubSvg.appendChild(path);
+
+                // dot in the gap between ribbons (interactive)
+                const dot = document.createElement('div');
+                dot.className = 'tl-pub-dot';
+                dot.style.cssText =
+                    'left:'   + leftPct                  + '%;' +
+                    'top:'    + (PUB_DOT_Y - PUB_DOT_R) + 'px;' +
+                    'width:'  + (PUB_DOT_R * 2)          + 'px;' +
+                    'height:' + (PUB_DOT_R * 2)          + 'px;';
+                chart.appendChild(dot);
+
+                // label centred below the bottom of the vertical
+                const labelPct = leftPct;
+                const lbl = document.createElement('div');
+                lbl.className = 'tl-pub-label';
+                lbl.style.cssText =
+                    'left:'      + labelPct       + '%;' +
+                    'top:'       + (LEADER_Y + 3) + 'px;' +
+                    'transform:translateX(-50%);';
+                lbl.textContent = ev.label || ev.cs;
+                attachTooltip(lbl, ev, rowIdx, true, false, false);
+                chart.appendChild(lbl);
+
+                return;
+            }
+
+            const laneTop = isVlf ? VLF_TOP : HF_TOP;
+            const color   = isVlf ? '#42c8ff' : '#4eff80';
+            const opacity = ev.dis ? 0.18 : 0.88;
+
+            const el = document.createElement('div');
+            el.className = isHinata ? 'tl-tick tl-tick-hinata' : 'tl-tick';
+            el.style.cssText =
+                'left:'             + leftPct + '%;' +
+                'top:'              + laneTop + 'px;' +
+                'height:'           + LANE_H  + 'px;' +
+                'background-color:' + color   + ';' +
+                'opacity:'          + opacity + ';';
+
+            attachTooltip(el, ev, rowIdx, false, isVlf, isHinata);
+            chart.appendChild(el);
+
+            // special HF event annotations — vertical leader + label above HF ribbon
+            const isAnnotated = !isVlf && (
+                (ev.cs === 'SYMBOLIC'  && ev.date === '2023-06-13') ||
+                (ev.cs === 'YOUNG BOY' && ev.date === '2025-09-04')
+            );
+            if (isAnnotated) {
+                const aPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                aPath.setAttribute('d',
+                    'M ' + (leftPct * 10) + ' ' + EVT_LINE_Y1 +
+                    ' L ' + (leftPct * 10) + ' ' + EVT_LINE_Y2);
+                aPath.setAttribute('fill', 'none');
+                aPath.setAttribute('stroke', '#e0e0e0');
+                aPath.setAttribute('stroke-opacity', '0.25');
+                aPath.setAttribute('vector-effect', 'non-scaling-stroke');
+                aPath.setAttribute('stroke-width', '1');
+                pubSvg.appendChild(aPath);
+
+                const labelText = ev.cs === 'YOUNG BOY' ? 'Shogenji Yoko 8888' : '\u201coh I see\u201d 8888';
+                const aLbl = document.createElement('div');
+                aLbl.className = 'tl-evt-label';
+                aLbl.style.cssText =
+                    'left:' + leftPct + '%;' +
+                    'top:'  + EVT_LABEL_Y + 'px;' +
+                    'transform:translateX(-50%);';
+                aLbl.textContent = labelText;
+                if (ev.anecdote) {
+                    aLbl.addEventListener('mouseenter', (e) => {
+                        const displayName = ev.cs === 'YOUNG BOY' ? 'Hinatazaka46' : '\u201coh I see\u201d';
+                        let html = '<span class="tt-date">' + esc(ev.date) + '</span>';
+                        html += '<span class="tt-cs">' + displayName + '</span>';
+                        html += '<span class="tt-desc">' + esc(ev.anecdote) + '</span>';
+                        tooltip.innerHTML = html;
+                        tooltip.style.display = 'block';
+                        posTooltip(e);
+                    });
+                    aLbl.addEventListener('mousemove', posTooltip);
+                    aLbl.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+                }
+                chart.appendChild(aLbl);
+            }
+        });
+
+        // year labels
+        [2000, 2005, 2010, 2015, 2020, 2025].forEach(yr => {
+            const x = pct(yr + '-01-01');
+
+            const tick = document.createElement('div');
+            tick.className = 'tl-year-tick';
+            tick.style.left = x + '%';
+            yearRow.appendChild(tick);
+
+            const lbl = document.createElement('div');
+            lbl.className = 'tl-year-label';
+            lbl.style.left = x + '%';
+            lbl.textContent = yr;
+            yearRow.appendChild(lbl);
+        });
+
+        // ── tooltip ──────────────────────────────────────────────────
+        function attachTooltip(el, ev, rowIdx, isPub, isVlf, isHinata) {
+            el.addEventListener('mouseenter', (e) => {
+                if (highlighted) highlighted.classList.remove('tl-highlighted');
+                highlighted = document.getElementById('tl-row-' + rowIdx);
+                if (highlighted) highlighted.classList.add('tl-highlighted');
+
+                let html = '<span class="tt-date">' + esc(ev.date) + '</span>';
+                if (isPub) {
+                    html += '<span class="tt-medium pub">PUBLICATION</span>';
+                    html += '<span class="tt-cs">' + esc(ev.cs) + '</span>';
+                    if (ev.desc) html += '<span class="tt-desc">' + esc(ev.desc) + '</span>';
+                } else {
+                    const medCls = isVlf ? 'vlf' : 'hf';
+                    const struckClass = ev.dis ? ' tt-struck' : '';
+                    html += '<span class="tt-medium ' + medCls + '">' + ev.medium + '</span>';
+                    html += '<span class="tt-cs' + struckClass + '">' + esc(ev.cs) + '</span>';
+                    html += '<span class="tt-msg' + struckClass + '">' + esc(ev.msg) + '</span>';
+                    if (ev.notes) html += '<span class="tt-notes">' + esc(ev.notes) + '</span>';
+                }
+                tooltip.innerHTML = html;
+                tooltip.style.display = 'block';
+                posTooltip(e);
+            });
+            el.addEventListener('mousemove', posTooltip);
+            el.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+                if (highlighted) { highlighted.classList.remove('tl-highlighted'); highlighted = null; }
+            });
+        }
+
+        function posTooltip(e) {
+            const pad = 14, tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+            let x = e.clientX + pad;
+            let y = e.clientY - th / 2;
+            if (x + tw > window.innerWidth  - 8) x = e.clientX - tw - pad;
+            if (y < 8) y = 8;
+            if (y + th > window.innerHeight - 8) y = window.innerHeight - th - 8;
+            tooltip.style.left = x + 'px';
+            tooltip.style.top  = y + 'px';
+        }
+    })();
+    </script>
+</body>
+</html>
