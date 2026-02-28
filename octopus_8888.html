@@ -410,8 +410,9 @@
         The video discusses suspected huge gaps and deficiencies in monitoring, and some proposals to
         improve monitoring are advanced. Since then, the count has more than doubled. On VLF, 8888 messages
         appear fairly regularly; on HF, far less so, and most HF broadcasts are disregarded. What they represent
-        remains ambiguous; the same operators who transmit them would recognize a mistake, and unusual terminations
-        like the disregarded <i>&#8220;oh I see&#8221;</i> 8888 (2023.06.13) raise more questions than they answer.
+        remains ambiguous; it seems reasonable to assume the operators who transmit them would recognize them if they
+        were a mistake; unusual terminations like what was heard in the disregarded <i>&#8220;oh I see&#8221;</i> 8888
+        (2023.06.13) make it difficult to come to any particular conclusion.
     </div>
 
     <!-- Timeline -->
@@ -798,16 +799,16 @@
     <script>
     (function () {
         // ── layout constants (px) ────────────────────────────────────
-        const HF_TOP      = 36;  // raised to leave room for event labels above HF ribbon
+        const HF_TOP      = 50;  // raised to leave room for two rows of event labels above HF ribbon
         const LANE_H      = 26;
         const LANE_GAP    = 14;
-        const VLF_TOP     = HF_TOP + LANE_H + LANE_GAP;                 // 76
-        const PUB_DOT_Y   = HF_TOP + LANE_H + Math.round(LANE_GAP / 2); // 69 — gap centre
+        const VLF_TOP     = HF_TOP + LANE_H + LANE_GAP;                 // 90
+        const PUB_DOT_Y   = HF_TOP + LANE_H + Math.round(LANE_GAP / 2); // 83
         const PUB_DOT_R   = 4;
-        const LEADER_Y    = VLF_TOP + LANE_H + 14;                      // 116
-        const CHART_H     = LEADER_Y + 18;                              // 134
-        const EVT_LABEL_Y = 4;      // CSS top for HF event labels (px from chart top)
-        const EVT_LINE_Y1 = 16;     // SVG y: line start (below label text)
+        const LEADER_Y    = VLF_TOP + LANE_H + 14;                      // 130
+        const CHART_H     = LEADER_Y + 18;                              // 148
+        const EVT_LABEL_Y = 4;      // CSS top for HF event labels — row 1 (px from chart top)
+        const EVT_LINE_Y1 = 16;     // SVG y: line start — row 1
         const EVT_LINE_Y2 = HF_TOP; // SVG y: line end (top of HF ribbon)
 
         // ── date range ───────────────────────────────────────────────
@@ -837,7 +838,7 @@
             { date:'2022-11-18', medium:'HF',  dis:false, cs:'RETALIATE', msg:'888800181831AAEEGGKKNNXXZZ8888',       notes:'' },
             { date:'2022-11-22', medium:'HF',  dis:false, cs:'FINNEGAN',  msg:'888800221650AAEEGGKKNNXXZZ8888',       notes:'' },
             { date:'2023-03-12', medium:'HF',  dis:true,  cs:'STOCKYARD', msg:'8888000',                              notes:'' },
-            { date:'2023-06-13', medium:'HF',  dis:true,  cs:'SYMBOLIC',  msg:'888800',                               notes:'the "oh I see" 8888',
+            { date:'2023-06-13', medium:'HF',  dis:true,  cs:'SYMBOLIC',  msg:'888800',                               notes:'the disregarded "oh I see" 8888',
               anecdote:'Before disregarding this message, the operator reading it could be heard saying "oh I see" in response to something a second voice said in the background.' },
             { date:'2023-08-21', medium:'HF',  dis:true,  cs:'BAG FEED',  msg:'888800',                               notes:'' },
             { date:'2023-12-21', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800211852AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB3' },
@@ -983,9 +984,14 @@
                 (ev.cs === 'YOUNG BOY' && ev.date === '2025-09-04')
             );
             if (isAnnotated) {
+                // stagger: SYMBOLIC on row 1 (top), YOUNG BOY on row 2 (offset down 20px)
+                const isYB     = ev.cs === 'YOUNG BOY';
+                const labelY   = isYB ? (EVT_LABEL_Y + 20) : EVT_LABEL_Y;
+                const lineY1   = isYB ? (EVT_LINE_Y1 + 20) : EVT_LINE_Y1;
+
                 const aPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 aPath.setAttribute('d',
-                    'M ' + (leftPct * 10) + ' ' + EVT_LINE_Y1 +
+                    'M ' + (leftPct * 10) + ' ' + lineY1 +
                     ' L ' + (leftPct * 10) + ' ' + EVT_LINE_Y2);
                 aPath.setAttribute('fill', 'none');
                 aPath.setAttribute('stroke', '#e0e0e0');
@@ -994,12 +1000,12 @@
                 aPath.setAttribute('stroke-width', '1');
                 pubSvg.appendChild(aPath);
 
-                const labelText = ev.cs === 'YOUNG BOY' ? 'Shogenji Yoko 8888' : '\u201coh I see\u201d 8888';
+                const labelText = isYB ? 'Shogenji Yoko 8888' : '\u201coh I see\u201d 8888';
                 const aLbl = document.createElement('div');
                 aLbl.className = 'tl-evt-label';
                 aLbl.style.cssText =
                     'left:' + leftPct + '%;' +
-                    'top:'  + EVT_LABEL_Y + 'px;' +
+                    'top:'  + labelY + 'px;' +
                     'transform:translateX(-50%);';
                 aLbl.textContent = labelText;
                 if (ev.anecdote) {
