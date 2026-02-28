@@ -182,14 +182,6 @@
             margin: 40px 0;
         }
 
-        .footer {
-            text-align: center;
-            color: #444;
-            font-size: 0.82rem;
-            margin-top: 50px;
-            padding-bottom: 20px;
-        }
-
         /* Language toggle */
         .jp { display: none; }
         body.show-jp .en { display: none; }
@@ -294,9 +286,13 @@
 
 <p>The threshold is 30%: the characters at the two positions must match in at least 30% of messages within a group to qualify. The specific character changes from message to message, but the <em>relationship</em> persists&mdash;the two positions are structurally linked. This suggests they may be computed from the same input, or one is derived from the other.</p>
 
+<p>Hot pairs are also detected in contiguous blocks. If positions 15&ndash;17 consistently mirror positions 23&ndash;25 across messages (as a 3-character block), this is identified statistically even when no individual position pair meets the 30% threshold on its own.</p>
+
 <h3>Quadruple Repeats <span class="t-pink">(Pink)</span></h3>
 
 <p>The simplest pattern: four or more of the same character in a row (e.g., <code>AAAA</code>). In a random 36-character alphabet (A&ndash;Z plus 0&ndash;9), a run of four identical characters is quite rare. When it happens, it likely reflects something deliberate in the encoding&mdash;padding, a separator, or a special marker.</p>
+
+<p>Quadruple repeats that occur at the same positions across multiple messages are shown at full intensity. A quad that appears at a position where no other message has one is slightly dimmed&mdash;still prominent, but visually distinguished from structurally confirmed quads.</p>
 
 <h3>Partial Quads <span class="t-coral">(Coral)</span></h3>
 
@@ -308,11 +304,11 @@
 
 <ol>
     <li><strong>Group by length.</strong> All logged EAMs are sorted by character count. Each unique length gets its own page. Position-based analysis only makes sense when position 15 in one message corresponds to position 15 in another, so same-length grouping is essential.</li>
-    <li><strong>Identify hot position pairs.</strong> Within each group, the tool checks every possible pair of positions to see if they tend to hold matching characters. Pairs that match in at least 30% of messages are flagged as "hot." This is a cross-message analysis.</li>
+    <li><strong>Identify hot position pairs.</strong> Messages are further divided into groups based on their two-character prefix. Within each group, the tool checks every possible pair of positions to see if they tend to hold matching characters. Pairs that match in at least 30% of messages are flagged as "hot." The tool also detects contiguous block pairs&mdash;runs of 2&ndash;5 positions that mirror each other&mdash;using a statistically corrected threshold that accounts for the number of candidates tested. This is a cross-message, group-aware analysis; each group's patterns are computed independently.</li>
     <li><strong>Scan each message for within-message patterns.</strong> Each individual message is checked for exact repeating substrings, gapped repeats, quadruple runs, and partial quads.</li>
-    <li><strong>Score confidence.</strong> Short repeats in long messages are often coincidental&mdash;the <a href="https://www.britannica.com/science/birthday-problem" target="_blank">birthday paradox</a> makes collisions surprisingly likely. The tool estimates the probability of each pattern occurring by chance and assigns a confidence weight accordingly. Low-confidence patterns appear dimmer; very weak ones are filtered out.</li>
-    <li><strong>Consolidate and prioritize.</strong> When multiple patterns overlap at the same position, the most informative one is displayed. Priority order, highest to lowest: <span class="t-pink">Quad Repeat</span> &gt; <span class="t-coral">Partial Quad</span> &gt; <span class="t-green">Gapped</span> &gt; <span class="t-blue">Exact</span> &gt; <span class="t-purple">Hot Pair</span>. In certain cases, a strong hot pair can override a weaker exact repeat when the exact repeat isn't fully corroborated by cross-message evidence.</li>
-    <li><strong>Render.</strong> The results are assembled into the interactive page, with the aggregate bar at top and per-message colored characters below.</li>
+    <li><strong>Score confidence.</strong> Short repeats in long messages are often coincidental&mdash;the birthday paradox makes collisions surprisingly likely. The tool estimates the probability of each pattern occurring by chance and assigns a confidence weight accordingly. Low-confidence patterns appear dimmer; very weak ones are filtered out.</li>
+    <li><strong>Consolidate and prioritize.</strong> When multiple patterns overlap at the same position, the most informative one is displayed. Priority order, highest to lowest: <span class="t-pink">Quad Repeat</span> &gt; <span class="t-coral">Partial Quad</span> &gt; <span class="t-green">Gapped</span> &gt; <span class="t-blue">Exact</span> &gt; <span class="t-purple">Hot Pair</span>. However, when a position has both a blue exact repeat and a purple hot pair, the tool checks whether the exact k-mer is structurally corroborated: if every offset in the exact match is backed by a hot pair, the blue stays (the block match is genuine). If not, the purple overrides (the exact is incidental at that position, and the cross-message evidence is the real signal).</li>
+    <li><strong>Render.</strong> The results are assembled into the interactive page, with the aggregate bar at top and per-message colored characters below. Each group's highlight intensity is computed from its own pattern data, so one group's activity at a position does not inflate or diminish another group's display.</li>
 </ol>
 
 <h2>Interacting with the Pages</h2>
@@ -346,11 +342,7 @@
 
 <p>Not all detected patterns are equally meaningful. A 2-character substring repeating in a 142-character message is not very surprising&mdash;with that many characters and only 36 possible values, short collisions are statistically expected. A 5-character repeat in the same message is far more noteworthy.</p>
 
-<p>The tool handles this with two tiers of scoring:</p>
-
-<p><strong>Tier 1 &mdash; Statistical baseline.</strong> The tool estimates how likely a repeat of a given length is to occur by chance in a message of a given size (using a concept from probability theory called the <a href="https://www.britannica.com/science/birthday-problem" target="_blank">birthday paradox</a>). Shorter repeats in longer messages score lower.</p>
-
-<p><strong>Tier 2 &mdash; Cross-message corroboration.</strong> If the positions where a repeat occurs also show up as hot pairs across the full set of messages, the tool boosts confidence. A repeat that aligns with a known structural relationship is less likely to be a coincidence.</p>
+<p>The tool estimates how likely a repeat of a given length is to occur by chance in a message of a given size, using a concept from probability theory called the <a href="https://www.britannica.com/science/birthday-problem" target="_blank">birthday paradox</a>. Shorter repeats in longer messages score lower. Each pattern detection system stands on its own evidence&mdash;within-message patterns (blue, green) are scored independently from cross-message patterns (purple), so neither inflates the other.</p>
 
 <p>Low-confidence patterns appear at reduced opacity (more transparent). Brighter, more opaque highlights are the ones most worth paying attention to.</p>
 
@@ -453,9 +445,13 @@
 
 <p>閾値は30%です。グループ内のメッセージの少なくとも30%で2つの位置の文字が一致する必要があります。具体的な文字はメッセージごとに変わりますが、<em>関係性</em>（2つの位置が等しいこと）は維持されます。これは2つの位置が構造的にリンクしていることを示唆しており、同じ入力から計算されるか、一方が他方から導出される可能性があります。</p>
 
+<p>ホットペアは連続ブロックとしても検出されます。位置15〜17が位置23〜25と3文字ブロックとしてメッセージ間で一貫して対応する場合、個々のペアが単独で30%の閾値を満たさなくても、統計的に特定されます。</p>
+
 <h3>4連続リピート <span class="t-pink">（ピンク）</span></h3>
 
 <p>最も単純なパターンです。同じ文字が4つ以上連続して出現します（例：<code>AAAA</code>）。ランダムな36文字のアルファベット（A〜Zおよび0〜9）において、同じ文字が4つ連続する確率は非常に低いです。これが発生する場合、符号化における意図的な要素&mdash;パディング、区切り、特殊マーカーなど&mdash;を反映している可能性が高いです。</p>
+
+<p>複数のメッセージで同じ位置に4連続リピートが出現する場合、最大の強度で表示されます。他のメッセージでは見られない位置に出現する4連続リピートはやや薄く表示されますが、依然として目立つ形で表示され、構造的に確認されたものと視覚的に区別されます。</p>
 
 <h3>部分的4連続 <span class="t-coral">（コーラル）</span></h3>
 
@@ -467,11 +463,11 @@
 
 <ol>
     <li><strong>文字数でグループ化。</strong>すべてのEAMを文字数で分類します。各文字数が個別のページを持ちます。位置ベースの分析は、あるメッセージの位置15が別のメッセージの位置15と対応する場合にのみ意味を持つため、同一文字数でのグループ化は不可欠です。</li>
-    <li><strong>ホットポジションペアの特定。</strong>各グループ内で、すべての位置の組み合わせについて、一致する文字を持つ傾向があるかを確認します。メッセージの30%以上で一致するペアが「ホット」としてフラグ付けされます。これはメッセージ間の分析です。</li>
+    <li><strong>ホットポジションペアの特定。</strong>メッセージは2文字のプレフィックスに基づいてさらにグループに分類されます。各グループ内で、すべての位置の組み合わせについて、一致する文字を持つ傾向があるかを確認します。メッセージの30%以上で一致するペアが「ホット」としてフラグ付けされます。ツールはさらに、2〜5位置の連続ブロックが互いに対応するパターンも検出します。テスト候補数を考慮した統計的補正閾値が使用されます。これはメッセージ間のグループ別分析であり、各グループのパターンは独立して計算されます。</li>
     <li><strong>各メッセージのパターン走査。</strong>各メッセージについて、完全一致する部分文字列、ギャップ付きリピート、4連続リピート、部分的4連続を検出します。</li>
-    <li><strong>信頼度スコアリング。</strong>長いメッセージでの短いリピートは偶然の産物であることが多く、<a href="https://www.britannica.com/science/birthday-problem" target="_blank">誕生日のパラドックス</a>により衝突は驚くほど高い確率で発生します。ツールは各パターンが偶然発生する確率を推定し、信頼度の重みを付与します。低信頼度のパターンはより薄く表示され、非常に弱いものは除外されます。</li>
-    <li><strong>統合と優先順位付け。</strong>同じ位置に複数のパターンが重なる場合、最も情報量の多いものが表示されます。優先順位（高い順）：<span class="t-pink">4連続リピート</span> &gt; <span class="t-coral">部分的4連続</span> &gt; <span class="t-green">ギャップ付き</span> &gt; <span class="t-blue">完全一致</span> &gt; <span class="t-purple">ホットペア</span>。特定の状況では、強いホットペア（紫）がメッセージ間の証拠で十分に裏付けられていない弱い完全一致リピート（青）を上書きすることがあります。</li>
-    <li><strong>レンダリング。</strong>結果がインタラクティブなページに組み立てられ、上部に集約バー、下部にメッセージごとの色付き文字が表示されます。</li>
+    <li><strong>信頼度スコアリング。</strong>長いメッセージでの短いリピートは偶然の産物であることが多く、誕生日のパラドックスにより衝突は驚くほど高い確率で発生します。ツールは各パターンが偶然発生する確率を推定し、信頼度の重みを付与します。低信頼度のパターンはより薄く表示され、非常に弱いものは除外されます。</li>
+    <li><strong>統合と優先順位付け。</strong>同じ位置に複数のパターンが重なる場合、最も情報量の多いものが表示されます。優先順位（高い順）：<span class="t-pink">4連続リピート</span> &gt; <span class="t-coral">部分的4連続</span> &gt; <span class="t-green">ギャップ付き</span> &gt; <span class="t-blue">完全一致</span> &gt; <span class="t-purple">ホットペア</span>。ただし、ある位置に青（完全一致）と紫（ホットペア）の両方が存在する場合、ツールは完全一致が構造的に裏付けられているかを確認します。完全一致の各オフセットがホットペアで裏付けられていれば青のまま（ブロック一致が本物）ですが、裏付けがなければ紫に上書きされます（完全一致はその位置では偶発的であり、メッセージ間の証拠が真のシグナル）。</li>
+    <li><strong>レンダリング。</strong>結果がインタラクティブなページに組み立てられ、上部に集約バー、下部にメッセージごとの色付き文字が表示されます。各グループの強調表示の強度はそのグループ自体のパターンデータから計算されるため、あるグループの位置での活動が別のグループの表示を膨張させたり減少させたりすることはありません。</li>
 </ol>
 
 <h2>ページの操作方法</h2>
@@ -505,11 +501,7 @@
 
 <p>検出されたパターンがすべて等しく意味があるわけではありません。142文字のメッセージ内で2文字の部分文字列が繰り返されても、それほど驚くことではありません&mdash;それだけの文字数と36種類の値しかない状況では、短い衝突は統計的に予想される範囲内です。一方、同じメッセージで5文字のリピートが見つかれば、はるかに注目に値します。</p>
 
-<p>ツールは2段階のスコアリングでこれに対応しています。</p>
-
-<p><strong>第1段階 &mdash; 統計的ベースライン。</strong>確率論の<a href="https://www.britannica.com/science/birthday-problem" target="_blank">誕生日のパラドックス</a>という概念を用いて、特定のサイズのメッセージで特定の長さのリピートが偶然発生する確率を推定します。長いメッセージでの短いリピートほどスコアが低くなります。</p>
-
-<p><strong>第2段階 &mdash; メッセージ間の裏付け。</strong>リピートが発生する位置がメッセージ集合全体でホットペアとしても検出される場合、ツールは信頼度を引き上げます。既知の構造的関係性と一致するリピートは、偶然である可能性が低いためです。</p>
+<p>ツールは確率論の<a href="https://manabitimes.jp/math/996" target="_blank">誕生日のパラドックス</a>という概念を用いて、特定のサイズのメッセージで特定の長さのリピートが偶然発生する確率を推定します。長いメッセージでの短いリピートほどスコアが低くなります。各パターン検出システムはそれぞれ独立した証拠に基づきます&mdash;メッセージ内パターン（青、緑）はメッセージ間パターン（紫）とは独立してスコアリングされ、互いに数値を膨張させることはありません。</p>
 
 <p>低信頼度のパターンは透明度が高く（より薄く）表示されます。明るく不透明な強調表示ほど、注目する価値が高いパターンです。</p>
 
@@ -530,8 +522,6 @@
 </div>
 
 </div>
-
-<div class="footer">HFGCS EAM Structural Analysis</div>
 
 </div>
 
