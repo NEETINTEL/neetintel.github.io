@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minuteman III ICBM Test Launches &amp; HFGCS EAM Activity</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #000000;
+      --muted: #666;
+      --link: #1a5276;
+      --hover: #0d3b5e;
+      --border: #ddd;
+      --accent: #c0392b;
+      --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --prose-font: Calluna, Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--ui-font);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      max-width: none;
+      padding: 2.5rem 2.5rem 4rem;
+      margin: 0;
+    }
+
+    a { color: var(--link); text-decoration: underline; text-decoration-color: #bbb; text-underline-offset: 2px; }
+    a:hover { color: var(--hover); text-decoration-color: var(--hover); }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+    .article-date {
+      font-family: var(--prose-font);
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.15rem;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-family: var(--ui-font);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Footer */
+    .page-footer {
+      max-width: none;
+      margin: 0;
+      padding: 1.5rem 2.5rem 2.5rem;
+      border-top: 1px solid #e0e0e0;
+      font-family: var(--ui-font);
+      font-size: 0.75rem;
+      color: #999;
+    }
+    .page-footer a { color: #999; }
+    .page-footer a:hover { color: var(--link); }
+    .kofi-link {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #777;
+    }
+    .kofi-link a {
+      color: #e07020;
+      font-weight: 600;
+      text-decoration-color: #e0702066;
+    }
+    .kofi-link a:hover { color: #c05010; text-decoration-color: #c05010; }
+
+    /* Summary box */
+    .summary-box {
+      background: #fafafa;
+      border-left: 3px solid var(--accent);
+      border-radius: 0;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-family: var(--prose-font);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #000;
+    }
+    .summary-box h2 {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin: 0 0 0.5rem;
+    }
+    .summary-highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .summary-note {
+      color: #555;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #eee;
+    }
+    .findings-list {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2em;
+    }
+    .findings-list li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* Prediction box */
+    .prediction-box {
+      background: #fffbf0;
+      border-left: 3px solid #c27800;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-family: var(--prose-font);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #000;
+    }
+    .prediction-box h2 {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #c27800;
+      margin: 0 0 0.5rem;
+    }
+    .prediction-box p { margin: 0.4rem 0; }
+
+    /* Dataset info box */
+    .dataset-box {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-family: var(--prose-font);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: #000;
+    }
+    .dataset-box h2 {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #333;
+      margin: 0 0 0.5rem;
+    }
+    .dataset-box h3 {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0.9rem 0 0.3rem;
+    }
+    .dataset-box p { margin: 0.3rem 0; }
+    .dataset-box ul {
+      margin: 0.3rem 0;
+      padding-left: 1.2em;
+    }
+    .dataset-box li { margin-bottom: 0.3rem; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      padding: 0.65rem 1rem;
+      background: #f8f8f8;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 0.8rem;
+      align-items: center;
+    }
+    .legend-title { color: #999; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: #444;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-sep { color: #ccc; }
+    .legend-label-row, .legend-label-coverage {
+      font-size: 0.72rem;
+      color: #888;
+    }
+
+    /* GT sections — card with narrative to the right */
+    .gt-section {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .gt-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .gt-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      flex-wrap: wrap;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    .gt-designation {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      color: #1a1a1a;
+    }
+
+    .gt-date {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .gt-date-local {
+      font-size: 0.75rem;
+      color: #999;
+    }
+
+    .status-badge {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      flex-shrink: 0;
+    }
+
+    .gt-link {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .coverage-badge {
+      font-size: 0.7rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin-left: auto;
+    }
+
+    .gt-body {
+      padding: 0 1rem 0.75rem;
+      border-top: 1px solid #eee;
+    }
+
+    .gt-narrative {
+      font-family: var(--prose-font);
+      font-size: 0.85rem;
+      color: #000;
+      line-height: 1.7;
+      padding: 0;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    .narrative-heading {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #999;
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .gt-no-data {
+      padding: 1.5rem 0;
+      text-align: center;
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    /* Timeline wrapper */
+    .gt-timeline-wrapper {
+      padding-top: 0.5rem;
+    }
+
+    .row-labels {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      float: left;
+      width: 32px;
+      padding-top: 2px;
+    }
+    .row-label {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 0.65rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 4px;
+    }
+
+    .gt-timelines {
+      margin-left: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .gt-timeline {
+      display: flex;
+      align-items: flex-end;
+      height: 120px;
+      gap: 3px;
+      background: #f5f5f5;
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 2px;
+    }
+
+    .day-col {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 100%;
+      position: relative;
+      border-radius: 2px;
+    }
+    .day-col.hot-zone { background: rgba(192, 57, 43, 0.06); }
+    .day-col.launch-day { background: rgba(26, 82, 118, 0.06); }
+
+    .bar {
+      width: 70%;
+      display: flex;
+      flex-direction: column-reverse;
+      border-radius: 2px 2px 0 0;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .bar-all { opacity: 1; }
+
+    .bar-segment { width: 100%; min-height: 1px; }
+    .bar-empty {
+      width: 100%;
+      height: 2px;
+      background: #ccc;
+      opacity: 0.4;
+      border-radius: 1px;
+    }
+
+    /* Day labels */
+    .day-labels-row {
+      display: flex;
+      margin-top: 2px;
+    }
+    .row-label-spacer { width: 36px; flex-shrink: 0; }
+    .day-labels {
+      display: flex;
+      flex: 1;
+      gap: 3px;
+      padding: 0 2px;
+    }
+    .day-label-col {
+      flex: 1;
+      text-align: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      border-radius: 2px;
+      padding: 1px 0;
+    }
+    .day-label-col.hot-zone { background: rgba(192, 57, 43, 0.04); }
+    .day-label-col.launch-day { background: rgba(26, 82, 118, 0.04); }
+    .day-label-offset { font-size: 0.7rem; font-weight: 600; color: var(--fg); }
+    .day-label-date { font-size: 0.6rem; color: #999; }
+    .day-label-counts { font-size: 0.6rem; color: #888; }
+    .day-label-counts .sep { color: #ccc; margin: 0 1px; }
+
+    /* Coverage strip */
+    .coverage-strip-row {
+      display: flex;
+      margin-top: 2px;
+    }
+    .coverage-strip {
+      display: flex;
+      flex: 1;
+      gap: 3px;
+      padding: 0 2px;
+    }
+    .coverage-cell {
+      flex: 1;
+      text-align: center;
+      font-size: 0.55rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      padding: 1px 0;
+      border-radius: 2px;
+      background: #f8f8f8;
+    }
+    .coverage-cell.no-data { color: #ccc; }
+    .video-cell a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .video-cell a:hover { text-decoration: underline; }
+    .video-ls { line-height: 1.2; }
+    .video-ls .ls-label { font-size: 0.45rem; font-weight: 600; color: #777; letter-spacing: 0.03em; }
+    .video-ls a { color: #999; font-weight: 500; font-size: 0.48rem; white-space: nowrap; display: inline-block; }
+
+    /* Long EAM summary — column-aligned grid */
+    .long-summary {
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: flex-start;
+    }
+    .long-summary-label {
+      width: 36px;
+      flex-shrink: 0;
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding-top: 2px;
+      line-height: 1.2;
+    }
+    .long-summary-grid {
+      display: flex;
+      flex: 1;
+      gap: 3px;
+    }
+    .long-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      padding: 3px 0;
+      border-radius: 2px;
+      min-height: 16px;
+    }
+    .long-col.hot-zone { background: rgba(192, 57, 43, 0.06); }
+    .long-col.launch-day { background: rgba(26, 82, 118, 0.06); }
+    .lc-item {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.65rem;
+      color: #444;
+      line-height: 1.3;
+    }
+    .lc-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      display: none;
+      position: fixed;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 0.75rem;
+      z-index: 1000;
+      pointer-events: none;
+      min-width: 180px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .tooltip.visible { display: block; }
+    .tooltip-date { font-weight: 600; margin-bottom: 4px; color: #1a1a1a; }
+    .tooltip-counts { color: #666; margin-bottom: 4px; }
+    .tooltip-group-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 1px 0;
+    }
+    .tooltip-group-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .tooltip-group-info { color: #333; }
+    .tooltip-group-prefixes { color: #888; font-size: 0.7rem; }
+
+    /* Language toggle */
+    .lang-btn {
+      display: inline-block;
+      padding: 5px 14px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: var(--ui-font);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      float: right;
+      margin-top: -0.5rem;
+    }
+    .lang-btn:hover { background: #eee; color: #333; }
+    .jp { display: none; }
+    body.show-jp .en { display: none; }
+    body.show-jp .jp { display: block; }
+    body.show-jp .jp-inline { display: inline; }
+    body.show-jp .en-inline { display: none; }
+    .jp-inline { display: none; }
+
+    @media (max-width: 900px) {
+      main { padding: 1rem 0.75rem; }
+      h1 { font-size: 1.35rem; }
+      .page-footer { padding: 1.5rem 0.75rem 2.5rem; }
+      .gt-section { flex-direction: column; gap: 0; }
+      .gt-narrative { flex: none; max-width: none; padding: 0.75rem 1rem 0.25rem; width: 100%; }
+      .gt-timeline { height: 70px; }
+      .row-label { height: 70px; }
+      .day-label-date { display: none; }
+      .gt-header { gap: 0.5rem; padding: 0.5rem 0.75rem; }
+      .gt-designation { font-size: 0.9rem; }
+      .legend { gap: 0.5rem; padding: 0.5rem 0.75rem; }
+      .coverage-cell { font-size: 0.5rem; }
+      .narrative-heading { margin-top: 0.5rem; }
+    }
+    </style>
+</head>
+<body>
+  <main>
+    <h1>
+      <span class="en">Minuteman III ICBM Test Launches &amp; HFGCS EAM Activity</span>
+      <span class="jp">ミニットマンIII ICBM試験発射とHFGCS EAM活動</span>
+    </h1>
+    <div class="article-date">February 28, 2026</div>
+    <div class="subtitle">
+      <span class="en-inline">Pre-launch EAM patterns observed from HFGCS monitoring</span>
+      <span class="jp-inline">HFGCS監視から観測された発射前EAMパターン</span>
+      &mdash; <a href="index.html">back to index</a>
+      <button class="lang-btn" onclick="toggleLang()">日本語</button>
+    </div>
+
+    <div class="summary-box">
+      <h2><span class="en-inline">Key Findings</span><span class="jp-inline">主な発見</span></h2>
+      <div class="en">
+      <ul class="findings-list">
+        <li>
+          <span class="summary-highlight">Group 4 EAMs appear at ~3.6&times; their baseline rate</span>
+          in the T-1 to T-3 window before Minuteman III test launches from Vandenberg SFB.
+        </li>
+        <li>
+          Of 9 launches with monitoring data in the T-1&ndash;T-3 window,
+          <span class="summary-highlight">7 showed Group 4 long-EAM activity</span>.
+          On non-launch days, Group 4 appears on only 22% of days
+          (avg 0.28 long messages/day, computed over 806 baseline days).
+        </li>
+        <li>
+          Group 4 prefixes are notable because they produce almost exclusively extended-length
+          (&gt;30 character) EAMs&mdash;99.2% of Group 4 messages exceed the standard 30-character format.
+        </li>
+      </ul>
+      <div class="summary-note">
+        Correlation only&mdash;not a confirmed causal relationship.
+        This is a hobbyist observation from publicly monitored HF radio traffic.
+      </div>
+      </div>
+      <div class="jp">
+      <ul class="findings-list">
+        <li>
+          <span class="summary-highlight">Group 4のEAMは基準値の約3.6倍の頻度で出現</span>し、
+          バンデンバーグ宇宙軍基地からのミニットマンIII試験発射のT-1〜T-3（発射1〜3日前）の期間に集中しています。
+        </li>
+        <li>
+          T-1〜T-3期間の監視データがある9回の発射のうち、
+          <span class="summary-highlight">7回でGroup 4のロングEAM活動が確認</span>されました。
+          通常日にGroup 4が出現するのは全体の22%のみです
+          （平均0.28件/日、806日間の基準データに基づく）。
+        </li>
+        <li>
+          Group 4のプレフィックスは、ほぼ例外なく長文（30文字超）のEAMを生成します。
+          Group 4メッセージの99.2%が標準の30文字フォーマットを超えています。
+        </li>
+      </ul>
+      <div class="summary-note">
+        相関関係のみであり、因果関係は確認されていません。
+        これは公開されているHF無線通信の趣味的な観測です。
+      </div>
+      </div>
+    </div>
+
+    <div class="prediction-box">
+      <h2><span class="en-inline">Upcoming: GT-255?</span><span class="jp-inline">予定: GT-255?</span></h2>
+      <div class="en">
+      <p>
+        A Minuteman III test launch is
+        <a href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/4417890/unarmed-minuteman-iii-icbm-test-launch-scheduled-at-vandenberg-space-force-base/">scheduled from Vandenberg SFB</a>
+        with a launch window of <strong>March 4, 07:01 to March 4, 13:01 UTC</strong>.
+        Based on the pattern described above, if this launch follows
+        the same trend as previous Glory Trips, we would expect to see Group 4 long EAMs
+        appearing between approximately <strong>March 1 and March 4 UTC</strong> (the T-1 to T-3 window).
+      </p>
+      <p>
+        This timing coincides with heightened geopolitical tensions between Iran and Israel.
+        It is worth noting that an increase in HFGCS long-EAM activity in early March 2026
+        could easily be misread by casual observers as related to the Iran&ndash;Israel situation,
+        when in reality it may simply reflect routine pre-launch messaging for a scheduled,
+        publicly announced ICBM test. The pattern documented on this page suggests that
+        elevated Group 4 activity before a Glory Trip is normal and expected&mdash;it has occurred
+        before 7 of the 9 prior launches where monitoring data was available.
+      </p>
+      <p>
+        That said, the correlation shown here does not rule out the possibility that the same
+        prefix groups are also used for operationally significant messaging unrelated to test launches.
+        Nonetheless, it&rsquo;s more coherent to assume any instances of long EAMs around this time will be
+        related to the Minuteman ICBM test launch, rather than necessarily related to the news of the day.
+      </p>
+      </div>
+      <div class="jp">
+      <p>
+        ミニットマンIIIの試験発射が
+        <a href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/4417890/unarmed-minuteman-iii-icbm-test-launch-scheduled-at-vandenberg-space-force-base/">バンデンバーグ宇宙軍基地から予定</a>されており、
+        発射ウィンドウは<strong>3月4日 07:01〜13:01 UTC</strong>です。
+        上記のパターンに従えば、Group 4のロングEAMは<strong>3月1日〜4日（UTC）</strong>頃（T-1〜T-3期間）に出現すると予想されます。
+      </p>
+      <p>
+        この時期はイランとイスラエル間の地政学的緊張の高まりと重なっています。
+        2026年3月初旬のHFGCSロングEAM活動の増加は、一般の観察者からイラン・イスラエル情勢に関連するものと
+        誤解される可能性がありますが、実際には予定されている公開済みのICBM試験発射に伴う
+        通常の発射前メッセージングである可能性が高いです。
+        このページで記録されたパターンによれば、Glory Trip前のGroup 4活動の増加は正常かつ予想される現象であり、
+        監視データのある過去9回の発射のうち7回で確認されています。
+      </p>
+      <p>
+        ただし、ここで示された相関関係は、同じプレフィックスグループが試験発射以外の
+        運用上重要なメッセージングにも使用される可能性を排除するものではありません。
+        それでも、この時期のロングEAMはミニットマンICBM試験発射に関連していると考える方が、
+        その日のニュースに関連していると考えるよりも合理的です。
+      </p>
+      </div>
+    </div>
+
+    <div class="dataset-box">
+      <h2><span class="en-inline">About This Dataset</span><span class="jp-inline">データセットについて</span></h2>
+      <div class="en">
+      <p>
+        This page was prepared by <strong>NEET INTEL</strong>, a hobbyist project that monitors and
+        catalogues <strong>EAMs</strong> (Emergency Action Messages) broadcast on the US military&rsquo;s
+        <strong>HFGCS</strong> (High Frequency Global Communications System). HFGCS transmits on shortwave
+        radio frequencies that anyone with the right equipment can receive. Most EAMs are exactly 30 characters long,
+        following a standard format. Messages longer than 30 characters are operationally more significant&mdash;we
+        colloquially refer to these here simply as &ldquo;long EAMs.&rdquo;
+      </p>
+      <p>
+        Over time, NEET INTEL has grouped the observed prefixes into <strong>4 groups</strong> based on
+        their behavior. Each group has different characteristics. Group 4 is of particular interest
+        because 99.2% of its messages exceed the standard 30-character length; Group 4 messages are often the &ldquo;VERY
+        LONG&rdquo; messages that get interest and attention outside of the niche of <i>&lsquo;guys who are sat around listening to
+        the US military read ciphertext over the radio.&rsquo;</i> The charts below show each group as a different color,
+        stacked into bars for each day.
+      </p>
+      <h3>HOW TO READ THE CHARTS</h3>
+      <p>
+        Each launch card shows a <strong>6-day window</strong> (T-5 through T-0, where T-0 is launch day).
+        The bar chart shows every EAM logged that day, color-coded by prefix group.
+        The columns highlighted in <span style="color:#c0392b;">pink</span> are T-1 through T-3&mdash;the
+        window where elevated Group 4 activity is most frequently observed before launches.
+        Below the chart, individual long-message character counts are listed per day, color-coded by group.
+      </p>
+      <h3>MONITORING LIMITATIONS</h3>
+      <p>
+        NEET INTEL&rsquo;s monitoring is volunteer-based and <strong>not continuous</strong>.
+        The coverage strip below each chart shows
+        which monitoring datasets are available for each day:
+      </p>
+      <ul>
+        <li><strong>SET</strong> labels indicate the known quality/comprehensiveness of NEET INTEL&rsquo;s monitoring for
+            the period of time the given test launch falls under (green = comprehensive, blue = partial, orange = remedial, red = little/none).</li>
+        <li><strong>DTCP</strong> (Daily Timecard Project) and <strong>DCRP</strong> (Daily Compilation Recording Project)
+            are transcribed video/audio recordings, the most reliable sources.</li>
+        <li><strong>LIVESTREAMS</strong> are raw stream recordings that have not been transcribed, so the logged data for
+            those days may be incomplete. Of course, since recordings exist and were made, the possibility of comprehensive
+            transcription exists if there is interest and support.</li>
+      </ul>
+      <p>
+        Days with no coverage indicator had no known monitoring. Absence of EAM activity on a given
+        day may reflect a gap in monitoring rather than actual inactivity.
+      </p>
+      </div>
+      <div class="jp">
+      <p>
+        このページは<strong>NEET INTEL</strong>が作成しました。NEET INTELは、米軍の
+        <strong>HFGCS</strong>（高周波グローバル通信システム）で放送される<strong>EAM</strong>（緊急行動メッセージ）を
+        監視・記録する趣味のプロジェクトです。HFGCSは適切な機器があれば誰でも受信できる短波無線周波数で送信しています。
+        ほとんどのEAMは標準フォーマットに従い正確に30文字ですが、30文字を超えるメッセージは運用上より重要とされ、
+        ここでは単に「ロングEAM」と呼んでいます。
+      </p>
+      <p>
+        NEET INTELは、観測されたプレフィックスをその特性に基づき<strong>4つのグループ</strong>に分類しています。
+        各グループには異なる特徴があります。Group 4は特に注目に値し、そのメッセージの99.2%が標準の30文字を超えています。
+        Group 4のメッセージは、<i>「米軍が無線で暗号文を読み上げるのを聞いている趣味の人々」</i>の
+        ニッチな界隈の外でも注目を集める「非常に長い」メッセージであることが多いです。
+        下のチャートでは各グループを異なる色で表示し、日ごとに積み上げ棒グラフとして表現しています。
+      </p>
+      <h3>チャートの読み方</h3>
+      <p>
+        各発射カードは<strong>6日間のウィンドウ</strong>（T-5からT-0、T-0が発射日）を表示しています。
+        棒グラフはその日に記録された全EAMをプレフィックスグループ別に色分けして表示しています。
+        <span style="color:#c0392b;">ピンク</span>でハイライトされた列はT-1からT-3で、
+        発射前にGroup 4活動の増加が最も頻繁に観測される期間です。
+        チャートの下には、30文字超のメッセージの文字数がグループ別に色分けされて表示されています。
+      </p>
+      <h3>監視の制限事項</h3>
+      <p>
+        NEET INTELの監視はボランティアベースであり、<strong>連続的ではありません</strong>。
+        各チャートの下にあるカバレッジストリップは、各日にどの監視データセットが利用可能かを示しています：
+      </p>
+      <ul>
+        <li><strong>SET</strong>ラベルは、該当する試験発射が行われた期間におけるNEET INTELの監視の質と網羅性を示します
+            （緑＝包括的、青＝部分的、橙＝基礎的、赤＝ほとんどなし）。</li>
+        <li><strong>DTCP</strong>（Daily Timecard Project）と<strong>DCRP</strong>（Daily Compilation Recording Project）は
+            文字起こし済みの映像・音声記録で、最も信頼性の高い情報源です。</li>
+        <li><strong>LIVESTREAMS</strong>は文字起こしされていない生のストリーム録画であるため、
+            該当日のデータは不完全な可能性があります。録画は存在するため、関心と支援があれば
+            包括的な文字起こしの可能性があります。</li>
+      </ul>
+      <p>
+        カバレッジ表示のない日は既知の監視がなかったことを意味します。
+        ある日にEAM活動がないことは、実際の非活動ではなく監視の空白を反映している可能性があります。
+      </p>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-title">Prefix Groups</span>
+      <span class="legend-item" data-group="1"><span class="legend-dot" style="background:#06b050;"></span> G1</span>
+      <span class="legend-item" data-group="2"><span class="legend-dot" style="background:#ed7d32;"></span> G2</span>
+      <span class="legend-item" data-group="3"><span class="legend-dot" style="background:#ffcc00;"></span> G3</span>
+      <span class="legend-item" data-group="4"><span class="legend-dot" style="background:#ff0467;"></span> G4</span>
+      <span class="legend-sep">|</span>
+      <span class="legend-label-row">
+        Bar = all EAMs by group &middot;
+        <strong>Long EAMs</strong> = character counts for &gt;30-char messages &middot;
+        Counts: <em>total / long</em>
+      </span>
+      <span class="legend-sep">|</span>
+      <span class="legend-label-coverage">
+        <b>Coverage:</b>
+        <span style="color:#1a7d3f;">&#9632;</span> Comprehensive
+        <span style="color:#2c5aa0;">&#9632;</span> Good
+        <span style="color:#c27800;">&#9632;</span> Remedial
+        <span style="color:#c0392b;">&#9632;</span> Little/none
+        &middot; <strong>DTCP</strong> / <strong>DCRP</strong> = EAM transcriptions &plusmn; recordings
+        &middot; <strong>LIVESTREAMS</strong> = HFGCS livestream recordings
+      </span>
+    </div>
+
+    
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-245">
+        <div class="gt-header">
+          <span class="gt-designation">GT-245</span>
+          <span class="gt-date">2023.02.10 07:01 UTC</span>
+          <span class="gt-date-local">(2023.02.09 11:01 PM PST)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3294666/unarmed-minuteman-iii-test-launch-from-vandenberg/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all" style="height:60.0%;"><div class="bar-segment" data-group="1" style="height:50.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:50.0%; background:#ed7d32;"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:50.0%;"><div class="bar-segment" data-group="1" style="height:80.0%; background:#06b050;"></div><div class="bar-segment" data-group="unclassified" style="height:20.0%; background:#aaa;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:70.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:30.0%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:40.0%;"><div class="bar-segment" data-group="1" style="height:50.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:25.0%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:25.0%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:70.0%;"><div class="bar-segment" data-group="1" style="height:28.6%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:71.4%; background:#ed7d32;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all" style="height:80.0%;"><div class="bar-segment" data-group="1" style="height:62.5%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:25.0%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:12.5%; background:#ff0467;"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">02.05</div><div class="day-label-counts">6<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">02.06</div><div class="day-label-counts">5<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">02.07</div><div class="day-label-counts">10<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">02.08</div><div class="day-label-counts">4<span class="sep">/</span>2</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">02.09</div><div class="day-label-counts">7<span class="sep">/</span>1</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">02.10</div><div class="day-label-counts">8<span class="sep">/</span>3</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=YisXZd-D6SM" target="_blank" title="Daily Compilation Recording (transcribed)">DCRP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=cRh0Cf1FAw8" target="_blank" title="Daily Compilation Recording (transcribed)">DCRP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=cRh0Cf1FAw8" target="_blank" title="Daily Compilation Recording (transcribed)">DCRP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=tOcO-TrYQGU" target="_blank" title="Daily Compilation Recording (transcribed)">DCRP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=tOcO-TrYQGU" target="_blank" title="Daily Compilation Recording (transcribed)">DCRP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=tOcO-TrYQGU" target="_blank" title="Daily Compilation Recording (transcribed)">DCRP</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>38</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>34</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>68</span></div><div class="long-col launch-day"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>172</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>47</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>47</span></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">February 10, 2023</h3>40 messages were recorded in the six days before this launch, 6 of which were longer than the standard 30 characters. One Group 4 long message was recorded in the days before launch (1 appearing two days before). The longest message in the window was a <b>172 character</b> Group 4 message.<br><br>
+      <em>Monitoring during this period was comprehensive, with transcribed recordings available for most days.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-246">
+        <div class="gt-header">
+          <span class="gt-designation">GT-246</span>
+          <span class="gt-date">2023.04.19 12:11 UTC</span>
+          <span class="gt-date-local">(2023.04.19 5:11 AM PDT)</span>
+          
+          <a class="gt-link" href="https://www.malmstrom.af.mil/News/Photos/igphoto/2003203539/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:10.5%;"><div class="bar-segment" data-group="2" style="height:100.0%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:31.6%;"><div class="bar-segment" data-group="2" style="height:66.7%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:33.3%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:26.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:21.1%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:52.6%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:89.5%;"><div class="bar-segment" data-group="1" style="height:17.6%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:23.5%; background:#ed7d32;"></div><div class="bar-segment" data-group="3" style="height:23.5%; background:#ffcc00;"></div><div class="bar-segment" data-group="4" style="height:35.3%; background:#ff0467;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all"><div class="bar-empty"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">04.14</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">04.15</div><div class="day-label-counts">2<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">04.16</div><div class="day-label-counts">6<span class="sep">/</span>3</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">04.17</div><div class="day-label-counts">19<span class="sep">/</span>9</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">04.18</div><div class="day-label-counts">17<span class="sep">/</span>11</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">04.19</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell" style="color:#c27800;" title="SET-2: MIXED">S2</div><div class="coverage-cell no-data" title="No data">-</div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>49</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>76</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>66</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>56</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>56</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>46</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>36</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>186</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>152</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>118</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>69</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>50</span><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>46</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>36</span></div><div class="long-col launch-day"></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">April 19, 2023</h3>44 messages were recorded in the six days before this launch, 23 of which were longer than the standard 30 characters. Group 4 prefixes — which almost always carry longer-than-normal messages — were especially active before this launch, with 17 long messages in the three days prior (2 appearing three days before, 9 appearing two days before, 6 appearing the day before launch). That’s about 20× the usual daily rate for Group 4. The longest message in the window was <b>186 characters</b> (Group 3, the day before launch).<br><br>
+      <em>No recordings are currently published for this period. The logged data is provided as-is and may not be comprehensive.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-247">
+        <div class="gt-header">
+          <span class="gt-designation">GT-247</span>
+          <span class="gt-date">2023.09.06 08:26 UTC</span>
+          <span class="gt-date-local">(2023.09.06 1:26 AM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3516134/mmiii-gt-247-launches-from-vandenberg/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all" style="height:26.7%;"><div class="bar-segment" data-group="1" style="height:50.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:50.0%; background:#ed7d32;"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:20.0%;"><div class="bar-segment" data-group="1" style="height:100.0%; background:#06b050;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:60.0%;"><div class="bar-segment" data-group="1" style="height:77.8%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:22.2%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:46.7%;"><div class="bar-segment" data-group="1" style="height:85.7%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:14.3%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:73.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:13.3%; background:#ed7d32;"></div><div class="bar-segment" data-group="3" style="height:6.7%; background:#ffcc00;"></div><div class="bar-segment" data-group="4" style="height:6.7%; background:#ff0467;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all" style="height:66.7%;"><div class="bar-segment" data-group="1" style="height:30.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:70.0%; background:#ed7d32;"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">09.01</div><div class="day-label-counts">4<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">09.02</div><div class="day-label-counts">3<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">09.03</div><div class="day-label-counts">9<span class="sep">/</span>1</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">09.04</div><div class="day-label-counts">7<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">09.05</div><div class="day-label-counts">15<span class="sep">/</span>2</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">09.06</div><div class="day-label-counts">10<span class="sep">/</span>2</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=bbjL1IknPl4" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=Lud4INuWRQ0" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=gxIuU2MJsyM" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=qWX3GiV_0U4" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=e-F83MAWA-M" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=nfKL3j9n_Fo" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=203l7qwoTXw" target="_blank" title="HFGCS Livestream 230901A">230901A</a><br><a href="https://www.youtube.com/watch?v=JFRPFKw90A0" target="_blank" title="HFGCS Livestream 230901B">230901B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=JFRPFKw90A0" target="_blank" title="HFGCS Livestream 230901B">230901B</a><br><a href="https://www.youtube.com/watch?v=e1Y3sz4FucA" target="_blank" title="HFGCS Livestream 230902A">230902A</a><br><a href="https://www.youtube.com/watch?v=dvosHyURAag" target="_blank" title="HFGCS Livestream 230902B">230902B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=dvosHyURAag" target="_blank" title="HFGCS Livestream 230902B">230902B</a><br><a href="https://www.youtube.com/watch?v=HliPhK1EyG0" target="_blank" title="HFGCS Livestream 230903A">230903A</a><br><a href="https://www.youtube.com/watch?v=PJnay2B12PA" target="_blank" title="HFGCS Livestream 230903B">230903B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=PJnay2B12PA" target="_blank" title="HFGCS Livestream 230903B">230903B</a><br><a href="https://www.youtube.com/watch?v=eX68oXrR7K4" target="_blank" title="HFGCS Livestream 230904A">230904A</a><br><a href="https://www.youtube.com/watch?v=bjceAxmV5CM" target="_blank" title="HFGCS Livestream 230904B">230904B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=bjceAxmV5CM" target="_blank" title="HFGCS Livestream 230904B">230904B</a><br><a href="https://www.youtube.com/watch?v=a-rKaEkWHgU" target="_blank" title="HFGCS Livestream 230905A">230905A</a><br><a href="https://www.youtube.com/watch?v=iHDVdwv_TGg" target="_blank" title="HFGCS Livestream 230905B">230905B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=iHDVdwv_TGg" target="_blank" title="HFGCS Livestream 230905B">230905B</a><br><a href="https://www.youtube.com/watch?v=0Ubhm3iXyog" target="_blank" title="HFGCS Livestream 230906A">230906A</a><br><a href="https://www.youtube.com/watch?v=r2VnIMAgNtg" target="_blank" title="HFGCS Livestream 230906B">230906B</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>34</span></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>142</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>51</span></div><div class="long-col launch-day"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>39</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>33</span></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">September 6, 2023</h3>48 messages were recorded in the six days before this launch, 5 of which were longer than the standard 30 characters. One Group 4 long message was recorded in the days before launch (1 appearing the day before launch). The longest message in the window was <b>142 characters</b> (Group 4, the day before launch).<br><br>
+      <em>Monitoring during this period was comprehensive, with transcribed recordings available for most days.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-248">
+        <div class="gt-header">
+          <span class="gt-designation">GT-248</span>
+          <span class="gt-date">2023.11.01 ~07:01 UTC</span>
+          <span class="gt-date-local">(2023.11.01 ~12:01 AM PT)</span>
+          <span class="status-badge" style="color:#c0392b; background:#fdecea; border: 1px solid #c0392b22;">ANOMALY</span>
+          <a class="gt-link" href="https://www.cnbc.com/2023/11/01/-us-air-force-blows-up-minuteman-iii-in-test-flight-after-post-launch-anomaly.html" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all" style="height:63.6%;"><div class="bar-segment" data-group="1" style="height:57.1%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:42.9%; background:#ed7d32;"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:36.4%;"><div class="bar-segment" data-group="1" style="height:25.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:75.0%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:54.5%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:27.3%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:18.2%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:90.9%;"><div class="bar-segment" data-group="1" style="height:50.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:40.0%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:10.0%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:90.9%;"><div class="bar-segment" data-group="1" style="height:70.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:30.0%; background:#ed7d32;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all" style="height:72.7%;"><div class="bar-segment" data-group="1" style="height:87.5%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:12.5%; background:#ed7d32;"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">10.27</div><div class="day-label-counts">7<span class="sep">/</span>1</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">10.28</div><div class="day-label-counts">4<span class="sep">/</span>3</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">10.29</div><div class="day-label-counts">11<span class="sep">/</span>4</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">10.30</div><div class="day-label-counts">10<span class="sep">/</span>4</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">10.31</div><div class="day-label-counts">10<span class="sep">/</span>1</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">11.01</div><div class="day-label-counts">8<span class="sep">/</span>0</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div><div class="coverage-cell" style="color:#1a7d3f;" title="SET-3: EXCELLENT">S3</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=aoWdAl6MOzc" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=x428Rcq_boE" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=L4cavRvM0AM" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=ED32qIn8GWI" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=Eo9ZPl2A8ko" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=1jv1YgzKIV8" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=uvOQui3lJxY" target="_blank" title="HFGCS Livestream 231030A">231030A</a><br><a href="https://www.youtube.com/watch?v=hsfi32_m-jw" target="_blank" title="HFGCS Livestream 231030B">231030B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=hsfi32_m-jw" target="_blank" title="HFGCS Livestream 231030B">231030B</a><br><a href="https://www.youtube.com/watch?v=HmTn0u_z17c" target="_blank" title="HFGCS Livestream 231031A">231031A</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=sTQwlOmO30I" target="_blank" title="HFGCS Livestream 231101A">231101A</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>42</span></div><div class="long-col"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>51</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>34</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>33</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>268</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>142</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>39</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>34</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>160</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>86</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>38</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>37</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>51</span></div><div class="long-col launch-day"></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">November 1, 2023</h3>50 messages were recorded in the six days before this launch, 13 of which were longer than the standard 30 characters. Group 4 prefixes appeared 3 times in the three days before launch (2 appearing three days before, 1 appearing two days before), which is above average. That’s about 4× the usual daily rate for Group 4. The longest message in the window was <b>268 characters</b> (Group 4, three days before).<br><br>
+      An anomaly was detected approximately 5 minutes after launch, and the missile was intentionally destroyed over the Pacific Ocean as a safety precaution. The test was deemed unsuccessful.<br><br>
+      <em>Monitoring during this period was comprehensive, with transcribed recordings available for most days.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-249">
+        <div class="gt-header">
+          <span class="gt-designation">GT-249</span>
+          <span class="gt-date">2024.06.04 07:56 UTC</span>
+          <span class="gt-date-local">(2024.06.04 12:56 AM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3795369/unarmed-minuteman-iii-test-launch-showcases-readiness-of-us-nuclear-forces-safe/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all" style="height:41.2%;"><div class="bar-segment" data-group="1" style="height:100.0%; background:#06b050;"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:11.8%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:88.2%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:82.4%;"><div class="bar-segment" data-group="1" style="height:14.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:85.7%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:41.2%;"><div class="bar-segment" data-group="1" style="height:14.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:85.7%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:5.9%;"><div class="bar-segment" data-group="1" style="height:100.0%; background:#06b050;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all" style="height:41.2%;"><div class="bar-segment" data-group="1" style="height:71.4%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:28.6%; background:#ed7d32;"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">05.30</div><div class="day-label-counts">7<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">05.31</div><div class="day-label-counts">17<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">06.01</div><div class="day-label-counts">14<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">06.02</div><div class="day-label-counts">7<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">06.03</div><div class="day-label-counts">1<span class="sep">/</span>0</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">06.04</div><div class="day-label-counts">7<span class="sep">/</span>1</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=KNVY7pd4GJA" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=OH0EcBD2V-c" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=GmdYDEh240A" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=Bx73WytLIVo" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=qEAzeFxwH7w" target="_blank" title="HFGCS Livestream 240529B (not yet transcribed)">240529B</a><br><a href="https://www.youtube.com/watch?v=bfG4TtFaO_Q" target="_blank" title="HFGCS Livestream 240530A (not yet transcribed)">240530A</a><br><a href="https://www.youtube.com/watch?v=4ZS0Xm9zzaI" target="_blank" title="HFGCS Livestream 240530B (not yet transcribed)">240530B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=4ZS0Xm9zzaI" target="_blank" title="HFGCS Livestream 240530B (not yet transcribed)">240530B</a><br><a href="https://www.youtube.com/watch?v=WztnKgscQHM" target="_blank" title="HFGCS Livestream 240531A (not yet transcribed)">240531A</a><br><a href="https://www.youtube.com/watch?v=m46c8CW_30Y" target="_blank" title="HFGCS Livestream 240531B (not yet transcribed)">240531B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=m46c8CW_30Y" target="_blank" title="HFGCS Livestream 240531B">240531B</a><br><a href="https://www.youtube.com/watch?v=RhUkKTb8Dzk" target="_blank" title="HFGCS Livestream 240601A">240601A</a><br><a href="https://www.youtube.com/watch?v=VV2OKcOaTEg" target="_blank" title="HFGCS Livestream 240601B">240601B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=VV2OKcOaTEg" target="_blank" title="HFGCS Livestream 240601B">240601B</a><br><a href="https://www.youtube.com/watch?v=J1oyjp1PNqw" target="_blank" title="HFGCS Livestream 240602A">240602A</a><br><a href="https://www.youtube.com/watch?v=ZhzhxLO0BAc" target="_blank" title="HFGCS Livestream 240602B">240602B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=ZhzhxLO0BAc" target="_blank" title="HFGCS Livestream 240602B">240602B</a><br><a href="https://www.youtube.com/watch?v=b2uVsElc0bU" target="_blank" title="HFGCS Livestream 240603A">240603A</a><br><a href="https://www.youtube.com/watch?v=rq74SU4XB8A" target="_blank" title="HFGCS Livestream 240603B">240603B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=rq74SU4XB8A" target="_blank" title="HFGCS Livestream 240603B">240603B</a><br><a href="https://www.youtube.com/watch?v=04SAomq5sb8" target="_blank" title="HFGCS Livestream 240604A">240604A</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"></div><div class="long-col launch-day"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>35</span></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">June 4, 2024</h3>53 messages were recorded in the six days before this launch, 1 of which was longer than the standard 30 characters. No Group 4 messages appeared in the days before launch.<br><br>
+      <em>Monitoring during this period was comprehensive, with transcribed recordings available for most days.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-250">
+        <div class="gt-header">
+          <span class="gt-designation">GT-250</span>
+          <span class="gt-date">2024.06.06 08:46 UTC</span>
+          <span class="gt-date-local">(2024.06.06 1:46 AM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3798505/mmiii-gt-250-launches-from-vandenberg/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:14.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:85.7%; background:#ed7d32;"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:50.0%;"><div class="bar-segment" data-group="1" style="height:14.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:85.7%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:7.1%;"><div class="bar-segment" data-group="1" style="height:100.0%; background:#06b050;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:50.0%;"><div class="bar-segment" data-group="1" style="height:71.4%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:28.6%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:78.6%;"><div class="bar-segment" data-group="1" style="height:63.6%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:36.4%; background:#ed7d32;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all" style="height:92.9%;"><div class="bar-segment" data-group="1" style="height:69.2%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:30.8%; background:#ed7d32;"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">06.01</div><div class="day-label-counts">14<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">06.02</div><div class="day-label-counts">7<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">06.03</div><div class="day-label-counts">1<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">06.04</div><div class="day-label-counts">7<span class="sep">/</span>1</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">06.05</div><div class="day-label-counts">11<span class="sep">/</span>0</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">06.06</div><div class="day-label-counts">13<span class="sep">/</span>1</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div><div class="coverage-cell" style="color:#c27800;" title="SET-4: UNCERTAIN">S4</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=KNVY7pd4GJA" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=OH0EcBD2V-c" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=GmdYDEh240A" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=Bx73WytLIVo" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=AyevaW8YfYY" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div><div class="coverage-cell video-cell"><a href="https://www.youtube.com/watch?v=zy7kS0a_WMI" target="_blank" title="Daily Timecard video (transcribed)">DTCP</a></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=m46c8CW_30Y" target="_blank" title="HFGCS Livestream 240531B">240531B</a><br><a href="https://www.youtube.com/watch?v=RhUkKTb8Dzk" target="_blank" title="HFGCS Livestream 240601A">240601A</a><br><a href="https://www.youtube.com/watch?v=VV2OKcOaTEg" target="_blank" title="HFGCS Livestream 240601B">240601B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=VV2OKcOaTEg" target="_blank" title="HFGCS Livestream 240601B">240601B</a><br><a href="https://www.youtube.com/watch?v=J1oyjp1PNqw" target="_blank" title="HFGCS Livestream 240602A">240602A</a><br><a href="https://www.youtube.com/watch?v=ZhzhxLO0BAc" target="_blank" title="HFGCS Livestream 240602B">240602B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=ZhzhxLO0BAc" target="_blank" title="HFGCS Livestream 240602B">240602B</a><br><a href="https://www.youtube.com/watch?v=b2uVsElc0bU" target="_blank" title="HFGCS Livestream 240603A">240603A</a><br><a href="https://www.youtube.com/watch?v=rq74SU4XB8A" target="_blank" title="HFGCS Livestream 240603B">240603B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=rq74SU4XB8A" target="_blank" title="HFGCS Livestream 240603B">240603B</a><br><a href="https://www.youtube.com/watch?v=04SAomq5sb8" target="_blank" title="HFGCS Livestream 240604A">240604A</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=8CnXjoO_t6o" target="_blank" title="HFGCS Livestream 240605A">240605A</a><br><a href="https://www.youtube.com/watch?v=np8NxbgquoY" target="_blank" title="HFGCS Livestream 240605B">240605B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=np8NxbgquoY" target="_blank" title="HFGCS Livestream 240605B">240605B</a><br><a href="https://www.youtube.com/watch?v=Z1jlectPlkw" target="_blank" title="HFGCS Livestream 240606A">240606A</a><br><a href="https://www.youtube.com/watch?v=Y6LxYZ2Cz9k" target="_blank" title="HFGCS Livestream 240606B">240606B</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>35</span></div><div class="long-col hot-zone"></div><div class="long-col launch-day"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>52</span></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">June 6, 2024</h3>53 messages were recorded in the six days before this launch, 2 of which were longer than the standard 30 characters. No Group 4 messages appeared in the days before launch.<br><br>
+      <em>Monitoring during this period was comprehensive, with transcribed recordings available for most days.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-251">
+        <div class="gt-header">
+          <span class="gt-designation">GT-251</span>
+          <span class="gt-date">2024.11.06 07:01 UTC</span>
+          <span class="gt-date-local">(2024.11.05 11:01 PM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/3957637/minuteman-iii-test-launch-showcases-readiness-of-us-nuclear-forces-safe-effecti/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all" style="height:65.4%;"><div class="bar-segment" data-group="1" style="height:17.6%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:70.6%; background:#ed7d32;"></div><div class="bar-segment" data-group="3" style="height:11.8%; background:#ffcc00;"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="1" style="height:34.6%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:57.7%; background:#ed7d32;"></div><div class="bar-segment" data-group="3" style="height:7.7%; background:#ffcc00;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:53.8%;"><div class="bar-segment" data-group="1" style="height:21.4%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:78.6%; background:#ed7d32;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:61.5%;"><div class="bar-segment" data-group="1" style="height:81.2%; background:#06b050;"></div><div class="bar-segment" data-group="3" style="height:12.5%; background:#ffcc00;"></div><div class="bar-segment" data-group="4" style="height:6.2%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all" style="height:57.7%;"><div class="bar-segment" data-group="1" style="height:73.3%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:20.0%; background:#ed7d32;"></div><div class="bar-segment" data-group="3" style="height:6.7%; background:#ffcc00;"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all" style="height:76.9%;"><div class="bar-segment" data-group="1" style="height:60.0%; background:#06b050;"></div><div class="bar-segment" data-group="2" style="height:15.0%; background:#ed7d32;"></div><div class="bar-segment" data-group="3" style="height:25.0%; background:#ffcc00;"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">11.01</div><div class="day-label-counts">17<span class="sep">/</span>1</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">11.02</div><div class="day-label-counts">26<span class="sep">/</span>1</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">11.03</div><div class="day-label-counts">14<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">11.04</div><div class="day-label-counts">16<span class="sep">/</span>1</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">11.05</div><div class="day-label-counts">15<span class="sep">/</span>3</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">11.06</div><div class="day-label-counts">20<span class="sep">/</span>4</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell" style="color:#888;" title="SET-7: INCOMPLETE">S7</div><div class="coverage-cell" style="color:#888;" title="SET-7: INCOMPLETE">S7</div><div class="coverage-cell" style="color:#888;" title="SET-7: INCOMPLETE">S7</div><div class="coverage-cell" style="color:#888;" title="SET-7: INCOMPLETE">S7</div><div class="coverage-cell" style="color:#888;" title="SET-7: INCOMPLETE">S7</div><div class="coverage-cell" style="color:#888;" title="SET-7: INCOMPLETE">S7</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=-ioof9yyG5U" target="_blank" title="HFGCS Livestream 241031B (not yet transcribed)">241031B</a><br><a href="https://www.youtube.com/watch?v=BYZ9dPSsU6g" target="_blank" title="HFGCS Livestream 241101A (not yet transcribed)">241101A</a><br><a href="https://www.youtube.com/watch?v=3YCoQqJWLEs" target="_blank" title="HFGCS Livestream 241101B (not yet transcribed)">241101B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=3YCoQqJWLEs" target="_blank" title="HFGCS Livestream 241101B (not yet transcribed)">241101B</a><br><a href="https://www.youtube.com/watch?v=OShZn0EYJ1k" target="_blank" title="HFGCS Livestream 241102A (not yet transcribed)">241102A</a><br><a href="https://www.youtube.com/watch?v=LnPENfLCz_0" target="_blank" title="HFGCS Livestream 241102B (not yet transcribed)">241102B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=LnPENfLCz_0" target="_blank" title="HFGCS Livestream 241102B (not yet transcribed)">241102B</a><br><a href="https://www.youtube.com/watch?v=y4y9X8e1BDE" target="_blank" title="HFGCS Livestream 241103A (not yet transcribed)">241103A</a><br><a href="https://www.youtube.com/watch?v=HRbsRPyYGto" target="_blank" title="HFGCS Livestream 241103B (not yet transcribed)">241103B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=HRbsRPyYGto" target="_blank" title="HFGCS Livestream 241103B (not yet transcribed)">241103B</a><br><a href="https://www.youtube.com/watch?v=k36Dkd3a0sE" target="_blank" title="HFGCS Livestream 241104A (not yet transcribed)">241104A</a><br><a href="https://www.youtube.com/watch?v=OZQRMzdJwxw" target="_blank" title="HFGCS Livestream 241104B (not yet transcribed)">241104B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=OZQRMzdJwxw" target="_blank" title="HFGCS Livestream 241104B (not yet transcribed)">241104B</a><br><a href="https://www.youtube.com/watch?v=xn8EtKa9VFw" target="_blank" title="HFGCS Livestream 241105A (not yet transcribed)">241105A</a><br><a href="https://www.youtube.com/watch?v=rGQOXy1TeDI" target="_blank" title="HFGCS Livestream 241105B (not yet transcribed)">241105B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=rGQOXy1TeDI" target="_blank" title="HFGCS Livestream 241105B (not yet transcribed)">241105B</a><br><a href="https://www.youtube.com/watch?v=6RJ2unYIbzA" target="_blank" title="HFGCS Livestream 241106A (not yet transcribed)">241106A</a><br><a href="https://www.youtube.com/watch?v=zkY0WmwJYtY" target="_blank" title="HFGCS Livestream 241106B (not yet transcribed)">241106B</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>42</span></div><div class="long-col"><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>41</span></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>120</span></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>48</span><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>43</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>40</span></div><div class="long-col launch-day"><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>63</span><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>40</span><span class="lc-item"><span class="lc-dot" style="background:#ed7d32;"></span>35</span><span class="lc-item"><span class="lc-dot" style="background:#ffcc00;"></span>31</span></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">November 6, 2024</h3>108 messages were recorded in the six days before this launch, 10 of which were longer than the standard 30 characters. One Group 4 long message was recorded in the days before launch (1 appearing two days before). The longest message in the window was <b>120 characters</b> (Group 4, two days before).<br><br>
+      This test was launched via E-6B Airborne Launch Control System (ALCS).<br><br>
+      <em>No transcribed recordings are available for this period, but livestream recordings exist and can be reviewed for accuracy.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-252">
+        <div class="gt-header">
+          <span class="gt-designation">GT-252</span>
+          <span class="gt-date">2025.02.19 09:00 UTC</span>
+          <span class="gt-date-local">(2025.02.19 1:00 AM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/4070144/minuteman-iii-test-launch-showcases-readiness-of-us-nuclear-forces-safe-effecti/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="2" style="height:50.0%; background:#ed7d32;"></div><div class="bar-segment" data-group="4" style="height:50.0%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all"><div class="bar-empty"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">02.14</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">02.15</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">02.16</div><div class="day-label-counts">2<span class="sep">/</span>1</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">02.17</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">02.18</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">02.19</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell" style="color:#c0392b;" title="SET-10: POOR">S10</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=B_NK8pBXNIc" target="_blank" title="HFGCS Livestream 250214A (not yet transcribed)">250214A</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=hsx474ot93U" target="_blank" title="HFGCS Livestream 250215A (not yet transcribed)">250215A</a></div><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>268</span></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"></div><div class="long-col launch-day"></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">February 19, 2025</h3>Only 2 messages were recorded in the six days before this launch, 1 of which was longer than 30 characters. One Group 4 long message was recorded in the days before launch (1 appearing three days before). The longest message in the window was <b>268 characters</b> (Group 4, three days before).<br><br>
+      <em>Livestream recordings cover 2 of the 6 days, but no transcribed recordings are available. The logged data is provided as-is.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-253">
+        <div class="gt-header">
+          <span class="gt-designation">GT-253</span>
+          <span class="gt-date">2025.05.21 07:01 UTC</span>
+          <span class="gt-date-local">(2025.05.21 12:01 AM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/4193609/minuteman-iii-test-launch-showcases-readiness-of-us-nuclear-forces-safe-effecti/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-no-data">No data in NEET INTEL dataset for this period</div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">May 21, 2025</h3><em>NEET INTEL was not monitoring or recording during this period. No EAM data, transcribed recordings, or livestreams were published during this launch window. However, <a href="https://eam.watch/view/3a0cc7d6-c6ab-40bb-9873-3429a09d3bea"><b>eam.watch</b></a> reported a 290-character EAM broadcast on May 19, 2025. eam.watch’s accuracy and quality is often dubious, so the accuracy of this will need to be verified. Nonetheless, if true, the evidence would support the observation being made throughout this page.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-254">
+        <div class="gt-header">
+          <span class="gt-designation">GT-254</span>
+          <span class="gt-date">2025.11.05 09:35 UTC</span>
+          <span class="gt-date-local">(2025.11.05 1:35 AM PT)</span>
+          
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/4328255/gt-254-afgsc-validates-reliability-readiness-of-icbm-force-with-minuteman-iii-t/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="4" style="height:100.0%; background:#ff0467;"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all"><div class="bar-empty"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">10.31</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">11.01</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">11.02</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">11.03</div><div class="day-label-counts">2<span class="sep">/</span>2</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">11.04</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">11.05</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell" style="color:#888;" title="SET-13: INCOMPLETE">S13</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=VFPa1yA_QgI" target="_blank" title="HFGCS Livestream 251030B (not yet transcribed)">251030B</a><br><a href="https://www.youtube.com/watch?v=NpTOB2x6RzY" target="_blank" title="HFGCS Livestream 251031A (not yet transcribed)">251031A</a><br><a href="https://www.youtube.com/watch?v=Ei-nSJeoY2w" target="_blank" title="HFGCS Livestream 251031B (not yet transcribed)">251031B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=Ei-nSJeoY2w" target="_blank" title="HFGCS Livestream 251031B (not yet transcribed)">251031B</a><br><a href="https://www.youtube.com/watch?v=J8sPQLuJFtQ" target="_blank" title="HFGCS Livestream 251101A (not yet transcribed)">251101A</a><br><a href="https://www.youtube.com/watch?v=YYf3_HDLrKI" target="_blank" title="HFGCS Livestream 251101B (not yet transcribed)">251101B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=YYf3_HDLrKI" target="_blank" title="HFGCS Livestream 251101B (not yet transcribed)">251101B</a><br><a href="https://www.youtube.com/watch?v=xpdi6rrtGW0" target="_blank" title="HFGCS Livestream 251102A (not yet transcribed)">251102A</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=IEosPtDQ5gI" target="_blank" title="HFGCS Livestream 251103A (not yet transcribed)">251103A</a><br><a href="https://www.youtube.com/watch?v=-dmWkt6O784" target="_blank" title="HFGCS Livestream 251103B (not yet transcribed)">251103B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=-dmWkt6O784" target="_blank" title="HFGCS Livestream 251103B (not yet transcribed)">251103B</a><br><a href="https://www.youtube.com/watch?v=HQCPve01FOU" target="_blank" title="HFGCS Livestream 251104A (not yet transcribed)">251104A</a><br><a href="https://www.youtube.com/watch?v=kCJb1xpw0kQ" target="_blank" title="HFGCS Livestream 251104B (not yet transcribed)">251104B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=kCJb1xpw0kQ" target="_blank" title="HFGCS Livestream 251104B (not yet transcribed)">251104B</a><br><a href="https://www.youtube.com/watch?v=HapKt0W1W7Q" target="_blank" title="HFGCS Livestream 251105A (not yet transcribed)">251105A</a><br><a href="https://www.youtube.com/watch?v=knzqk14vrUM" target="_blank" title="HFGCS Livestream 251105B (not yet transcribed)">251105B</a></div></div></div></div><div class="long-summary"><div class="long-summary-label">Long EAMs</div><div class="long-summary-grid"><div class="long-col"></div><div class="long-col"></div><div class="long-col hot-zone"></div><div class="long-col hot-zone"><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>268</span><span class="lc-item"><span class="lc-dot" style="background:#ff0467;"></span>164</span></div><div class="long-col hot-zone"></div><div class="long-col launch-day"></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">November 5, 2025</h3>Only 2 messages were recorded in the six days before this launch, 2 of which were longer than 30 characters. Group 4 prefixes appeared 2 times in the three days before launch (2 appearing two days before), which is above average. That’s about 2× the usual daily rate for Group 4. The longest message in the window was <b>268 characters</b> (Group 4, two days before).<br><br>
+      This test was launched via E-6B Airborne Launch Control System (ALCS).<br><br>
+      <em>No transcribed recordings are available for this period, but livestream recordings exist and can be reviewed for accuracy.</em></div>
+    </div>
+    <div class="gt-section">
+      <div class="gt-card" id="card-GT-255">
+        <div class="gt-header">
+          <span class="gt-designation">GT-255?</span>
+          <span class="gt-date">2026.03.04 ~07:01 UTC</span>
+          <span class="gt-date-local">(2026.03.04 ~11:01 PM PT)</span>
+          <span class="status-badge" style="color:#666; background:#f0f0f0; border: 1px solid #66622;">Scheduled</span>
+          <a class="gt-link" href="https://www.vandenberg.spaceforce.mil/News/Article-Display/Article/4417890/unarmed-minuteman-iii-icbm-test-launch-scheduled-at-vandenberg-space-force-base/" target="_blank" title="Source article">source &#8599;</a>
+        </div>
+        <div class="gt-body">
+          <div class="gt-timeline-wrapper"><div class="row-labels"><div class="row-label">All</div></div><div class="gt-timelines"><div class="gt-timeline timeline-all"><div class="day-col" data-offset="-5"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col" data-offset="-4"><div class="bar bar-all" style="height:100.0%;"><div class="bar-segment" data-group="unclassified" style="height:100.0%; background:#aaa;"></div></div></div><div class="day-col hot-zone" data-offset="-3"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col hot-zone" data-offset="-2"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col hot-zone" data-offset="-1"><div class="bar bar-all"><div class="bar-empty"></div></div></div><div class="day-col launch-day" data-offset="0"><div class="bar bar-all"><div class="bar-empty"></div></div></div></div></div><div class="day-labels-row"><div class="row-label-spacer"></div><div class="day-labels"><div class="day-label-col"><div class="day-label-offset">T-5</div><div class="day-label-date">02.27</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col"><div class="day-label-offset">T-4</div><div class="day-label-date">02.28</div><div class="day-label-counts">1<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-3</div><div class="day-label-date">03.01</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-2</div><div class="day-label-date">03.02</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col hot-zone"><div class="day-label-offset">T-1</div><div class="day-label-date">03.03</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div><div class="day-label-col launch-day"><div class="day-label-offset">T-0</div><div class="day-label-date">03.04</div><div class="day-label-counts">0<span class="sep">/</span>0</div></div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip"><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell" style="color:#555;" title="SET-15: ?">S15</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div><div class="coverage-cell no-data" title="No data">-</div></div></div><div class="coverage-strip-row"><div class="row-label-spacer"></div><div class="coverage-strip video-strip"><div class="coverage-cell no-data">-</div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=PTzleKwGhTI" target="_blank" title="HFGCS Livestream 260228B (not yet transcribed)">260228B</a></div><div class="coverage-cell video-cell video-ls"><span class="ls-label">LIVESTREAMS</span><br><a href="https://www.youtube.com/watch?v=PTzleKwGhTI" target="_blank" title="HFGCS Livestream 260228B (not yet transcribed)">260228B</a></div><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div><div class="coverage-cell no-data">-</div></div></div></div>
+        </div>
+      </div>
+      <div class="gt-narrative"><h3 class="narrative-heading">March 4, 2026</h3>This launch is scheduled with a window of March 4, 07:01 to 13:01 UTC.</div>
+    </div>
+
+  </main>
+
+  <footer class="page-footer">
+    <div>Generated on 2026-02-28 &middot; NEET INTEL &middot; <a href="index.html">HFGCS EAM Index</a></div>
+    <div class="kofi-link">
+      <span class="en-inline">If you find this useful, consider <a href="https://ko-fi.com/neetintel">supporting NEET INTEL on Ko-fi</a> &#9749;</span>
+      <span class="jp-inline">このページが参考になった場合は、<a href="https://ko-fi.com/neetintel">Ko-fiでNEET INTELを支援</a>してください &#9749;</span>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    const tooltipData = {"card-GT-245": {"-5": {"date": "2023.02.05", "total": 6, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 3, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 0, "prefixes": []}]}, "-4": {"date": "2023.02.06", "total": 5, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 4, "count_long": 0, "prefixes": []}, {"group": "unclassified", "color": "#aaa", "count_all": 1, "count_long": 0, "prefixes": []}]}, "-3": {"date": "2023.02.07", "total": 10, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 7, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 0, "prefixes": []}]}, "-2": {"date": "2023.02.08", "total": 4, "n_long": 2, "max_ln": 38, "groups": [{"group": "1", "color": "#06b050", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 1, "count_long": 1, "prefixes": ["VK"]}, {"group": "4", "color": "#ff0467", "count_all": 1, "count_long": 1, "prefixes": ["ET"]}]}, "-1": {"date": "2023.02.09", "total": 7, "n_long": 1, "max_ln": 68, "groups": [{"group": "1", "color": "#06b050", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 5, "count_long": 1, "prefixes": ["VK"]}]}, "0": {"date": "2023.02.10", "total": 8, "n_long": 3, "max_ln": 172, "groups": [{"group": "1", "color": "#06b050", "count_all": 5, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 2, "prefixes": ["VK"]}, {"group": "4", "color": "#ff0467", "count_all": 1, "count_long": 1, "prefixes": ["ET"]}]}}, "card-GT-246": {"-5": {"date": "2023.04.14", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-4": {"date": "2023.04.15", "total": 2, "n_long": 0, "max_ln": 30, "groups": [{"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 0, "prefixes": []}]}, "-3": {"date": "2023.04.16", "total": 6, "n_long": 3, "max_ln": 50, "groups": [{"group": "2", "color": "#ed7d32", "count_all": 4, "count_long": 1, "prefixes": ["6S"]}, {"group": "4", "color": "#ff0467", "count_all": 2, "count_long": 2, "prefixes": ["PC"]}]}, "-2": {"date": "2023.04.17", "total": 19, "n_long": 9, "max_ln": 76, "groups": [{"group": "1", "color": "#06b050", "count_all": 5, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 4, "count_long": 0, "prefixes": []}, {"group": "4", "color": "#ff0467", "count_all": 10, "count_long": 9, "prefixes": ["PC"]}]}, "-1": {"date": "2023.04.18", "total": 17, "n_long": 11, "max_ln": 186, "groups": [{"group": "1", "color": "#06b050", "count_all": 3, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 4, "count_long": 1, "prefixes": ["6S"]}, {"group": "3", "color": "#ffcc00", "count_all": 4, "count_long": 4, "prefixes": ["AH"]}, {"group": "4", "color": "#ff0467", "count_all": 6, "count_long": 6, "prefixes": ["PC"]}]}, "0": {"date": "2023.04.19", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}}, "card-GT-247": {"-5": {"date": "2023.09.01", "total": 4, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 0, "prefixes": []}]}, "-4": {"date": "2023.09.02", "total": 3, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 3, "count_long": 0, "prefixes": []}]}, "-3": {"date": "2023.09.03", "total": 9, "n_long": 1, "max_ln": 34, "groups": [{"group": "1", "color": "#06b050", "count_all": 7, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 1, "prefixes": ["RM"]}]}, "-2": {"date": "2023.09.04", "total": 7, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 6, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 1, "count_long": 0, "prefixes": []}]}, "-1": {"date": "2023.09.05", "total": 15, "n_long": 2, "max_ln": 142, "groups": [{"group": "1", "color": "#06b050", "count_all": 11, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 1, "prefixes": ["RM"]}, {"group": "3", "color": "#ffcc00", "count_all": 1, "count_long": 0, "prefixes": []}, {"group": "4", "color": "#ff0467", "count_all": 1, "count_long": 1, "prefixes": ["JC"]}]}, "0": {"date": "2023.09.06", "total": 10, "n_long": 2, "max_ln": 39, "groups": [{"group": "1", "color": "#06b050", "count_all": 3, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 7, "count_long": 2, "prefixes": ["RM"]}]}}, "card-GT-248": {"-5": {"date": "2023.10.27", "total": 7, "n_long": 1, "max_ln": 42, "groups": [{"group": "1", "color": "#06b050", "count_all": 4, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 1, "prefixes": ["NK"]}]}, "-4": {"date": "2023.10.28", "total": 4, "n_long": 3, "max_ln": 51, "groups": [{"group": "1", "color": "#06b050", "count_all": 1, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 3, "prefixes": ["NK"]}]}, "-3": {"date": "2023.10.29", "total": 11, "n_long": 4, "max_ln": 268, "groups": [{"group": "1", "color": "#06b050", "count_all": 6, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 2, "prefixes": ["NK"]}, {"group": "4", "color": "#ff0467", "count_all": 2, "count_long": 2, "prefixes": ["MN"]}]}, "-2": {"date": "2023.10.30", "total": 10, "n_long": 4, "max_ln": 160, "groups": [{"group": "1", "color": "#06b050", "count_all": 5, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 4, "count_long": 3, "prefixes": ["NK"]}, {"group": "4", "color": "#ff0467", "count_all": 1, "count_long": 1, "prefixes": ["MN"]}]}, "-1": {"date": "2023.10.31", "total": 10, "n_long": 1, "max_ln": 51, "groups": [{"group": "1", "color": "#06b050", "count_all": 7, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 1, "prefixes": ["CQ"]}]}, "0": {"date": "2023.11.01", "total": 8, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 7, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 1, "count_long": 0, "prefixes": []}]}}, "card-GT-249": {"-5": {"date": "2024.05.30", "total": 7, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 7, "count_long": 0, "prefixes": []}]}, "-4": {"date": "2024.05.31", "total": 17, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 15, "count_long": 0, "prefixes": []}]}, "-3": {"date": "2024.06.01", "total": 14, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 12, "count_long": 0, "prefixes": []}]}, "-2": {"date": "2024.06.02", "total": 7, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 1, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 6, "count_long": 0, "prefixes": []}]}, "-1": {"date": "2024.06.03", "total": 1, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 1, "count_long": 0, "prefixes": []}]}, "0": {"date": "2024.06.04", "total": 7, "n_long": 1, "max_ln": 35, "groups": [{"group": "1", "color": "#06b050", "count_all": 5, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 1, "prefixes": ["XS"]}]}}, "card-GT-250": {"-5": {"date": "2024.06.01", "total": 14, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 12, "count_long": 0, "prefixes": []}]}, "-4": {"date": "2024.06.02", "total": 7, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 1, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 6, "count_long": 0, "prefixes": []}]}, "-3": {"date": "2024.06.03", "total": 1, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 1, "count_long": 0, "prefixes": []}]}, "-2": {"date": "2024.06.04", "total": 7, "n_long": 1, "max_ln": 35, "groups": [{"group": "1", "color": "#06b050", "count_all": 5, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 2, "count_long": 1, "prefixes": ["XS"]}]}, "-1": {"date": "2024.06.05", "total": 11, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 7, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 4, "count_long": 0, "prefixes": []}]}, "0": {"date": "2024.06.06", "total": 13, "n_long": 1, "max_ln": 52, "groups": [{"group": "1", "color": "#06b050", "count_all": 9, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 4, "count_long": 1, "prefixes": ["XS"]}]}}, "card-GT-251": {"-5": {"date": "2024.11.01", "total": 17, "n_long": 1, "max_ln": 42, "groups": [{"group": "1", "color": "#06b050", "count_all": 3, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 12, "count_long": 0, "prefixes": []}, {"group": "3", "color": "#ffcc00", "count_all": 2, "count_long": 1, "prefixes": ["DX"]}]}, "-4": {"date": "2024.11.02", "total": 26, "n_long": 1, "max_ln": 41, "groups": [{"group": "1", "color": "#06b050", "count_all": 9, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 15, "count_long": 0, "prefixes": []}, {"group": "3", "color": "#ffcc00", "count_all": 2, "count_long": 1, "prefixes": ["DX"]}]}, "-3": {"date": "2024.11.03", "total": 14, "n_long": 0, "max_ln": 30, "groups": [{"group": "1", "color": "#06b050", "count_all": 3, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 11, "count_long": 0, "prefixes": []}]}, "-2": {"date": "2024.11.04", "total": 16, "n_long": 1, "max_ln": 120, "groups": [{"group": "1", "color": "#06b050", "count_all": 13, "count_long": 0, "prefixes": []}, {"group": "3", "color": "#ffcc00", "count_all": 2, "count_long": 0, "prefixes": []}, {"group": "4", "color": "#ff0467", "count_all": 1, "count_long": 1, "prefixes": ["BV"]}]}, "-1": {"date": "2024.11.05", "total": 15, "n_long": 3, "max_ln": 48, "groups": [{"group": "1", "color": "#06b050", "count_all": 11, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 2, "prefixes": ["BP"]}, {"group": "3", "color": "#ffcc00", "count_all": 1, "count_long": 1, "prefixes": ["DX"]}]}, "0": {"date": "2024.11.06", "total": 20, "n_long": 4, "max_ln": 63, "groups": [{"group": "1", "color": "#06b050", "count_all": 12, "count_long": 0, "prefixes": []}, {"group": "2", "color": "#ed7d32", "count_all": 3, "count_long": 1, "prefixes": ["BP"]}, {"group": "3", "color": "#ffcc00", "count_all": 5, "count_long": 3, "prefixes": ["DX"]}]}}, "card-GT-252": {"-5": {"date": "2025.02.14", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-4": {"date": "2025.02.15", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-3": {"date": "2025.02.16", "total": 2, "n_long": 1, "max_ln": 268, "groups": [{"group": "2", "color": "#ed7d32", "count_all": 1, "count_long": 0, "prefixes": []}, {"group": "4", "color": "#ff0467", "count_all": 1, "count_long": 1, "prefixes": ["N2"]}]}, "-2": {"date": "2025.02.17", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-1": {"date": "2025.02.18", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "0": {"date": "2025.02.19", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}}, "card-GT-253": {"-5": {"date": "2025.05.16", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-4": {"date": "2025.05.17", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-3": {"date": "2025.05.18", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-2": {"date": "2025.05.19", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-1": {"date": "2025.05.20", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "0": {"date": "2025.05.21", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}}, "card-GT-254": {"-5": {"date": "2025.10.31", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-4": {"date": "2025.11.01", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-3": {"date": "2025.11.02", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-2": {"date": "2025.11.03", "total": 2, "n_long": 2, "max_ln": 268, "groups": [{"group": "4", "color": "#ff0467", "count_all": 2, "count_long": 2, "prefixes": ["S7"]}]}, "-1": {"date": "2025.11.04", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "0": {"date": "2025.11.05", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}}, "card-GT-255": {"-5": {"date": "2026.02.27", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-4": {"date": "2026.02.28", "total": 1, "n_long": 0, "max_ln": 30, "groups": [{"group": "unclassified", "color": "#aaa", "count_all": 1, "count_long": 0, "prefixes": []}]}, "-3": {"date": "2026.03.01", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-2": {"date": "2026.03.02", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "-1": {"date": "2026.03.03", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}, "0": {"date": "2026.03.04", "total": 0, "n_long": 0, "max_ln": 0, "groups": []}}};
+    
+
+    // Language toggle
+    function toggleLang() {
+      document.body.classList.toggle('show-jp');
+      const btn = document.querySelector('.lang-btn');
+      if (document.body.classList.contains('show-jp')) {
+        btn.textContent = 'English';
+      } else {
+        btn.textContent = '日本語';
+      }
+    }
+
+    // Tooltip
+    const tooltip = document.getElementById('tooltip');
+
+    document.querySelectorAll('.day-col').forEach(col => {
+      col.addEventListener('mouseenter', function(e) {
+        const card = this.closest('.gt-card');
+        const cardId = card ? card.id : '';
+        const offset = this.getAttribute('data-offset');
+        const data = tooltipData[cardId] && tooltipData[cardId][offset];
+        if (!data || data.total === 0) return;
+
+        let html = '<div class="tooltip-date">' + data.date + '</div>';
+        html += '<div class="tooltip-counts">' + data.total + ' messages</div>';
+
+        data.groups.forEach(function(g) {
+          if (g.count_all > 0) {
+            html += '<div class="tooltip-group-row">';
+            html += '<span class="tooltip-group-dot" style="background:' + g.color + ';"></span>';
+            html += '<span class="tooltip-group-info">G' + g.group + ': ' + g.count_all;
+            html += '</span>';
+            if (g.prefixes.length > 0) {
+              html += ' <span class="tooltip-group-prefixes">(' + g.prefixes.join(', ') + ')</span>';
+            }
+            html += '</div>';
+          }
+        });
+
+        tooltip.innerHTML = html;
+        tooltip.classList.add('visible');
+      });
+
+      col.addEventListener('mousemove', function(e) {
+        const pad = 12;
+        let left = e.clientX + pad;
+        let top = e.clientY + pad;
+        const tw = tooltip.offsetWidth;
+        const th = tooltip.offsetHeight;
+        if (left + tw > window.innerWidth - pad) left = e.clientX - tw - pad;
+        if (top + th > window.innerHeight - pad) top = e.clientY - th - pad;
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+      });
+
+      col.addEventListener('mouseleave', function() {
+        tooltip.classList.remove('visible');
+      });
+    });
+
+    // Group legend hover: highlight segments of that group across all cards
+    document.querySelectorAll('.legend-item').forEach(item => {
+      const group = item.getAttribute('data-group');
+
+      item.addEventListener('mouseenter', function() {
+        document.querySelectorAll('.bar-segment').forEach(seg => {
+          if (seg.getAttribute('data-group') === group) {
+            seg.style.opacity = '1';
+            seg.style.filter = 'brightness(1.3)';
+          } else {
+            seg.style.opacity = '0.15';
+          }
+        });
+      });
+
+      item.addEventListener('mouseleave', function() {
+        document.querySelectorAll('.bar-segment').forEach(seg => {
+          seg.style.opacity = '';
+          seg.style.filter = '';
+        });
+      });
+    });
+    
+  </script>
+</body>
+</html>
