@@ -1054,7 +1054,8 @@
           if (g.count_all > 0) {
             html += '<div class="tooltip-group-row">';
             html += '<span class="tooltip-group-dot" style="background:' + g.color + ';"></span>';
-            html += '<span class="tooltip-group-info">G' + g.group + ': ' + g.count_all;
+            var gLabel = g.group === 'unclassified' ? 'Unclassified' : ('G' + g.group);
+            html += '<span class="tooltip-group-info">' + gLabel + ': ' + g.count_all;
             html += '</span>';
             if (g.prefixes.length > 0) {
               html += ' <span class="tooltip-group-prefixes">(' + g.prefixes.join(', ') + ')</span>';
