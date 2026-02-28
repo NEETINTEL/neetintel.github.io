@@ -6,12 +6,12 @@
     <title>About These Heatmaps</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&family=IBM+Plex+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
 
         body {
-            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+            font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
             background-color: #0d0d0d;
             color: #ccc;
             margin: 0;
@@ -25,30 +25,14 @@
             margin: 0 auto;
         }
 
-        .nav-box {
-            background-color: #1a1a1a;
-            padding: 10px 15px;
-            border-radius: 5px;
+        .nav-bar {
+            font-size: 0.85em;
             margin-bottom: 20px;
-            border: 2px solid #4a9eff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
         }
-
-        .nav-link {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #4a9eff;
-            color: #000;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.2s;
-            font-size: 14px;
-        }
-
-        .nav-link:hover { background-color: #6bb6ff; }
+        .nav-bar a { color: #4a9eff; text-decoration: none; }
+        .nav-bar a:hover { text-decoration: underline; }
 
         .lang-btn {
             display: inline-block;
@@ -60,7 +44,7 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: bold;
-            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+            font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
             transition: all 0.2s;
             float: right;
         }
@@ -132,7 +116,7 @@
         }
 
         .example .caption {
-            font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+            font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
             font-size: 0.82rem;
             color: #666;
             margin-bottom: 6px;
@@ -215,7 +199,6 @@
             body { padding: 16px 14px; font-size: 14px; }
             h1 { font-size: 1.25rem; }
             .example { font-size: 0.82rem; padding: 10px 12px; }
-            .nav-box { padding: 8px 12px; }
         }
     </style>
 </head>
@@ -223,11 +206,11 @@
 
 <div class="content">
 
-<div class="nav-box">
-    <a href="index.html" class="nav-link">Index</a>
+<div class="nav-bar">
+    <a href="index.html">&larr; Index</a>
 </div>
 <div style="text-align: right; margin-bottom: 20px;">
-    <button class="lang-btn" onclick="toggleLang()">JP</button>
+    <button class="lang-btn" onclick="toggleLang()">日本語</button>
 </div>
 
 <!-- ==================== ENGLISH ==================== -->
@@ -557,7 +540,7 @@ function toggleLang() {
     var body = document.body;
     var btn = document.querySelector('.lang-btn');
     body.classList.toggle('show-jp');
-    btn.textContent = body.classList.contains('show-jp') ? 'EN' : 'JP';
+    btn.textContent = body.classList.contains('show-jp') ? 'EN' : '日本語';
 }
 </script>
 

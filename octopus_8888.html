@@ -6,7 +6,7 @@
     <title>8888 Messages</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'IBM Plex Sans', Arial, sans-serif;
@@ -53,6 +53,30 @@
         .info-box cite   { color: #f48f42; font-style: italic; }
         .info-box a      { color: #f48f42; text-decoration: none; }
         .info-box a:hover { text-decoration: underline; }
+
+        /* ── Language toggle ──────────────────────────────────────── */
+        .lang-btn {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: #1a1a1a;
+            color: #555;
+            border: 1px solid #2e2e2e;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7em;
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+            letter-spacing: 0.1em;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .lang-btn:hover { color: #999; border-color: #444; }
+        .jp { display: none; }
+        body.show-jp .en { display: none; }
+        body.show-jp .jp { display: block; }
+        /* inline variants for diagram labels */
+        .jp-text { display: none; }
+        body.show-jp .en-text { display: none; }
+        body.show-jp .jp-text { display: inline; }
 
         /* ── Timeline ─────────────────────────────────────────── */
 
@@ -396,29 +420,52 @@
 
     <h1>8888 Messages</h1>
 
+    <div style="text-align:right; margin-bottom:8px;">
+        <button class="lang-btn" onclick="toggleLang()">日本語</button>
+    </div>
     <div class="info-box">
-        8888 messages &mdash; also called <strong>Quad 8s</strong> or
-        <strong>octopus messages</strong> &mdash; are most likely <em>not</em> standard EAMs, and
-        probably should not be broadcast on HFGCS. They are conspicuous: EAMs contain neither 0 nor 8,
-        using a 32-character set (26 letters plus 9 digits, both 0 and 8 excluded &mdash; significant
-        for encoding). A message opening <code>888800</code> is therefore immediately anomalous. Structure
-        is consistent: the <code>888800</code> prefix, followed in most cases by a timestamp and a standard
-        character sequence ending in <code>8888</code>.
-        <br><br>
-        In 2023, NEET INTEL published a <cite><a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank" rel="noopener">video</a></cite>
-        cataloging only 11 documented instances of 8888 messages in nearly 20 years of records.
-        The video discusses suspected huge gaps and deficiencies in monitoring, and some proposals to
-        improve monitoring are advanced. Since then, the count has more than doubled. On VLF, 8888 messages
-        appear fairly regularly; on HF, far less so, and most HF broadcasts are disregarded. What they represent
-        remains ambiguous; it seems reasonable to assume the operators who transmit them would recognize them if they
-        were a mistake; unusual terminations like what was heard in the disregarded <i>&#8220;oh I see&#8221;</i> 8888
-        (2023.06.13) make it difficult to come to any particular conclusion.
+        <div class="en">
+            8888 messages &mdash; also called <strong>Quad 8s</strong> or
+            <strong>octopus messages</strong> &mdash; are most likely <em>not</em> standard EAMs, and
+            probably should not be broadcast on HFGCS. They are conspicuous: EAMs contain neither 0 nor 8,
+            using a 32-character set (26 letters plus 9 digits, both 0 and 8 excluded &mdash; significant
+            for encoding). A message opening <code>888800</code> is therefore immediately anomalous. Structure
+            is consistent: the <code>888800</code> prefix, followed in most cases by a timestamp and a standard
+            character sequence ending in <code>8888</code>.
+            <br><br>
+            In 2023, NEET INTEL published a <a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank" rel="noopener">video</a>
+            cataloging only 11 documented instances of 8888 messages in nearly 20 years of records.
+            The video discusses suspected huge gaps and deficiencies in monitoring, and some proposals to
+            improve monitoring are advanced. Since then, the count has more than doubled. On VLF, 8888 messages
+            appear fairly regularly; on HF, far less so, and most HF broadcasts of 8888s are disregarded. What they represent
+            remains ambiguous. Since it seems reasonable to assume the operators who transmit them would recognize them if they
+            were a mistake, unusual terminations like what was heard in the disregarded <i>&#8220;oh I see&#8221;</i> 8888
+            (2023.06.13) make it difficult to come to any particular conclusion.
+        </div>
+        <div class="jp" style="font-family:'IBM Plex Sans JP','IBM Plex Sans',sans-serif;">
+            8888メッセージ&mdash;<strong>クアッド8</strong>または<strong>オクトパスメッセージ</strong>とも呼ばれる&mdash;は、
+            おそらく標準的なEAMではなく、HFGCSで放送されるべきでもないと考えられる。
+            その異常さは一目瞭然だ：EAMは0も8も使用しない32文字セット（アルファベット26文字と9種の数字で構成されるが、
+            0と8の両方を除外している&mdash;エンコード上で重要な特性である）を採用している。
+            そのため、<code>888800</code>で始まるメッセージは即座に異常と判断される。
+            構造は一貫しており、<code>888800</code>のプレフィックスの後に、多くの場合タイムスタンプと
+            <code>8888</code>で終わる標準的な文字列が続く。
+            <br><br>
+            2023年、NEET INTELは約20年分の記録において8888メッセージがわずか11件しか確認されていないことをまとめた
+            <a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank" rel="noopener">動画</a>を公開した。
+            この動画では、モニタリングに大きな空白と欠陥があるという疑念、および改善策についても論じられている。
+            それ以降、記録件数は倍以上に増加した。VLFでは8888メッセージが比較的定期的に確認されるが、
+            HFではずっと稀であり、HFでの放送のほとんどは送信後に取り消し宣言（disregarded）が出されている。
+            それらが何を表すのかは依然として不明確だ。もし誤りであれば送信したオペレーターは気づくはずだと考えるのが自然だが、
+            取り消し宣言を受けた<i>&#8220;oh I see&#8221;</i> 8888（2023.06.13）に聞こえたような異例の終話音声を前にすると、
+            特定の結論を導き出すことは難しい。
+        </div>
     </div>
 
     <!-- Timeline -->
     <div class="tl-section">
-        <h3>Observation Timeline</h3>
-        <div class="tl-subtitle">HF &amp; VLF &middot; 1999&ndash;present</div>
+        <h3><span class="en-text">Observation Timeline</span><span class="jp-text">観測タイムライン</span></h3>
+        <div class="tl-subtitle"><span class="en-text">HF &amp; VLF &middot; 1999&ndash;present</span><span class="jp-text">HF・VLF・1999年〜現在</span></div>
         <div class="tl-body">
             <div class="tl-label-col" id="tlLabelCol"></div>
             <div class="tl-chart" id="tlChart"></div>
@@ -427,7 +474,7 @@
         <div class="tl-legend">
             <div class="tl-legend-item"><span class="tl-legend-swatch" style="background:#4eff80;"></span>HF</div>
             <div class="tl-legend-item"><span class="tl-legend-swatch" style="background:#42c8ff;"></span>VLF</div>
-            <div class="tl-legend-item"><span class="tl-legend-pub-dot"></span>Publication</div>
+            <div class="tl-legend-item"><span class="tl-legend-pub-dot"></span><span class="en-text">Publication</span><span class="jp-text">文献</span></div>
         </div>
     </div>
     <div id="tlTooltip"></div>
@@ -436,13 +483,13 @@
         <table>
             <thead>
                 <tr>
-                    <th>Date</th>
+                    <th><span class="en-text">Date</span><span class="jp-text">日付</span></th>
                     <th>UTC</th>
-                    <th>Callsign</th>
-                    <th>Message</th>
-                    <th>Medium</th>
-                    <th>Notes</th>
-                    <th>Source</th>
+                    <th><span class="en-text">Callsign</span><span class="jp-text">コールサイン</span></th>
+                    <th><span class="en-text">Message</span><span class="jp-text">メッセージ</span></th>
+                    <th><span class="en-text">Medium</span><span class="jp-text">媒体</span></th>
+                    <th><span class="en-text">Notes</span><span class="jp-text">備考</span></th>
+                    <th><span class="en-text">Source</span><span class="jp-text">出典</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -822,13 +869,16 @@
         function esc(s) {
             return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
+        function t(en, jp) {
+            return (document.body.classList.contains('show-jp') && jp) ? jp : en;
+        }
 
         const EVENTS = [
             { date:'1999-04-19', medium:'HF',  dis:false, cs:'?',         msg:'888800',                               notes:'' },
             { date:'2003-12-01', medium:'HF',  dis:false, cs:'SCULPTOR',  msg:'888800010715GGKKLLMMNNXXZZ8888',       notes:'' },
-            { date:'2003-12-01', medium:'HF',  dis:false, cs:'SCULPTOR',  msg:'888800',                               notes:"didn't transcribe full message" },
+            { date:'2003-12-01', medium:'HF',  dis:false, cs:'SCULPTOR',  msg:'888800',                               notes:"didn't transcribe full message", notes_jp:'全文は記録されず' },
             { date:'2003-12-01', medium:'HF',  dis:false, cs:'GERANIUM',  msg:'888800020315GGKKLLMMNNXXZZ8888',       notes:'' },
-            { date:'2003-12-01', medium:'HF',  dis:false, cs:'GERANIUM',  msg:'888800',                               notes:"didn't transcribe full message" },
+            { date:'2003-12-01', medium:'HF',  dis:false, cs:'GERANIUM',  msg:'888800',                               notes:"didn't transcribe full message", notes_jp:'全文は記録されず' },
             { date:'2004-02-23', medium:'HF',  dis:false, cs:'?',         msg:'888800232346GGKK??MRNNXXZ?AABBCC8888', notes:'' },
             { date:'2007-06-26', medium:'HF',  dis:false, cs:'?',         msg:'88880025I600AAE6GG00NNXXZZ8886',       notes:'' },
             { date:'2018-03-13', medium:'HF',  dis:true,  cs:'WILD BUCK', msg:'888800',                               notes:'' },
@@ -838,8 +888,9 @@
             { date:'2022-11-18', medium:'HF',  dis:false, cs:'RETALIATE', msg:'888800181831AAEEGGKKNNXXZZ8888',       notes:'' },
             { date:'2022-11-22', medium:'HF',  dis:false, cs:'FINNEGAN',  msg:'888800221650AAEEGGKKNNXXZZ8888',       notes:'' },
             { date:'2023-03-12', medium:'HF',  dis:true,  cs:'STOCKYARD', msg:'8888000',                              notes:'' },
-            { date:'2023-06-13', medium:'HF',  dis:true,  cs:'SYMBOLIC',  msg:'888800',                               notes:'the disregarded "oh I see" 8888',
-              anecdote:'Before disregarding this message, the operator reading it could be heard saying "oh I see" in response to something a second voice said in the background.' },
+            { date:'2023-06-13', medium:'HF',  dis:true,  cs:'SYMBOLIC',  msg:'888800',                               notes:'the disregarded "oh I see" 8888', notes_jp:'取り消し宣言を受けた「oh I see」8888',
+              anecdote:'Before disregarding this message, the operator reading it could be heard saying "oh I see" in response to something a second voice said in the background.',
+              anecdote_jp:'このメッセージの取り消しを宣言する前に、読み上げていたオペレーターがバックグラウンドの別の声に応じて「oh I see」と発するのが聞こえた。' },
             { date:'2023-08-21', medium:'HF',  dis:true,  cs:'BAG FEED',  msg:'888800',                               notes:'' },
             { date:'2023-12-21', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800211852AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB3' },
             { date:'2024-03-13', medium:'HF',  dis:true,  cs:'MUSCULAR',  msg:'8888',                                 notes:'' },
@@ -847,7 +898,7 @@
             { date:'2024-05-17', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800171939AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
             { date:'2024-05-17', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800171956AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
             { date:'2024-05-17', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800172020AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
-            { date:'2024-09-10', medium:'VLF', dis:false, cs:'\u2014',    msg:'*',                                    notes:'Likely E4 ADFEB4 (missed?)' },
+            { date:'2024-09-10', medium:'VLF', dis:false, cs:'\u2014',    msg:'*',                                    notes:'Likely E4 ADFEB4 (missed?)', notes_jp:'E4 ADFEB4と思われる（記録漏れ？）' },
             { date:'2024-09-13', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800131824AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB4' },
             { date:'2024-09-22', medium:'VLF', dis:false, cs:'PHOSPHATE', msg:'888800221601AAEEGGKKNNXXZZ8888',       notes:'E6 AE0412' },
             { date:'2024-09-23', medium:'VLF', dis:false, cs:'(WEPS13)',  msg:'888800DDHHMMAAEEGGKKNNXXZZ8888',       notes:'E6 AE0414' },
@@ -857,17 +908,20 @@
             { date:'2025-02-08', medium:'HF',  dis:true,  cs:'PAWN SHOP', msg:'888800',                               notes:'' },
             { date:'2025-04-15', medium:'HF',  dis:true,  cs:'IMPLICATE', msg:'888800',                               notes:'' },
             { date:'2025-09-04', medium:'HF',  dis:true,  cs:'YOUNG BOY', msg:'888800041141AAEEGGKKNNXXZZ8888',       notes:'Shogenji Yoko 8888',
-              anecdote:'It\'s the Shogenji Yoko 8888 message!' },
+              anecdote:'It\'s the Shogenji Yoko 8888 message!',
+              anecdote_jp:'正源司陽子8888メッセージ！' },
             { date:'2025-09-23', medium:'VLF', dis:false, cs:'ORE MINE',  msg:'888800231704AAEEGGKKNNXXZZ8888',       notes:'E6 AF54BB (AE0413?)' },
-            { date:'2025-09-23', medium:'HF',  dis:true,  cs:'TEST KIT',  msg:'888800260901AAEEGGKKNNXXZZ8888',       notes:'before SKYMASTER 251026' },
+            { date:'2025-09-23', medium:'HF',  dis:true,  cs:'TEST KIT',  msg:'888800260901AAEEGGKKNNXXZZ8888',       notes:'before SKYMASTER 251026', notes_jp:'SKYMASTER 251026の前' },
             { date:'2025-11-06', medium:'HF',  dis:true,  cs:'NEIGHBOR',  msg:'888800',                               notes:'' },
             { date:'2025-11-18', medium:'HF',  dis:true,  cs:'COLD DUCK', msg:'888800',                               notes:'' },
             { date:'2026-02-06', medium:'HF',  dis:true,  cs:'ABSENTEE',  msg:'888800061633AAEE',                     notes:'' },
             { date:'2026-02-27', medium:'HF',  dis:true,  cs:'AMBITION',  msg:'888800',                               notes:'' },
             { date:'2012-01-01', type:'pub', cs:'2012 Gouge Book', msg:'', notes:'', label:'2012 Gouge Book',
-              desc:'Internal instructions for STRATCOMWING ONE; "Quad 8\'s" are mentioned in a \'PRE OPAREA\' checklist.'},
+              desc:'Internal instructions for STRATCOMWING ONE; "Quad 8\'s" are mentioned in a \'PRE OPAREA\' checklist.',
+              desc_jp:'STRATCOMWING ONEの内部規定文書。「Quad 8\'s」は「PRE OPAREA」チェックリストの中で言及されている。' },
             { date:'2023-10-01', type:'pub', cs:'8888 Messages',   msg:'', notes:'NEET INTEL', label:'8888 Messages (NEET INTEL)',
-              desc:'YouTube video by NEET INTEL cataloging only 11 documented instances over nearly 20 years of records.' },
+              desc:'YouTube video by NEET INTEL cataloging only 11 documented instances over nearly 20 years of records.',
+              desc_jp:'NEET INTELによるYouTube動画。約20年分の記録の中で確認されたわずか11件の8888メッセージをまとめたもの。' },
         ];
 
         // ── build ────────────────────────────────────────────────────
@@ -1013,7 +1067,7 @@
                         const displayName = ev.cs === 'YOUNG BOY' ? 'Hinatazaka46' : '\u201coh I see\u201d';
                         let html = '<span class="tt-date">' + esc(ev.date) + '</span>';
                         html += '<span class="tt-cs">' + displayName + '</span>';
-                        html += '<span class="tt-desc">' + esc(ev.anecdote) + '</span>';
+                        html += '<span class="tt-desc">' + esc(t(ev.anecdote, ev.anecdote_jp)) + '</span>';
                         tooltip.innerHTML = html;
                         tooltip.style.display = 'block';
                         posTooltip(e);
@@ -1050,16 +1104,16 @@
 
                 let html = '<span class="tt-date">' + esc(ev.date) + '</span>';
                 if (isPub) {
-                    html += '<span class="tt-medium pub">PUBLICATION</span>';
+                    html += '<span class="tt-medium pub">' + t('PUBLICATION', '文献') + '</span>';
                     html += '<span class="tt-cs">' + esc(ev.cs) + '</span>';
-                    if (ev.desc) html += '<span class="tt-desc">' + esc(ev.desc) + '</span>';
+                    if (ev.desc) html += '<span class="tt-desc">' + esc(t(ev.desc, ev.desc_jp)) + '</span>';
                 } else {
                     const medCls = isVlf ? 'vlf' : 'hf';
                     const struckClass = ev.dis ? ' tt-struck' : '';
                     html += '<span class="tt-medium ' + medCls + '">' + ev.medium + '</span>';
                     html += '<span class="tt-cs' + struckClass + '">' + esc(ev.cs) + '</span>';
                     html += '<span class="tt-msg' + struckClass + '">' + esc(ev.msg) + '</span>';
-                    if (ev.notes) html += '<span class="tt-notes">' + esc(ev.notes) + '</span>';
+                    if (ev.notes) html += '<span class="tt-notes">' + esc(t(ev.notes, ev.notes_jp)) + '</span>';
                 }
                 tooltip.innerHTML = html;
                 tooltip.style.display = 'block';
@@ -1083,6 +1137,13 @@
             tooltip.style.top  = y + 'px';
         }
     })();
+
+    function toggleLang() {
+        var body = document.body;
+        var btn  = document.querySelector('.lang-btn');
+        body.classList.toggle('show-jp');
+        btn.textContent = body.classList.contains('show-jp') ? 'EN' : '日本語';
+    }
     </script>
 </body>
 </html>
