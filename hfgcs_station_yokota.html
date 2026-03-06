@@ -251,12 +251,6 @@
         #map:hover .secondary-marker div {
             box-shadow: 0 0 14px rgba(92,154,219,0.8), 0 0 35px rgba(92,154,219,0.4) !important;
         }
-        #map .dist-label span {
-            transition: text-shadow 0.3s ease;
-        }
-        #map:hover .dist-label span {
-            text-shadow: 0 0 8px rgba(255,255,255,0.7), 0 0 18px rgba(255,255,255,0.3);
-        }
         #map .leaflet-overlay-pane path {
             transition: filter 0.3s ease;
         }
@@ -659,9 +653,9 @@
             })
         }).addTo(map);
 
-        distLabel(mid(yokota, toko), '~14 km', -0.015, -0.01);
+        distLabel(mid(yokota, toko), '~14 km', -0.025, 0.025);
         distLabel(mid(yokota, owada), '~22 km', 0.030, -0.027);
-        distLabel(mid(toko, owada), '~10 km', 0.020, 0.005);
+        distLabel(mid(toko, owada), '~10 km', 0.010, 0.025);
 
         // Fit bounds to show all markers
         const bounds = L.latLngBounds([
