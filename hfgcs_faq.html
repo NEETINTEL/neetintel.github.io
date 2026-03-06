@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HFGCS FAQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@900&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #0d0d0d;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 40px 40px, 40px 40px;
+            background-attachment: fixed;
+            color: #ccc;
+            margin: 0;
+            padding: 30px 20px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .nav-bar a { color: #4a9eff; text-decoration: none; }
+        .nav-bar a:hover { color: #6bb6ff; text-decoration: underline; }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #4a9eff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.15rem;
+            margin-top: 45px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        h3 {
+            color: #ddd;
+            font-size: 1rem;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+
+        p { margin: 12px 0; }
+
+        a { color: #4a9eff; text-decoration: none; }
+        a:hover { color: #6bb6ff; text-decoration: underline; }
+
+        html { scroll-behavior: smooth; }
+
+        strong { color: #e0e0e0; }
+        em { color: #ddd; }
+
+        ol, ul {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        li { margin-bottom: 8px; }
+
+        code {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #1a1a1a;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.92em;
+            color: #e0e0e0;
+        }
+
+        pre {
+            background-color: rgba(17, 17, 17, 0.5);
+            border-left: 3px solid rgba(51, 51, 51, 0.5);
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            color: #aaa;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .note {
+            background-color: rgba(255, 193, 7, 0.08);
+            border-left: 3px solid #ffc107;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .note strong { color: #ffc107; }
+
+        .info-box {
+            background-color: rgba(74, 158, 255, 0.08);
+            border-left: 3px solid #4a9eff;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            color: #aaa;
+        }
+
+        /* TOC */
+        .toc {
+            margin: 0 0 10px 0;
+        }
+        .toc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .toc-header h2 {
+            margin: 0;
+            padding: 0;
+            border: none;
+            font-size: 0.9rem;
+            color: #888;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .expand-toggle {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8em;
+            color: #555;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .expand-toggle:hover { color: #4a9eff; }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+            column-count: 2;
+            column-gap: 24px;
+        }
+        @media (max-width: 600px) {
+            .toc ul { column-count: 1; }
+        }
+        .toc li {
+            margin-bottom: 3px;
+            font-size: 0.88em;
+            break-inside: avoid;
+        }
+        .toc li a {
+            color: #666;
+            transition: color 0.2s;
+        }
+        .toc li a:hover { color: #fff; }
+        .toc li a::before {
+            content: '\25B8 ';
+            color: #333;
+            font-size: 0.8em;
+        }
+
+        /* FAQ items */
+        .faq-section {
+            margin-top: 10px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            padding: 16px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+        }
+        .faq-question:hover .q-text { color: #fff; }
+
+        .faq-question .q-marker {
+            font-family: 'IBM Plex Mono', monospace;
+            color: #4a9eff;
+            font-weight: 500;
+            font-size: 0.85em;
+            flex-shrink: 0;
+        }
+
+        .faq-question .q-text {
+            color: #e0e0e0;
+            font-weight: 500;
+            flex: 1;
+            transition: color 0.2s;
+        }
+
+        .faq-question .q-toggle {
+            font-family: 'IBM Plex Mono', monospace;
+            color: #555;
+            font-size: 0.85em;
+            flex-shrink: 0;
+            transition: transform 0.3s, color 0.2s;
+        }
+
+        .faq-item.open .q-toggle {
+            transform: rotate(45deg);
+            color: #4a9eff;
+        }
+        .faq-item.open .q-marker {
+            color: #6bb6ff;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0 0 0 32px;
+        }
+
+        .faq-item.open .faq-answer {
+            padding-bottom: 24px;
+        }
+
+        .faq-answer p:first-child { margin-top: 0; }
+        .faq-answer ul { margin-top: 8px; }
+
+        /* Footnote refs */
+        .fn-ref {
+            color: #4a9eff;
+            font-size: 0.75em;
+            text-decoration: none;
+            vertical-align: super;
+            line-height: 0;
+            padding: 0 1px;
+        }
+        .fn-ref:hover { color: #6bb6ff; text-decoration: underline; }
+
+        /* References section */
+        .references {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a2a;
+        }
+        .references h2 {
+            font-size: 0.9rem;
+            color: #888;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            margin-top: 0;
+        }
+        .references ol {
+            font-size: 0.85em;
+            color: #777;
+            padding-left: 0;
+            list-style: none;
+        }
+        .references li {
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+        .fn-back {
+            color: #4a9eff;
+            text-decoration: none;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.92em;
+            margin-right: 4px;
+            cursor: pointer;
+        }
+        .fn-back:hover {
+            color: #6bb6ff;
+            text-decoration: underline;
+        }
+        .references li a {
+            word-break: break-all;
+        }
+
+        /* Closing section */
+        .closing {
+            margin-top: 40px;
+        }
+        .closing p {
+            color: #888;
+            font-size: 0.92em;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin: 50px 0 20px 0;
+        }
+        .footer a {
+            color: #555;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8em;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.2s;
+        }
+        .footer a:hover { color: #fff; }
+
+        /* Draft stamp overlay */
+        .draft-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            pointer-events: none;
+            z-index: 9999;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .draft-border {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 8px double rgba(229, 57, 53, 0.90);
+            border-radius: 8px;
+            filter: url(#stamp-grunge-mild);
+        }
+        .draft-text {
+            position: relative;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 900;
+            font-size: clamp(100px, 18vw, 240px);
+            color: rgba(229, 57, 53, 0.90);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 20px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1;
+            filter: url(#stamp-grunge);
+        }
+        .draft-kanji {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.7em;
+        }
+        .draft-sub {
+            font-size: 0.28em;
+            letter-spacing: 0.25em;
+            margin-top: 2px;
+        }
+
+        /* Ambient glow — silver (dark) / gold (light) */
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            transition: background 0.6s;
+            background: radial-gradient(ellipse at 50% 0%, rgba(180,200,220,0.09) 0%, transparent 55%);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            font-size: 1.1em;
+            cursor: pointer;
+            user-select: none;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s, transform 0.3s;
+        }
+        .theme-toggle:hover {
+            background-color: rgba(255,255,255,0.08);
+            transform: rotate(20deg);
+        }
+
+        /* ========== LIGHT THEME ========== */
+        [data-theme="light"] body {
+            background-color: #f2f1ef;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+            color: #444;
+        }
+        [data-theme="light"] body::before {
+            background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.04) 100%);
+        }
+        [data-theme="light"] .ambient-glow {
+            background: radial-gradient(ellipse at 50% 0%, rgba(120,130,145,0.10) 0%, transparent 50%);
+        }
+        [data-theme="light"] .theme-toggle:hover {
+            background-color: rgba(0,0,0,0.06);
+        }
+
+        /* Nav */
+        [data-theme="light"] .nav-bar {
+            border-bottom-color: #ddd;
+        }
+        [data-theme="light"] .nav-bar a { color: #2563a8; }
+        [data-theme="light"] .nav-bar a:hover { color: #1a4a7a; }
+
+        /* Headings */
+        [data-theme="light"] h1 {
+            color: #1a1a1a;
+            border-bottom-color: #2563a8;
+        }
+        [data-theme="light"] h2 {
+            color: #1a1a1a;
+            border-bottom-color: #ddd;
+        }
+        [data-theme="light"] h3 { color: #333; }
+
+        /* Text */
+        [data-theme="light"] strong { color: #222; }
+        [data-theme="light"] em { color: #333; }
+        [data-theme="light"] a { color: #2563a8; }
+        [data-theme="light"] a:hover { color: #1a4a7a; }
+
+        /* Code */
+        [data-theme="light"] code {
+            background-color: #e4e4e2;
+            color: #333;
+        }
+        [data-theme="light"] pre {
+            background-color: rgba(0,0,0,0.03);
+            border-left-color: rgba(0,0,0,0.1);
+            color: #555;
+        }
+
+        /* Callouts */
+        [data-theme="light"] .note {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left-color: #d4a000;
+        }
+        [data-theme="light"] .note strong { color: #b38600; }
+        [data-theme="light"] .info-box {
+            background-color: rgba(37, 99, 168, 0.06);
+            border-left-color: #2563a8;
+        }
+        [data-theme="light"] .intro { color: #666; }
+
+        /* TOC */
+        [data-theme="light"] .toc-header h2 { color: #999; }
+        [data-theme="light"] .expand-toggle { color: #999; }
+        [data-theme="light"] .expand-toggle:hover { color: #2563a8; }
+        [data-theme="light"] .toc li a { color: #777; }
+        [data-theme="light"] .toc li a:hover { color: #1a1a1a; }
+        [data-theme="light"] .toc li a::before { color: #ccc; }
+
+        /* FAQ items */
+        [data-theme="light"] .faq-item { border-bottom-color: #e0e0e0; }
+        [data-theme="light"] .faq-question:hover .q-text { color: #111; }
+        [data-theme="light"] .faq-question .q-marker { color: #2563a8; }
+        [data-theme="light"] .faq-question .q-text { color: #222; }
+        [data-theme="light"] .faq-question .q-toggle { color: #bbb; }
+        [data-theme="light"] .faq-item.open .q-toggle { color: #2563a8; }
+        [data-theme="light"] .faq-item.open .q-marker { color: #1a4a7a; }
+
+        /* Footnotes */
+        [data-theme="light"] .fn-ref { color: #2563a8; }
+        [data-theme="light"] .fn-ref:hover { color: #1a4a7a; }
+
+        /* References */
+        [data-theme="light"] .references { border-top-color: #ddd; }
+        [data-theme="light"] .references h2 { color: #999; }
+        [data-theme="light"] .references ol { color: #777; }
+        [data-theme="light"] .references a { color: #2563a8; }
+        [data-theme="light"] .fn-back { color: #2563a8; }
+        [data-theme="light"] .fn-back:hover { color: #1a4a7a; }
+
+        /* Closing */
+        [data-theme="light"] .closing p { color: #666; }
+
+        /* Footer */
+        [data-theme="light"] .footer a { color: #bbb; }
+        [data-theme="light"] .footer a:hover { color: #333; }
+    </style>
+</head>
+<body>
+    <svg style="position:absolute;width:0;height:0;">
+        <filter id="stamp-grunge" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="4" seed="7" result="warp"/>
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="5" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+            <feMorphology operator="erode" radius="0.4" in="displaced"/>
+        </filter>
+        <filter id="stamp-grunge-mild" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="4" seed="7" result="warp"/>
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+            <feMorphology operator="erode" radius="0.3" in="displaced"/>
+        </filter>
+    </svg>
+    <div class="draft-overlay">
+        <div class="draft-border"></div>
+        <div class="draft-text"><span class="draft-kanji">草稿</span><span class="draft-sub">DRAFT</span></div>
+    </div>
+    <div class="ambient-glow"></div>
+    <div class="content">
+        <div class="nav-bar">
+            <a href="index.html">&larr; Back to Index</a>
+            <span class="theme-toggle" id="theme-toggle" title="Toggle theme"></span>
+        </div>
+
+        <h1>HFGCS &mdash; Frequently Asked Questions</h1>
+
+        <div class="intro">
+            <p>The usual information about the HFGCS &ndash; &ldquo;What is an EAM? What is a SKYKING?&rdquo; etc. &ndash; even if you&rsquo;ve read this kind of thing before or watched a video about it, this contains information I haven&rsquo;t seen discussed elsewhere, and some original research on my part, so I believe you will find it useful. Also, even if you have read or watched things about the HFGCS, as I&rsquo;ll discuss in a moment, a lot of information out there is outdated.</p>
+        </div>
+
+        <nav class="toc">
+            <div class="toc-header">
+                <h2>Contents</h2>
+                <span class="expand-toggle" id="expand-toggle">Expand all</span>
+            </div>
+            <ul>
+                <li><a href="#faq-hfgcs">What is the HFGCS?</a></li>
+                <li><a href="#faq-eam">What is an EAM?</a></li>
+                <li><a href="#faq-eam-chars">EAM character patterns</a></li>
+                <li><a href="#faq-eam-freq">EAM frequency &amp; &ldquo;SHTF events&rdquo;</a></li>
+                <li><a href="#faq-fdm">What is an FDM?</a></li>
+                <li><a href="#faq-skyking">What is a SKYKING?</a></li>
+                <li><a href="#faq-mainsail">Who is MAINSAIL?</a></li>
+                <li><a href="#faq-callsign">What is a rotating daily callsign?</a></li>
+                <li><a href="#faq-8888">What is an &ldquo;8888 message&rdquo;?</a></li>
+                <li><a href="#faq-skymaster">What is a SKYMASTER message?</a></li>
+                <li><a href="#faq-274">What is a 274 message?</a></li>
+                <li><a href="#faq-recovery">What is a Recovery Report?</a></li>
+                <li><a href="#faq-ce">What is the CE Window?</a></li>
+                <li><a href="#faq-z170">What is Z170?</a></li>
+            </ul>
+        </nav>
+
+        <div class="faq-section">
+
+            <!-- ◆ What is the HFGCS? -->
+            <div class="faq-item" id="faq-hfgcs">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is the HFGCS?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Many explanations of the US military&rsquo;s High Frequency Global Communications System (HFGCS) are repeating the same information available 15&ndash;20+ years ago<a href="#fn-1" class="fn-ref">1</a><a href="#fn-2" class="fn-ref">,2</a>. Part of the reason for this is because while the US military used to be more candid about the HFGCS (at one point the HFGCS even had its own website<a href="#fn-3" class="fn-ref">3</a>), they began to be less forthcoming about it sometime in the mid-2000s. Nonetheless, its existence is not confidential, and you can still come across occasional mentions of the HFGCS in news stories, non-classified documentation, etc.</p>
+                    <p>In fact, an exhaustive and contemporary description (published March 2023) of the HFGCS, straight from the Department of Defense, is freely available online &ndash; buried in a near-1000 page budget document<a href="#fn-4" class="fn-ref">4</a>. It&rsquo;s definitely worth a read, because some of the info and explanations about the HFGCS out there actively contradict some of its information.</p>
+                    <p>Colloquially, most of the time people talk about the &ldquo;HFGCS&rdquo; they&rsquo;re in fact referring to a network of ground stations located across the world which simulcast broadcasts of EAMs and other traffic, provide phone patch services, and can play a role in numerous other activity (see DoD summary). <a href="https://priyom.org/military-stations/united-states/hfgcs" target="_blank">priyom.org</a> has a map of these stations<a href="#fn-5" class="fn-ref">5</a>; they&rsquo;re not entirely correct when they suggest that these stations are all remotely controlled from the Centralized Network Control Station (CNCS) located at Andrews AFB, because it actually isn&rsquo;t only Andrews AFB &ndash; in a 2006 article, Andrews anticipated soon having &ldquo;another CNCS at Offutt Air Force Base&rdquo;<a href="#fn-6" class="fn-ref">6</a>. My own impression based on voices and certain kinds of activity<a href="#fn-7" class="fn-ref">7</a>, is there is indeed at least one additional control center.</p>
+                    <p>Though it goes unsourced, Wikipedia&rsquo;s current write-up of the HFGCS says the second station is Grand Forks AFB, and any basic web search will find support for this<a href="#fn-8" class="fn-ref">8</a>. Grand Forks is not Offutt and it seems unlikely the former would identify as the latter, so there&rsquo;s some clarification needed for what happened here<a href="#fn-9" class="fn-ref">9</a>, but it&rsquo;s almost certainly not the case that Andrews AFB is the only control center.</p>
+                    <p>As of January 2024, the current primary frequencies of the HFGCS are <strong>4724</strong>, <strong>8992 kHz</strong>, <strong>11175 kHz</strong>, and <strong>15016 kHz</strong>. The HFGCS stations will usually simulcast messages on all of these frequencies at the same time, but not always. Things begin to get a bit confusing here, not just because people will often confuse their own inability to pick up a message on a frequency as that message not broadcasting on that frequency at all, but because there are both times broadcasts are sometimes exclusive to only one or some of the frequencies. The HFGCS has previously seemed to operate on schedules<a href="#fn-10" class="fn-ref">10</a>, and might still do.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is an EAM? -->
+            <div class="faq-item" id="faq-eam">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is an EAM?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>From the same DoD budgetary document posted earlier, Emergency Action Messages are <em>&ldquo;highly structured, authenticated messages primarily used in the command and control of nuclear forces. They are disseminated over numerous survivable and non-survivable communication systems including terrestrial and space systems.&rdquo;</em> Most descriptions available online are generally correct &ndash; most are 30 characters, etc. &ndash; but are generally just recycling the same information over and over and many more observations can be made about them.</p>
+
+                    <div class="note">
+                        <p>Despite the confidence with which it&rsquo;s declared, the oft-made statement that all EAMs are encrypted using one-time pads (OTPs) is not necessarily correct; not necessarily because there&rsquo;s no source for this statement available anywhere, but because there&rsquo;s decent reason to doubt this. Given messages are broadcast and received by multiple assets globally, and the amount of messages broadcast during any given period does not appear to be necessarily known in advance, etc. &ndash; there are several logistical demands that make the feasibility of using OTPs for all EAMs questionable.</p>
+                        <p>If you think about the actual needs of the US military for these messages, they don&rsquo;t actually need them to be OTP encrypted. EAMs are probably time-sensitive messages that even decrypted would probably use abbreviations, codewords, etc. that wouldn&rsquo;t be comprehensible to anyone but the intended receiver(s). So as long as EAMs are encoded in a method that makes them highly resistant to decryption (short of significant compute time/power), the trade-off in not using OTPs for simpler implementation could make sense for them.</p>
+                        <p>This is controversial because it upends long-standing accepted wisdom, but I think this only became conventional wisdom because when the shortwave listening (SWL) community, which mostly started off in numbers stations which do use OTPs, discovered the HFGCS, they probably automatically assumed EAMs also used OTPs and never second-guessed this.</p>
+                    </div>
+
+                    <p>While many see EAMs as completely indecipherable, they are (as the DoD states) highly structured. Elements of this structure can be readily obvious to anyone who bothers to transcribe them or else can be teased out with a little bit of observation. For example, 100+ character EAMs are often structurally similar to each other based on the specific message length, with repeating tetragrams (e.g. AAAA, BBBB, etc.) in similar positions<a href="#fn-11" class="fn-ref">11</a><a href="#fn-12" class="fn-ref">,12</a>. 30&ndash;100 character long EAMs also have similar structures, but often more obfuscated<a href="#fn-13" class="fn-ref">13</a><a href="#fn-14" class="fn-ref">,14</a>. Message structure is obvious even for 200+ character messages<a href="#fn-15" class="fn-ref">15</a>.</p>
+
+                    <h3>Miscellaneous EAM information</h3>
+                    <ul>
+                        <li>At least at one point, EAMs were encoded using a program called <strong>EAMGEN</strong><a href="#fn-16" class="fn-ref">16</a>.</li>
+                        <li>From a transcription of a phone conversation available in the DOD archive, <a href="https://x.com/ReidDA" target="_blank">@ReidDA</a> discovered that on September 11, 2001, an EAM was used to change the DEFCON level<a href="#fn-17" class="fn-ref">17</a>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ◆ EAM character patterns -->
+            <div class="faq-item" id="faq-eam-chars">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What patterns exist in EAM characters?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <ul>
+                        <li>For some reason, the characters <strong>M</strong> and <strong>5</strong> appear about half as often as any of the other characters.</li>
+                        <li>For almost all messages broadcast over the HFGCS (8888 messages are an exception), the characters <strong>0, 1, 8, and 9</strong> don&rsquo;t appear in any of them. The reasons for 0 and 1 are obvious &ndash; the numbers 0 and 1 could be confused for the letters O and I (or vice versa). You might think this shouldn&rsquo;t be a concern because messages are read off using a phonetic alphabet, but they&rsquo;re still occasionally (if not always?) being read off from someone&rsquo;s handwriting, so legibility could be a concern<a href="#fn-18" class="fn-ref">18</a>.</li>
+                        <li>The reason for withholding the numbers 8 and 9 is less obvious, but consider that A&ndash;Z &amp; 2&ndash;7 = <strong>32 possible characters</strong> for an EAM, so it seems reasonable to suggest that EAMs could be using base-32 encryption.</li>
+                        <li>Some EAMs have strings of identical characters in them, even if they&rsquo;re broadcast weeks&ndash;months apart, if they have the same 2 characters at the start<a href="#fn-19" class="fn-ref">19</a>. (Another knock against the idea that we can be confident that they&rsquo;re encoded using OTPs.)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ◆ EAM frequency & SHTF -->
+            <div class="faq-item" id="faq-eam-freq">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">How often are EAMs broadcast? Do they correlate with world events?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <ul>
+                        <li>EAM broadcast times are not completely random, and they&rsquo;re more often broadcast during <strong>daylight hours for CONUS</strong><a href="#fn-20" class="fn-ref">20</a>.</li>
+                        <li>Certain days of the week are typically busier than others<a href="#fn-21" class="fn-ref">21</a>.</li>
+                        <li>While monitoring the HFGCS over the last two years, I heard anywhere from 0&ndash;50+ messages any given day, with the typical range more like <strong>5 to 25</strong>. It&rsquo;s pretty rare for a day to go by without at least 1 EAM being broadcast (when this happens it tends to be on a federal holiday, such as Thanksgiving or Christmas). In line with the typical range I gave, the running average is usually around <strong>15 messages a day</strong>.</li>
+                        <li>Folks will usually stumble on apparent correlations &ndash; e.g. if something big happens in Ukraine or the Middle East and more than a couple dozen EAMs have been broadcast on the same day, people will take to Twitter and YT and announce a connection. However, people will also regularly overlook days with 30+ EAMs if there&rsquo;s nothing in the news, and vice versa &ndash; if there are big news headlines but not a significant amount of EAM traffic, EAMs go undiscussed that day. <strong>A strong, consistent correlation between the number of EAMs broadcast and geopolitical events has never been established.</strong></li>
+                        <li><strong>Are long EAMs cause for concern?</strong> At least some long messages appear to be broadcast with a kind of periodicity, and/or tend to be broadcast around the same time as each other. For example, there were two instances of a 194 character message broadcast on the third Sunday of a month, and in both instances a 219 character message was broadcast the next day; similarly, on two Sundays in 2023, a 246 character message and 216 character messages were broadcast around the same time as each other<a href="#fn-22" class="fn-ref">22</a>. Long messages also tend to be broadcast on weekends more often than weekdays. So if some long messages appear to be broadcast in a pre-scheduled fashion to be pseudo-predictable, and geopolitical events don&rsquo;t have quite that kind of periodicity &ndash; whether some correlate to real-world events is still up for debate, but many of them definitely are not.</li>
+                        <li><strong>Claims that an operator&rsquo;s tone of voice as they read an EAM could indicate the significance of an EAM are completely ridiculous.</strong> This isn&rsquo;t necessarily because it&rsquo;s a question about whether the operator understands the significance of the message<a href="#fn-23" class="fn-ref">23</a>, but a mixed track record on the part of the people who make that claim. I&rsquo;ve seen people claim an HFGCS operator was crying because the EAM they were reading meant that WW3 was about to begin &ndash; not only did WW3 not begin (obviously), the operator wasn&rsquo;t crying, they were laughing. Consider that an operator could read a practice message with strong enunciation and a little nervous tremble in their voice not because nukes are about to fly, but because they know a superior who will pass/fail them is listening. Just like anyone else at any job, the mood of an HFGCS operator could be affected by any number of things &ndash; personal troubles in or out of work, a funny joke someone just told them, workplace pressure, etc.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ◆ What is an FDM? -->
+            <div class="faq-item" id="faq-fdm">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is an FDM?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>People rarely ask about FDMs but they probably should, because <strong>Force Direction Messages</strong> are regularly mentioned in DoD documentation in the same breath as EAMs. Though it&rsquo;s unsourced, <a href="https://numbers-stations.com/usa/hfgcs/" target="_blank">numbers-stations.com</a> states that FDMs are probably structured near-identical to EAMs, and we have no way to tell the difference<a href="#fn-24" class="fn-ref">24</a>. In other words, what the SWL community and internet does at large &ndash; i.e. referring to all these messages as EAMs &ndash; might be backwards. In fact, the above section on &ldquo;What is an EAM?&rdquo; could be wrong on my part and everything I wrote about observing structures of EAMs, etc. is actually about FDMs.</p>
+                    <p>For anyone strictly interested in all this, you might decide that it might be best to talk about all these messages as &ldquo;EAMs and/or FDMs&rdquo; (as I sometimes do), but you&rsquo;ll also come to realize that is clunky and pedantic and sometimes colloquial use of a term overrides actual use.</p>
+                    <p>Having said all this, even though it still isn&rsquo;t possible to tell which one is which, it does appear possible to identify certain &lsquo;subgroups&rsquo; of message types based on the first two characters of messages, which are often reused over certain time periods, but might be acting as differentiating traits<a href="#fn-25" class="fn-ref">25</a> &ndash; i.e., somewhat of a lead does exist on differentiating EAMs and FDMs.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is a SKYKING? -->
+            <div class="faq-item" id="faq-skyking">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is a SKYKING?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SKYKING messages are often discussed whenever you see anyone talk about the HFGCS and EAMs, but <strong>these are rarely broadcast on the HFGCS anymore</strong>. People still talk about them because of what I discussed earlier &ndash; a lot of information about the HFGCS is simply repeating old information that used to be more readily available and a lot of documentation was made when SKYKING messages were actually quite common.</p>
+                    <p>I&rsquo;ve never heard a SKYKING message myself despite all the time I&rsquo;ve spent listening to the HFGCS and I can&rsquo;t really say I&rsquo;m bothered not to have ever heard one. All the reading I have suggests their foreboding reputation is basically undeserved, because while &lsquo;SKYKINGS&rsquo; do indeed appear to be &ldquo;high priority messages&rdquo;, I think they worked as mission abort or return to base messages &ndash; so that instead of being an indication to SWLs that &ldquo;it&rsquo;s about to pop off&rdquo;, it actually seemed to be a sign that &ldquo;whatever it was, it just ended&rdquo;.</p>
+                    <p>Larry Van Horn&rsquo;s 2006 documentation defined SKYKING as <em>&ldquo;The collective call sign for all Single Integrated Operational Plan (SIOP) committed aircraft and missile crews. Its meaning is &lsquo;all SIOP committed aircraft and missile crews copy the following message.&rsquo;&rdquo;</em> It is probably not much more complex than that, so their vanishment seems completely non-notable to me.</p>
+                    <p>If you hear anyone professing expertise about the HFGCS talking about SKYKING messages like they&rsquo;re still a big deal, they&rsquo;re kind of giving themselves away as a pleb<a href="#fn-26" class="fn-ref">26</a>.</p>
+                </div>
+            </div>
+
+            <!-- ◆ Who is MAINSAIL? -->
+            <div class="faq-item" id="faq-mainsail">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">Who is MAINSAIL?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>When someone radios in requesting to speak to MAINSAIL, they&rsquo;re making an open-ended request to speak to <strong>&ldquo;any global ground station&rdquo;</strong> &ndash; e.g. anyone from Andrews, Offutt, etc. can respond. That isn&rsquo;t any different from the way Larry Van Horn wrote it up in 2006. What has changed over the years is who identifies as MAINSAIL.</p>
+                    <p>In the past, stations broadcasting EAMs used to identify under their station callsign &ndash; e.g. Andrews would broadcast an EAM and identify as ANDREWS before reading it and after signing off, Offutt would identify as &ldquo;OFFUTT&rdquo;, etc. Sometime around 2014, they appear to have all switched to instead identifying as MAINSAIL, and sometime around 2015 they all instead began to use rotating daily callsigns.</p>
+                    <p>Currently, when someone requests to speak to MAINSAIL, a ground station responding might either identify as MAINSAIL, the station they are broadcasting and/or receiving from, or the daily HFGCS callsign. You will also still hear MAINSAIL occasionally used as identification during test counts, etc.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is a rotating daily callsign? -->
+            <div class="faq-item" id="faq-callsign">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is a &ldquo;rotating daily callsign&rdquo;?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>As mentioned, around 2015, the callsigns used for EAM broadcasts moved away from stations and MAINSAIL and began to use a variety of unique callsigns. These callsigns almost always change every day at <strong>00:00 UTC</strong>.</p>
+                    <p>I have spent a non-trivial amount of time looking for as many different callsigns used as possible, and with only a couple of ambiguous exceptions, it is fairly obvious to me that virtually all the HFGCS callsigns observe a <strong>9 character limit, including spaces</strong> (some callsigns are two words). The only apparent exceptions are daily callsigns like &ldquo;CUTTY SARK&rdquo; and &ldquo;LIGHT BUOY&rdquo;. It&rsquo;s not obvious to me if this means the character limit is actually 10 characters, or 9 not counting spaces, but my suspicion is they actually smush these into one word (e.g. &ldquo;CUTTY SARK&rdquo; is 10 characters, but &ldquo;CUTTYSARK&rdquo; is 9).</p>
+                    <p>Note that this limit seems to extend for almost all other callsigns used on the HFGCS &ndash; e.g. SKYMASTER fits the 9 character limit, as does MAINSAIL, and so do station names &ndash; ANDREWS, OFFUTT, SIGONELLA. The only exception I can think of is PUERTO RICO, which does indeed identify as &ldquo;PUERTO RICO&rdquo; for radio checks and test counts &ndash; even if you take out the space, you&rsquo;re at 10 characters.</p>
+                    <p>Why wasn&rsquo;t this noticed earlier? At least partly poor documentation &ndash; for example, for many years, an admin of <a href="https://eam.watch" target="_blank">eam.watch</a>, who claimed to have insider knowledge about the HFGCS, incorrectly logged and continues to incorrectly log test counts from Diego Garcia as using the callsign &ldquo;DIEGO GARCIA&rdquo;<a href="#fn-27" class="fn-ref">27</a>. Other SWLers will incorrectly occasionally hear and log callsigns that exceed the limit. Another reason is that it might be, as I suggested earlier, a de facto limit rather than a hard-coded one. While Air Force Instruction 33-217 might have had a lead to this end<a href="#fn-28" class="fn-ref">28</a> &ndash; <em>&ldquo;The VCSLI contains detailed procedures for requesting, assigning, and using voice call signs, and is available on the VCS SIPRNet web site&rdquo;</em> &ndash; that link probably has, or had, the definitive answer, but it isn&rsquo;t live, and probably wasn&rsquo;t publicly accessible anyways.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is an 8888 message? -->
+            <div class="faq-item" id="faq-8888">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is an &ldquo;8888 message&rdquo;?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>As mentioned earlier, the vast majority of EAMs never use the characters 0, 1, 8, or 9. The apparent exception are what I have named &ldquo;8888 messages&rdquo;<a href="#fn-29" class="fn-ref">29</a>, which are superficially similar to EAMs but can include these characters &ndash; most conspicuously, they all <strong>begin and end with a tetragram of four 8s (&ldquo;8888&rdquo;)</strong>.</p>
+                    <p>In October of 2023, I made a video going into depth on these messages and going through the documentation of only 11 messages broadcast from 2004&ndash;2023. It is available on YouTube<a href="#fn-30" class="fn-ref">30</a>; since posting that video, 4 more messages from 2003 were identified, and in November of 2023 a recording of an 8888 message broadcast as a VLF digital transmission was posted by <a href="https://x.com/thenewarea51" target="_blank">@thenewarea51</a> to Twitter<a href="#fn-31" class="fn-ref">31</a>.</p>
+                    <p>Though it&rsquo;s impossible to know how they&rsquo;re considered internally, I consider these separate from, and do not refer to 8888 messages, or any of the following message types, as EAMs.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is a SKYMASTER message? -->
+            <div class="faq-item" id="faq-skymaster">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is a &ldquo;SKYMASTER message&rdquo;?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SKYMASTER messages appear to only be broadcast during <strong>STRATCOM exercises</strong> (I&rsquo;ll often refer to them as &ldquo;SKYMASTER exercises&rdquo;) and are formatted differently from EAMs. Instead of beginning the broadcast with &ldquo;ALL STATIONS, ALL STATIONS [&hellip;] MESSAGE FOLLOWS&rdquo; the broadcaster will say &ldquo;SKYMASTER, SKYMASTER [&hellip;] 1 MESSAGE OF # ITEMS FOLLOWS&hellip;&rdquo;<a href="#fn-32" class="fn-ref">32</a></p>
+                    <p>The current method of identifying as/responding to SKYMASTER might be up for grabs. In 2006, Larry Van Horn noted SKYMASTER is <em>&ldquo;The collective callsign to all USSTRATCOM airborne command post.&rdquo;</em> but to my ear, traffic during the January 11, 2024 exercise didn&rsquo;t seem to line up with this.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is a 274 message? -->
+            <div class="faq-item" id="faq-274">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is a 274 message?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Another message format that appears to only be broadcast during <strong>STRATCOM exercises</strong>, 274 messages are poorly documented and logged online. Despite what the name suggests, these messages are not 274 characters long, so the meaning of the name is non-obvious<a href="#fn-33" class="fn-ref">33</a>.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is a Recovery Report? -->
+            <div class="faq-item" id="faq-recovery">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is a Recovery Report?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Another message format that appears to only be broadcast during <strong>STRATCOM exercises</strong>, a Recovery Report seems to be an unusual way of confirming SKYMASTER messages have been received by the intended recipient. Notably, slashes are actually read off during such reports and might be the only time they are.</p>
+                    <p>I have seen a lot of idiosyncratically and/or incorrectly transcribed EAMs out there use slashes in their notation; because of the format of Recovery Reports I would suggest this is a bad practice to follow.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is the CE Window? -->
+            <div class="faq-item" id="faq-ce">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is the CE Window?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>In addition to the (known) primary HFGCS frequencies and discrete (unknown) frequencies, STRATCOM uses <strong>9031 kHz</strong> which, on the primary frequencies, has been heard referred to as the <strong>&ldquo;Charlie Echo Window&rdquo;</strong> instead of as 9031 kHz, presumably to maintain some level of secrecy to it.</p>
+                    <p>Previously documented by the SWL community, it is part of a series of &ldquo;Charlie Windows&rdquo; (e.g. CA, CB, CC, CD, CE, etc.) of which the frequencies are known for frequencies CA through CI, though I have only heard CE in use. Surprisingly, the frequencies of C Windows documented in the mid to late 2000s are still the same frequencies being used today<a href="#fn-34" class="fn-ref">34</a>.</p>
+                    <p>I have heard operations mention &ldquo;CL&rdquo; but was unable to identify which frequency that was. These frequencies, or at least CE, appear to be reserved for a way for E-6s to communicate with each other.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is Z170? -->
+            <div class="faq-item" id="faq-z170">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is Z170?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Z170</strong> is another code name for a frequency used by STRATCOM, as part of a series of frequencies possibly known as the <strong>&ldquo;Zulu Net&rdquo;</strong>. They might only be used during SKYMASTER exercises. If you spend some time searching online you may find some old documentation of Z frequencies by members of the SWL community, but unlike the C Windows, the Z frequencies are not the same as they used to be. As far as I have found, nobody has been successful in identifying a Z frequency for quite some time and none of the current Z freqs are known.</p>
+                    <p>During a January 11, 2024 SKYMASTER exercise, <a href="https://x.com/theintelfrog" target="_blank">@theintelfrog</a> identified <strong>8008 kHz</strong> in use for broadcasting EAMs and/or SKYMASTER messages, I identified <strong>8035 kHz</strong>, and Jay Projects identified several additional frequencies to the same end. It&rsquo;s possible these are some of the current Z freqs &ndash; but if they are, we don&rsquo;t know what their Z names are.</p>
+                </div>
+            </div>
+
+        </div><!-- /faq-section -->
+
+        <!-- Closing -->
+        <div class="closing">
+            <div class="info-box" style="margin-top:40px;">
+                <p>If you have read all the way to the end and found this useful, this took me a bit to write and represents untold hours spent both monitoring the HFGCS, recording and transcribing EAMs, and looking up information and previous transcriptions across the internet, including scouring Russian-language forums, finding dead Discord servers, etc. Likes, retweets, <a href="https://ko-fi.com/neetintel" target="_blank">ko-fi</a> contributions, etc. let me know it&rsquo;s appreciated and to both keep at it and keep sharing this info with you. Cheers.</p>
+                <p>If you have read this and found it incorrect, please let me know so I can revise for the future, and because I want to know about it! If you wish to argue with me about whether EAMs are OTP encrypted or not, please do not let me know, because I do not want to know about it.</p>
+            </div>
+        </div>
+
+        <!-- References -->
+        <div class="references">
+            <h2>References</h2>
+            <ol>
+                <li id="fn-1">Even though it&rsquo;s almost 20 years old, Larry Van Horn&rsquo;s 2006 writeups of the HFGCS are still the core of most info out there. This is mostly because he did a fantastic job, but it&rsquo;s inevitable some of it would go out of date, and nobody&rsquo;s really picked up where he left off or updated that information. <a href="http://monitoringtimes.com/mtsubscriber/MT%20Mil-Gov%20Freq%20List.pdf" target="_blank">monitoringtimes.com &mdash; MT Mil-Gov Freq List</a></li>
+                <li id="fn-2">See also his blog which he maintained until 2023: <a href="http://mt-milcom.blogspot.com" target="_blank">mt-milcom.blogspot.com</a></li>
+                <li id="fn-3"><a href="https://web.archive.org/web/19971025190903/http://www.mcclellan.af.mil/LH/LHX/" target="_blank">HFGCS website (archived 1997)</a></li>
+                <li id="fn-4"><a href="https://saffm.hq.af.mil/Portals/84/documents/FY24/Procurement/FY24%20Air%20Force%20Other%20Procurement.pdf" target="_blank">FY24 Air Force Other Procurement (DoD budget document)</a></li>
+                <li id="fn-5"><a href="https://priyom.org/military-stations/united-states/hfgcs" target="_blank">priyom.org &mdash; HFGCS</a></li>
+                <li id="fn-6"><a href="https://jba.af.mil/News/Article-Display/Article/337881/andrews-radio-operators-assist-crewmembers-worldwide/" target="_blank">Andrews radio operators assist crewmembers worldwide (2006)</a></li>
+                <li id="fn-7">For example, when a plane requests a radio check over the HFGCS and a voice from one ground station radios in responding they hear them quite well and another voice from a ground station responds to say they can barely hear them.</li>
+                <li id="fn-8">A video of an HFGCS operator at Grand Forks AFB: <a href="https://facebook.com/watch/?v=3804525316238941" target="_blank">facebook.com</a></li>
+                <li id="fn-9">At the very least, a flood happened: <a href="https://offutt.af.mil/News/Article-Display/Article/3411324/offutt-rebuilds-command-center/" target="_blank">Offutt rebuilds command center</a></li>
+                <li id="fn-10">This schedule appears to be outdated &ndash; most of the frequencies listed here aren&rsquo;t in use anymore &ndash; but still a good reference for the idea of the HFGCS operating on schedules. Refer to page 2: <a href="https://udxf.nl/USAF-HFGCS.pdf" target="_blank">udxf.nl &mdash; USAF HFGCS</a></li>
+                <li id="fn-11"><a href="https://x.com/neetintel/status/1703141877627691399" target="_blank">x.com/neetintel &mdash; EAM structure (100+ chars)</a></li>
+                <li id="fn-12"><a href="https://x.com/neetintel/status/1703141877627691399" target="_blank">x.com/neetintel &mdash; EAM structure (100+ chars)</a></li>
+                <li id="fn-13">The apparent structure of 56 character messages is, by comparison, more obscure: <a href="https://youtube.com/watch?v=x5S6IbmzSOU" target="_blank">YouTube</a></li>
+                <li id="fn-14">ChatGPT v3 helped identify the structure of 59 character messages: <a href="https://pic.x.com/anuxxogx3m" target="_blank">pic.x.com</a></li>
+                <li id="fn-15"><a href="https://youtube.com/watch?v=cRVkRYhbteM&list=PLVmgc_OQTMfyAICaD4N_S_TpMMOX7Qdos&index=24" target="_blank">YouTube &mdash; 200+ character EAM structure</a></li>
+                <li id="fn-16"><a href="https://x.com/neetintel/status/1684008070484045824" target="_blank">x.com/neetintel &mdash; EAMGEN</a></li>
+                <li id="fn-17"><a href="https://x.com/ReidDA/status/1713272506394513818" target="_blank">x.com/ReidDA &mdash; 9/11 DEFCON EAM</a> and <a href="https://archives.gov/files/declassification/iscap/pdf/2012-076-doc1.pdf" target="_blank">archives.gov &mdash; declassification document</a></li>
+                <li id="fn-18">We&rsquo;ve previously heard HFGCS operators complain about quality of message handwriting: <a href="https://x.com/neetintel/status/1736431126208512360" target="_blank">x.com/neetintel</a></li>
+                <li id="fn-19"><a href="https://x.com/neetintel/status/1683976792703467520" target="_blank">x.com/neetintel &mdash; identical strings in EAMs</a></li>
+                <li id="fn-20"><a href="https://pic.x.com/1k1qtwt377" target="_blank">EAM broadcast time distribution</a></li>
+                <li id="fn-21"><a href="https://pic.x.com/qzpdc36nti" target="_blank">EAM day-of-week distribution</a></li>
+                <li id="fn-22"><a href="https://x.com/neetintel/status/1726650967771283922" target="_blank">x.com/neetintel &mdash; long EAM periodicity</a></li>
+                <li id="fn-23">Do operators know the meaning of the EAMs? Online, I&rsquo;ve only found a mix of anecdotal evidence and statements for either possibility.</li>
+                <li id="fn-24"><a href="https://numbers-stations.com/usa/hfgcs/" target="_blank">numbers-stations.com &mdash; HFGCS</a></li>
+                <li id="fn-25">In November 2023, I split EAMs into four discrete groups based on their first two characters: <a href="https://x.com/neetintel/status/1731808435744784412" target="_blank">x.com/neetintel</a></li>
+                <li id="fn-26">Similarly, anyone stating SKYKING messages haven&rsquo;t been broadcast since 2019 are also giving themselves away. Though I didn&rsquo;t hear it myself, SKYKINGs were heard and documented on the HFGCS as recently as 2022. I suspect they continue to be regularly broadcast, but instead of over the HFGCS, have shifted to other kinds of communication systems.</li>
+                <li id="fn-27">They only ever use DIEGO. Here is a November 2023 example of said admin incorrectly logging the callsign as &ldquo;DIEGO GARCIA&rdquo;, even though the recording clearly only says &ldquo;DIEGO&rdquo;: <a href="https://eam.watch/view/7c0f720d-9424-4d8e-ac3c-9a7724680a76" target="_blank">eam.watch</a></li>
+                <li id="fn-28">Though it&rsquo;s from 2014 and rescinded, it&rsquo;s a good lead here: <a href="https://docplayer.net/20810022-Compliance-with-this-publication-is-mandatory.html" target="_blank">AFI 33-217</a></li>
+                <li id="fn-29">I would like to call them Octopus Messages because that is easier to say. Do you think it would catch on?</li>
+                <li id="fn-30"><a href="https://youtube.com/watch?v=-ugRcvA2hKU" target="_blank">YouTube &mdash; 8888 Messages</a></li>
+                <li id="fn-31"><a href="https://x.com/thenewarea51/status/1737933789999833407" target="_blank">x.com/thenewarea51 &mdash; VLF 8888 message</a></li>
+                <li id="fn-32"><a href="https://youtu.be/MkRX-Q3Mx5M?si=Qyx51dhd0ScCqmoz&t=28" target="_blank">YouTube &mdash; SKYMASTER broadcast example</a></li>
+                <li id="fn-33">One example: <a href="https://youtube.com/watch?v=8NzK-XeGQi4" target="_blank">YouTube &mdash; 274 message recording</a></li>
+                <li id="fn-34"><a href="https://youtube.com/watch?v=F_v0zaNlLhw" target="_blank">YouTube &mdash; CE Window</a></li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&uarr; RETURN</a>
+        </div>
+    </div>
+
+    <script>
+        // ====== THEME TOGGLE ======
+        (function() {
+            var toggle = document.getElementById('theme-toggle');
+            var html = document.documentElement;
+
+            function getSystemTheme() {
+                return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            }
+
+            function applyTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                toggle.textContent = theme === 'dark' ? '\u2600' : '\u263E';
+                toggle.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            }
+
+            // Init: check saved preference, else use system
+            var saved = localStorage.getItem('hfgcs-faq-theme');
+            applyTheme(saved || getSystemTheme());
+
+            toggle.addEventListener('click', function() {
+                var current = html.getAttribute('data-theme');
+                var next = current === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+                localStorage.setItem('hfgcs-faq-theme', next);
+            });
+
+            // Listen for system theme changes (if no saved preference)
+            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(e) {
+                if (!localStorage.getItem('hfgcs-faq-theme')) {
+                    applyTheme(e.matches ? 'light' : 'dark');
+                }
+            });
+        })();
+
+        // FAQ toggle with dynamic height
+        document.addEventListener('click', function(e) {
+            var question = e.target.closest('.faq-question');
+            if (!question) return;
+            var item = question.closest('.faq-item');
+            var answer = item.querySelector('.faq-answer');
+
+            if (item.classList.contains('open')) {
+                answer.style.maxHeight = null;
+                item.classList.remove('open');
+            } else {
+                item.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
+            }
+        });
+
+        // Expand / Collapse all
+        var expandBtn = document.getElementById('expand-toggle');
+        var allExpanded = false;
+
+        expandBtn.addEventListener('click', function() {
+            var items = document.querySelectorAll('.faq-item');
+            allExpanded = !allExpanded;
+
+            items.forEach(function(item) {
+                var answer = item.querySelector('.faq-answer');
+                if (allExpanded) {
+                    item.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
+                } else {
+                    answer.style.maxHeight = null;
+                    item.classList.remove('open');
+                }
+            });
+
+            expandBtn.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+        });
+
+        // TOC clicks open the corresponding FAQ item
+        document.querySelectorAll('.toc a').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var id = this.getAttribute('href').slice(1);
+                var item = document.getElementById(id);
+                if (item && !item.classList.contains('open')) {
+                    var answer = item.querySelector('.faq-answer');
+                    item.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
+                }
+            });
+        });
+
+        // ====== FOOTNOTE NAVIGATION ======
+        (function() {
+            // 1. Tag first occurrence of each inline footnote ref with an ID
+            var seen = {};
+            document.querySelectorAll('.fn-ref').forEach(function(ref) {
+                var href = ref.getAttribute('href');
+                if (href && !seen[href]) {
+                    seen[href] = true;
+                    ref.id = 'fn-ref-' + href.replace('#fn-', '');
+                }
+            });
+
+            function scrollHighlight(target) {
+                // Open parent FAQ item if collapsed
+                var faqItem = target.closest('.faq-item');
+                if (faqItem && !faqItem.classList.contains('open')) {
+                    var answer = faqItem.querySelector('.faq-answer');
+                    faqItem.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
+                }
+                setTimeout(function() {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.style.transition = 'background-color 0.3s';
+                    target.style.backgroundColor = 'rgba(74,158,255,0.15)';
+                    setTimeout(function() { target.style.backgroundColor = ''; }, 2000);
+                }, 100);
+            }
+
+            // 2. Inline refs → scroll down to reference
+            document.querySelectorAll('.fn-ref').forEach(function(ref) {
+                ref.addEventListener('click', function(e) {
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        scrollHighlight(target);
+                    }
+                });
+            });
+
+            // 3. Reference list → prepend clickable numbers that scroll back up
+            document.querySelectorAll('.references li').forEach(function(li, i) {
+                var num = i + 1;
+                var backTarget = document.getElementById('fn-ref-' + num);
+
+                var link = document.createElement('a');
+                link.className = 'fn-back';
+                link.href = backTarget ? '#fn-ref-' + num : '#';
+                link.textContent = num + '.';
+
+                if (backTarget) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        scrollHighlight(backTarget);
+                    });
+                }
+
+                li.insertBefore(document.createTextNode(' '), li.firstChild);
+                li.insertBefore(link, li.firstChild);
+            });
+        })();
+    </script>
+</body>
+</html>
