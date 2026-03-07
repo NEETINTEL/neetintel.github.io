@@ -20,6 +20,7 @@
     --unshared-bg: rgba(100,100,140,0.04);
     --unshared-border: rgba(100,100,140,0.15);
   }
+  html { scroll-behavior: smooth; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: var(--bg);
@@ -556,6 +557,10 @@ allComps.forEach(c => {
   tbody.appendChild(tr);
 });
 </script>
+
+<div style="text-align:center;margin:50px 0 20px 0;">
+  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">&uarr; RETURN</a>
+</div>
 
 </body>
 </html>

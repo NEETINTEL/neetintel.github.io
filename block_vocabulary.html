@@ -17,6 +17,7 @@
     --offset-color: #4488ff;
     --chain-color: #c084fc;
   }
+  html { scroll-behavior: smooth; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: var(--bg);
@@ -709,6 +710,10 @@ chartNote.style.cssText = 'font-size:0.65rem; color:var(--text-dim); font-family
 chartNote.textContent = 'Tail length (chars) — all values are even.';
 chartArea.appendChild(chartNote);
 </script>
+
+<div style="text-align:center;margin:50px 0 20px 0;">
+  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">&uarr; RETURN</a>
+</div>
 
 </body>
 </html>

@@ -10,6 +10,8 @@
     <style>
         * { box-sizing: border-box; }
 
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
             background-color: #0d0d0d;
@@ -186,6 +188,20 @@
         .jp { display: none; }
         body.show-jp .en { display: none; }
         body.show-jp .jp { display: block; }
+
+        .footer {
+            text-align: center;
+            margin: 50px 0 20px 0;
+        }
+        .footer a {
+            color: #555;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8em;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.2s;
+        }
+        .footer a:hover { color: #fff; }
 
         @media (max-width: 600px) {
             body { padding: 16px 14px; font-size: 14px; }
@@ -521,6 +537,10 @@
     <strong>解釈についての注意。</strong>これらのヒートマップは相関関係と構造的規則性&mdash;フォーマットの「形」&mdash;を明らかにしますが、メッセージを解読したり暗号を破ったりするものではありません。読めない言語で書かれた手紙を研究するようなものです：内容の意味はわからなくても、3番目の単語がいつも7番目の単語と韻を踏んでいること、一部だけ入れ替わった形でフレーズが繰り返されること、4文字つづきの同じ文字のブロックが予測可能な位置に現れることに気づき始めます。フォーマットの文法と骨格を地図にしているのであって、内容を読んでいるのではありません。
 </div>
 
+</div>
+
+<div class="footer">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><span class="en">&uarr; RETURN</span><span class="jp">&uarr; 戻る</span></a>
 </div>
 
 </div>
