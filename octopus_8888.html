@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'IBM Plex Sans', Arial, sans-serif;
             background-color: #0d0d0d;
@@ -1146,5 +1147,10 @@
         btn.textContent = body.classList.contains('show-jp') ? 'EN' : '日本語';
     }
     </script>
+
+<div style="text-align:center;margin:50px 0 20px 0;">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'IBM Plex Mono',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'"><span class="en">&uarr; RETURN</span><span class="jp">&uarr; 戻る</span></a>
+</div>
+
 </body>
 </html>
