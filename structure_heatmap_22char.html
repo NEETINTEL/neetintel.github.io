@@ -101,6 +101,22 @@
 
         .notice strong { color: #ffc107; }
 
+        .notice.info {
+            background: rgba(220, 220, 220, 0.12);
+            border-left-color: #d0d0d0;
+        }
+
+        .notice.info strong { color: #e0e0e0; }
+
+        .notice.info { color: #9a9a9a; }
+
+        .notice a {
+            color: #b0b0b0;
+            text-decoration: underline;
+        }
+
+        .notice a:hover { color: #e0e0e0; }
+
         /* Stats section */
         .stats-section {
             display: flex;
@@ -559,7 +575,7 @@
             <strong>Pattern Types:</strong> <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>, <span style="color: #51cf66; font-weight: bold;">Gapped</span>, <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>, <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
         </div>
         <div class="stat-card">
-            <div class="stat-value">73</div>
+            <div class="stat-value">74</div>
             <div class="stat-label">Total Messages</div>
         </div>
         <div class="stat-card">
@@ -569,6 +585,29 @@
         <div class="stat-card">
             <div class="stat-value">15</div>
             <div class="stat-label">Total Patterns Found</div>
+        </div>
+    </div>
+    <div class="controls-container">
+        <div class="sort-controls">
+            <strong>Display Mode:</strong>
+            <div class="sort-buttons">
+                <button class="sort-btn active" id="sort-grouped">Grouped by Classification</button>
+                <button class="sort-btn" id="sort-chronological">Chronological</button>
+            </div>
+        </div>
+
+        <div class="filter-controls">
+            <strong>Filter by Group:</strong>
+            <div class="filter-group">
+                <div class="filter-checkbox">
+                    <input type="checkbox" id="filter-group-3" checked>
+                    <label for="filter-group-3"><span class="group-label group-label-3">Group 3</span></label>
+                </div>
+                <div class="filter-checkbox">
+                    <input type="checkbox" id="filter-group-unclassified" checked>
+                    <label for="filter-group-unclassified"><span class="group-label group-label-unclassified">Unknown</span></label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="heatmap-container">
@@ -817,6 +856,11 @@
             <div class="message-meta"><span class="dot group-3-dot" data-message="5G5KCKCSYWGGWRREFMFI3A" title="5G (Group 3)">●</span><span>20250114 15:32 LONG TERM</span></div>
             <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">5</span><span class="char" data-position="1" data-highlight-sig="">G</span><span class="char" data-position="2" data-highlight-sig="">5</span><span class="char char-exact" data-patterns="10" data-position="3" data-highlight-sig="3,4,5,6" style="background-color:rgba(74,158,255,0.66);color:#000000;" title="exact">K</span><span class="char char-exact" data-patterns="10" data-position="4" data-highlight-sig="3,4,5,6" style="background-color:rgba(74,158,255,0.66);color:#000000;" title="exact">C</span><span class="char char-exact" data-patterns="10" data-position="5" data-highlight-sig="3,4,5,6" style="background-color:rgba(74,158,255,0.80);color:#000000;" title="exact">K</span><span class="char char-exact" data-patterns="10" data-position="6" data-highlight-sig="3,4,5,6" style="background-color:rgba(74,158,255,0.66);color:#000000;" title="exact">C</span><span class="char" data-position="7" data-highlight-sig="">S</span><span class="char" data-position="8" data-highlight-sig="">Y</span><span class="char" data-position="9" data-highlight-sig="">W</span><span class="char" data-position="10" data-highlight-sig="">G</span><span class="char" data-position="11" data-highlight-sig="">G</span><span class="char" data-position="12" data-highlight-sig="">W</span><span class="char" data-position="13" data-highlight-sig="">R</span><span class="char" data-position="14" data-highlight-sig="">R</span><span class="char" data-position="15" data-highlight-sig="">E</span><span class="char" data-position="16" data-highlight-sig="">F</span><span class="char" data-position="17" data-highlight-sig="">M</span><span class="char" data-position="18" data-highlight-sig="">F</span><span class="char" data-position="19" data-highlight-sig="">I</span><span class="char" data-position="20" data-highlight-sig="">3</span><span class="char" data-position="21" data-highlight-sig="">A</span></div>
             <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
+        </div>
+        <div class="message-block" data-group="unclassified" data-timestamp="2025-04-05T15:15:00" data-patterns="[]">
+            <div class="message-meta"><span class="dot" style="color: #555;" data-message="S2WV5HGKUKGOJO2SH4A52Z" title="S2">●</span><span>20250405 15:15 ABOUTSHIP</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">S</span><span class="char" data-position="1" data-highlight-sig="">2</span><span class="char" data-position="2" data-highlight-sig="">W</span><span class="char" data-position="3" data-highlight-sig="">V</span><span class="char" data-position="4" data-highlight-sig="">5</span><span class="char" data-position="5" data-highlight-sig="">H</span><span class="char" data-position="6" data-highlight-sig="">G</span><span class="char" data-position="7" data-highlight-sig="">K</span><span class="char" data-position="8" data-highlight-sig="">U</span><span class="char" data-position="9" data-highlight-sig="">K</span><span class="char" data-position="10" data-highlight-sig="">G</span><span class="char" data-position="11" data-highlight-sig="">O</span><span class="char" data-position="12" data-highlight-sig="">J</span><span class="char" data-position="13" data-highlight-sig="">O</span><span class="char" data-position="14" data-highlight-sig="">2</span><span class="char" data-position="15" data-highlight-sig="">S</span><span class="char" data-position="16" data-highlight-sig="">H</span><span class="char" data-position="17" data-highlight-sig="">4</span><span class="char" data-position="18" data-highlight-sig="">A</span><span class="char" data-position="19" data-highlight-sig="">5</span><span class="char" data-position="20" data-highlight-sig="">2</span><span class="char" data-position="21" data-highlight-sig="">Z</span></div>
+            <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
         </div>
         <div class="message-block" data-group="3" data-timestamp="2025-04-11T15:33:00" data-patterns="[]">
             <div class="message-meta"><span class="dot group-3-dot" data-message="5WU5PPV6J37P5QKSPXQWHY" title="5W (Group 3)">●</span><span>20250411 15:33 NIGHTWEAR</span></div>
