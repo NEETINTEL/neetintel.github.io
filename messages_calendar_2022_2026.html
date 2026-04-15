@@ -707,15 +707,63 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             padding: 12px 10px 6px 0;
         }
+
+        .sidebar-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #262626;
+            font-size: 0.8em;
+        }
+
+        .sidebar-top a {
+            color: #dcdcdc;
+            text-decoration: none;
+        }
+
+        .sidebar-top a:hover {
+            text-decoration: underline;
+        }
+
+        .lang-btn {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #141414;
+            border: 1px solid #333;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1em;
+            font-weight: 600;
+            color: #dcdcdc;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        .lang-btn:hover {
+            background: #1e1e1e;
+            border-color: #dcdcdc;
+        }
+
+        /* EN/JP toggle */
+        .jp { display: none; }
+        body.show-jp .en { display: none; }
+        body.show-jp .jp { display: block; }
+        body.show-jp span.jp { display: inline; }
+        body.show-jp span.en { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2>FILTERS</h2>
+            <div class="sidebar-top">
+                <a href="index.html"><span class="en">← index</span><span class="jp">← 戻る</span></a>
+                <button class="lang-btn" onclick="toggleLang()">日本語</button>
+            </div>
+            <h2><span class="en">FILTERS</span><span class="jp">フィルター</span></h2>
 
             <div class="control-section">
-                <h3>Groups</h3>
+                <h3><span class="en">Groups</span><span class="jp">グループ</span></h3>
                 <div class="checkbox-grid">
 
                     <div class="checkbox-item">
@@ -750,7 +798,7 @@
             </div>
 
             <div class="control-section">
-                <h3>Message Lengths</h3>
+                <h3><span class="en">Message Lengths</span><span class="jp">メッセージ長</span></h3>
                 <div class="length-grid" id="length-filters">
 
                     <div class="checkbox-item">
@@ -1276,12 +1324,12 @@
             </div>
 
             <div class="control-section">
-                <h3>Legend</h3>
-                <div class="legend-item"><span class="legend-swatch sw-normal"></span>Verified monitoring</div>
-                <div class="legend-item"><span class="legend-swatch sw-unconf"></span>Unverified — may be incomplete</div>
-                <div class="legend-item"><span class="legend-swatch sw-empty"></span>No messages logged</div>
-                <div class="legend-item"><span class="legend-swatch sw-sky"></span>SKYMASTER event</div>
-                <div class="legend-item"><span class="legend-swatch sw-fake"></span>FAKEMASTER event</div>
+                <h3><span class="en">Legend</span><span class="jp">凡例</span></h3>
+                <div class="legend-item"><span class="legend-swatch sw-normal"></span><span class="en">Verified monitoring</span><span class="jp">確認済み監視日</span></div>
+                <div class="legend-item"><span class="legend-swatch sw-unconf"></span><span class="en">Unverified — may be incomplete</span><span class="jp">未確認 — 不完全の可能性</span></div>
+                <div class="legend-item"><span class="legend-swatch sw-empty"></span><span class="en">No messages logged</span><span class="jp">メッセージ記録なし</span></div>
+                <div class="legend-item"><span class="legend-swatch sw-sky"></span><span class="en">SKYMASTER event</span><span class="jp">SKYMASTERイベント</span></div>
+                <div class="legend-item"><span class="legend-swatch sw-fake"></span><span class="en">FAKEMASTER event</span><span class="jp">FAKEMASTERイベント</span></div>
             </div>
         </div>
 
@@ -11989,10 +12037,10 @@
 
                 let html = `<h4>${dateStr}</h4>`;
                 if (isSkymaster) {
-                    html += `<div class="tooltip-section" style="color:#ff6060;"><strong>SKYMASTER event</strong></div>`;
+                    html += `<div class="tooltip-section" style="color:#ff6060;"><strong>${t('SKYMASTER event', 'SKYMASTERイベント')}</strong></div>`;
                 }
                 if (isFakemaster) {
-                    html += `<div class="tooltip-section" style="color:#ff8c1a;"><strong>FAKEMASTER event</strong></div>`;
+                    html += `<div class="tooltip-section" style="color:#ff8c1a;"><strong>${t('FAKEMASTER event', 'FAKEMASTERイベント')}</strong></div>`;
                 }
                 const vids = videoMap[dateStr];
                 if (vids) {
@@ -12008,23 +12056,23 @@
                         vh += `<div class="vid-meta"><div class="vid-src">${src.toUpperCase()}</div><div class="vid-title">${escapeHtml(v.title)}</div></div>`;
                         vh += `</div>`;
                     });
-                    vh += `<div style="color:#777;margin-top:6px;font-size:0.85em;">click day to open →</div>`;
+                    vh += `<div style="color:#777;margin-top:6px;font-size:0.85em;">${t('click day to open →', 'クリックで動画を開く →')}</div>`;
                     html += `<div class="tooltip-section">${vh}</div>`;
                 }
                 if (isUnconfirmed) {
-                    html += `<div class="tooltip-section" style="color:#aaa;"><em>Unverified monitoring — message counts may be incomplete</em></div>`;
+                    html += `<div class="tooltip-section" style="color:#aaa;"><em>${t('Unverified monitoring — message counts may be incomplete', '未確認の監視日 — メッセージ数が不完全の可能性あり')}</em></div>`;
                 }
                 if (!data) {
-                    html += `<div class="tooltip-section">No messages logged.</div>`;
+                    html += `<div class="tooltip-section">${t('No messages logged.', 'メッセージ記録なし。')}</div>`;
                     tooltip.innerHTML = html;
                     tooltip.classList.add('show');
                     positionTooltip(tooltip, rect);
                     return;
                 }
-                html += `<div class="tooltip-section"><strong>Total Messages:</strong> ${data.total}</div>`;
+                html += `<div class="tooltip-section"><strong>${t('Total Messages:', 'メッセージ合計:')}</strong> ${data.total}</div>`;
 
                 if (data.e6b_count > 0) {
-                    html += `<div class="tooltip-section"><strong>E-6B Messages:</strong> ${data.e6b_count}</div>`;
+                    html += `<div class="tooltip-section"><strong>${t('E-6B Messages:', 'E-6Bメッセージ:')}</strong> ${data.e6b_count}</div>`;
                 }
 
                 // Hierarchical display: Group -> Lengths -> Prefixes
@@ -12072,6 +12120,15 @@
                 tooltip.innerHTML = html;
                 tooltip.classList.add('show');
                 positionTooltip(tooltip, rect);
+            }
+
+            const isJP = () => document.body.classList.contains('show-jp');
+            const t = (en, jp) => isJP() ? jp : en;
+
+            function toggleLang() {
+                document.body.classList.toggle('show-jp');
+                const btn = document.querySelector('.lang-btn');
+                btn.textContent = isJP() ? 'English' : '日本語';
             }
 
             function escapeHtml(s) {
@@ -12148,7 +12205,7 @@
             });
         </script>
 
-        <div class="gen-footer">Generated 260415. Dataset is not comprehensive except for select periods.</div>
+        <div class="gen-footer"><span class="en">Generated 260415. Dataset is not comprehensive except for select periods.</span><span class="jp">生成日 260415。データセットは一部の期間を除き網羅的ではありません。</span></div>
         </div>  <!-- main-content -->
     </div>  <!-- container -->
 </body>
