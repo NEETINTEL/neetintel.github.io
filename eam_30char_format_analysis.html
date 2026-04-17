@@ -689,8 +689,8 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <tbody>
     <tr><td class="num">1</td><td class="num">1–5</td><td class="num">+20.12</td><td class="num">−4.96</td><td>prefix char 1 (PR-distribution)</td></tr>
     <tr><td class="num">2</td><td class="num">6–10</td><td class="num">−7.15</td><td class="num">+3.25</td><td>prefix char 2 (PR-distribution)</td></tr>
-    <tr><td class="num">3</td><td class="num">11–15</td><td class="num">−0.47</td><td class="num">−0.86</td><td></td></tr>
-    <tr><td class="num">4</td><td class="num">16–20</td><td class="num">−0.47</td><td class="num">+0.00</td><td></td></tr>
+    <tr class="highlight"><td class="num"><strong>3</strong></td><td class="num"><strong>11–15</strong></td><td class="num"><strong>−0.47</strong></td><td class="num"><strong>−0.86</strong></td><td>deficit attenuates</td></tr>
+    <tr class="highlight"><td class="num"><strong>4</strong></td><td class="num"><strong>16–20</strong></td><td class="num"><strong>−0.47</strong></td><td class="num"><strong>+0.00</strong></td><td>deficit attenuates</td></tr>
     <tr><td class="num">5</td><td class="num">21–25</td><td class="num">−4.57</td><td class="num">−5.05</td><td></td></tr>
     <tr><td class="num">6</td><td class="num">26–30</td><td class="num">−4.67</td><td class="num">−4.77</td><td></td></tr>
     <tr><td class="num">7</td><td class="num">31–35</td><td class="num">−4.67</td><td class="num">−4.67</td><td></td></tr>
@@ -719,7 +719,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
     <tr><td class="num">30</td><td class="num">146–150</td><td class="num">−2.67</td><td class="num">−4.38</td><td></td></tr>
   </tbody>
 </table></div>
-<div class="caption"><span class="label">Table 4.</span> Per-position z-scores of symbols M and 5 in Group 1 first-broadcast messages (<em>N</em>=3,519). The deficit is present at nearly every body position. Positions 19, 20, and 21 (bit offsets 91–105) show a qualitatively different profile, with both deficits falling to |<em>z</em>|&nbsp;&lt;&nbsp;1.7. Position 1 reflects the G1 prefix-character distribution (M-prefixed PRs such as MQ and MK contribute disproportionately to position 1) rather than a body-generator property.</div>
+<div class="caption"><span class="label">Table 4.</span> Per-position z-scores of symbols M and 5 in Group 1 first-broadcast messages (<em>N</em>=3,519). The deficit is present at nearly every body position. <strong>Two regions deviate from the surrounding pattern</strong>: positions 3–4 (bit offsets 11–20) and positions 19–21 (bit offsets 91–105) both show attenuated deficits at |<em>z</em>|&nbsp;&lt;&nbsp;1.7 for both symbols, while the intervening positions 5–18 and the trailing positions 22–30 carry the full 4–6σ deficit. The mid-body attenuation at 19–21 is co-localised with an independent doublet-rate suppression (§6), so that region has two statistical channels agreeing; the head-of-body attenuation at 3–4 appears only in this marginal channel. Position 1 reflects the G1 prefix-character distribution (M-prefixed PRs such as MQ and MK contribute disproportionately to position 1) rather than a body-generator property.</div>
 
 <figure class="plot" role="img" aria-label="Line chart of per-position z-scores for symbols M and 5">
 <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg">
