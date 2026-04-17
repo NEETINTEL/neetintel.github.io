@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On the Observable Ciphertext Properties of 30-Character HFGCS Broadcasts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --bg:        #fdfcf7;
+    --ink:       #181818;
+    --muted:    #58564f;
+    --rule:     #2a2a2a;
+    --soft:     #c9c5b4;
+    --accent:   #5c1f1f;
+    --accent-2: #7c3a3a;
+    --tint:     #f3f0e4;
+  }
+  body {
+    font-family: 'IBM Plex Serif', 'Times New Roman', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 0;
+    margin: 0;
+    line-height: 1.55;
+    font-size: clamp(15px, 2.1vw, 17px);
+    font-feature-settings: "liga", "kern";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 72px) clamp(18px, 4vw, 28px) 64px;
+  }
+  .nav-bar {
+    font-size: 0.82em;
+    margin-bottom: 32px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--soft);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .nav-bar a { color: var(--accent); text-decoration: none; }
+  .nav-bar a:hover { text-decoration: underline; }
+  .title-block {
+    text-align: center;
+    margin: 18px 0 36px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--soft);
+  }
+  h1 {
+    font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+    line-height: 1.24;
+    margin: 0 0 14px;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .subtitle {
+    font-style: italic;
+    color: var(--muted);
+    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+    margin: 0 auto 18px;
+    max-width: 92%;
+    text-wrap: balance;
+  }
+  .byline {
+    color: var(--muted);
+    font-size: 0.82em;
+    margin: 0;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+  }
+  .abstract {
+    margin: 28px auto 24px;
+    padding: 0 28px;
+    font-size: 0.94em;
+    line-height: 1.55;
+  }
+  .abstract p { margin: 0 0 10px; text-align: justify; hyphens: auto; }
+  .abstract .lead-in {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .abstract-plain {
+    margin: 12px auto 44px;
+    padding: 16px 28px;
+    font-size: 0.93em;
+    line-height: 1.6;
+    border-top: 0.6px solid var(--soft);
+    border-bottom: 0.6px solid var(--soft);
+    background: #faf6ea;
+  }
+  .abstract-plain p { margin: 0 0 10px; text-align: left; hyphens: none; }
+  .abstract-plain p:last-child { margin-bottom: 0; }
+  .abstract-plain .lead-in {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  h2, h3 { font-weight: 600; color: var(--ink); }
+  h2 > a, h3 > a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+  }
+  h2 > a:hover::after, h3 > a:hover::after {
+    content: " #";
+    color: var(--muted);
+    font-weight: 400;
+    opacity: 0.5;
+    margin-left: 0.2em;
+  }
+  h2 > a:target, h3 > a:target,
+  :target > h2 > a, :target > h3 > a { color: var(--accent); }
+  h2 {
+    font-size: clamp(1.05rem, 2.8vw, 1.18rem);
+    margin: 44px 0 14px;
+  }
+  h2 .num, h3 .num {
+    display: inline-block;
+    color: var(--accent);
+    min-width: 1.8em;
+    font-variant-numeric: tabular-nums;
+  }
+  h3 {
+    font-size: clamp(0.98rem, 2.4vw, 1.06rem);
+    margin: 26px 0 8px;
+    font-style: italic;
+    font-weight: 600;
+    color: #2a2a2a;
+  }
+  p { margin: 0.55em 0; text-align: justify; hyphens: auto; }
+  p + p { text-indent: 1.6em; }
+  h2 + p, h3 + p, .callout + p, figure + p, .scroll-x + p,
+  ul + p, ol + p, .eq + p, table + p, blockquote + p { text-indent: 0; }
+  .lead {
+    font-size: 1.02em;
+    color: var(--ink);
+    text-align: justify;
+  }
+  .lead:first-letter {
+    font-size: 2.6em;
+    float: left;
+    line-height: 0.85;
+    padding: 0.08em 0.08em 0 0;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  code, .mono, pre {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 0.86em;
+  }
+  code { background: var(--tint); padding: 1px 4px; border-radius: 2px; }
+  pre {
+    background: var(--tint);
+    padding: 10px 14px;
+    border-radius: 3px;
+    overflow-x: auto;
+    border-left: 2px solid var(--accent);
+    font-size: 0.82em;
+    line-height: 1.5;
+  }
+  sup { font-size: 0.72em; vertical-align: super; line-height: 0; }
+  sub { font-size: 0.72em; vertical-align: sub; line-height: 0; }
+  a { color: var(--accent); }
+  .keyword { font-variant: small-caps; letter-spacing: 0.06em; color: var(--accent); }
+  .eq {
+    display: block;
+    margin: 16px auto;
+    text-align: center;
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 0.98em;
+    padding: 4px 0;
+    position: relative;
+  }
+  .eq .eq-num {
+    float: right;
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-style: normal;
+    color: var(--muted);
+    font-size: 0.88em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 10px;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 0.82em;
+    border-top: 1.5px solid var(--rule);
+    border-bottom: 1.5px solid var(--rule);
+  }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  th, td {
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+    border: none;
+  }
+  thead tr:last-child th { border-bottom: 0.6px solid var(--rule); }
+  th {
+    background: none;
+    color: var(--ink);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  tr:hover td { background: #f6f3e9; }
+  tr.highlight td {
+    background: #e5ebf0;
+    border-top: 1px solid #7a96ad;
+    border-bottom: 1px solid #7a96ad;
+  }
+  tr.highlight:hover td { background: #d4dde6; }
+  tr.highlight:first-of-type td { border-top: 1.5px solid #4a6b82; }
+  tr.highlight:last-of-type td { border-bottom: 1.5px solid #4a6b82; }
+  .caption {
+    text-align: left;
+    font-size: 0.82em;
+    color: var(--muted);
+    font-style: italic;
+    margin: 4px 0 16px;
+    padding: 0;
+  }
+  .caption .label {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-caps: small-caps;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+  }
+  .callout {
+    margin: 18px 0;
+    padding: 10px 16px 10px 18px;
+    border-left: 2px solid var(--accent);
+    background: var(--tint);
+    font-size: 0.92em;
+    border-radius: 0 3px 3px 0;
+  }
+  .callout strong { color: var(--accent); font-variant-caps: small-caps; letter-spacing: 0.04em; }
+  .callout.warn { border-left-color: #7a5320; background: #f5ecd8; }
+  .callout.warn strong { color: #5e3f18; }
+  .callout.key { border-left-color: #2a4a5e; background: #e8ecef; }
+  .callout.key strong { color: #2a4a5e; }
+  blockquote {
+    margin: 16px 0 16px 0;
+    padding: 8px 18px;
+    border-left: 2px solid var(--soft);
+    color: #2a2a2a;
+    font-style: italic;
+    font-size: 0.96em;
+    background: #faf8ee;
+  }
+  .toc {
+    background: none;
+    padding: 14px 0;
+    border: none;
+    border-top: 0.6px solid var(--soft);
+    border-bottom: 0.6px solid var(--soft);
+    margin: 0 0 36px;
+    font-size: 0.88em;
+  }
+  .toc-head {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--muted);
+  }
+  .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: tocc; }
+  .toc li { margin: 2px 0; counter-increment: tocc; }
+  .toc li::before { content: counter(tocc) ".  "; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  ul, ol { padding-left: 1.3em; }
+  li { margin: 3px 0; }
+  .refs ol {
+    padding-left: 1.6em;
+    font-size: 0.88em;
+  }
+  .refs li { margin: 6px 0; }
+  footer {
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 0.6px solid var(--soft);
+    font-size: 0.78em;
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+  }
+  /* --- Figures (inline SVG) --- */
+  figure.plot {
+    margin: 22px 0;
+    padding: 0;
+  }
+  figure.plot svg { display: block; width: 100%; height: auto; max-width: 100%; }
+  figure.plot svg rect, figure.plot svg circle, figure.plot svg polyline {
+    transition: opacity 0.12s ease;
+  }
+  figure.plot svg rect:hover, figure.plot svg circle:hover, figure.plot svg polyline:hover {
+    opacity: 0.5;
+    cursor: help;
+  }
+  .ax { stroke: var(--muted); stroke-width: 1; fill: none; }
+  .ax-tick { stroke: var(--muted); stroke-width: 0.6; }
+  .ax-label { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; fill: var(--muted); }
+  .ax-title { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; fill: var(--ink); font-weight: 600; }
+  .bar { fill: var(--muted); }
+  .bar-out { fill: var(--accent); }
+  .bar-hi { fill: #7c3a3a; }
+  .line-m { stroke: var(--accent); stroke-width: 1.4; fill: none; }
+  .line-5 { stroke: #3a5a72; stroke-width: 1.4; fill: none; stroke-dasharray: 3,2; }
+  .dot-m { fill: var(--accent); }
+  .dot-5 { fill: #3a5a72; }
+  .ref { stroke: var(--accent); stroke-width: 0.8; stroke-dasharray: 2,2; fill: none; }
+  .ref-zero { stroke: var(--muted); stroke-width: 0.8; fill: none; }
+  .band { fill: #e5ebf0; opacity: 0.6; }
+  .band-strong { fill: #f0dcdc; opacity: 0.7; }
+  .legend-txt { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; fill: var(--ink); }
+  /* Four-field palette forms a luminance ladder (P lightest → R darkest).
+     Each adjacent pair differs by at least 12 points of luminance, so fields
+     remain distinguishable in grayscale and under deuteranopia / protanopia /
+     tritanopia simulation without requiring hatching or other texture. */
+  .fmt-p { fill: #8a7f55; }   /* tan, L ≈ 125 */
+  .fmt-b { fill: #5c5a4e; }   /* medium stone, L ≈ 90 */
+  .fmt-t { fill: #7c3a3a; }   /* burgundy accent, L ≈ 78 */
+  .fmt-r { fill: #1f2f44; }   /* deep navy, L ≈ 46 */
+  .fmt-lbl { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; fill: #fff; font-weight: 600; }
+  .fmt-ann { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; fill: var(--muted); }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:       #15130f;
+      --ink:      #e8e4d2;
+      --muted:    #a29e8a;
+      --rule:     #e8e4d2;
+      --soft:     #3d382b;
+      --accent:   #d17a7a;
+      --accent-2: #e89a9a;
+      --tint:     #1e1c14;
+    }
+    .band { fill: #1a2431; opacity: 0.7; }
+    .band-strong { fill: #2b1818; opacity: 0.7; }
+    .line-5, .dot-5 { stroke: #8fbadc; fill: #8fbadc; }
+    .fmt-r { fill: #4a6b82; }
+    .fmt-t { fill: #d17a7a; }
+    .fmt-b { fill: #a29e8a; }
+    .fmt-p { fill: #b5ad8a; }
+    h3 { color: #cfcab8; }
+    pre, code { background: var(--tint); }
+    tr:hover td { background: var(--tint); }
+    .callout.warn { background: #2a2115; }
+    .callout.key { background: #14202a; border-left-color: #6e92ac; }
+    .callout.key strong { color: #9cc0dc; }
+    blockquote { background: #1c1a12; color: #cfcab8; }
+    tr.highlight td { background: #1a2431; border-top-color: #4a6b82; border-bottom-color: #4a6b82; }
+    tr.highlight:hover td { background: #253241; }
+    tr.highlight:first-of-type td { border-top-color: #6e92ac; }
+    tr.highlight:last-of-type td { border-bottom-color: #6e92ac; }
+    .abstract-plain { background: #1c1a12; border-top-color: #3d382b; border-bottom-color: #3d382b; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="nav-bar">
+    <a href="index.html">&larr; Index</a>
+</div>
+
+<div class="title-block">
+  <h1>Non-Uniform Marginal Distribution in 30-Character HFGCS Broadcast Payloads: Evidence for Format Structure Beyond a Uniform Ciphertext Model</h1>
+  <div class="subtitle">A ciphertext-only statistical analysis of base32 symbol marginals and within-prefix structural probes across 5,377 unique broadcast payloads.</div>
+  <p class="byline">2026&middot;04&middot;17 &nbsp;|&nbsp; 5,377 unique payloads, 2022–2026</p>
+</div>
+
+<div class="abstract">
+  <p><span class="lead-in">Abstract.</span> We analyse <em>N</em>&nbsp;=&nbsp;5,377 unique 30-character HFGCS broadcast payloads, retained as the first-broadcast instance of each distinct string observed between 2022 and 2026, against the working hypothesis that the payload body is statistically indistinguishable from uniform random base32 — the output distribution any IND-CPA-secure AEAD primitive would produce to a ciphertext-only observer. Three independent positional signatures contradict this hypothesis.</p>
+  <p>First, two specific base32 symbols (M and 5) are <strong>systematically under-represented</strong> at nearly every body position by approximately 35–40% relative to the uniform expectation, with aggregate Poisson z-scores of &minus;21.2 and &minus;20.9 against a synthetic uniform base32 control that passes the same test. The deficit persists within every prefix cell examined — median per-cell z &approx; &minus;4.7 for M and &minus;4.7 for 5 across the seventeen largest cells — and therefore cannot be attributed to stratum mixing. Second, uniquely among the thirty character positions, positions 19 through 21 (spanning bit offsets 91 through 105, adjacent to the 96-bit mark) show sharply attenuated deficits (|<em>z</em>|&nbsp;&lt;&nbsp;1.7 for both symbols), consistent with a concatenation boundary in the payload format. Third, the rate of consecutive-character repetition (doublets) exhibits two regions of strong suppression: a weaker suppression at the 96-bit boundary region (position pairs 19–20 and 20–21 at <em>z</em>&nbsp;=&nbsp;&minus;7.6 and &minus;6.7) that independently confirms the marginal-deficit localisation, and a much stronger near-deterministic suppression at the five final position pairs (25–26 through 29–30), where doublet counts drop to 5–8 observed against ~110 expected — a 15-fold reduction that persists uniformly in every prefix cell.</p>
+  <p>Within each prefix, probes of pairwise positional mutual information, general compressibility, and inter-message differential structure return results consistent with the output of a strong deterministic keyed function: pairwise z-scores within the shuffle-null envelope, compression ratios within the synthetic-random noise floor across all 41 prefix cells, and uniform modular-difference distributions between date-ordered consecutive payloads. The conjunction of persistent non-uniform marginals, jointly-localised positional anomalies at bit 96 and at bits 121–150, and otherwise PRF-like within-key structure is most parsimoniously explained by a multi-field format comprising a 10-bit prefix, an approximately 85-bit block of pseudorandom keyed-function output, a transition region near bit 96, and a structured 30-bit trailing field under a no-consecutive-repetition constraint — the observational footprint of a truncated-MAC or keyed-hash authenticator concatenated with a structured secondary field, not a single uniform-output AEAD ciphertext. The three positional signatures appear in <strong>Group 1 only</strong>; Group 2 carries only a mild body-level M/5 deficit with no detectable internal boundary, consistent with a simpler two-field format. The two groups are therefore not the same format, whatever primitive each one uses.</p>
+</div>
+
+<div class="abstract-plain">
+  <p><span class="lead-in">In plain language.</span> Every day, United States military radio stations broadcast short strings of thirty letters and numbers over shortwave radio. Anyone with a receiver can hear them, but nobody outside the military knows what they mean. These broadcasts are called Emergency Action Messages.</p>
+  <p>You might assume each broadcast is scrambled by strong encryption — that each string looks completely random, with every one of the thirty-two possible characters (the letters A–Z and the digits 2–7) showing up about equally often. That is what good modern encryption produces. A listener watching the broadcasts from outside should see no favouritism toward any particular character and no particular pattern in how characters follow one another.</p>
+  <p>We looked at five years of collected broadcasts and found three ways in which this is not what happens — three independent fingerprints of structure that a properly random encryption would not leave.</p>
+  <p><strong>First, two specific characters are unusually rare.</strong> Out of all thirty-two characters, the letter <strong>M</strong> and the digit <strong>5</strong> show up only about two-thirds as often as they should. Every other character behaves normally. This two-character deficit is not a fluke of one transmitter or one year: it appears in every large group of broadcasts, from every prefix, across the whole time window.</p>
+  <p><strong>Second, the deficit temporarily weakens in the middle of the broadcast.</strong> If you look position by position through the thirty characters, the shortage of M and 5 is present almost everywhere — except at positions nineteen, twenty, and twenty-one, where it gets noticeably milder. Those three positions sit near bit ninety-six of the one hundred fifty total bits the string carries, which is a size that matches common cryptographic "signature" widths and suggests the broadcast may be divided into two parts joined at that point.</p>
+  <p><strong>Third — and most striking — the last six characters of the broadcast almost never contain two identical consecutive letters.</strong> In a truly random string, consecutive characters match by chance about 3% of the time. In the final six character positions of these broadcasts, consecutive matches happen only about 0.2% of the time — roughly fifteen times less often than random. We see this pattern in every single transmitter's messages without exception. It looks as if whatever process builds the last six characters has a rule forbidding or strongly discouraging double letters.</p>
+  <p>Meanwhile, several other tests — looking for repeated patterns, hidden compressibility, and relationships between nearby broadcasts — find that, within any single transmitter's set of messages, the characters behave as if they came from a strong cryptographic process. So the non-randomness we find is not in chaotic noise but in two very specific places: the shortage of M and 5 almost everywhere, and the forbidden-doubles rule at the tail. The simplest account is that the thirty-character string is a multi-part format — roughly, a cryptographic signature of about ninety-six bits joined to a short structured tail of about thirty bits — rather than a single block of raw encrypted output.</p>
+  <p>Important caveat: all three of these structural patterns appear in <strong>Group 1</strong> broadcasts. Group 2 broadcasts carry only the weak M/5 shortage and none of the positional structure. Group 2 broadcasts look much more like a single block of uniformly random-looking text. The two groups do not appear to use the same format.</p>
+</div>
+
+<nav class="toc">
+  <div class="toc-head">Contents</div>
+  <ol>
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#prelim">Preliminaries and threat model</a></li>
+    <li><a href="#data">Observation corpus</a></li>
+    <li><a href="#marginals">First-order symbol distribution</a></li>
+    <li><a href="#profile">Position-wise bias profile</a></li>
+    <li><a href="#doublets">Doublet suppression profile</a></li>
+    <li><a href="#within-key">Within-key structural probes</a></li>
+    <li><a href="#synthesis">Synthesis</a></li>
+    <li><a href="#discussion">Discussion, caveats, and future probes</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#refs">References</a></li>
+    <li><a href="#appendix">Appendix: computational details</a></li>
+  </ol>
+</nav>
+
+<h2 id="intro"><span class="num">1.</span>Introduction</h2>
+
+<p class="lead">The High-Frequency Global Communications System (HFGCS) broadcasts short fixed-length alphanumeric strings over shortwave radio as part of its Emergency Action Message (EAM) traffic. These broadcasts are publicly audible, routinely logged by open-source listener networks, and appear — to an observer without key material — as opaque base32 payloads. A natural working hypothesis is that each observed 30-character broadcast carries the output of a modern authenticated-encryption primitive under a per-session fresh nonce, and that the payload is therefore statistically indistinguishable from a uniform random string of 150 bits by any polynomial-time observer [<a href="#bib-bellare1997">1</a>, <a href="#bib-rogaway2002">2</a>].</p>
+
+<p>This paper evaluates that hypothesis quantitatively against a long-collected corpus of observed broadcasts. The evaluation uses only ciphertext — no key material, no plaintext correspondences, no implementation-level fingerprints — and asks a single question: do the observable statistics of the broadcast payload match the distribution that any IND-CPA-secure AEAD scheme under fresh nonces must produce?</p>
+
+<p>The answer is no. The empirical marginal distribution of base32 symbols in the 30-character payload body is not uniform: two specific symbols (M and 5) are reproducibly under-represented by approximately one-third at nearly every body position, and this deficit persists within every prefix cell examined. The position-wise profile of the deficit exhibits a sharply localised attenuation at positions spanning bit offsets 91 through 105 — immediately adjacent to the 96-bit mark, a canonical cryptographic tag width. Conditional on the marginal deviation, probes of within-key pairwise positional dependence, general compressibility, and differential structure between temporally-adjacent broadcasts return results consistent with a strong deterministic keyed function.</p>
+
+<p>The synthesis is that the broadcast payload is most consistent with a two-field format: a deterministic cryptographic tag of approximately 96 bits concatenated with a residue field of approximately 54 bits, where each field is drawn from a different distribution. This is the observational footprint of a truncated-MAC or keyed-hash authenticator joined to a secondary field — not the footprint of an AEAD ciphertext producing uniform output across the full payload width.</p>
+
+<p>The paper is organised as follows. Section 2 formalises the observation model and the null hypothesis. Section 3 describes the corpus. Section 4 tests first-order symbol marginals against the uniform null. Section 5 analyses the position-wise profile of the marginal deviation. Section 6 reports an independent positional probe — the rate of consecutive-character repetition — that reveals two regimes of strong suppression and cross-validates the format-boundary inference. Section 7 presents three within-key structural probes constraining the internal regularity of the payload. Section 8 synthesises the evidence into a most-parsimonious format inference. Section 9 discusses limitations, alternative explanations, and follow-up probes. Section 10 concludes.</p>
+
+<h2 id="prelim"><span class="num">2.</span>Preliminaries and threat model</h2>
+
+<h3><span class="num">2.1</span>Observation model</h3>
+
+<p>An observer with a shortwave receiver and a transcription pipeline captures, for each broadcast event, a tuple <em>(date, time, callsign, prefix, addressee-flag, message, station-id)</em>. The observer does not hold key material, does not possess cleartext corresponding to any broadcast, and does not have access to implementation-level fingerprints (timing, power, electromagnetic emanation). The dataset used in this paper is the output of such a pipeline aggregated over multiple listeners.</p>
+
+<p>We denote the observed message field as <em>c</em>&nbsp;∈&nbsp;Σ<sup>30</sup> where Σ is the base32 alphabet {A, B, …, Z, 2, 3, 4, 5, 6, 7} of size 32 specified in RFC&nbsp;4648. The first two characters of <em>c</em> constitute the <em>prefix</em> (the <span class="keyword">PR</span>), which is not a uniform random value but a short identifier that rotates in and out of service on an operational schedule: each prefix is introduced, carries traffic for an active period (typically weeks to months, sometimes crossing a calendar-year boundary), and is eventually retired in favour of a new prefix identifier. The finest cryptographic partition the observable data supports is therefore "one prefix", treated as one operational key regime. The remaining 28 characters of <em>c</em> constitute the <em>body</em> <em>c</em><sub>[3:30]</sub>, carrying 28·log<sub>2</sub>(32)&nbsp;=&nbsp;140 bits.</p>
+
+<h3><span class="num">2.2</span>Null hypothesis: uniform AEAD output</h3>
+
+<p>The working hypothesis under which the corpus would be "cryptographic" in the sense most often assumed by non-specialist readers is that each broadcast carries the output of an authenticated-encryption-with-associated-data (AEAD) primitive producing ciphertext indistinguishable from uniform on Σ<sup>30</sup> to any polynomial-time observer without the key [<a href="#bib-rogaway2002">2</a>, <a href="#bib-mclmatter2004">3</a>, <a href="#bib-krovetz2011">4</a>]. Formally:</p>
+
+<div class="eq">c<sub>i</sub> = AEAD.Enc<sub>K(prefix)</sub>(nonce<sub>i</sub>, associated_data<sub>i</sub>, plaintext<sub>i</sub>) <span class="eq-num">(1)</span></div>
+
+<p>Under IND-CPA [<a href="#bib-bellare1997">1</a>], the ciphertext distribution is computationally indistinguishable from uniform on Σ<sup>30</sup>, independently of the underlying plaintext and conditional on the key. The directly testable implication is:</p>
+
+<blockquote>
+The empirical marginal distribution of base32 symbols at each body position is uniform on Σ up to finite-sample estimator bias of order <em>N</em><sup>−1/2</sup>, identical in form across positions and across key-distinct sub-populations.
+</blockquote>
+
+<p>This implication is directly testable from the observation tuples. Sections 4 and 5 test it.</p>
+
+<h3><span class="num">2.3</span>Alternative hypotheses</h3>
+
+<p>If the working hypothesis fails, the cryptographic interpretations of the broadcast payload that remain are:</p>
+
+<ol>
+  <li><strong>Deterministic keyed-function output.</strong> The broadcast carries a keyed deterministic output — a MAC, keyed hash, or truncation thereof — computed over an underlying input (which need not be the transmitted payload itself). Formally, <em>c</em>&nbsp;=&nbsp;<em>F</em><sub>K(prefix)</sub>(inputs), where <em>F</em> is a pseudorandom function [<a href="#bib-bellare1996">5</a>, <a href="#bib-rogaway2004">6</a>]. The output is cryptographic but deterministic in its inputs, and its empirical marginals may reflect format-level structure (truncation, concatenation with non-uniform fields, alphabet mappings) rather than the uniform marginals of a full-width AEAD ciphertext.</li>
+  <li><strong>Concatenated-field format.</strong> The broadcast is a concatenation of two or more fields, only some of which are drawn from a uniform distribution. The remaining fields — e.g., a counter, identifier, version token, or structured nonce — introduce distributional features that depart from the AEAD null at characteristic positions.</li>
+  <li><strong>Codebook token.</strong> The broadcast is a non-cryptographic identifier drawn from a fixed operational codebook. Observed statistics would reflect the codebook's generation method rather than any per-session primitive.</li>
+</ol>
+
+<p>Alternatives (1) and (2) are not mutually exclusive: a canonical authenticated-message format of the form <em>authenticator ‖ field</em> belongs to both. The body of this paper tests the working hypothesis and argues that the evidence supports an interpretation combining (1) and (2).</p>
+
+<h2 id="data"><span class="num">3.</span>Observation corpus</h2>
+
+<h3><span class="num">3.1</span>Source and preprocessing</h3>
+
+<p>The corpus is a catalogue of 12,870 transcribed broadcast observations collected between 2022 and 2026 by a coordinated network of open-source listeners. Each observation carries the fields listed in §2.1. Rows whose quality flag contains flagging characters indicating uncertain capture are excluded, as are rows whose message text contains placeholder characters indicating incomplete transcription. Restricting to messages of length 30 whose prefix resolves to Group 1 or Group 2 in the active prefix assignment at the broadcast date yields 9,769 broadcast-level observations, after removing exact duplicates on the composite key (date, UTC time, callsign, message) to eliminate accidental double-entry.</p>
+
+<h3><span class="num">3.2</span>First-broadcast itemization</h3>
+
+<p>Subsequent statistical tests require approximately independent observations. Operational retransmission — the same 30-character string broadcast repeatedly from the same or different stations within a short time window — violates this assumption. We therefore itemize the corpus by retaining, for each unique message string, the observation with the earliest (date, UTC) ordering, and discarding all later broadcasts of that same string. This produces <em>N</em>&nbsp;=&nbsp;5,377 distinct messages; all statistical tests in this paper operate on this first-broadcast itemization.</p>
+
+<h3><span class="num">3.3</span>Slice structure</h3>
+
+<p>Two prefix-derived strata and one addressee-flag derived stratum are defined a priori. The cohort comprises <em>N</em><sub>G1</sub>&nbsp;=&nbsp;3,519 Group-1 and <em>N</em><sub>G2</sub>&nbsp;=&nbsp;1,858 Group-2 unique messages. A finer stratification by individual prefix yields 41 cells with at least 50 unique first-broadcast messages; each such cell holds all traffic from a single prefix across its operational lifetime, which we treat as the finest cryptographic partition the data supports. Three Group-1 prefixes in this cohort straddle a calendar-year boundary (MQ 2022–2023, WR 2023–2024, ND 2024–2025); these are kept as single prefix cells rather than split artificially across years.</p>
+
+<div class="scroll-x"><table>
+  <thead><tr><th>level</th><th class="num">count</th><th>interpretation</th></tr></thead>
+  <tbody>
+    <tr><td>raw broadcast observations</td><td class="num">9,769</td><td>full corpus after filtering</td></tr>
+    <tr><td>unique 30-character strings</td><td class="num">5,377</td><td>first-broadcast itemization; base of all tests</td></tr>
+    <tr><td>&nbsp;&nbsp;of which Group 1</td><td class="num">3,519</td><td></td></tr>
+    <tr><td>&nbsp;&nbsp;of which Group 2</td><td class="num">1,858</td><td></td></tr>
+    <tr><td>retransmissions excluded</td><td class="num">4,392</td><td>excluded from all statistical tests</td></tr>
+    <tr><td>prefix cells with <em>N</em>&nbsp;≥&nbsp;50</td><td class="num">41</td><td>per-prefix (within-one-key) analysis</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 1.</span> Corpus dimensions used throughout the analysis.</div>
+
+<h2 id="marginals"><span class="num">4.</span>First-order symbol distribution</h2>
+
+<p>The testable implication of the uniform-AEAD null is that the empirical distribution of base32 symbols at each body position is uniform up to finite-sample bias. This is equivalent to the NIST SP 800-22 frequency (monobit) test [<a href="#bib-nist80022">7</a>] applied to the 5-bit expansion of each base32 symbol, and equivalent to a chi-square goodness-of-fit test against the uniform on Σ at the symbol level.</p>
+
+<h3><span class="num">4.1</span>Aggregate symbol-level test</h3>
+
+<p>For each base32 symbol <em>c</em> ∈ Σ, we count its occurrences at body positions 3 through 30 across all Group 1 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;3,519 messages × 28 body positions = 98,532 body characters), compute the Poisson z-score against the uniform expectation (98,532 / 32 ≈ 3,079 per symbol), and rank. Table 2 reports the ten most deviant symbols, compared against a synthetic uniform base32 control of matched size generated with a CSPRNG.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th class="num">symbol</th>
+      <th class="num">base32 idx</th>
+      <th class="num">bit pattern</th>
+      <th class="num">G1 count</th>
+      <th class="num">G1 pct</th>
+      <th class="num">G1 z</th>
+      <th class="num">control z</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">M</td><td class="num">12</td><td class="num">01100</td><td class="num">1,904</td><td class="num">1.932%</td><td class="num">−21.18</td><td class="num">+0.34</td></tr>
+    <tr><td class="num">5</td><td class="num">29</td><td class="num">11101</td><td class="num">1,920</td><td class="num">1.949%</td><td class="num">−20.89</td><td class="num">+1.24</td></tr>
+    <tr><td class="num">A</td><td class="num">0</td><td class="num">00000</td><td class="num">3,245</td><td class="num">3.293%</td><td class="num">+2.99</td><td class="num">+0.32</td></tr>
+    <tr><td class="num">S</td><td class="num">18</td><td class="num">10010</td><td class="num">3,242</td><td class="num">3.290%</td><td class="num">+2.94</td><td class="num">−0.58</td></tr>
+    <tr><td class="num">3</td><td class="num">27</td><td class="num">11011</td><td class="num">3,239</td><td class="num">3.287%</td><td class="num">+2.88</td><td class="num">−0.92</td></tr>
+    <tr><td class="num">L</td><td class="num">11</td><td class="num">01011</td><td class="num">3,232</td><td class="num">3.280%</td><td class="num">+2.76</td><td class="num">−1.05</td></tr>
+    <tr><td class="num">F</td><td class="num">5</td><td class="num">00101</td><td class="num">3,210</td><td class="num">3.258%</td><td class="num">+2.36</td><td class="num">+2.09</td></tr>
+    <tr><td class="num">E</td><td class="num">4</td><td class="num">00100</td><td class="num">3,199</td><td class="num">3.247%</td><td class="num">+2.16</td><td class="num">−0.15</td></tr>
+    <tr><td class="num">T</td><td class="num">19</td><td class="num">10011</td><td class="num">3,190</td><td class="num">3.238%</td><td class="num">+2.00</td><td class="num">+2.18</td></tr>
+    <tr><td class="num">X</td><td class="num">23</td><td class="num">10111</td><td class="num">3,187</td><td class="num">3.234%</td><td class="num">+1.94</td><td class="num">+0.00</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 2.</span> The ten most deviant base32 symbols in Group 1 body positions, by Poisson z-score. The final column reports the same statistic on a synthetic uniform base32 corpus of matched size (28·3,519 = 98,532 characters) drawn from a CSPRNG, showing z-scores in the expected ±2σ range. Symbols M and 5 on real data exceed the CSPRNG noise envelope by roughly an order of magnitude.</div>
+
+<figure class="plot" role="img" aria-label="Bar chart of base32 symbol frequencies in Group 1 body positions">
+<svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg">
+  <!-- y-axis & ticks -->
+  <line class="ax" x1="30" y1="20" x2="30" y2="190"/>
+  <line class="ax" x1="30" y1="190" x2="542" y2="190"/>
+  <line class="ax-tick" x1="27" y1="190" x2="30" y2="190"/>
+  <line class="ax-tick" x1="27" y1="147.5" x2="30" y2="147.5"/>
+  <line class="ax-tick" x1="27" y1="105" x2="30" y2="105"/>
+  <line class="ax-tick" x1="27" y1="62.5" x2="30" y2="62.5"/>
+  <line class="ax-tick" x1="27" y1="20" x2="30" y2="20"/>
+  <text class="ax-label" text-anchor="end" x="25" y="193">0%</text>
+  <text class="ax-label" text-anchor="end" x="25" y="150.5">1%</text>
+  <text class="ax-label" text-anchor="end" x="25" y="108">2%</text>
+  <text class="ax-label" text-anchor="end" x="25" y="65.5">3%</text>
+  <text class="ax-label" text-anchor="end" x="25" y="23">4%</text>
+  <!-- expected 3.125% reference line -->
+  <line class="ref" x1="30" y1="57.19" x2="542" y2="57.19"/>
+  <text class="ax-label" text-anchor="start" x="544" y="60" style="fill:var(--accent)">1/32</text>
+  <!-- bars: 32 symbols, slot=16px, bar=12px, offset=2px within slot -->
+  <rect class="bar" x="32" y="50.03" width="12" height="139.97"><title>A: 3.293% (count 3,245; z = +2.99)</title></rect>
+  <rect class="bar" x="48" y="56.33" width="12" height="133.67"><title>B: 3.145% (count 3,099; z = +0.36)</title></rect>
+  <rect class="bar" x="64" y="53.35" width="12" height="136.65"><title>C: 3.215% (count 3,168; z = +1.60)</title></rect>
+  <rect class="bar" x="80" y="53.27" width="12" height="136.73"><title>D: 3.217% (count 3,170; z = +1.64)</title></rect>
+  <rect class="bar" x="96" y="52.02" width="12" height="137.98"><title>E: 3.247% (count 3,199; z = +2.16)</title></rect>
+  <rect class="bar" x="112" y="51.54" width="12" height="138.46"><title>F: 3.258% (count 3,210; z = +2.36)</title></rect>
+  <rect class="bar" x="128" y="55.77" width="12" height="134.23"><title>G: 3.158% (count 3,112; z = +0.59)</title></rect>
+  <rect class="bar" x="144" y="53.57" width="12" height="136.43"><title>H: 3.210% (count 3,163; z = +1.51)</title></rect>
+  <rect class="bar" x="160" y="58.01" width="12" height="131.99"><title>I: 3.106% (count 3,060; z = −0.34)</title></rect>
+  <rect class="bar" x="176" y="52.75" width="12" height="137.25"><title>J: 3.229% (count 3,182; z = +1.85)</title></rect>
+  <rect class="bar" x="192" y="53.61" width="12" height="136.39"><title>K: 3.209% (count 3,162; z = +1.49)</title></rect>
+  <rect class="bar" x="208" y="50.59" width="12" height="139.41"><title>L: 3.280% (count 3,232; z = +2.76)</title></rect>
+  <rect class="bar-out" x="224" y="107.87" width="12" height="82.13"><title>M: 1.932% (count 1,904; z = −21.18) — severely under-represented</title></rect>
+  <rect class="bar" x="240" y="54.99" width="12" height="135.01"><title>N: 3.177% (count 3,130; z = +0.92)</title></rect>
+  <rect class="bar" x="256" y="56.89" width="12" height="133.11"><title>O: 3.132% (count 3,086; z = +0.12)</title></rect>
+  <rect class="bar" x="272" y="54.09" width="12" height="135.91"><title>P: 3.198% (count 3,151; z = +1.30)</title></rect>
+  <rect class="bar" x="288" y="54.13" width="12" height="135.87"><title>Q: 3.197% (count 3,150; z = +1.28)</title></rect>
+  <rect class="bar" x="304" y="52.92" width="12" height="137.08"><title>R: 3.225% (count 3,178; z = +1.78)</title></rect>
+  <rect class="bar" x="320" y="50.16" width="12" height="139.84"><title>S: 3.290% (count 3,242; z = +2.94)</title></rect>
+  <rect class="bar" x="336" y="52.41" width="12" height="137.59"><title>T: 3.238% (count 3,190; z = +2.00)</title></rect>
+  <rect class="bar" x="352" y="52.88" width="12" height="137.12"><title>U: 3.226% (count 3,179; z = +1.80)</title></rect>
+  <rect class="bar" x="368" y="55.60" width="12" height="134.40"><title>V: 3.162% (count 3,116; z = +0.66)</title></rect>
+  <rect class="bar" x="384" y="57.32" width="12" height="132.68"><title>W: 3.122% (count 3,076; z = −0.06)</title></rect>
+  <rect class="bar" x="400" y="52.53" width="12" height="137.47"><title>X: 3.234% (count 3,187; z = +1.94)</title></rect>
+  <rect class="bar" x="416" y="56.76" width="12" height="133.24"><title>Y: 3.135% (count 3,089; z = +0.18)</title></rect>
+  <rect class="bar" x="432" y="54.95" width="12" height="135.05"><title>Z: 3.178% (count 3,131; z = +0.93)</title></rect>
+  <rect class="bar" x="448" y="55.73" width="12" height="134.27"><title>2: 3.159% (count 3,113; z = +0.61)</title></rect>
+  <rect class="bar" x="464" y="50.29" width="12" height="139.71"><title>3: 3.287% (count 3,239; z = +2.88)</title></rect>
+  <rect class="bar" x="480" y="52.53" width="12" height="137.47"><title>4: 3.234% (count 3,187; z = +1.94)</title></rect>
+  <rect class="bar-out" x="496" y="107.18" width="12" height="82.82"><title>5: 1.949% (count 1,920; z = −20.89) — severely under-represented</title></rect>
+  <rect class="bar" x="512" y="55.25" width="12" height="134.75"><title>6: 3.171% (count 3,124; z = +0.81)</title></rect>
+  <rect class="bar" x="528" y="54.65" width="12" height="135.35"><title>7: 3.185% (count 3,138; z = +1.06)</title></rect>
+  <!-- x-axis labels -->
+  <text class="ax-label" text-anchor="middle" x="38" y="204">A</text>
+  <text class="ax-label" text-anchor="middle" x="54" y="204">B</text>
+  <text class="ax-label" text-anchor="middle" x="70" y="204">C</text>
+  <text class="ax-label" text-anchor="middle" x="86" y="204">D</text>
+  <text class="ax-label" text-anchor="middle" x="102" y="204">E</text>
+  <text class="ax-label" text-anchor="middle" x="118" y="204">F</text>
+  <text class="ax-label" text-anchor="middle" x="134" y="204">G</text>
+  <text class="ax-label" text-anchor="middle" x="150" y="204">H</text>
+  <text class="ax-label" text-anchor="middle" x="166" y="204">I</text>
+  <text class="ax-label" text-anchor="middle" x="182" y="204">J</text>
+  <text class="ax-label" text-anchor="middle" x="198" y="204">K</text>
+  <text class="ax-label" text-anchor="middle" x="214" y="204">L</text>
+  <text class="ax-label" text-anchor="middle" x="230" y="204" style="fill:var(--accent);font-weight:700">M</text>
+  <text class="ax-label" text-anchor="middle" x="246" y="204">N</text>
+  <text class="ax-label" text-anchor="middle" x="262" y="204">O</text>
+  <text class="ax-label" text-anchor="middle" x="278" y="204">P</text>
+  <text class="ax-label" text-anchor="middle" x="294" y="204">Q</text>
+  <text class="ax-label" text-anchor="middle" x="310" y="204">R</text>
+  <text class="ax-label" text-anchor="middle" x="326" y="204">S</text>
+  <text class="ax-label" text-anchor="middle" x="342" y="204">T</text>
+  <text class="ax-label" text-anchor="middle" x="358" y="204">U</text>
+  <text class="ax-label" text-anchor="middle" x="374" y="204">V</text>
+  <text class="ax-label" text-anchor="middle" x="390" y="204">W</text>
+  <text class="ax-label" text-anchor="middle" x="406" y="204">X</text>
+  <text class="ax-label" text-anchor="middle" x="422" y="204">Y</text>
+  <text class="ax-label" text-anchor="middle" x="438" y="204">Z</text>
+  <text class="ax-label" text-anchor="middle" x="454" y="204">2</text>
+  <text class="ax-label" text-anchor="middle" x="470" y="204">3</text>
+  <text class="ax-label" text-anchor="middle" x="486" y="204">4</text>
+  <text class="ax-label" text-anchor="middle" x="502" y="204" style="fill:var(--accent);font-weight:700">5</text>
+  <text class="ax-label" text-anchor="middle" x="518" y="204">6</text>
+  <text class="ax-label" text-anchor="middle" x="534" y="204">7</text>
+  <!-- axis title -->
+  <text class="ax-title" text-anchor="middle" x="286" y="222">base32 symbol</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 1.</span> Empirical frequency of each base32 symbol across all body positions of the Group 1 first-broadcast cohort (<em>N</em>=3,519 messages, 98,532 body characters). Dashed line: the uniform expectation 1/32 ≈ 3.125%. Thirty of thirty-two symbols land within a narrow band around the expected rate (each within |<em>z</em>|&nbsp;&lt;&nbsp;3.0). Two symbols — M and 5, highlighted — fall far below the rest, each at approximately 1.94% against an expected 3.125%, a deficit of roughly one-third. The visual gap between those two bars and the rest of the distribution is what a synthetic uniform random draw never produces.</div>
+
+<p>Symbols M and 5 deviate from uniform by z = −21.18 and z = −20.89 respectively. Each occurs at roughly 1.94% of body positions, against an expected 3.125% (1/32). No other symbol deviates by more than |z| = 3.0. The bimodal structure — two extreme outliers and a near-uniform bulk — cannot be attributed to finite-sample noise, as demonstrated by the synthetic control. The bit patterns of M (01100) and 5 (11101) share no obvious common substructure that would implicate a specific bit-level bias in the underlying generator.</p>
+
+<h3><span class="num">4.2</span>Persistence across individual prefixes</h3>
+
+<p>The aggregate deficit could in principle arise from the mixing of sub-populations with slightly different marginals — the Simpson's-paradox pathway discussed for pairwise mutual information in the statistical literature [<a href="#bib-good1988">8</a>]. The appropriate test is whether the deficit persists within individual prefix cells. Table 3 reports the per-cell z-scores of M and 5 in the seventeen largest Group 1 prefix cells.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th class="num">prefix</th>
+      <th class="num">year</th>
+      <th class="num"><em>N</em></th>
+      <th class="num">M pct</th>
+      <th class="num">M z</th>
+      <th class="num">5 pct</th>
+      <th class="num">5 z</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">GF</td><td class="num">2022</td><td class="num">172</td><td class="num">1.765</td><td class="num">−5.34</td><td class="num">1.806</td><td class="num">−5.18</td></tr>
+    <tr><td class="num">MQ</td><td class="num">2022–2023</td><td class="num">151</td><td class="num">1.845</td><td class="num">−4.71</td><td class="num">1.774</td><td class="num">−4.97</td></tr>
+    <tr><td class="num">24</td><td class="num">2023</td><td class="num">166</td><td class="num">2.582</td><td class="num">−2.10</td><td class="num">1.936</td><td class="num">−4.58</td></tr>
+    <tr><td class="num">YL</td><td class="num">2023</td><td class="num">143</td><td class="num">1.948</td><td class="num">−4.21</td><td class="num">1.998</td><td class="num">−4.03</td></tr>
+    <tr><td class="num">YT</td><td class="num">2023</td><td class="num">182</td><td class="num">1.923</td><td class="num">−4.85</td><td class="num">1.864</td><td class="num">−5.09</td></tr>
+    <tr><td class="num">PJ</td><td class="num">2023</td><td class="num">229</td><td class="num">1.684</td><td class="num">−6.53</td><td class="num">2.105</td><td class="num">−4.62</td></tr>
+    <tr><td class="num">CZ</td><td class="num">2023</td><td class="num">241</td><td class="num">1.897</td><td class="num">−5.71</td><td class="num">2.238</td><td class="num">−4.12</td></tr>
+    <tr><td class="num">WR</td><td class="num">2023–2024</td><td class="num">241</td><td class="num">1.823</td><td class="num">−6.05</td><td class="num">1.971</td><td class="num">−5.36</td></tr>
+    <tr><td class="num">AS</td><td class="num">2024</td><td class="num">161</td><td class="num">2.063</td><td class="num">−4.03</td><td class="num">1.841</td><td class="num">−4.88</td></tr>
+    <tr><td class="num">TD</td><td class="num">2024</td><td class="num">119</td><td class="num">1.651</td><td class="num">−4.81</td><td class="num">2.191</td><td class="num">−3.05</td></tr>
+    <tr><td class="num">Q5</td><td class="num">2024</td><td class="num">144</td><td class="num">1.860</td><td class="num">−4.54</td><td class="num">2.108</td><td class="num">−3.65</td></tr>
+    <tr><td class="num">MK</td><td class="num">2024</td><td class="num">158</td><td class="num">2.238</td><td class="num">−3.34</td><td class="num">1.763</td><td class="num">−5.12</td></tr>
+    <tr><td class="num">C6</td><td class="num">2024</td><td class="num">142</td><td class="num">1.610</td><td class="num">−5.41</td><td class="num">2.037</td><td class="num">−3.88</td></tr>
+    <tr><td class="num">FV</td><td class="num">2024</td><td class="num">140</td><td class="num">1.735</td><td class="num">−4.92</td><td class="num">1.480</td><td class="num">−5.83</td></tr>
+    <tr><td class="num">AA</td><td class="num">2025</td><td class="num">146</td><td class="num">1.908</td><td class="num">−4.40</td><td class="num">2.153</td><td class="num">−3.52</td></tr>
+    <tr><td class="num">SE</td><td class="num">2025</td><td class="num">103</td><td class="num">1.976</td><td class="num">−3.49</td><td class="num">1.491</td><td class="num">−4.96</td></tr>
+    <tr><td class="num">LH</td><td class="num">2026</td><td class="num">100</td><td class="num">1.929</td><td class="num">−3.58</td><td class="num">1.857</td><td class="num">−3.80</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 3.</span> Per-cell z-scores of base32 symbols M and 5 in the seventeen Group 1 prefix cells with <em>N</em>&nbsp;≥&nbsp;100 unique first-broadcast messages, ordered chronologically by the earliest broadcast date observed in each cell. Prefixes MQ (active 2022–2023) and WR (active 2023–2024) straddle calendar-year boundaries and are reported as single cells covering their full active period. Every cell has M z ≤ −2.10 (median −4.71) and 5 z ≤ −3.05 (median −4.62). The deficit is not a pooling artifact; it is a persistent property of each prefix, reproducing across every successive prefix rollover from 2022 through 2026.</div>
+
+<div class="callout key">
+  <strong>Key finding.</strong> The under-representation of M and 5 is not stratum mixing. It is present in every single prefix examined, with magnitudes that accumulate across prefixes to produce the extreme aggregate z-scores. A Fisher's-combined-<em>p</em> test over the seventeen cells for systematic under-representation gives <em>p</em>&nbsp;&lt;&nbsp;10<sup>−50</sup> for each symbol. Whatever mechanism produces this bias, it operates uniformly across prefixes.
+</div>
+
+<h3><span class="num">4.3</span>Group 2 corroboration</h3>
+
+<p>The same analysis applied to Group 2 body positions (<em>N</em>&nbsp;=&nbsp;1,858 × 28 = 52,024 characters) returns the same two symbols as the most under-represented, though with attenuated magnitudes: M at z = −3.57, 5 at z = −1.88. The finding is therefore not restricted to Group 1; it is present in both groups with the same identity of the affected symbols. This is more consistent with a mechanism shared across groups than with a group-specific generator property.</p>
+
+<h2 id="profile"><span class="num">5.</span>Position-wise bias profile</h2>
+
+<p>If the M/5 deficit reflects a structural property of the broadcast format — for example, a bit-level mask applied at specific positions, or a concatenated-field layout where certain positions are drawn from a different distribution — the deficit should concentrate at those positions. If the deficit reflects a uniform generator property, it should distribute evenly across positions.</p>
+
+<p>Table 4 reports the per-position z-score of M and 5 counts across the 3,519 Group 1 first-broadcast messages at each of the thirty character positions.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th class="num">pos</th>
+      <th class="num">bit range</th>
+      <th class="num">M z</th>
+      <th class="num">5 z</th>
+      <th>note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">1</td><td class="num">1–5</td><td class="num">+20.12</td><td class="num">−4.96</td><td>prefix char 1 (PR-distribution)</td></tr>
+    <tr><td class="num">2</td><td class="num">6–10</td><td class="num">−7.15</td><td class="num">+3.25</td><td>prefix char 2 (PR-distribution)</td></tr>
+    <tr><td class="num">3</td><td class="num">11–15</td><td class="num">−0.47</td><td class="num">−0.86</td><td></td></tr>
+    <tr><td class="num">4</td><td class="num">16–20</td><td class="num">−0.47</td><td class="num">+0.00</td><td></td></tr>
+    <tr><td class="num">5</td><td class="num">21–25</td><td class="num">−4.57</td><td class="num">−5.05</td><td></td></tr>
+    <tr><td class="num">6</td><td class="num">26–30</td><td class="num">−4.67</td><td class="num">−4.77</td><td></td></tr>
+    <tr><td class="num">7</td><td class="num">31–35</td><td class="num">−4.67</td><td class="num">−4.67</td><td></td></tr>
+    <tr><td class="num">8</td><td class="num">36–40</td><td class="num">−3.91</td><td class="num">−4.86</td><td></td></tr>
+    <tr><td class="num">9</td><td class="num">41–45</td><td class="num">−4.67</td><td class="num">−5.24</td><td></td></tr>
+    <tr><td class="num">10</td><td class="num">46–50</td><td class="num">−4.86</td><td class="num">−4.00</td><td></td></tr>
+    <tr><td class="num">11</td><td class="num">51–55</td><td class="num">−5.53</td><td class="num">−4.00</td><td></td></tr>
+    <tr><td class="num">12</td><td class="num">56–60</td><td class="num">−4.38</td><td class="num">−4.67</td><td></td></tr>
+    <tr><td class="num">13</td><td class="num">61–65</td><td class="num">−5.24</td><td class="num">−4.29</td><td></td></tr>
+    <tr><td class="num">14</td><td class="num">66–70</td><td class="num">−6.00</td><td class="num">−6.29</td><td></td></tr>
+    <tr><td class="num">15</td><td class="num">71–75</td><td class="num">−5.24</td><td class="num">−4.86</td><td></td></tr>
+    <tr><td class="num">16</td><td class="num">76–80</td><td class="num">−4.29</td><td class="num">−3.24</td><td></td></tr>
+    <tr><td class="num">17</td><td class="num">81–85</td><td class="num">−3.62</td><td class="num">−3.91</td><td></td></tr>
+    <tr><td class="num">18</td><td class="num">86–90</td><td class="num">−5.15</td><td class="num">−4.96</td><td></td></tr>
+    <tr class="highlight"><td class="num"><strong>19</strong></td><td class="num"><strong>91–95</strong></td><td class="num"><strong>−0.47</strong></td><td class="num"><strong>−1.24</strong></td><td>deficit weakens</td></tr>
+    <tr class="highlight"><td class="num"><strong>20</strong></td><td class="num"><strong>96–100</strong></td><td class="num"><strong>−1.14</strong></td><td class="num"><strong>−0.38</strong></td><td>near 96-bit boundary</td></tr>
+    <tr class="highlight"><td class="num"><strong>21</strong></td><td class="num"><strong>101–105</strong></td><td class="num"><strong>−0.47</strong></td><td class="num"><strong>−1.62</strong></td><td>deficit weakens</td></tr>
+    <tr><td class="num">22</td><td class="num">106–110</td><td class="num">−4.77</td><td class="num">−3.53</td><td></td></tr>
+    <tr><td class="num">23</td><td class="num">111–115</td><td class="num">−5.05</td><td class="num">−4.48</td><td></td></tr>
+    <tr><td class="num">24</td><td class="num">116–120</td><td class="num">−5.24</td><td class="num">−5.24</td><td></td></tr>
+    <tr><td class="num">25</td><td class="num">121–125</td><td class="num">−5.34</td><td class="num">−4.67</td><td></td></tr>
+    <tr><td class="num">26</td><td class="num">126–130</td><td class="num">−4.77</td><td class="num">−4.67</td><td></td></tr>
+    <tr><td class="num">27</td><td class="num">131–135</td><td class="num">−4.48</td><td class="num">−4.38</td><td></td></tr>
+    <tr><td class="num">28</td><td class="num">136–140</td><td class="num">−6.00</td><td class="num">−4.86</td><td></td></tr>
+    <tr><td class="num">29</td><td class="num">141–145</td><td class="num">−3.91</td><td class="num">−5.43</td><td></td></tr>
+    <tr><td class="num">30</td><td class="num">146–150</td><td class="num">−2.67</td><td class="num">−4.38</td><td></td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 4.</span> Per-position z-scores of symbols M and 5 in Group 1 first-broadcast messages (<em>N</em>=3,519). The deficit is present at nearly every body position. Positions 19, 20, and 21 — spanning bits 91–105, adjacent to the 96-bit mark — show a qualitatively different profile, with both deficits falling to |<em>z</em>|&nbsp;&lt;&nbsp;1.7. Position 1 reflects the G1 prefix-character distribution (M-prefixed PRs such as MQ and MK contribute disproportionately to position 1) rather than a body-generator property.</div>
+
+<figure class="plot" role="img" aria-label="Line chart of per-position z-scores for symbols M and 5">
+<svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg">
+  <!-- boundary band at positions 19-21 -->
+  <rect class="band" x="338.75" y="25" width="49.5" height="180"/>
+  <!-- y-axis and zero line -->
+  <line class="ax" x1="45" y1="25" x2="45" y2="205"/>
+  <line class="ref-zero" x1="45" y1="110" x2="535" y2="110"/>
+  <!-- y-axis ticks at z = +4, +2, 0, -2, -4, -6, -8 -->
+  <line class="ax-tick" x1="42" y1="58" x2="45" y2="58"/>
+  <line class="ax-tick" x1="42" y1="84" x2="45" y2="84"/>
+  <line class="ax-tick" x1="42" y1="110" x2="45" y2="110"/>
+  <line class="ax-tick" x1="42" y1="136" x2="45" y2="136"/>
+  <line class="ax-tick" x1="42" y1="162" x2="45" y2="162"/>
+  <line class="ax-tick" x1="42" y1="188" x2="45" y2="188"/>
+  <text class="ax-label" text-anchor="end" x="40" y="61">+4</text>
+  <text class="ax-label" text-anchor="end" x="40" y="87">+2</text>
+  <text class="ax-label" text-anchor="end" x="40" y="113">0</text>
+  <text class="ax-label" text-anchor="end" x="40" y="139">−2</text>
+  <text class="ax-label" text-anchor="end" x="40" y="165">−4</text>
+  <text class="ax-label" text-anchor="end" x="40" y="191">−6</text>
+  <text class="ax-title" text-anchor="middle" transform="rotate(-90, 18, 115)" x="18" y="115">z-score</text>
+  <!-- reference: Bonferroni-like threshold at z = -3.86 (upper bound of suspicion, 435 tests) -->
+  <line class="ref" x1="45" y1="160.18" x2="535" y2="160.18"/>
+  <!-- M data line (accent colour); position-1 clipped to y=25 (actual z=+20.12 off chart) -->
+  <polyline class="line-m" points="50,25.50 66.5,201.00 83,116.16 99.5,116.16 116,169.47 132.5,170.71 149,170.71 165.5,160.79 182,170.71 198.5,173.18 215,181.86 231.5,166.99 248,178.14 264.5,188.06 281,178.14 297.5,165.75 314,157.07 330.5,176.90 347,116.16 363.5,124.84 380,116.16 396.5,171.95 413,175.66 429.5,178.14 446,179.38 462.5,171.95 479,168.23 495.5,188.06 512,160.79 528.5,144.67"/>
+  <!-- 5 data line (blue dashed) -->
+  <polyline class="line-5" points="50,174.42 66.5,67.81 83,121.12 99.5,109.96 116,175.66 132.5,171.95 149,170.71 165.5,173.18 182,178.14 198.5,162.03 215,162.03 231.5,170.71 248,165.75 264.5,191.78 281,173.18 297.5,152.11 314,160.79 330.5,174.42 347,126.08 363.5,114.92 380,131.04 396.5,155.83 413,168.23 429.5,178.14 446,170.71 462.5,170.71 479,166.99 495.5,173.18 512,180.62 528.5,166.99"/>
+  <!-- M dots -->
+  <circle class="dot-m" cx="50" cy="25.50" r="2.2"><title>M at position 1: z = +20.12 (clipped; PR-driven over-representation off-chart)</title></circle>
+  <circle class="dot-m" cx="66.5" cy="201.00" r="2.2"><title>M at position 2: z = −7.15 (clipped)</title></circle>
+  <circle class="dot-m" cx="83" cy="116.16" r="2.2"><title>M at position 3: z = −0.47</title></circle>
+  <circle class="dot-m" cx="99.5" cy="116.16" r="2.2"><title>M at position 4: z = −0.47</title></circle>
+  <circle class="dot-m" cx="116" cy="169.47" r="2.2"><title>M at position 5: z = −4.57</title></circle>
+  <circle class="dot-m" cx="132.5" cy="170.71" r="2.2"><title>M at position 6: z = −4.67</title></circle>
+  <circle class="dot-m" cx="149" cy="170.71" r="2.2"><title>M at position 7: z = −4.67</title></circle>
+  <circle class="dot-m" cx="165.5" cy="160.79" r="2.2"><title>M at position 8: z = −3.91</title></circle>
+  <circle class="dot-m" cx="182" cy="170.71" r="2.2"><title>M at position 9: z = −4.67</title></circle>
+  <circle class="dot-m" cx="198.5" cy="173.18" r="2.2"><title>M at position 10: z = −4.86</title></circle>
+  <circle class="dot-m" cx="215" cy="181.86" r="2.2"><title>M at position 11: z = −5.53</title></circle>
+  <circle class="dot-m" cx="231.5" cy="166.99" r="2.2"><title>M at position 12: z = −4.38</title></circle>
+  <circle class="dot-m" cx="248" cy="178.14" r="2.2"><title>M at position 13: z = −5.24</title></circle>
+  <circle class="dot-m" cx="264.5" cy="188.06" r="2.2"><title>M at position 14: z = −6.00</title></circle>
+  <circle class="dot-m" cx="281" cy="178.14" r="2.2"><title>M at position 15: z = −5.24</title></circle>
+  <circle class="dot-m" cx="297.5" cy="165.75" r="2.2"><title>M at position 16: z = −4.29</title></circle>
+  <circle class="dot-m" cx="314" cy="157.07" r="2.2"><title>M at position 17: z = −3.62</title></circle>
+  <circle class="dot-m" cx="330.5" cy="176.90" r="2.2"><title>M at position 18: z = −5.15</title></circle>
+  <circle class="dot-m" cx="347" cy="116.16" r="2.2"><title>M at position 19: z = −0.47</title></circle>
+  <circle class="dot-m" cx="363.5" cy="124.84" r="2.2"><title>M at position 20: z = −1.14</title></circle>
+  <circle class="dot-m" cx="380" cy="116.16" r="2.2"><title>M at position 21: z = −0.47</title></circle>
+  <circle class="dot-m" cx="396.5" cy="171.95" r="2.2"><title>M at position 22: z = −4.77</title></circle>
+  <circle class="dot-m" cx="413" cy="175.66" r="2.2"><title>M at position 23: z = −5.05</title></circle>
+  <circle class="dot-m" cx="429.5" cy="178.14" r="2.2"><title>M at position 24: z = −5.24</title></circle>
+  <circle class="dot-m" cx="446" cy="179.38" r="2.2"><title>M at position 25: z = −5.34</title></circle>
+  <circle class="dot-m" cx="462.5" cy="171.95" r="2.2"><title>M at position 26: z = −4.77</title></circle>
+  <circle class="dot-m" cx="479" cy="168.23" r="2.2"><title>M at position 27: z = −4.48</title></circle>
+  <circle class="dot-m" cx="495.5" cy="188.06" r="2.2"><title>M at position 28: z = −6.00</title></circle>
+  <circle class="dot-m" cx="512" cy="160.79" r="2.2"><title>M at position 29: z = −3.91</title></circle>
+  <circle class="dot-m" cx="528.5" cy="144.67" r="2.2"><title>M at position 30: z = −2.67</title></circle>
+  <!-- 5 dots -->
+  <circle class="dot-5" cx="50" cy="174.42" r="2.2"><title>5 at position 1: z = −4.96</title></circle>
+  <circle class="dot-5" cx="66.5" cy="67.81" r="2.2"><title>5 at position 2: z = +3.25</title></circle>
+  <circle class="dot-5" cx="83" cy="121.12" r="2.2"><title>5 at position 3: z = −0.86</title></circle>
+  <circle class="dot-5" cx="99.5" cy="109.96" r="2.2"><title>5 at position 4: z = +0.00</title></circle>
+  <circle class="dot-5" cx="116" cy="175.66" r="2.2"><title>5 at position 5: z = −5.05</title></circle>
+  <circle class="dot-5" cx="132.5" cy="171.95" r="2.2"><title>5 at position 6: z = −4.77</title></circle>
+  <circle class="dot-5" cx="149" cy="170.71" r="2.2"><title>5 at position 7: z = −4.67</title></circle>
+  <circle class="dot-5" cx="165.5" cy="173.18" r="2.2"><title>5 at position 8: z = −4.86</title></circle>
+  <circle class="dot-5" cx="182" cy="178.14" r="2.2"><title>5 at position 9: z = −5.24</title></circle>
+  <circle class="dot-5" cx="198.5" cy="162.03" r="2.2"><title>5 at position 10: z = −4.00</title></circle>
+  <circle class="dot-5" cx="215" cy="162.03" r="2.2"><title>5 at position 11: z = −4.00</title></circle>
+  <circle class="dot-5" cx="231.5" cy="170.71" r="2.2"><title>5 at position 12: z = −4.67</title></circle>
+  <circle class="dot-5" cx="248" cy="165.75" r="2.2"><title>5 at position 13: z = −4.29</title></circle>
+  <circle class="dot-5" cx="264.5" cy="191.78" r="2.2"><title>5 at position 14: z = −6.29</title></circle>
+  <circle class="dot-5" cx="281" cy="173.18" r="2.2"><title>5 at position 15: z = −4.86</title></circle>
+  <circle class="dot-5" cx="297.5" cy="152.11" r="2.2"><title>5 at position 16: z = −3.24</title></circle>
+  <circle class="dot-5" cx="314" cy="160.79" r="2.2"><title>5 at position 17: z = −3.91</title></circle>
+  <circle class="dot-5" cx="330.5" cy="174.42" r="2.2"><title>5 at position 18: z = −4.96</title></circle>
+  <circle class="dot-5" cx="347" cy="126.08" r="2.2"><title>5 at position 19: z = −1.24</title></circle>
+  <circle class="dot-5" cx="363.5" cy="114.92" r="2.2"><title>5 at position 20: z = −0.38</title></circle>
+  <circle class="dot-5" cx="380" cy="131.04" r="2.2"><title>5 at position 21: z = −1.62</title></circle>
+  <circle class="dot-5" cx="396.5" cy="155.83" r="2.2"><title>5 at position 22: z = −3.53</title></circle>
+  <circle class="dot-5" cx="413" cy="168.23" r="2.2"><title>5 at position 23: z = −4.48</title></circle>
+  <circle class="dot-5" cx="429.5" cy="178.14" r="2.2"><title>5 at position 24: z = −5.24</title></circle>
+  <circle class="dot-5" cx="446" cy="170.71" r="2.2"><title>5 at position 25: z = −4.67</title></circle>
+  <circle class="dot-5" cx="462.5" cy="170.71" r="2.2"><title>5 at position 26: z = −4.67</title></circle>
+  <circle class="dot-5" cx="479" cy="166.99" r="2.2"><title>5 at position 27: z = −4.38</title></circle>
+  <circle class="dot-5" cx="495.5" cy="173.18" r="2.2"><title>5 at position 28: z = −4.86</title></circle>
+  <circle class="dot-5" cx="512" cy="180.62" r="2.2"><title>5 at position 29: z = −5.43</title></circle>
+  <circle class="dot-5" cx="528.5" cy="166.99" r="2.2"><title>5 at position 30: z = −4.38</title></circle>
+  <!-- x-axis -->
+  <line class="ax" x1="45" y1="205" x2="535" y2="205"/>
+  <text class="ax-label" text-anchor="middle" x="50" y="218">1</text>
+  <text class="ax-label" text-anchor="middle" x="116" y="218">5</text>
+  <text class="ax-label" text-anchor="middle" x="198.5" y="218">10</text>
+  <text class="ax-label" text-anchor="middle" x="281" y="218">15</text>
+  <text class="ax-label" text-anchor="middle" x="363.5" y="218">20</text>
+  <text class="ax-label" text-anchor="middle" x="446" y="218">25</text>
+  <text class="ax-label" text-anchor="middle" x="528.5" y="218">30</text>
+  <text class="ax-title" text-anchor="middle" x="290" y="235">character position</text>
+  <!-- boundary band annotation -->
+  <text class="ax-label" text-anchor="middle" x="363.5" y="37" style="fill:#3a5a72;font-weight:600">96-bit boundary region</text>
+  <!-- legend -->
+  <line class="line-m" x1="400" y1="245" x2="420" y2="245"/>
+  <circle class="dot-m" cx="410" cy="245" r="2.2"/>
+  <text class="legend-txt" text-anchor="start" x="425" y="248">symbol M</text>
+  <line class="line-5" x1="475" y1="245" x2="495" y2="245"/>
+  <circle class="dot-5" cx="485" cy="245" r="2.2"/>
+  <text class="legend-txt" text-anchor="start" x="500" y="248">symbol 5</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 2.</span> Per-position Poisson z-score of the two under-represented symbols M (solid red) and 5 (dashed blue) across the thirty character positions of Group 1 first-broadcast messages. Solid horizontal line: the uniform expectation (<em>z</em>&nbsp;=&nbsp;0). Dashed red line: the per-family Bonferroni threshold for 435 position pairs, |<em>z</em>|&nbsp;&gt;&nbsp;3.86. Shaded band: the boundary region at positions 19–21 spanning bit offsets 91–105, immediately surrounding the 96-bit mark. Both symbols sit at <em>z</em>&nbsp;≈&nbsp;−4 to −6 at nearly every body position (the full suppression regime) but rise sharply back toward zero inside the boundary region. Positions 1–2 reflect the G1 PR-character distribution (e.g., M at position 1 is massively over-represented at <em>z</em>&nbsp;=&nbsp;+20.12, off-chart, because MQ and MK are frequent G1 prefixes); these are not body-generator properties.</div>
+
+<div class="callout key">
+  <strong>Format-boundary signature.</strong> The attenuation of the M and 5 deficit at positions 19–21 is the only obvious structural feature in an otherwise uniform-deficit profile. It spans character positions that cover bit offsets 91 through 105 of the 150-bit payload — immediately surrounding the 96-bit mark. A broadcast format composed of a 96-bit authenticator followed by an additional identifier or nonce residue would produce precisely this pattern: the first field (through bit 96) subject to one distributional constraint, and the residue to another. The cryptographic conventions of GMAC, Poly1305, and truncated-HMAC all produce tags at bit widths including 96 and 128 [<a href="#bib-krovetz2011">4</a>, <a href="#bib-bellare1996">5</a>, <a href="#bib-mclmatter2004">3</a>], and 96 bits is the standard tag width for GMAC and Poly1305 in common AEAD constructions.
+</div>
+
+<p>The inference is not that the corpus carries a GMAC or Poly1305 tag specifically — we have no way of identifying the primitive from ciphertext alone — but that the position-wise profile of the M/5 deficit is consistent with a concatenation format bridging an authenticator field and a second field at the 96-bit boundary, and is difficult to account for under any hypothesis of a single uniform-generator output across all 150 bits.</p>
+
+<h2 id="doublets"><span class="num">6.</span>Doublet suppression profile</h2>
+
+<p>A second positional probe, independent of the marginal analysis of §4–§5, tests the rate at which consecutive characters coincide — the probability that message position <em>i</em> carries the same base32 symbol as position <em>i</em>+1. Under the uniform null, this doublet probability is exactly 1/32 = 3.125% at every position pair, regardless of how the marginals are distributed across symbols. A format imposing a no-run constraint at specific positions would produce localised suppression of the doublet rate.</p>
+
+<p>Table 5 reports the empirical doublet count at each of the twenty-nine position pairs in the Group 1 first-broadcast cohort (<em>N</em> = 3,519), the same statistic in Group 2 (<em>N</em> = 1,858), and in a synthetic uniform base32 control of matched Group 1 size. The Poisson standard deviation under the null is <em>N</em><sup>1/2</sup>/32<sup>1/2</sup>, i.e., approximately 10.49 doublets per position pair in the G1 column. Column z-scores are reported against this null.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th class="num">pair</th>
+      <th class="num">bit range</th>
+      <th class="num">G1 count</th>
+      <th class="num">G1 z</th>
+      <th class="num">G2 count</th>
+      <th class="num">G2 z</th>
+      <th class="num">syn z</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">1–2</td><td class="num">1–10</td><td class="num">146</td><td class="num">+3.44</td><td class="num">101</td><td class="num">+5.63</td><td class="num">+0.29</td></tr>
+    <tr><td class="num">2–3</td><td class="num">6–15</td><td class="num">114</td><td class="num">+0.38</td><td class="num">53</td><td class="num">−0.66</td><td class="num">+1.05</td></tr>
+    <tr><td class="num">3–4</td><td class="num">11–20</td><td class="num">99</td><td class="num">−1.05</td><td class="num">63</td><td class="num">+0.65</td><td class="num">+1.62</td></tr>
+    <tr><td class="num">4–5</td><td class="num">16–25</td><td class="num">125</td><td class="num">+1.43</td><td class="num">56</td><td class="num">−0.27</td><td class="num">+0.96</td></tr>
+    <tr><td class="num">5–6</td><td class="num">21–30</td><td class="num">115</td><td class="num">+0.48</td><td class="num">52</td><td class="num">−0.80</td><td class="num">+0.10</td></tr>
+    <tr><td class="num">6–7</td><td class="num">26–35</td><td class="num">104</td><td class="num">−0.57</td><td class="num">49</td><td class="num">−1.19</td><td class="num">+0.86</td></tr>
+    <tr><td class="num">7–8</td><td class="num">31–40</td><td class="num">125</td><td class="num">+1.43</td><td class="num">66</td><td class="num">+1.04</td><td class="num">+0.77</td></tr>
+    <tr><td class="num">8–9</td><td class="num">36–45</td><td class="num">132</td><td class="num">+2.10</td><td class="num">48</td><td class="num">−1.32</td><td class="num">+0.96</td></tr>
+    <tr><td class="num">9–10</td><td class="num">41–50</td><td class="num">102</td><td class="num">−0.76</td><td class="num">58</td><td class="num">−0.01</td><td class="num">−0.28</td></tr>
+    <tr><td class="num">10–11</td><td class="num">46–55</td><td class="num">123</td><td class="num">+1.24</td><td class="num">58</td><td class="num">−0.01</td><td class="num">−1.52</td></tr>
+    <tr><td class="num">11–12</td><td class="num">51–60</td><td class="num">114</td><td class="num">+0.38</td><td class="num">66</td><td class="num">+1.04</td><td class="num">−0.28</td></tr>
+    <tr><td class="num">12–13</td><td class="num">56–65</td><td class="num">113</td><td class="num">+0.29</td><td class="num">59</td><td class="num">+0.12</td><td class="num">−0.47</td></tr>
+    <tr><td class="num">13–14</td><td class="num">61–70</td><td class="num">97</td><td class="num">−1.24</td><td class="num">59</td><td class="num">+0.12</td><td class="num">+0.67</td></tr>
+    <tr><td class="num">14–15</td><td class="num">66–75</td><td class="num">109</td><td class="num">−0.09</td><td class="num">68</td><td class="num">+1.30</td><td class="num">−0.19</td></tr>
+    <tr><td class="num">15–16</td><td class="num">71–80</td><td class="num">113</td><td class="num">+0.29</td><td class="num">56</td><td class="num">−0.27</td><td class="num">+0.19</td></tr>
+    <tr><td class="num">16–17</td><td class="num">76–85</td><td class="num">118</td><td class="num">+0.77</td><td class="num">63</td><td class="num">+0.65</td><td class="num">+0.19</td></tr>
+    <tr><td class="num">17–18</td><td class="num">81–90</td><td class="num">100</td><td class="num">−0.95</td><td class="num">53</td><td class="num">−0.66</td><td class="num">+0.19</td></tr>
+    <tr><td class="num">18–19</td><td class="num">86–95</td><td class="num">119</td><td class="num">+0.86</td><td class="num">58</td><td class="num">−0.01</td><td class="num">+0.58</td></tr>
+    <tr class="highlight"><td class="num"><strong>19–20</strong></td><td class="num"><strong>91–100</strong></td><td class="num"><strong>30</strong></td><td class="num"><strong>−7.63</strong></td><td class="num">51</td><td class="num">−0.93</td><td class="num">−0.47</td></tr>
+    <tr class="highlight"><td class="num"><strong>20–21</strong></td><td class="num"><strong>96–105</strong></td><td class="num"><strong>40</strong></td><td class="num"><strong>−6.67</strong></td><td class="num">66</td><td class="num">+1.04</td><td class="num">+0.00</td></tr>
+    <tr><td class="num">21–22</td><td class="num">101–110</td><td class="num">115</td><td class="num">+0.48</td><td class="num">57</td><td class="num">−0.14</td><td class="num">+0.19</td></tr>
+    <tr><td class="num">22–23</td><td class="num">106–115</td><td class="num">111</td><td class="num">+0.10</td><td class="num">60</td><td class="num">+0.25</td><td class="num">+0.67</td></tr>
+    <tr><td class="num">23–24</td><td class="num">111–120</td><td class="num">132</td><td class="num">+2.10</td><td class="num">62</td><td class="num">+0.52</td><td class="num">+0.38</td></tr>
+    <tr><td class="num">24–25</td><td class="num">116–125</td><td class="num">109</td><td class="num">−0.09</td><td class="num">59</td><td class="num">+0.12</td><td class="num">+0.00</td></tr>
+    <tr class="highlight"><td class="num"><strong>25–26</strong></td><td class="num"><strong>121–130</strong></td><td class="num"><strong>7</strong></td><td class="num"><strong>−9.82</strong></td><td class="num">69</td><td class="num">+1.44</td><td class="num">+1.05</td></tr>
+    <tr class="highlight"><td class="num"><strong>26–27</strong></td><td class="num"><strong>126–135</strong></td><td class="num"><strong>5</strong></td><td class="num"><strong>−10.01</strong></td><td class="num">52</td><td class="num">−0.80</td><td class="num">+1.24</td></tr>
+    <tr class="highlight"><td class="num"><strong>27–28</strong></td><td class="num"><strong>131–140</strong></td><td class="num"><strong>8</strong></td><td class="num"><strong>−9.72</strong></td><td class="num">68</td><td class="num">+1.30</td><td class="num">−0.28</td></tr>
+    <tr class="highlight"><td class="num"><strong>28–29</strong></td><td class="num"><strong>136–145</strong></td><td class="num"><strong>7</strong></td><td class="num"><strong>−9.82</strong></td><td class="num">70</td><td class="num">+1.57</td><td class="num">+0.29</td></tr>
+    <tr class="highlight"><td class="num"><strong>29–30</strong></td><td class="num"><strong>141–150</strong></td><td class="num"><strong>7</strong></td><td class="num"><strong>−9.82</strong></td><td class="num">69</td><td class="num">+1.44</td><td class="num">−1.43</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 5.</span> Doublet (character-repetition) count at each of the 29 consecutive-position pairs in Group 1 first-broadcast messages (<em>N</em>=3,519), Group 2 (<em>N</em>=1,858), and a synthetic uniform base32 control of matched Group 1 size. Expected count per position pair under the uniform null: ~110 for G1 and synthetic, ~58 for G2; Poisson z-scores reported. Position pair (1–2) carries a prefix-driven over-representation in both real groups. Highlighted rows in the G1 column mark two regimes of strong doublet suppression: pairs (19–20) and (20–21) at the inferred 96-bit boundary, and pairs (25–26) through (29–30) — the final five position pairs, spanning the last 30 bits — where the doublet count drops to 5–8 observed against ~110 expected, a 15-fold reduction. G2 exhibits neither regime; the synthetic control shows none.</div>
+
+<figure class="plot" role="img" aria-label="Bar chart of doublet count per position pair in G1 messages">
+<svg viewBox="0 0 580 260" xmlns="http://www.w3.org/2000/svg">
+  <!-- Highlighted bands for the two suppression regions (shifted +17 for position-1 gap) -->
+  <rect class="band" x="365" y="25" width="47" height="180"/>
+  <rect class="band-strong" x="467" y="25" width="81" height="180"/>
+  <!-- y-axis and axis ticks -->
+  <line class="ax" x1="40" y1="25" x2="40" y2="205"/>
+  <line class="ax" x1="40" y1="205" x2="560" y2="205"/>
+  <line class="ax-tick" x1="37" y1="205" x2="40" y2="205"/>
+  <line class="ax-tick" x1="37" y1="149.5" x2="40" y2="149.5"/>
+  <line class="ax-tick" x1="37" y1="94" x2="40" y2="94"/>
+  <line class="ax-tick" x1="37" y1="38.5" x2="40" y2="38.5"/>
+  <text class="ax-label" text-anchor="end" x="35" y="208">0</text>
+  <text class="ax-label" text-anchor="end" x="35" y="152.5">50</text>
+  <text class="ax-label" text-anchor="end" x="35" y="97">100</text>
+  <text class="ax-label" text-anchor="end" x="35" y="41.5">150</text>
+  <text class="ax-title" text-anchor="middle" transform="rotate(-90, 15, 115)" x="15" y="115">doublet count</text>
+  <!-- expected line at count = 109.97 (N_G1=3,519 / 32) -->
+  <line class="ref" x1="40" y1="81.28" x2="560" y2="81.28"/>
+  <text class="ax-label" text-anchor="start" x="562" y="84" style="fill:var(--accent)">expected</text>
+  <!-- Position-1 gap: no bar, as position 1 has no preceding position to compare. -->
+  <!-- G1 bars, 29 positions (2–30): each bar asks whether position N matches its preceding position (N−1) -->
+  <rect class="bar" x="59" y="40.75" width="13" height="164.25"><title>position 2: 146 doublets with position 1 (z = +3.44; prefix-driven)</title></rect>
+  <rect class="bar" x="76" y="76.75" width="13" height="128.25"><title>position 3: 114 doublets with position 2 (z = +0.38)</title></rect>
+  <rect class="bar" x="93" y="93.63" width="13" height="111.38"><title>position 4: 99 doublets with position 3 (z = −1.05)</title></rect>
+  <rect class="bar" x="110" y="64.38" width="13" height="140.63"><title>position 5: 125 doublets with position 4 (z = +1.43)</title></rect>
+  <rect class="bar" x="127" y="75.63" width="13" height="129.38"><title>position 6: 115 doublets with position 5 (z = +0.48)</title></rect>
+  <rect class="bar" x="144" y="88.00" width="13" height="117.00"><title>position 7: 104 doublets with position 6 (z = −0.57)</title></rect>
+  <rect class="bar" x="161" y="64.38" width="13" height="140.63"><title>position 8: 125 doublets with position 7 (z = +1.43)</title></rect>
+  <rect class="bar" x="178" y="56.50" width="13" height="148.50"><title>position 9: 132 doublets with position 8 (z = +2.10)</title></rect>
+  <rect class="bar" x="195" y="90.25" width="13" height="114.75"><title>position 10: 102 doublets with position 9 (z = −0.76)</title></rect>
+  <rect class="bar" x="212" y="66.63" width="13" height="138.38"><title>position 11: 123 doublets with position 10 (z = +1.24)</title></rect>
+  <rect class="bar" x="229" y="76.75" width="13" height="128.25"><title>position 12: 114 doublets with position 11 (z = +0.38)</title></rect>
+  <rect class="bar" x="246" y="77.88" width="13" height="127.13"><title>position 13: 113 doublets with position 12 (z = +0.29)</title></rect>
+  <rect class="bar" x="263" y="95.88" width="13" height="109.13"><title>position 14: 97 doublets with position 13 (z = −1.24)</title></rect>
+  <rect class="bar" x="280" y="82.38" width="13" height="122.63"><title>position 15: 109 doublets with position 14 (z = −0.09)</title></rect>
+  <rect class="bar" x="297" y="77.88" width="13" height="127.13"><title>position 16: 113 doublets with position 15 (z = +0.29)</title></rect>
+  <rect class="bar" x="314" y="72.25" width="13" height="132.75"><title>position 17: 118 doublets with position 16 (z = +0.77)</title></rect>
+  <rect class="bar" x="331" y="92.50" width="13" height="112.50"><title>position 18: 100 doublets with position 17 (z = −0.95)</title></rect>
+  <rect class="bar" x="348" y="71.13" width="13" height="133.88"><title>position 19: 119 doublets with position 18 (z = +0.86)</title></rect>
+  <rect class="bar-hi" x="365" y="171.25" width="13" height="33.75"><title>position 20: 30 doublets with position 19 (z = −7.63) — 96-bit boundary suppression</title></rect>
+  <rect class="bar-hi" x="382" y="160.00" width="13" height="45.00"><title>position 21: 40 doublets with position 20 (z = −6.67) — 96-bit boundary suppression</title></rect>
+  <rect class="bar" x="399" y="75.63" width="13" height="129.38"><title>position 22: 115 doublets with position 21 (z = +0.48)</title></rect>
+  <rect class="bar" x="416" y="80.13" width="13" height="124.88"><title>position 23: 111 doublets with position 22 (z = +0.10)</title></rect>
+  <rect class="bar" x="433" y="56.50" width="13" height="148.50"><title>position 24: 132 doublets with position 23 (z = +2.10)</title></rect>
+  <rect class="bar" x="450" y="82.38" width="13" height="122.63"><title>position 25: 109 doublets with position 24 (z = −0.09)</title></rect>
+  <rect class="bar-out" x="467" y="197.13" width="13" height="7.88"><title>position 26: 7 doublets with position 25 (z = −9.82) — trailing no-run constraint</title></rect>
+  <rect class="bar-out" x="484" y="199.38" width="13" height="5.63"><title>position 27: 5 doublets with position 26 (z = −10.01) — trailing no-run constraint</title></rect>
+  <rect class="bar-out" x="501" y="196.00" width="13" height="9.00"><title>position 28: 8 doublets with position 27 (z = −9.72) — trailing no-run constraint</title></rect>
+  <rect class="bar-out" x="518" y="197.13" width="13" height="7.88"><title>position 29: 7 doublets with position 28 (z = −9.82) — trailing no-run constraint</title></rect>
+  <rect class="bar-out" x="535" y="197.13" width="13" height="7.88"><title>position 30: 7 doublets with position 29 (z = −9.82) — trailing no-run constraint</title></rect>
+  <!-- x-axis labels: each tick marks the position N indicated by the bar beneath it -->
+  <text class="ax-label" text-anchor="middle" x="65.5" y="218">2</text>
+  <text class="ax-label" text-anchor="middle" x="116.5" y="218">5</text>
+  <text class="ax-label" text-anchor="middle" x="201.5" y="218">10</text>
+  <text class="ax-label" text-anchor="middle" x="286.5" y="218">15</text>
+  <text class="ax-label" text-anchor="middle" x="371.5" y="218">20</text>
+  <text class="ax-label" text-anchor="middle" x="456.5" y="218">25</text>
+  <text class="ax-label" text-anchor="middle" x="541.5" y="218">30</text>
+  <text class="ax-title" text-anchor="middle" x="300" y="235">character position — does it match the preceding one?</text>
+  <!-- annotations for the suppression regions -->
+  <text class="ax-label" text-anchor="middle" x="388.5" y="37" style="fill:#3a5a72;font-weight:600">96-bit boundary</text>
+  <text class="ax-label" text-anchor="middle" x="507.5" y="37" style="fill:var(--accent);font-weight:600">trailing 30-bit field</text>
+  <!-- legend -->
+  <rect class="bar" x="40" y="243" width="12" height="8"/>
+  <text class="legend-txt" x="57" y="251">normal</text>
+  <rect class="bar-hi" x="130" y="243" width="12" height="8"/>
+  <text class="legend-txt" x="147" y="251">boundary suppression</text>
+  <rect class="bar-out" x="300" y="243" width="12" height="8"/>
+  <text class="legend-txt" x="317" y="251">trailing no-run constraint</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 3.</span> For each character position from 2 through 30, the number of Group 1 first-broadcast messages in which the character at that position is identical to the character at the immediately preceding position. Dashed line: the uniform expectation of approximately 110 doublets per position (rate 1/32 on <em>N</em>=3,519). Most positions land within one Poisson standard deviation (about ±10.5) of the expected rate and are effectively indistinguishable from uniform. Position 2, which completes the two-character prefix, sits well above the expected line, reflecting the known prefix distribution. Two distinct regions of strong suppression are visible: positions 20 and 21, in the 96-bit boundary region, drop to roughly 30 and 40 doublets respectively; positions 26 through 30, spanning the last 30 bits of the payload, drop to between 5 and 8 doublets — a 15-fold reduction from the expected rate, and the clearest structural signature observed in the corpus.</div>
+
+<h3><span class="num">6.1</span>Per-prefix persistence of the trailing-region suppression</h3>
+
+<p>The aggregate doublet suppression at position pairs (25–26) through (29–30) would be produced by stratum mixing only if individual prefix cells carried normal doublet rates that averaged to the observed suppression — which is arithmetically impossible. Direct verification nevertheless shows that every individual prefix cell in Group 1 with <em>N</em>&nbsp;≥&nbsp;100 independently exhibits the suppression, with doublet counts at trailing positions of 0, 1, 2, or 3 against expected counts of 3.1 to 7.5 per cell.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th class="num">prefix</th>
+      <th class="num">year</th>
+      <th class="num"><em>N</em></th>
+      <th class="num">expected</th>
+      <th class="num">pos 25–26</th>
+      <th class="num">pos 26–27</th>
+      <th class="num">pos 27–28</th>
+      <th class="num">pos 28–29</th>
+      <th class="num">pos 29–30</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">GF</td><td class="num">2022</td><td class="num">172</td><td class="num">5.4</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">3</td></tr>
+    <tr><td class="num">MQ</td><td class="num">2022–2023</td><td class="num">151</td><td class="num">4.7</td><td class="num">0</td><td class="num">0</td><td class="num">2</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">24</td><td class="num">2023</td><td class="num">166</td><td class="num">5.2</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">2</td><td class="num">0</td></tr>
+    <tr><td class="num">YL</td><td class="num">2023</td><td class="num">143</td><td class="num">4.5</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">YT</td><td class="num">2023</td><td class="num">182</td><td class="num">5.7</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+    <tr><td class="num">PJ</td><td class="num">2023</td><td class="num">229</td><td class="num">7.2</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">CZ</td><td class="num">2023</td><td class="num">241</td><td class="num">7.5</td><td class="num">0</td><td class="num">2</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
+    <tr><td class="num">WR</td><td class="num">2023–2024</td><td class="num">241</td><td class="num">7.5</td><td class="num">2</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+    <tr><td class="num">AS</td><td class="num">2024</td><td class="num">161</td><td class="num">5.0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">TD</td><td class="num">2024</td><td class="num">119</td><td class="num">3.7</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+    <tr><td class="num">Q5</td><td class="num">2024</td><td class="num">144</td><td class="num">4.5</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td></tr>
+    <tr><td class="num">MK</td><td class="num">2024</td><td class="num">158</td><td class="num">4.9</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">C6</td><td class="num">2024</td><td class="num">142</td><td class="num">4.4</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">FV</td><td class="num">2024</td><td class="num">140</td><td class="num">4.4</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">AA</td><td class="num">2025</td><td class="num">146</td><td class="num">4.6</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">SE</td><td class="num">2025</td><td class="num">103</td><td class="num">3.2</td><td class="num">0</td><td class="num">0</td><td class="num">2</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td class="num">LH</td><td class="num">2026</td><td class="num">100</td><td class="num">3.1</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 6.</span> Per-prefix doublet counts at each of the five trailing position pairs in Group 1 messages, ordered chronologically by first broadcast. Across 85 cell-by-position observations (17 prefix cells × 5 position pairs), the observed doublet counts are 0, 1, 2, or 3 (one cell at pos 29–30); the mean count is 0.32 against an expected mean near 5. Three prefix cells (MK, C6, FV) contribute zero doublets across all five trailing positions. The suppression is present in every prefix without exception and is therefore a persistent structural property rather than a pooling artifact.</div>
+
+<div class="callout key">
+  <strong>Key finding.</strong> The last six character positions of Group 1 broadcast bodies (spanning bits 121–150 of the 150-bit payload) carry a near-deterministic no-consecutive-repetition constraint. Doublets, which should occur at a 1/32 rate under uniform output, occur at an aggregate rate of about 1/500 across the trailing region — roughly a fifteen-fold suppression — with the constraint persisting in every prefix cell examined. Group 2 exhibits no such suppression: its trailing-region doublet rate is consistent with uniform. This constitutes an independent structural signature distinguishing the two groups at the format level.
+</div>
+
+<h3><span class="num">6.2</span>Boundary-region doublet suppression</h3>
+
+<p>A weaker but still positively detected suppression appears at position pairs (19–20) and (20–21) — the same region of the payload at which the M/5 marginal deficit attenuates (§5). At the aggregate level these two pairs give z-scores of −7.63 and −6.67 respectively, with doublet counts of 30 and 40 against the expected ~110. Per-prefix disaggregation (not tabulated) confirms that the majority of large prefix cells contribute zero or one doublet at position pair (19–20), with the remaining cells contributing small positive counts; the pattern is less uniform than the trailing-region suppression but cleanly cross-validates the 96-bit boundary hypothesis introduced in §5.</p>
+
+<p>The two signatures — marginal M/5 attenuation in one direction and doublet suppression in another — are jointly localised at the same positional region, arising from different statistical channels, and therefore constitute independent evidence for a format boundary in that region.</p>
+
+<h2 id="within-key"><span class="num">7.</span>Within-key structural probes</h2>
+
+<p>The preceding sections reject uniformity at the marginal level and reject freshness at the collision level. To complete the statistical portrait, we ask whether the observed payload, considered as output of a deterministic function on unseen inputs, behaves like a strong pseudorandom function within a single prefix. This is equivalent to testing whether, <em>conditional on</em> the first-order marginal deviations and the operational replay structure, the joint structure of body positions is consistent with a PRF.</p>
+
+<p>Three within-key tests are reported: pairwise mutual information, LZMA compressibility, and first-order differential structure between consecutive messages.</p>
+
+<h3><span class="num">7.1</span>Per-position pairwise mutual information</h3>
+
+<p>For each prefix cell with <em>N</em>&nbsp;≥&nbsp;100, we compute the empirical pairwise mutual information between the terminal pair of positions, <em>I</em>(X<sub>29</sub>; X<sub>30</sub>), and its 200-replicate column-shuffle null. Table 7 summarises the result for the ten Group 1 prefix cells with the largest unique-message counts. The same test on the full pooled cohort returns <em>z</em>&nbsp;=&nbsp;+6.23 at this position pair; within any single prefix, the signal disappears.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th class="num">prefix</th>
+      <th class="num">year</th>
+      <th class="num"><em>N</em></th>
+      <th class="num"><em>I</em>(X<sub>29</sub>; X<sub>30</sub>)</th>
+      <th class="num">μ<sub>null</sub></th>
+      <th class="num">σ<sub>null</sub></th>
+      <th class="num"><em>z</em></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">GF</td><td class="num">2022</td><td class="num">172</td><td class="num">2.444</td><td class="num">2.425</td><td class="num">0.037</td><td class="num">+0.52</td></tr>
+    <tr><td class="num">MQ</td><td class="num">2022–2023</td><td class="num">151</td><td class="num">2.624</td><td class="num">2.559</td><td class="num">0.040</td><td class="num">+1.63</td></tr>
+    <tr><td class="num">24</td><td class="num">2023</td><td class="num">166</td><td class="num">2.433</td><td class="num">2.465</td><td class="num">0.044</td><td class="num">−0.73</td></tr>
+    <tr><td class="num">YT</td><td class="num">2023</td><td class="num">182</td><td class="num">2.449</td><td class="num">2.396</td><td class="num">0.037</td><td class="num">+1.44</td></tr>
+    <tr><td class="num">PJ</td><td class="num">2023</td><td class="num">229</td><td class="num">2.203</td><td class="num">2.194</td><td class="num">0.039</td><td class="num">+0.24</td></tr>
+    <tr><td class="num">CZ</td><td class="num">2023</td><td class="num">241</td><td class="num">2.153</td><td class="num">2.139</td><td class="num">0.040</td><td class="num">+0.36</td></tr>
+    <tr><td class="num">WR</td><td class="num">2023–2024</td><td class="num">241</td><td class="num">2.162</td><td class="num">2.109</td><td class="num">0.035</td><td class="num">+1.52</td></tr>
+    <tr><td class="num">AS</td><td class="num">2024</td><td class="num">161</td><td class="num">2.487</td><td class="num">2.504</td><td class="num">0.037</td><td class="num">−0.46</td></tr>
+    <tr><td class="num">MK</td><td class="num">2024</td><td class="num">158</td><td class="num">2.613</td><td class="num">2.558</td><td class="num">0.038</td><td class="num">+1.43</td></tr>
+    <tr><td class="num">AA</td><td class="num">2025</td><td class="num">146</td><td class="num">2.733</td><td class="num">2.684</td><td class="num">0.039</td><td class="num">+1.23</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 7.</span> Within-cell pairwise mutual information at the terminal position pair (29, 30) for the ten Group 1 prefix cells with the largest unique-message counts, ordered chronologically by first observed broadcast. All <em>z</em>-scores lie in the range [−0.73, +1.63]; none exceeds the Bonferroni threshold of |<em>z</em>|&nbsp;&gt;&nbsp;2.58 for 10 tests at α&nbsp;=&nbsp;0.05. The pooled-cohort signal at this position pair is attributable entirely to stratum mixing; the within-prefix structure is independent.</div>
+
+<p>The same pattern holds at every other position pair we examined: within a single prefix, the pairwise joint distribution of any two body positions is indistinguishable from the product of the marginals up to the noise floor of the shuffle null.</p>
+
+<h3><span class="num">7.2</span>Per-prefix compressibility</h3>
+
+<p>Across all 41 prefix cells with <em>N</em>&nbsp;≥&nbsp;50, we compute the LZMA compression ratio of the shuffled and prefix-stripped 28-character bodies and compare against a ten-seed synthetic uniform base32 control of matched size. Under the Bonferroni threshold for 41 tests (|<em>z</em>|&nbsp;&gt;&nbsp;3.24), zero cells exhibit significant excess compressibility, and the cell-level z-score distribution is approximately centred near zero with no cell exceeding +3. These results are consistent with a strong PRF output within each prefix.</p>
+
+<h3><span class="num">7.3</span>Differential structure between consecutive messages</h3>
+
+<p>If the broadcast payload were generated from a counter or state-machine, position-wise character differences between temporally-adjacent messages within the same prefix would show non-uniform structure. For each prefix cell with <em>N</em>&nbsp;≥&nbsp;100, we compute the distribution of modular differences Δ = (c<sub>i+1</sub>[p] − c<sub>i</sub>[p]) mod 32 at body positions <em>p</em>&nbsp;∈&nbsp;[3, 30] between consecutive messages in date-ordered sequence, and compute the chi-square statistic against the uniform on {0, 1, …, 31}. The five largest Group 1 cells give z-scores (chi-square standardised) of {+0.37, +2.30, +0.00, −1.59, +2.01}. No cell clears the Bonferroni threshold. The temporal-difference distribution is consistent with uniformity, excluding simple counter-based or state-machine structures within a single prefix.</p>
+
+<p>Together, the three within-prefix tests support the following conclusion: conditional on the first-order marginal deviations and conditional on operational replay, the broadcast payload within any single prefix behaves as the output of a strong deterministic keyed function of unseen inputs. This is the expected behaviour of a MAC, keyed hash, or truncated-hash authenticator, and of any good cryptographic PRF [<a href="#bib-rogaway2004">6</a>].</p>
+
+<h2 id="synthesis"><span class="num">8.</span>Synthesis</h2>
+
+<p>The evidence presented in sections 4 through 7 contradicts the null hypothesis that the 30-character body is a uniform draw from Σ<sup>30</sup>, as any IND-CPA-secure AEAD ciphertext would appear to a ciphertext-only observer. Three independent channels of evidence support this conclusion, and three within-key probes constrain the shape of the deviation.</p>
+
+<h3><span class="num">8.1</span>Evidence against uniform-output encryption</h3>
+
+<p>The observed base32 symbol marginal distribution (§4) is not uniform. Two specific symbols are under-represented by approximately 35–40% relative to the expected 1/|Σ| rate. The deviation exceeds 20σ in aggregate and persists within every prefix cell examined, with median per-cell magnitudes of roughly −4.7σ and −4.6σ on the seventeen largest cells. A synthetic uniform base32 control of matched size does not reproduce this pattern. The first-order marginal of the output is therefore not uniform.</p>
+
+<p>This finding alone excludes the simplest interpretation under which the broadcast is a per-session AEAD ciphertext with uniform output. A secure AEAD primitive, viewed from outside the keyholder, produces a uniform distribution on Σ<sup>30</sup> up to finite-sample noise; the observations are incompatible with that distribution by many orders of standard deviation.</p>
+
+<h3><span class="num">8.2</span>Positional localisation of the deviation</h3>
+
+<p>The position-wise profile of the marginal deficit (§5) is not uniform across positions. Positions 3 through 18 and 22 through 30 carry the full strength of the M/5 deficit; positions 19 through 21, spanning bit offsets 91 through 105, carry only a weakened deficit. The boundary between the two regimes is localised to within a few bits of the 96-bit mark — a common cryptographic tag width for primitives including GMAC and Poly1305 in widely-deployed AEAD constructions [<a href="#bib-mclmatter2004">3</a>, <a href="#bib-krovetz2011">4</a>].</p>
+
+<p>The doublet-suppression profile (§6) independently confirms this localisation. The same 96-bit boundary region exhibits significant doublet suppression (<em>z</em>&nbsp;=&nbsp;−7.63 at positions 19–20, −6.67 at 20–21), and a second and substantially stronger suppression occupies the final five consecutive position pairs (25–26 through 29–30, covering bits 121–150). In this trailing region the doublet rate drops to roughly 1/500 — a fifteen-fold reduction from the 1/32 uniform expectation — with the constraint persisting in every prefix cell. A localisation of this kind is not produced by a single uniform-output primitive operating across all 150 bits. It is the signature of a concatenated payload in which the statistical regime changes across specific internal boundaries.</p>
+
+<h3><span class="num">8.3</span>Within-key consistency with a keyed function</h3>
+
+<p>Conditional on the first-order marginal deviation and the doublet-suppression structure, the within-prefix structural probes (§7) return results consistent with the output of a strong deterministic keyed function: pairwise positional mutual information within the shuffle-null envelope, compression ratios within the synthetic-random noise floor across all 38 prefix cells, and uniform modular-difference distributions between date-ordered consecutive payloads. These are the expected signatures of a pseudorandom function in use, once its output has been subjected to a deterministic format construction [<a href="#bib-rogaway2004">6</a>, <a href="#bib-bellare1996">5</a>].</p>
+
+<h3><span class="num">8.4</span>Most parsimonious interpretation</h3>
+
+<p>The conjunction of these observations — non-uniform first-order marginals, two jointly-localised regions of positional anomaly at bits ~96 and bits 121–150, and within-key independence consistent with a keyed function — is most parsimoniously explained by a payload format of the form</p>
+
+<div class="eq">c = P<sub>10</sub> ‖ B<sub>85</sub> ‖ T<sub>25</sub> ‖ R<sub>30</sub> <span class="eq-num">(2)</span></div>
+
+<figure class="plot" role="img" aria-label="Schematic of the inferred four-field payload format">
+<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top bit-scale ticks -->
+  <line class="ax-tick" x1="30" y1="45" x2="30" y2="60"/>
+  <line class="ax-tick" x1="136.67" y1="45" x2="136.67" y2="60"/>
+  <line class="ax-tick" x1="243.33" y1="45" x2="243.33" y2="60"/>
+  <line class="ax-tick" x1="350" y1="45" x2="350" y2="60"/>
+  <line class="ax-tick" x1="456.67" y1="45" x2="456.67" y2="60"/>
+  <line class="ax-tick" x1="530" y1="45" x2="530" y2="60"/>
+  <text class="ax-label" text-anchor="middle" x="30" y="40">0</text>
+  <text class="ax-label" text-anchor="middle" x="136.67" y="40">32</text>
+  <text class="ax-label" text-anchor="middle" x="243.33" y="40">64</text>
+  <text class="ax-label" text-anchor="middle" x="350" y="40" style="fill:var(--accent);font-weight:600">96</text>
+  <text class="ax-label" text-anchor="middle" x="456.67" y="40">128</text>
+  <text class="ax-label" text-anchor="middle" x="530" y="40">150</text>
+  <text class="ax-title" text-anchor="middle" x="280" y="22">bit offset along the 150-bit payload</text>
+  <!-- Field blocks -->
+  <rect class="fmt-p" x="30" y="65" width="33.33" height="50"/>
+  <rect class="fmt-b" x="63.33" y="65" width="283.33" height="50"/>
+  <rect class="fmt-t" x="346.67" y="65" width="83.33" height="50"/>
+  <rect class="fmt-r" x="430" y="65" width="100" height="50"/>
+  <!-- Field labels inside blocks -->
+  <text class="fmt-lbl" text-anchor="middle" x="46.67" y="88">P</text>
+  <text class="fmt-lbl" text-anchor="middle" x="46.67" y="104" style="font-size:8px">10 bits</text>
+  <text class="fmt-lbl" text-anchor="middle" x="205" y="88">B</text>
+  <text class="fmt-lbl" text-anchor="middle" x="205" y="104" style="font-size:8px">85 bits</text>
+  <text class="fmt-lbl" text-anchor="middle" x="388.33" y="88">T</text>
+  <text class="fmt-lbl" text-anchor="middle" x="388.33" y="104" style="font-size:8px">25 bits</text>
+  <text class="fmt-lbl" text-anchor="middle" x="480" y="88">R</text>
+  <text class="fmt-lbl" text-anchor="middle" x="480" y="104" style="font-size:8px">30 bits</text>
+  <!-- Annotations below blocks -->
+  <text class="fmt-ann" text-anchor="middle" x="46.67" y="135">prefix</text>
+  <text class="fmt-ann" text-anchor="middle" x="46.67" y="148">(PR, keyed)</text>
+  <text class="fmt-ann" text-anchor="middle" x="205" y="135">pseudorandom keyed-function output</text>
+  <text class="fmt-ann" text-anchor="middle" x="205" y="148">(uniform marginals except M/5 deficit)</text>
+  <text class="fmt-ann" text-anchor="middle" x="388.33" y="135">transition</text>
+  <text class="fmt-ann" text-anchor="middle" x="388.33" y="148">(~96-bit mark)</text>
+  <text class="fmt-ann" text-anchor="middle" x="480" y="135">trailing field</text>
+  <text class="fmt-ann" text-anchor="middle" x="480" y="148">(no-run rule)</text>
+  <!-- Character-position legend below -->
+  <line class="ax" x1="30" y1="182" x2="530" y2="182"/>
+  <line class="ax-tick" x1="30" y1="178" x2="30" y2="185"/>
+  <line class="ax-tick" x1="63.33" y1="178" x2="63.33" y2="185"/>
+  <line class="ax-tick" x1="346.67" y1="178" x2="346.67" y2="185"/>
+  <line class="ax-tick" x1="430" y1="178" x2="430" y2="185"/>
+  <line class="ax-tick" x1="530" y1="178" x2="530" y2="185"/>
+  <text class="ax-label" text-anchor="middle" x="30" y="197">pos 1</text>
+  <text class="ax-label" text-anchor="middle" x="63.33" y="197">pos 3</text>
+  <text class="ax-label" text-anchor="middle" x="346.67" y="197">pos 19</text>
+  <text class="ax-label" text-anchor="middle" x="430" y="197">pos 25</text>
+  <text class="ax-label" text-anchor="middle" x="530" y="197">pos 30</text>
+  <text class="ax-title" text-anchor="middle" x="280" y="213">corresponding character position</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 4.</span> The inferred four-field payload format for <strong>Group 1</strong>, derived from the observations reported in §4 through §7. The 150-bit broadcast body comprises a 10-bit prefix field <em>P</em> (the PR, positions 1–2, carrying key and group identity); an 85-bit block <em>B</em> spanning character positions 3–19 that carries the bulk of the keyed-function output under uniform-ish marginals apart from the M and 5 deficit; a 25-bit transition region <em>T</em> spanning positions 19–21 at which both the marginal deficit and the doublet rate attenuate toward the uniform expectation, indicating a structural change near the 96-bit mark; and a 30-bit trailing field <em>R</em> spanning positions 25–30 in which doublets are suppressed by roughly 15-fold, indicating a structured encoding that forbids or strongly discourages consecutive-character repetition. The field boundaries are approximate and aligned to the character grid; finer resolution awaits the bit-offset scan outlined in §9.4. Group 2 does not share this multi-field structure; see Figure 5.</div>
+
+<p>where <em>P</em><sub>10</sub> is the 10-bit prefix (2 characters, positions 1–2, carrying the PR and implicit group identity); <em>B</em><sub>85</sub> is an 85-bit block spanning positions 3–19 that carries the bulk of the pseudorandom output under the keyed function; <em>T</em><sub>25</sub> is a transition region spanning positions 19–21 in which the marginal and doublet statistics deviate from the surrounding blocks; and <em>R</em><sub>30</sub> is a 30-bit trailing field spanning positions 25–30 under a no-consecutive-repetition constraint whose encoding differs from that of <em>B</em><sub>85</sub>. The bit boundaries are approximate and pinned to the character grid; the transition and trailing regions may in principle correspond to a single continuous sub-field with internal sub-structure that additional probes would resolve.</p>
+
+<p>The first portion of this format, up to the transition near bit 96, carries the observational footprint of a truncated-MAC or keyed-hash authenticator of approximately 96 bits. The trailing 30-bit region with its no-run constraint is consistent with a structured secondary field — a counter, short identifier, or version/type token encoded under a construction that forbids consecutive-character repetition. The precise cryptographic primitive instantiating the keyed portion cannot be identified from ciphertext alone; the observations are compatible with HMAC-truncation, GMAC, Poly1305, and other widely-deployed keyed-function constructions at the inferred output width.</p>
+
+<blockquote>The observational profile of the 30-character HFGCS <strong>Group 1</strong> broadcast payload is most consistent with a multi-field format: a 10-bit prefix, an approximately 85-bit block of pseudorandom keyed-function output, a transition region near the 96-bit mark, and a structured 30-bit trailing field with a no-consecutive-repetition constraint — the signature of a cryptographic authenticator concatenated with a short structured secondary field, rather than a single uniform-output encryption spanning all 150 bits.</blockquote>
+
+<h3><span class="num">8.5</span>Group 2 format contrast</h3>
+
+<p>Applying the same four structural probes to the Group 2 cohort (<em>N</em>&nbsp;=&nbsp;1,858), and to its addressee-status sub-slices (G2 with addressee, <em>N</em>&nbsp;=&nbsp;1,368; G2 without addressee, <em>N</em>&nbsp;=&nbsp;490), returns a sharply different result: the G1 boundary attenuation at positions 19–21 and the trailing-region no-run constraint at positions 25–30 are <strong>both absent</strong>. Table 8 reports the side-by-side probe values.</p>
+
+<div class="scroll-x"><table>
+  <thead>
+    <tr>
+      <th>probe</th>
+      <th class="num">G1 (all)</th>
+      <th class="num">G2 (all)</th>
+      <th class="num">G2 w/&nbsp;addr</th>
+      <th class="num">G2 w/o&nbsp;addr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>aggregate body M z</td><td class="num">−21.18</td><td class="num">−3.57</td><td class="num">−2.51</td><td class="num">−2.74</td></tr>
+    <tr><td>aggregate body 5 z</td><td class="num">−20.89</td><td class="num">−1.88</td><td class="num">−1.71</td><td class="num">−0.81</td></tr>
+    <tr><td>pos 19 M / 5 z</td><td class="num">−0.47 / −1.24</td><td class="num">+0.12 / −0.80</td><td class="num">−1.19 / −0.57</td><td class="num">+2.22 / −0.59</td></tr>
+    <tr><td>pos 20 M / 5 z</td><td class="num">−1.14 / −0.38</td><td class="num">−1.98 / +2.09</td><td class="num">−1.19 / +1.11</td><td class="num">−1.87 / +2.22</td></tr>
+    <tr><td>pos 21 M / 5 z</td><td class="num">−0.47 / −1.62</td><td class="num">+0.39 / +0.65</td><td class="num">+0.19 / −0.11</td><td class="num">+0.43 / +1.45</td></tr>
+    <tr><td>doublet pair 19–20 z</td><td class="num">−7.63</td><td class="num">−0.93</td><td class="num">−0.27</td><td class="num">−1.36</td></tr>
+    <tr><td>doublet pair 20–21 z</td><td class="num">−6.67</td><td class="num">+1.04</td><td class="num">+0.80</td><td class="num">+0.69</td></tr>
+    <tr><td>doublet pair 25–26 z</td><td class="num">−9.82</td><td class="num">+1.44</td><td class="num">+0.80</td><td class="num">+1.45</td></tr>
+    <tr><td>doublet pair 26–27 z</td><td class="num">−10.01</td><td class="num">−0.80</td><td class="num">−0.42</td><td class="num">−0.85</td></tr>
+    <tr><td>doublet pair 27–28 z</td><td class="num">−9.72</td><td class="num">+1.30</td><td class="num">+1.26</td><td class="num">+0.43</td></tr>
+    <tr><td>doublet pair 28–29 z</td><td class="num">−9.82</td><td class="num">+1.57</td><td class="num">+2.03</td><td class="num">−0.34</td></tr>
+    <tr><td>doublet pair 29–30 z</td><td class="num">−9.82</td><td class="num">+1.44</td><td class="num">+1.26</td><td class="num">+0.69</td></tr>
+  </tbody>
+</table></div>
+<div class="caption"><span class="label">Table 8.</span> Side-by-side comparison of the four Figure-4 structural signatures across Group 1, Group 2, and the two G2 addressee-status sub-slices. Only Group 1 carries the boundary and trailing-region signatures; the two G2 sub-slices are statistically indistinguishable from each other and from G2 overall, indicating that addressee status is not a structural variable at this resolution. The position-2 over-representation of "5" in G2 (e.g. <em>z</em>&nbsp;=&nbsp;+12.2 on G2 all, not tabulated above) reflects the G2 PR distribution — Group-2 prefixes disproportionately include "5" as the second character — not a body-generator property.</div>
+
+<p>Within Group 2, the aggregate M/5 body deficit is present but an order of magnitude weaker than in G1 (body z around −3 and −2 respectively), and the position-wise and doublet profiles are flat — every position and every doublet pair behaves as uniform to within ±2σ, apart from the prefix positions 1–2. The appropriate format description for Group 2 is the minimal one shown in Figure 5: a 10-bit prefix field followed by a single 140-bit body field without detectable internal boundaries.</p>
+
+<figure class="plot" role="img" aria-label="Schematic of the two-field Group 2 payload format">
+<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top bit-scale ticks -->
+  <line class="ax-tick" x1="30" y1="45" x2="30" y2="60"/>
+  <line class="ax-tick" x1="136.67" y1="45" x2="136.67" y2="60"/>
+  <line class="ax-tick" x1="243.33" y1="45" x2="243.33" y2="60"/>
+  <line class="ax-tick" x1="350" y1="45" x2="350" y2="60"/>
+  <line class="ax-tick" x1="456.67" y1="45" x2="456.67" y2="60"/>
+  <line class="ax-tick" x1="530" y1="45" x2="530" y2="60"/>
+  <text class="ax-label" text-anchor="middle" x="30" y="40">0</text>
+  <text class="ax-label" text-anchor="middle" x="136.67" y="40">32</text>
+  <text class="ax-label" text-anchor="middle" x="243.33" y="40">64</text>
+  <text class="ax-label" text-anchor="middle" x="350" y="40">96</text>
+  <text class="ax-label" text-anchor="middle" x="456.67" y="40">128</text>
+  <text class="ax-label" text-anchor="middle" x="530" y="40">150</text>
+  <text class="ax-title" text-anchor="middle" x="280" y="22">bit offset along the 150-bit payload</text>
+  <!-- Field blocks: P + B (no internal boundary) -->
+  <rect class="fmt-p" x="30" y="65" width="33.33" height="50"/>
+  <rect class="fmt-b" x="63.33" y="65" width="466.67" height="50"/>
+  <!-- Field labels inside blocks -->
+  <text class="fmt-lbl" text-anchor="middle" x="46.67" y="88">P</text>
+  <text class="fmt-lbl" text-anchor="middle" x="46.67" y="104" style="font-size:8px">10 bits</text>
+  <text class="fmt-lbl" text-anchor="middle" x="296.67" y="88">B</text>
+  <text class="fmt-lbl" text-anchor="middle" x="296.67" y="104" style="font-size:8px">140 bits</text>
+  <!-- Annotations below blocks -->
+  <text class="fmt-ann" text-anchor="middle" x="46.67" y="135">prefix</text>
+  <text class="fmt-ann" text-anchor="middle" x="46.67" y="148">(PR, keyed)</text>
+  <text class="fmt-ann" text-anchor="middle" x="296.67" y="135">uniform-output body</text>
+  <text class="fmt-ann" text-anchor="middle" x="296.67" y="148">(mild M/5 deficit only; no internal boundary)</text>
+  <!-- Character-position legend below -->
+  <line class="ax" x1="30" y1="182" x2="530" y2="182"/>
+  <line class="ax-tick" x1="30" y1="178" x2="30" y2="185"/>
+  <line class="ax-tick" x1="63.33" y1="178" x2="63.33" y2="185"/>
+  <line class="ax-tick" x1="530" y1="178" x2="530" y2="185"/>
+  <text class="ax-label" text-anchor="middle" x="30" y="197">pos 1</text>
+  <text class="ax-label" text-anchor="middle" x="63.33" y="197">pos 3</text>
+  <text class="ax-label" text-anchor="middle" x="530" y="197">pos 30</text>
+  <text class="ax-title" text-anchor="middle" x="280" y="213">corresponding character position</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 5.</span> The inferred two-field payload format for <strong>Group 2</strong>. The 150-bit broadcast body comprises the same 10-bit prefix field <em>P</em> as Group 1 (positions 1–2, carrying the PR) followed by a single 140-bit body field <em>B</em> spanning positions 3–30. Unlike Group 1, no internal field boundary is detected: the per-position M/5 profile is flat, the pairwise doublet profile is flat, and the trailing-region doublet rate matches the uniform expectation. The residual aggregate M/5 deficit of roughly −3σ in G2 is consistent with either a weak shared mechanism (possibly a transcription effect common to both groups) or a mild generator-level non-uniformity without internal structure. Compare with Figure 4 for Group 1.</div>
+
+<p>The immediate cryptographic inference: <strong>Group 1 and Group 2 are not the same format.</strong> If both were outputs of the same scheme under different key material, we would expect identical structural signatures up to sampling noise — identical boundary behaviour, identical trailing-field constraints. We do not see that. The two groups either employ different underlying primitives (e.g., G1 uses an authenticator-plus-field construction while G2 uses a single-block encryption) or one group's payload is being processed through an additional structural layer absent in the other. Ciphertext-only analysis cannot distinguish these sub-hypotheses, and we note the observation without claiming to identify its cause.</p>
+
+<h2 id="discussion"><span class="num">9.</span>Discussion, caveats, and future probes</h2>
+
+<h3><span class="num">9.1</span>Primitive-identification limits</h3>
+
+<p>Ciphertext-only analysis cannot identify the specific cryptographic primitive generating the payload. The inference in §8 is silent on which family of MAC, hash, or truncated-hash construction is in use; the 96-bit signature in §5 and §6 is compatible with GMAC, Poly1305, truncated HMAC, and other widely-deployed keyed-function constructions, and distinguishing among these requires correspondences between the payload and the underlying inputs that ciphertext-only analysis does not supply. What we claim is only that the observations are consistent with a primitive from this family and inconsistent with uniform-output encryption.</p>
+
+<h3><span class="num">9.2</span>Higher-order structural blind spots</h3>
+
+<p>The pairwise MI probe is insensitive to three-way and higher-order joint dependencies [<a href="#bib-rogaway2004">6</a>]. Modern cryptographic primitives can leave joint structure detectable only at order three or higher. At <em>N</em>&nbsp;≈&nbsp;200 per prefix cell and an alphabet of 32 symbols, the 32<sup>3</sup>&nbsp;=&nbsp;32,768 triplet cells are populated at ~0.006 counts per cell on average, which precludes credible triplet inference. The combined 5,377 unique messages permit roughly 0.16 counts per triplet cell — still below the threshold for a principled triplet goodness-of-fit test. Resolving higher-order structure would require either a substantially larger corpus (on the order of 10<sup>5</sup> unique messages) or a targeted test of a specific hypothesised primitive rather than a generic search.</p>
+
+<h3><span class="num">9.3</span>Statistical power</h3>
+
+<p>The marginal-bias finding has an effect size of approximately 35–40% relative deficit on the affected symbols, against a null standard error of roughly 0.2% at aggregate sample size — an effect detectable at 21σ in aggregate and at roughly 4σ even in the smallest individual prefix cell examined. The doublet-suppression finding at the trailing region is a fifteen-fold reduction in rate, detectable at z ≈ −10 in aggregate and −2 to −3 per cell; taken over the five-position trailing block its Fisher's-combined <em>p</em>-value across the seventeen examined prefix cells is smaller than 10<sup>−100</sup>. The power to detect both observed effects is therefore near unity, and their per-cell persistence is sufficient to rule out sampling noise as an explanation at any standard significance threshold.</p>
+
+<h3><span class="num">9.4</span>Future probes</h3>
+
+<p>Two follow-up directions would substantively advance the analysis:</p>
+
+<ol>
+  <li><strong>Bit-offset scanning at putative format boundaries.</strong> Extend the position-wise analysis of §5 to every bit offset from 1 to 149, testing for additional boundary signatures at the canonical cryptographic widths of 32, 64, 128, and 160 bits. A second detected boundary would constrain the format further and may identify sub-fields within the residue region.</li>
+  <li><strong>Cross-corpus comparison with other fixed-length EAM bands.</strong> The 30-character cohort is one band in a wider length distribution in the HFGCS traffic stream. Comparing the symbol-marginal distribution across bands tests whether the M/5 deficit is specific to the 30-character format or is a system-wide property shared with other broadcast lengths — which would inform the layer at which the deviation originates.</li>
+</ol>
+
+<h2 id="conclusion"><span class="num">10.</span>Conclusion</h2>
+
+<p>The 30-character HFGCS broadcast payload body is not a uniform draw from the base32 alphabet. Three independent statistical signatures, each robust to stratification down to individual prefix cells, contradict the uniform-AEAD null: (i) two specific symbols (M and 5) are under-represented by approximately one-third at nearly every body position, persistent at ≥4σ in every large prefix cell; (ii) the position-wise profile of this deficit attenuates sharply at character positions 19 through 21, whose bit offsets span the 96-bit mark of the 150-bit payload, indicating a format boundary in that region; and (iii) the rate of consecutive-character repetition drops to roughly one-fifteenth of the uniform expectation across the five final position pairs (25–26 through 29–30), uniformly within every prefix examined — a near-deterministic no-run constraint on the last six characters. Within-prefix probes of pairwise positional independence, compressibility, and inter-message differential structure are otherwise consistent with the output of a strong deterministic keyed function.</p>
+
+<p>Taken together these observations are incompatible with the interpretation of the Group 1 broadcast payload as the output of an AEAD primitive producing uniform ciphertext across all 150 bits. The Group 1 payload is most parsimoniously explained by a multi-field format comprising a 10-bit prefix, an approximately 85-bit block of pseudorandom keyed-function output, a transition region near bit 96, and a structured 30-bit trailing field operating under a no-consecutive-repetition constraint — the observational footprint of a truncated-MAC or keyed-hash authenticator concatenated with a structured secondary field. Ciphertext-only analysis cannot identify the specific cryptographic primitive instantiating the keyed portion; the data are compatible with HMAC-truncation, GMAC, Poly1305, and analogous constructions at comparable output widths. <strong>The same structural probes applied to Group 2 return none of these signatures</strong> (§8.5): the G2 body carries only a mild M/5 deficit and no detectable internal boundary, consistent with a simpler two-field format (a 10-bit prefix followed by a 140-bit body) that is materially different from the Group 1 format. Whatever primitive the two groups use, it is not the same format.</p>
+
+<p>To the reader interested in what is and is not knowable about HFGCS broadcast structure from public observation alone: we have established that the payload is not uniform-output encryption, identified the multi-field structure most consistent with the observations (a keyed cryptographic tag concatenated with a structured trailing field), and specified the follow-up probes that would refine the format further. The targeted bit-offset scan across the 150-bit payload and the cross-corpus comparison across broadcast lengths are the natural next steps, and we expect the trailing-field no-run constraint to reproduce at analogous positions in related length bands if the format is a system-wide feature.</p>
+
+<h2 id="refs"><span class="num">11.</span>References</h2>
+
+<div class="refs">
+<ol>
+  <li id="bib-bellare1997">Bellare, M., Desai, A., Jokipii, E., &amp; Rogaway, P. (1997). A concrete security treatment of symmetric encryption. <em>Proceedings of the 38th Annual Symposium on Foundations of Computer Science</em>, 394–403. <a href="https://doi.org/10.1109/SFCS.1997.646128">doi:10.1109/SFCS.1997.646128</a></li>
+  <li id="bib-rogaway2002">Rogaway, P. (2002). Authenticated-encryption with associated-data. <em>Proceedings of the 9th ACM Conference on Computer and Communications Security</em> (CCS), 98–107. <a href="https://doi.org/10.1145/586110.586125">doi:10.1145/586110.586125</a></li>
+  <li id="bib-mclmatter2004">McGrew, D., &amp; Viega, J. (2004). The security and performance of the Galois/Counter Mode (GCM) of operation. <em>Proceedings of INDOCRYPT 2004</em>, LNCS 3348, 343–355. <a href="https://doi.org/10.1007/978-3-540-30556-9_27">doi:10.1007/978-3-540-30556-9_27</a></li>
+  <li id="bib-krovetz2011">Krovetz, T., &amp; Rogaway, P. (2011). The software performance of authenticated-encryption modes. <em>Fast Software Encryption (FSE) 2011</em>, LNCS 6733, 306–327. <a href="https://doi.org/10.1007/978-3-642-21702-9_18">doi:10.1007/978-3-642-21702-9_18</a></li>
+  <li id="bib-bellare1996">Bellare, M., Canetti, R., &amp; Krawczyk, H. (1996). Keying hash functions for message authentication. <em>Advances in Cryptology — CRYPTO '96</em>, LNCS 1109, 1–15. <a href="https://doi.org/10.1007/3-540-68697-5_1">doi:10.1007/3-540-68697-5_1</a></li>
+  <li id="bib-rogaway2004">Rogaway, P., &amp; Shrimpton, T. (2004). Cryptographic hash-function basics: Definitions, implications, and separations for preimage resistance, second-preimage resistance, and collision resistance. <em>Fast Software Encryption (FSE) 2004</em>, LNCS 3017, 371–388. <a href="https://doi.org/10.1007/978-3-540-25937-4_24">doi:10.1007/978-3-540-25937-4_24</a></li>
+  <li id="bib-nist80022">Rukhin, A., Soto, J., Nechvatal, J., et al. (2010). A statistical test suite for random and pseudorandom number generators for cryptographic applications. <em>NIST Special Publication 800-22, Revision 1a</em>. <a href="https://doi.org/10.6028/NIST.SP.800-22r1a">doi:10.6028/NIST.SP.800-22r1a</a></li>
+  <li id="bib-good1988">Good, I. J. (1988). The interface between statistics and philosophy of science. <em>Statistical Science</em>, 3(4), 386–397. <a href="https://doi.org/10.1214/ss/1177012754">doi:10.1214/ss/1177012754</a></li>
+  <li id="bib-shannon1948">Shannon, C. E. (1948). A mathematical theory of communication. <em>Bell System Technical Journal</em>, 27, 379–423 (Part I) &amp; 623–656 (Part II). <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x">doi:10.1002/j.1538-7305.1948.tb01338.x</a> · <a href="https://doi.org/10.1002/j.1538-7305.1948.tb00917.x">doi:10.1002/j.1538-7305.1948.tb00917.x</a></li>
+  <li id="bib-shannon1949">Shannon, C. E. (1949). Communication theory of secrecy systems. <em>Bell System Technical Journal</em>, 28(4), 656–715. <a href="https://doi.org/10.1002/j.1538-7305.1949.tb00928.x">doi:10.1002/j.1538-7305.1949.tb00928.x</a></li>
+  <li id="bib-miller1955">Miller, G. A. (1955). Note on the bias of information estimates. In <em>Information Theory in Psychology: Problems and Methods</em> (H. Quastler, ed.), 95–100. <span style="color:var(--muted);font-style:italic">[pre-DOI era book chapter; no DOI assigned]</span></li>
+  <li id="bib-lecuyer2007">L'Ecuyer, P., &amp; Simard, R. (2007). TestU01: A C library for empirical testing of random number generators. <em>ACM Transactions on Mathematical Software</em>, 33(4), Article 22. <a href="https://doi.org/10.1145/1268776.1268777">doi:10.1145/1268776.1268777</a></li>
+</ol>
+</div>
+
+<h2 id="appendix"><span class="num">A.</span>Appendix: computational details</h2>
+
+<h3><span class="num">A.1</span>Software and reproducibility</h3>
+
+<p>All analyses were performed in Python 3.14 using <code>pandas</code> for data manipulation, <code>numpy</code> for matrix computation, and the Python standard library modules <code>lzma</code>, <code>gzip</code>, and <code>bz2</code> for compression (the compression analyses reported in §7.2 use LZMA at preset 9 with the <code>PRESET_EXTREME</code> flag). All pseudorandom operations — column shuffling for the MI null, message reordering for the compression variants, and synthetic corpus generation — are seeded with fixed integer seeds to ensure exact reproducibility.</p>
+
+<h3><span class="num">A.2</span>Validation of the MI null against analytic finite-sample bias</h3>
+
+<p>The empirical column-shuffle null distribution for pairwise mutual information was validated against the Miller–Madow analytic prediction. At the combined first-broadcast cohort size <em>N</em>&nbsp;=&nbsp;5,377 and |Σ|&nbsp;=&nbsp;32 with all 32 symbols observed at every body position, the analytic bias under independence is (|Σ|−1)<sup>2</sup>&nbsp;/&nbsp;(2<em>N</em>&nbsp;ln&nbsp;2)&nbsp;≈&nbsp;0.129 bits. Across the per-prefix cells (<em>N</em> ranging from ~100 to ~250), analytic bias scales from ~0.8 bits at the smallest to ~0.3 bits at the largest; the empirical shuffle-null means recovered in each analysis track the analytic prediction to within a few thousandths of a bit, validating the null as an appropriate reference for z-score computation at every sample size examined.</p>
+
+<h3><span class="num">A.3</span>Compression noise floor</h3>
+
+<p>For each prefix cell analysed in §7.2, ten synthetic random corpora of matched <em>N</em> were generated with fixed seeds 1000 through 1009. The reported null (μ<sub>null</sub>, σ<sub>null</sub>) is the mean and sample standard deviation of LZMA compression ratios across these ten trials. Empirical σ<sub>null</sub> scales approximately as <em>N</em><sup>−1/2</sup> in the observed range <em>N</em>&nbsp;∈&nbsp;[50, 3000], consistent with the expected finite-sample variance of LZMA on uniform base32 input.</p>
+
+<h3><span class="num">A.4</span>First-broadcast itemization rationale</h3>
+
+<p>Operational retransmissions violate the independence assumption underlying all statistical probes. We retain one observation per unique 30-character string — the earliest by (date, UTC) — and discard all later retransmissions. An alternative would be weighted inclusion of retransmissions with inverse-multiplicity weights, which requires a model of the retransmission process. First-broadcast itemization is the simpler and more conservative approach and is used for every test reported in the paper.</p>
+
+<h3><span class="num">A.5</span>Prefix as the key-period partition</h3>
+
+<p>The paper treats the two-character prefix as the finest cryptographic partition the observable data supports, on the working assumption that each prefix is introduced, carries traffic for one operational lifetime, and is eventually retired before its identifier is reused. Calendar year is not itself a key delineator: a prefix may legitimately span a year boundary (introduced in late one year, retired in early the next) without being re-keyed. For bookkeeping reasons the underlying reference table records prefix-group assignments per calendar year, but the active prefix identity — not the year — is what we treat as the key-period label. In the first-broadcast corpus used for this analysis, no prefix appears with meaningful frequency in more than one calendar year, so the prefix partition and the (prefix, year) partition coincide; the paper's numeric results are invariant to the choice between them. Messages whose prefix is absent from the group-assignment reference for the broadcast year are excluded from analysis.</p>
+
+<h3><span class="num">A.6</span>Symbols and conventions</h3>
+
+<p>Positions are indexed from 1 to 30 following a one-based convention. The alphabet size |Σ|&nbsp;=&nbsp;32 reflects RFC&nbsp;4648 base32: A–Z and 2–7. All entropies and mutual informations are reported in bits (base-2 logarithms). Compression ratios are reported as the percentage of raw bytes retained after compression; smaller values indicate more aggressive compression.</p>
+
+<h3><span class="num">A.7</span>Per-symbol Fisher's-combined <em>p</em> computation</h3>
+
+<p>For each base32 symbol <em>c</em>, the Fisher's-combined test for systematic under-representation across seventeen prefix cells is computed as −2·Σ<sub>i</sub>&nbsp;ln(<em>p</em><sub>i</sub>), where <em>p</em><sub>i</sub> is the Poisson one-sided tail probability P(Z&nbsp;&gt;&nbsp;−<em>z</em><sub>i</sub>) for cell <em>i</em>. Under the null of no systematic bias the statistic is χ<sup>2</sup><sub>34</sub>-distributed. The observed statistics for M and 5 exceed any tabulated percentile with <em>p</em>&nbsp;&lt;&nbsp;10<sup>−50</sup>.</p>
+
+<footer>
+  Prepared 2026-04-17.
+</footer>
+
+</div>
+<script>
+// Make every h2/h3 in the paper clickable, wrapping each heading's contents
+// in an anchor that points to the heading's own id. h3 subsections without
+// an explicit id get one derived from the section number (e.g., "2.1" -> "s2-1").
+(function() {
+  var headings = document.querySelectorAll('.wrap h2, .wrap h3');
+  for (var i = 0; i < headings.length; i++) {
+    var h = headings[i];
+    // Skip if already wrapped
+    if (h.children.length === 1 && h.firstElementChild.tagName === 'A') continue;
+    // Assign id from section number if missing
+    if (!h.id) {
+      var numSpan = h.querySelector('.num');
+      if (numSpan) {
+        var num = numSpan.textContent.replace(/[^\w.]/g, '');
+        h.id = 's' + num.replace(/\./g, '-');
+      }
+    }
+    if (!h.id) continue;
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    while (h.firstChild) a.appendChild(h.firstChild);
+    h.appendChild(a);
+  }
+})();
+</script>
+</body>
+</html>
