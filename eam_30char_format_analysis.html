@@ -340,7 +340,7 @@
   .fmt-t { fill: #7c3a3a; }   /* burgundy accent, L ≈ 78 */
   .fmt-r { fill: #1f2f44; }   /* deep navy, L ≈ 46 */
   .fmt-lbl { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; fill: #fff; font-weight: 600; }
-  .fmt-ann { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; fill: var(--muted); }
+  .fmt-ann { font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; fill: var(--muted); }
 
   @media (prefers-color-scheme: dark) {
     :root {
@@ -390,8 +390,8 @@
 
 <div class="abstract">
   <p><span class="lead-in">Abstract.</span> We analyse <em>N</em>&nbsp;=&nbsp;5,377 unique 30-character HFGCS broadcast payloads, retained as the first-broadcast instance of each distinct string observed between 2022 and 2026, against the working hypothesis that the payload body is statistically indistinguishable from uniform random base32 — the output distribution any IND-CPA-secure AEAD primitive would produce to a ciphertext-only observer. Three independent positional signatures contradict this hypothesis.</p>
-  <p>First, two specific base32 symbols (M and 5) are <strong>systematically under-represented</strong> at nearly every body position by approximately 35–40% relative to the uniform expectation, with aggregate Poisson z-scores of &minus;21.2 and &minus;20.9 against a synthetic uniform base32 control that passes the same test. The deficit persists within every prefix cell examined — median per-cell z &approx; &minus;4.7 for M and &minus;4.7 for 5 across the seventeen largest cells — and therefore cannot be attributed to stratum mixing. Second, positions 19 through 21 (bit offsets 91 through 105) show sharply attenuated deficits (|<em>z</em>|&nbsp;&lt;&nbsp;1.7 for both symbols), indicating a mid-body regime transition; positions 3 through 4 show a similar attenuation in the marginal channel only. Third, the rate of consecutive-character repetition (doublets) exhibits two regions of strong suppression: a co-localised suppression at the mid-body transition (position pairs 19–20 and 20–21 at <em>z</em>&nbsp;=&nbsp;&minus;7.6 and &minus;6.7) that independently confirms the marginal-deficit localisation there, and a much stronger near-deterministic suppression at the five final position pairs (25–26 through 29–30), where doublet counts drop to 5–8 observed against ~110 expected — a 15-fold reduction that persists uniformly in every prefix cell.</p>
-  <p>Within each prefix, probes of pairwise positional mutual information, general compressibility, and inter-message differential structure return no further anomalies: pairwise z-scores sit within the shuffle-null envelope, compression ratios sit within the synthetic-random noise floor across all 41 prefix cells, and modular-difference distributions between date-ordered consecutive payloads are uniform. The conjunction of persistent non-uniform marginals, two regions of attenuated marginal deficit (positions 3–4 and 19–21), a co-localised doublet suppression at positions 19–21, and a 15-fold doublet suppression across positions 25–30 establishes that the 150-bit body carries at least four statistically distinguishable regions with transitions at specific character-grid boundaries. We deliberately avoid identifying any region with a specific cryptographic primitive: the ~35% M/5 deficit at main-body positions is itself inconsistent with the uniform-output behaviour that standard authenticator primitives (GMAC, Poly1305, truncated HMAC, SipHash) are designed to produce, and we accordingly decline to interpret the mid-body transition as the terminus of any particular standard-width authenticator. The three positional signatures appear in <strong>Group 1 only</strong>; Group 2 carries only a mild body-level M/5 deficit with no detectable internal boundary. Whatever generates the two groups' broadcasts, the two generators are not producing output with the same internal structure.</p>
+  <p>First, two specific base32 symbols (M and 5) are <strong>systematically under-represented</strong> at nearly every body position by approximately 35–40% relative to the uniform expectation, with aggregate Poisson z-scores of &minus;21.2 and &minus;20.9 against a synthetic uniform base32 control that passes the same test. The deficit persists within every prefix cell examined — median per-cell z &approx; &minus;4.7 for M and &minus;4.7 for 5 across the seventeen largest cells — and therefore cannot be attributed to stratum mixing. Second, positions 19 through 21 (bit offsets 91 through 105) show sharply attenuated deficits (|<em>z</em>|&nbsp;&lt;&nbsp;1.7 for both symbols), indicating a mid-body regime transition; positions 3 through 4 show a similar attenuation in the marginal channel only. Third, the rate of character equality at pairs of positions (doublets when adjacent; inter-position equalities in general) exhibits two regions of strong suppression: a co-localised suppression at the mid-body transition (position pairs 19–20 and 20–21 at <em>z</em>&nbsp;=&nbsp;&minus;7.6 and &minus;6.7) that independently confirms the marginal-deficit localisation there, and a much stronger near-deterministic suppression spanning the final six characters — not just at the five adjacent pairs but at <em>every one of the fifteen pair-positions</em> within positions 25&ndash;30 — with equality counts of 5&ndash;8 observed against ~105 expected per pair (a 15-fold reduction) persisting uniformly in every prefix cell. The six trailing characters are therefore near-certainly pairwise distinct within each message, not merely free of consecutive repeats.</p>
+  <p>Within each prefix, probes of pairwise positional mutual information, general compressibility, and inter-message differential structure return no further anomalies: pairwise z-scores sit within the shuffle-null envelope, compression ratios sit within the synthetic-random noise floor across all 41 prefix cells, and modular-difference distributions between date-ordered consecutive payloads are uniform. The conjunction of persistent non-uniform marginals, two regions of attenuated marginal deficit (positions 3–4 and 19–21), co-localised pairwise-equality suppression at positions 19–21, and 15-fold pairwise-equality suppression across all fifteen position pairs within 25–30 establishes that the 150-bit body carries at least four statistically distinguishable regions with transitions at specific character-grid boundaries. We deliberately avoid identifying any region with a specific cryptographic primitive: the ~35% M/5 deficit at main-body positions is itself inconsistent with the uniform-output behaviour that standard authenticator primitives (GMAC, Poly1305, truncated HMAC, SipHash) are designed to produce, and we accordingly decline to interpret the mid-body transition as the terminus of any particular standard-width authenticator. The three positional signatures appear in <strong>Group 1 only</strong>; Group 2 carries only a mild body-level M/5 deficit with no detectable internal boundary. Whatever generates the two groups' broadcasts, the two generators are not producing output with the same internal structure.</p>
 </div>
 
 <div class="abstract-plain">
@@ -400,7 +400,7 @@
   <p>We looked at five years of collected broadcasts and found three ways in which this is not what happens — three independent fingerprints of structure that a properly random encryption would not leave.</p>
   <p><strong>First, two specific characters are unusually rare.</strong> Out of all thirty-two characters, the letter <strong>M</strong> and the digit <strong>5</strong> show up only about two-thirds as often as they should. Every other character behaves normally. This two-character deficit is not a fluke of one prefix group or one year: it appears in every sufficiently large prefix group of broadcasts we examined, across the whole time window.</p>
   <p><strong>Second, the deficit temporarily weakens in the middle of the broadcast.</strong> If you look position by position through the thirty characters, the shortage of M and 5 is present almost everywhere — except at positions nineteen, twenty, and twenty-one, where it gets noticeably milder. At those three positions, independently, the rate at which consecutive characters match each other also drops sharply. Two separate statistical probes agreeing on the same three positions is strong evidence that something in the underlying broadcast format changes there. We don't claim to know what that "something" is, and we specifically do not read this as evidence for any particular cryptographic component: the pattern of rare characters we see in the surrounding region is itself inconsistent with the kind of uniform-looking output that standard cryptographic components produce.</p>
-  <p><strong>Third — and most striking — the last six characters of the broadcast almost never contain two identical consecutive letters.</strong> In a truly random string, consecutive characters match by chance about 3% of the time. In the final six character positions of these broadcasts, consecutive matches happen only about 0.2% of the time — roughly fifteen times less often than random. We see this pattern in every single two-letter prefix group we examined, without exception. It looks as if whatever process builds the last six characters has a rule forbidding or strongly discouraging double letters.</p>
+  <p><strong>Third — and most striking — the last six characters of the broadcast almost never contain two identical characters, at any pair of positions within that six-character window.</strong> In a truly random string, any two chosen characters match by chance about 3% of the time. In the final six positions of these broadcasts, that rate drops to roughly 0.2% for every pair of positions — not only for neighbouring positions, but for characters one apart, two apart, up to the full six-character span. The rule is stronger than a no-doubled-letters rule: the six final characters are near-certainly all distinct from each other. We see this pattern in every single two-letter prefix group we examined, without exception. Whatever process builds the last six characters chooses them to be mutually different.</p>
   <p>There is also a quieter fourth observation: at positions three and four — the two characters immediately after the prefix — the shortage of M and 5 vanishes. Those two characters look like a normal uniform random draw, unlike the rest of the body. It suggests a short ten-bit slot between the prefix and the main cryptographic region, carrying something like a counter, a short random number, or a version indicator.</p>
   <p>Meanwhile, several other tests — looking for repeated patterns, hidden compressibility, and relationships between nearby broadcasts — find that, within any single prefix group's set of messages, the characters pass all the "does this look random?" checks we applied, once you account for the rare-characters deficit and the forbidden-doubles rule. So the non-randomness we find is not in chaotic noise but in specific places: the shortage of M and 5 almost everywhere except two short slots, the mid-broadcast transition at positions nineteen to twenty-one, and the forbidden-doubles rule at the tail. The simplest account is that the thirty-character string is made of at least four distinguishable pieces — a prefix, a short head slot, a long body, and a structured six-character tail — rather than a single uniform block of encrypted output. We stop short of saying which cryptographic primitive builds any given piece. The observations are enough to rule out "it's just a standard AEAD ciphertext", but not enough to say what it is instead.</p>
   <p>Important caveat: all three of these structural patterns appear in <strong>Group 1</strong> broadcasts. Group 2 broadcasts carry only the weak M/5 shortage and none of the positional structure. Group 2 broadcasts look much more like a single block of uniformly random-looking text. The two groups do not appear to use the same format.</p>
@@ -432,7 +432,7 @@
 
 <p>The answer is no. The empirical marginal distribution of base32 symbols in the 30-character payload body is not uniform: two specific symbols (M and 5) are reproducibly under-represented by approximately one-third at nearly every body position, and this deficit persists within every prefix cell examined. The position-wise profile of the deficit is not flat: it attenuates in two specific regions, and the mid-body region at positions 19–21 carries an independent doublet-rate suppression co-localised with the marginal attenuation. Conditional on the marginal deviation, probes of within-key pairwise positional dependence, general compressibility, and differential structure between temporally-adjacent broadcasts return no further anomalies.</p>
 
-<p>The synthesis is that the broadcast payload is not a uniform draw on Σ<sup>30</sup> but a concatenation of at least four statistically distinguishable regions along its 150-bit length, with transitions at specific character-grid boundaries. In particular, the final six characters of every broadcast obey a near-deterministic no-consecutive-repetition constraint, with the doublet rate suppressed roughly 15-fold below the uniform expectation in every prefix cell examined. We deliberately avoid identifying any region with a specific cryptographic primitive. The observed main-body M/5 deficit is itself inconsistent with the uniform-output behaviour of standard authenticator constructions, which rules out the most natural ciphertext-only reading of the mid-body transition (namely, as the terminus of a standard-width authenticator). What the observations establish is the presence of the transitions, not their cryptographic meaning.</p>
+<p>The synthesis is that the broadcast payload is not a uniform draw on Σ<sup>30</sup> but a concatenation of at least four statistically distinguishable regions along its 150-bit length, with transitions at specific character-grid boundaries. In particular, the final six characters of every broadcast are near-certainly pairwise distinct — every one of the fifteen pair-positions within the trailing window shows a roughly 15-fold suppression of character equality, not only the five adjacent pairs. This is a stronger rule than &quot;no consecutive repetitions&quot;: the six final characters collectively form a six-element subset of the 32-symbol alphabet in each message. We deliberately avoid identifying any region with a specific cryptographic primitive. The observed main-body M/5 deficit is itself inconsistent with the uniform-output behaviour of standard authenticator constructions, which rules out the most natural ciphertext-only reading of the mid-body transition (namely, as the terminus of a standard-width authenticator). What the observations establish is the presence of the transitions, not their cryptographic meaning.</p>
 
 <p>The paper is organised as follows. Section 2 formalises the observation model and the null hypothesis. Section 3 describes the corpus. Section 4 tests first-order symbol marginals against the uniform null. Section 5 analyses the position-wise profile of the marginal deviation. Section 6 reports an independent positional probe — the rate of consecutive-character repetition — that reveals two regimes of strong suppression and cross-validates the position-level localisation. Section 7 presents three within-key structural probes constraining the internal regularity of the payload. Section 8 synthesises the evidence into a region-level description of the payload and states explicitly what the observations do and do not license. Section 9 discusses limitations, alternative explanations, and follow-up probes. Section 10 concludes.</p>
 
@@ -1021,6 +1021,552 @@ The empirical marginal distribution of base32 symbols at each body position is u
 
 <p>The two signatures — marginal M/5 attenuation in one direction and doublet suppression in another — are jointly localised at the same positional region, arising from different statistical channels, and therefore constitute independent evidence for a format boundary in that region.</p>
 
+
+<h3><span class="num">6.3</span>Generalised inter-position equality probe</h3>
+
+<p>The doublet probe tests adjacent position pairs (<em>i</em>, <em>i</em>+1) for identical-character rates. The natural generalisation tests <em>every</em> position pair (<em>i</em>, <em>j</em>) with <em>j</em>&nbsp;&gt;&nbsp;<em>i</em> — including non-adjacent pairs. This is the inter-position equality (IPE) probe. Under the uniform null the expected match count at each pair is <em>N</em>/32 regardless of the gap, so the probe extends the doublet statistic to the full triangular matrix of position-pair coincidences. At 30 characters this covers C(30, 2)&nbsp;=&nbsp;435 pairs; the per-family Bonferroni threshold at α=0.05 is |<em>z</em>|&nbsp;&gt;&nbsp;3.86.</p>
+
+<p>Applied to Group 1 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;3,348), the probe returns 18 pairs above the Bonferroni threshold on the deficit side. These pairs fall cleanly into two regions:</p>
+
+<ol>
+  <li><strong>All 15 pairs within the trailing region (25&ndash;30).</strong> Every pair (<em>i</em>, <em>j</em>) with <em>i</em>, <em>j</em>&nbsp;&in;&nbsp;{25, 26, 27, 28, 29, 30} and <em>i</em>&nbsp;&ne;&nbsp;<em>j</em> shows a deficit at <em>z</em>&nbsp;=&nbsp;&minus;9.6 to &minus;9.9, with observed match counts of 5&ndash;8 against an expected count of ~105.</li>
+  <li><strong>All 3 pairs within the mid-body boundary region (19&ndash;21).</strong> The pairs (19, 20), (20, 21), and (19, 21) show deficits at <em>z</em>&nbsp;=&nbsp;&minus;7.9, &minus;7.2, and roughly &minus;4 respectively.</li>
+</ol>
+
+<div class="callout key">
+  <strong>The tail constraint is stronger than the doublet probe alone reveals.</strong> The adjacent-doublet suppression reported in §6 and §6.1 is one slice of a more general rule: <em>every pair of positions within the six-character trailing region (25&ndash;30) shows suppressed equality</em>, not only consecutive pairs. The six characters at positions 25&ndash;30 are near-certainly all six distinct from each other — not merely that no two adjacent ones match. The 15 tail-region pairs attain equality rates of roughly 1/500 against the uniform 1/32, a rate consistent across every pair in the region. Group 2 exhibits no such suppression in any tail pair, adjacent or non-adjacent: the strengthened finding preserves the group contrast.
+</div>
+
+<figure class="plot" role="img" aria-label="G1 inter-position equality z-score heatmap over all 435 position pairs">
+<svg viewBox="0 0 560 594.0" xmlns="http://www.w3.org/2000/svg">
+<style>.ipe-matrix-bg   { fill: #f3f0e4; }.ipe-grid        { stroke: #f3f0e4; stroke-width: 0.5; }.ipe-grid-major  { stroke: #f3f0e4; stroke-width: 1.0; }.ipe-excess      { fill: rgb(190, 45, 45); }.ipe-deficit     { fill: rgb(40, 95, 170); }.ipe-noise       { fill: #e8e4d2; }@media (prefers-color-scheme: dark) {  .ipe-matrix-bg  { fill: #15130f; }  .ipe-grid       { stroke: #15130f; }  .ipe-grid-major { stroke: #15130f; }}</style>
+<text class="ax-title" text-anchor="middle" x="280.0" y="16">G1: inter-position equality z-score heatmap</text>
+<rect class="ipe-matrix-bg" x="40.0" y="34.0" width="480.0" height="480.0" stroke="none"/>
+<rect class="ipe-excess" fill-opacity="0.47" x="56.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 2): count=146, z=+4.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="72.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 3): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="88.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 4): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="104.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 5): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="120.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 6): count=85, z=-1.95</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="136.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 7): count=121, z=+1.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 8): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 9): count=85, z=-1.95</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 10): count=111, z=+0.63</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="200.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 11): count=83, z=-2.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 12): count=87, z=-1.75</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 13): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 14): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 15): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 16): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 17): count=106, z=+0.14</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.11" x="312.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 18): count=78, z=-2.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 19): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 20): count=86, z=-1.85</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 21): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 22): count=91, z=-1.35</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 23): count=85, z=-1.95</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 24): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 25): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 26): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 27): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 28): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 29): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="34.0" width="16.0" height="16.0" stroke="none"><title>pos (1, 30): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="72.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 3): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="88.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 4): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="104.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 5): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="120.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 6): count=118, z=+1.33</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="136.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 7): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 8): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 9): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 10): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 11): count=85, z=-1.95</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 12): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 13): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 14): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 15): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 16): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 17): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 18): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 19): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 20): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 21): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 22): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 23): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 24): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 25): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 26): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 27): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 28): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 29): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="50.0" width="16.0" height="16.0" stroke="none"><title>pos (2, 30): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="88.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 4): count=91, z=-1.35</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="104.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 5): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="120.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 6): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="136.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 7): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 8): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 9): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 10): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 11): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 12): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 13): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 14): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 15): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 16): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 17): count=85, z=-1.95</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 18): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 19): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 20): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 21): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 22): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 23): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 24): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 25): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 26): count=90, z=-1.45</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 27): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 28): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 29): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="66.0" width="16.0" height="16.0" stroke="none"><title>pos (3, 30): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="104.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 5): count=119, z=+1.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="120.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 6): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="136.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 7): count=123, z=+1.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 8): count=122, z=+1.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 9): count=99, z=-0.56</title></rect>
+<rect class="ipe-excess" fill-opacity="0.04" x="184.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 10): count=127, z=+2.22</title></rect>
+<rect class="ipe-excess" fill-opacity="0.00" x="200.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 11): count=125, z=+2.02</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 12): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 13): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 14): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 15): count=87, z=-1.75</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 16): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 17): count=112, z=+0.73</title></rect>
+<rect class="ipe-excess" fill-opacity="0.06" x="312.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 18): count=128, z=+2.32</title></rect>
+<rect class="ipe-excess" fill-opacity="0.13" x="328.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 19): count=132, z=+2.72</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 20): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 21): count=119, z=+1.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 22): count=118, z=+1.33</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 23): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 24): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 25): count=87, z=-1.75</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 26): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 27): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 28): count=121, z=+1.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 29): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="82.0" width="16.0" height="16.0" stroke="none"><title>pos (4, 30): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="120.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 6): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="136.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 7): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 8): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 9): count=123, z=+1.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 10): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 11): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 12): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 13): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 14): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 15): count=90, z=-1.45</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 16): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 17): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 18): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 19): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 20): count=87, z=-1.75</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 21): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 22): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 23): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 24): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 25): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 26): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 27): count=121, z=+1.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 28): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 29): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="98.0" width="16.0" height="16.0" stroke="none"><title>pos (5, 30): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="136.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 7): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 8): count=123, z=+1.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 9): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 10): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 11): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 12): count=116, z=+1.13</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 13): count=114, z=+0.93</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="248.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 14): count=126, z=+2.12</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 15): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 16): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 17): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 18): count=89, z=-1.55</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 19): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 20): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 21): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 22): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 23): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 24): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 25): count=124, z=+1.92</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 26): count=103, z=-0.16</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.06" x="456.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 27): count=81, z=-2.35</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 28): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 29): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="114.0" width="16.0" height="16.0" stroke="none"><title>pos (6, 30): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 8): count=116, z=+1.13</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="168.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 9): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 10): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 11): count=116, z=+1.13</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 12): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 13): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 14): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 15): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 16): count=121, z=+1.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 17): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 18): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 19): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 20): count=105, z=+0.04</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.11" x="360.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 21): count=78, z=-2.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 22): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 23): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 24): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 25): count=107, z=+0.24</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.01" x="440.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 26): count=84, z=-2.05</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 27): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 28): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 29): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="130.0" width="16.0" height="16.0" stroke="none"><title>pos (7, 30): count=124, z=+1.92</title></rect>
+<rect class="ipe-excess" fill-opacity="0.00" x="168.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 9): count=125, z=+2.02</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 10): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 11): count=118, z=+1.33</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 12): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 13): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 14): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 15): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 16): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 17): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 18): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 19): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 20): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 21): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 22): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 23): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 24): count=114, z=+0.93</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.15" x="424.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 25): count=76, z=-2.84</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 26): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 27): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 28): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 29): count=122, z=+1.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="146.0" width="16.0" height="16.0" stroke="none"><title>pos (8, 30): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="184.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 10): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 11): count=124, z=+1.92</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 12): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 13): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 14): count=118, z=+1.33</title></rect>
+<rect class="ipe-excess" fill-opacity="0.00" x="264.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 15): count=125, z=+2.02</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 16): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 17): count=85, z=-1.95</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 18): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 19): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 20): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 21): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 22): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 23): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 24): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 25): count=121, z=+1.63</title></rect>
+<rect class="ipe-excess" fill-opacity="0.04" x="440.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 26): count=127, z=+2.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 27): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 28): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 29): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="162.0" width="16.0" height="16.0" stroke="none"><title>pos (9, 30): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="200.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 11): count=118, z=+1.33</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 12): count=118, z=+1.33</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 13): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 14): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 15): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 16): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 17): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 18): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 19): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 20): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 21): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 22): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 23): count=93, z=-1.15</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.13" x="408.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 24): count=77, z=-2.74</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="424.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 25): count=126, z=+2.12</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 26): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 27): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 28): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 29): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="178.0" width="16.0" height="16.0" stroke="none"><title>pos (10, 30): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="216.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 12): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 13): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 14): count=86, z=-1.85</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 15): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 16): count=119, z=+1.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 17): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 18): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 19): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 20): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 21): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 22): count=116, z=+1.13</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 23): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 24): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 25): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 26): count=89, z=-1.55</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 27): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 28): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 29): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="194.0" width="16.0" height="16.0" stroke="none"><title>pos (11, 30): count=89, z=-1.55</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="232.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 13): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 14): count=109, z=+0.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 15): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 16): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 17): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 18): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 19): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 20): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 21): count=116, z=+1.13</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 22): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 23): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 24): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 25): count=107, z=+0.24</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.04" x="440.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 26): count=82, z=-2.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 27): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 28): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 29): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="210.0" width="16.0" height="16.0" stroke="none"><title>pos (12, 30): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="248.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 14): count=89, z=-1.55</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 15): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 16): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 17): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 18): count=105, z=+0.04</title></rect>
+<rect class="ipe-excess" fill-opacity="0.04" x="328.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 19): count=127, z=+2.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 20): count=119, z=+1.43</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 21): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 22): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 23): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 24): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 25): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 26): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 27): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 28): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 29): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="226.0" width="16.0" height="16.0" stroke="none"><title>pos (13, 30): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="264.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 15): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 16): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 17): count=91, z=-1.35</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 18): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 19): count=106, z=+0.14</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="344.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 20): count=83, z=-2.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 21): count=89, z=-1.55</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 22): count=119, z=+1.43</title></rect>
+<rect class="ipe-excess" fill-opacity="0.13" x="392.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 23): count=132, z=+2.72</title></rect>
+<rect class="ipe-excess" fill-opacity="0.14" x="408.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 24): count=133, z=+2.82</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 25): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 26): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 27): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 28): count=121, z=+1.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 29): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="242.0" width="16.0" height="16.0" stroke="none"><title>pos (14, 30): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 16): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 17): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 18): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 19): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 20): count=116, z=+1.13</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 21): count=94, z=-1.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 22): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 23): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 24): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 25): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 26): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 27): count=118, z=+1.33</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 28): count=114, z=+0.93</title></rect>
+<rect class="ipe-excess" fill-opacity="0.00" x="488.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 29): count=125, z=+2.02</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="258.0" width="16.0" height="16.0" stroke="none"><title>pos (15, 30): count=90, z=-1.45</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="296.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 17): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 18): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 19): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 20): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 21): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 22): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 23): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 24): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 25): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 26): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 27): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 28): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 29): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="274.0" width="16.0" height="16.0" stroke="none"><title>pos (16, 30): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="312.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 18): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 19): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 20): count=96, z=-0.86</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="360.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 21): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 22): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 23): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 24): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 25): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 26): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 27): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 28): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 29): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="290.0" width="16.0" height="16.0" stroke="none"><title>pos (17, 30): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="328.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 19): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="344.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 20): count=90, z=-1.45</title></rect>
+<rect class="ipe-excess" fill-opacity="0.06" x="360.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 21): count=128, z=+2.32</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 22): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 23): count=101, z=-0.36</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="408.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 24): count=126, z=+2.12</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 25): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 26): count=92, z=-1.25</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 27): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 28): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 29): count=124, z=+1.92</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="306.0" width="16.0" height="16.0" stroke="none"><title>pos (18, 30): count=85, z=-1.95</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="344.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 20): count=24, z=-8.01</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="360.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 21): count=25, z=-7.91</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 22): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 23): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 24): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 25): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 26): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 27): count=95, z=-0.96</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 28): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 29): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="322.0" width="16.0" height="16.0" stroke="none"><title>pos (19, 30): count=97, z=-0.76</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="360.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 21): count=30, z=-7.41</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 22): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 23): count=106, z=+0.14</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 24): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 25): count=88, z=-1.65</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 26): count=86, z=-1.85</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 27): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 28): count=123, z=+1.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 29): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="338.0" width="16.0" height="16.0" stroke="none"><title>pos (20, 30): count=97, z=-0.76</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="376.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 22): count=108, z=+0.34</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 23): count=91, z=-1.35</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 24): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 25): count=120, z=+1.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 26): count=110, z=+0.53</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 27): count=103, z=-0.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 28): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 29): count=99, z=-0.56</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="354.0" width="16.0" height="16.0" stroke="none"><title>pos (21, 30): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 23): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="408.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 24): count=93, z=-1.15</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 25): count=123, z=+1.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 26): count=113, z=+0.83</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 27): count=98, z=-0.66</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 28): count=104, z=-0.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 29): count=105, z=+0.04</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="370.0" width="16.0" height="16.0" stroke="none"><title>pos (22, 30): count=97, z=-0.76</title></rect>
+<rect class="ipe-excess" fill-opacity="0.04" x="408.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 24): count=127, z=+2.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 25): count=100, z=-0.46</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 26): count=112, z=+0.73</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 27): count=111, z=+0.63</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 28): count=114, z=+0.93</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 29): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="386.0" width="16.0" height="16.0" stroke="none"><title>pos (23, 30): count=90, z=-1.45</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="424.0" y="402.0" width="16.0" height="16.0" stroke="none"><title>pos (24, 25): count=101, z=-0.36</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="440.0" y="402.0" width="16.0" height="16.0" stroke="none"><title>pos (24, 26): count=117, z=+1.23</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="456.0" y="402.0" width="16.0" height="16.0" stroke="none"><title>pos (24, 27): count=102, z=-0.26</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="472.0" y="402.0" width="16.0" height="16.0" stroke="none"><title>pos (24, 28): count=107, z=+0.24</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="488.0" y="402.0" width="16.0" height="16.0" stroke="none"><title>pos (24, 29): count=115, z=+1.03</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="504.0" y="402.0" width="16.0" height="16.0" stroke="none"><title>pos (24, 30): count=104, z=-0.06</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="440.0" y="418.0" width="16.0" height="16.0" stroke="none"><title>pos (25, 26): count=6, z=-9.80</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="456.0" y="418.0" width="16.0" height="16.0" stroke="none"><title>pos (25, 27): count=5, z=-9.90</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="472.0" y="418.0" width="16.0" height="16.0" stroke="none"><title>pos (25, 28): count=9, z=-9.50</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="488.0" y="418.0" width="16.0" height="16.0" stroke="none"><title>pos (25, 29): count=7, z=-9.70</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="504.0" y="418.0" width="16.0" height="16.0" stroke="none"><title>pos (25, 30): count=6, z=-9.80</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="456.0" y="434.0" width="16.0" height="16.0" stroke="none"><title>pos (26, 27): count=5, z=-9.90</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="472.0" y="434.0" width="16.0" height="16.0" stroke="none"><title>pos (26, 28): count=8, z=-9.60</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="488.0" y="434.0" width="16.0" height="16.0" stroke="none"><title>pos (26, 29): count=8, z=-9.60</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="504.0" y="434.0" width="16.0" height="16.0" stroke="none"><title>pos (26, 30): count=6, z=-9.80</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="472.0" y="450.0" width="16.0" height="16.0" stroke="none"><title>pos (27, 28): count=8, z=-9.60</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="488.0" y="450.0" width="16.0" height="16.0" stroke="none"><title>pos (27, 29): count=8, z=-9.60</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="504.0" y="450.0" width="16.0" height="16.0" stroke="none"><title>pos (27, 30): count=8, z=-9.60</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="488.0" y="466.0" width="16.0" height="16.0" stroke="none"><title>pos (28, 29): count=7, z=-9.70</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="504.0" y="466.0" width="16.0" height="16.0" stroke="none"><title>pos (28, 30): count=8, z=-9.60</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.95" x="504.0" y="482.0" width="16.0" height="16.0" stroke="none"><title>pos (29, 30): count=7, z=-9.70</title></rect>
+<line class="ipe-grid-major" x1="40.0" y1="34.0" x2="40.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="34.0" x2="520.0" y2="34.0"/>
+<line class="ipe-grid" x1="56.0" y1="34.0" x2="56.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="50.0" x2="520.0" y2="50.0"/>
+<line class="ipe-grid" x1="72.0" y1="34.0" x2="72.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="66.0" x2="520.0" y2="66.0"/>
+<line class="ipe-grid" x1="88.0" y1="34.0" x2="88.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="82.0" x2="520.0" y2="82.0"/>
+<line class="ipe-grid" x1="104.0" y1="34.0" x2="104.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="98.0" x2="520.0" y2="98.0"/>
+<line class="ipe-grid-major" x1="120.0" y1="34.0" x2="120.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="114.0" x2="520.0" y2="114.0"/>
+<line class="ipe-grid" x1="136.0" y1="34.0" x2="136.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="130.0" x2="520.0" y2="130.0"/>
+<line class="ipe-grid" x1="152.0" y1="34.0" x2="152.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="146.0" x2="520.0" y2="146.0"/>
+<line class="ipe-grid" x1="168.0" y1="34.0" x2="168.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="162.0" x2="520.0" y2="162.0"/>
+<line class="ipe-grid" x1="184.0" y1="34.0" x2="184.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="178.0" x2="520.0" y2="178.0"/>
+<line class="ipe-grid-major" x1="200.0" y1="34.0" x2="200.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="194.0" x2="520.0" y2="194.0"/>
+<line class="ipe-grid" x1="216.0" y1="34.0" x2="216.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="210.0" x2="520.0" y2="210.0"/>
+<line class="ipe-grid" x1="232.0" y1="34.0" x2="232.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="226.0" x2="520.0" y2="226.0"/>
+<line class="ipe-grid" x1="248.0" y1="34.0" x2="248.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="242.0" x2="520.0" y2="242.0"/>
+<line class="ipe-grid" x1="264.0" y1="34.0" x2="264.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="258.0" x2="520.0" y2="258.0"/>
+<line class="ipe-grid-major" x1="280.0" y1="34.0" x2="280.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="274.0" x2="520.0" y2="274.0"/>
+<line class="ipe-grid" x1="296.0" y1="34.0" x2="296.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="290.0" x2="520.0" y2="290.0"/>
+<line class="ipe-grid" x1="312.0" y1="34.0" x2="312.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="306.0" x2="520.0" y2="306.0"/>
+<line class="ipe-grid" x1="328.0" y1="34.0" x2="328.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="322.0" x2="520.0" y2="322.0"/>
+<line class="ipe-grid" x1="344.0" y1="34.0" x2="344.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="338.0" x2="520.0" y2="338.0"/>
+<line class="ipe-grid-major" x1="360.0" y1="34.0" x2="360.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="354.0" x2="520.0" y2="354.0"/>
+<line class="ipe-grid" x1="376.0" y1="34.0" x2="376.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="370.0" x2="520.0" y2="370.0"/>
+<line class="ipe-grid" x1="392.0" y1="34.0" x2="392.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="386.0" x2="520.0" y2="386.0"/>
+<line class="ipe-grid" x1="408.0" y1="34.0" x2="408.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="402.0" x2="520.0" y2="402.0"/>
+<line class="ipe-grid" x1="424.0" y1="34.0" x2="424.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="418.0" x2="520.0" y2="418.0"/>
+<line class="ipe-grid-major" x1="440.0" y1="34.0" x2="440.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="434.0" x2="520.0" y2="434.0"/>
+<line class="ipe-grid" x1="456.0" y1="34.0" x2="456.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="450.0" x2="520.0" y2="450.0"/>
+<line class="ipe-grid" x1="472.0" y1="34.0" x2="472.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="466.0" x2="520.0" y2="466.0"/>
+<line class="ipe-grid" x1="488.0" y1="34.0" x2="488.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="482.0" x2="520.0" y2="482.0"/>
+<line class="ipe-grid" x1="504.0" y1="34.0" x2="504.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="498.0" x2="520.0" y2="498.0"/>
+<line class="ipe-grid-major" x1="520.0" y1="34.0" x2="520.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="514.0" x2="520.0" y2="514.0"/>
+<text class="ax-label" text-anchor="middle" x="48.0" y="530.0">1</text>
+<text class="ax-label" text-anchor="end" x="36" y="45.0">1</text>
+<text class="ax-label" text-anchor="middle" x="112.0" y="530.0">5</text>
+<text class="ax-label" text-anchor="end" x="36" y="109.0">5</text>
+<text class="ax-label" text-anchor="middle" x="192.0" y="530.0">10</text>
+<text class="ax-label" text-anchor="end" x="36" y="189.0">10</text>
+<text class="ax-label" text-anchor="middle" x="272.0" y="530.0">15</text>
+<text class="ax-label" text-anchor="end" x="36" y="269.0">15</text>
+<text class="ax-label" text-anchor="middle" x="352.0" y="530.0">20</text>
+<text class="ax-label" text-anchor="end" x="36" y="349.0">20</text>
+<text class="ax-label" text-anchor="middle" x="432.0" y="530.0">25</text>
+<text class="ax-label" text-anchor="end" x="36" y="429.0">25</text>
+<text class="ax-label" text-anchor="middle" x="512.0" y="530.0">30</text>
+<text class="ax-label" text-anchor="end" x="36" y="509.0">30</text>
+<text class="ax-title" text-anchor="middle" x="280.0" y="550.0">position j</text>
+<text class="ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0">position i</text>
+<rect class="ipe-deficit" fill-opacity="0.85" x="165.0" y="566.0" width="12" height="12"/>
+<text class="ax-label" x="182.0" y="576.0">deficit</text>
+<rect class="ipe-noise" fill-opacity="0.4" x="245.0" y="566.0" width="12" height="12"/>
+<text class="ax-label" x="262.0" y="576.0">noise</text>
+<rect class="ipe-excess" fill-opacity="0.85" x="315.0" y="566.0" width="12" height="12"/>
+<text class="ax-label" x="332.0" y="576.0">excess</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 4.</span> Inter-position equality z-score heatmap for all 435 position pairs (<em>i</em>, <em>j</em>) in Group 1 first-broadcast messages. Red cells indicate match-rate excess; blue cells indicate match-rate deficit; grey cells are within the chance envelope. The most saturated blue region sits in the upper-right corner (small <em>i</em>, large <em>j</em>), specifically the triangle spanned by positions 25&ndash;30 crossed with themselves — every one of the 15 pairs within that region is individually at <em>z</em>&nbsp;&lt;&nbsp;&minus;9.6. A secondary blue cluster at positions 19&ndash;21 crossed with themselves (the boundary region from §5) is also visible. Group 2, by contrast, produces an essentially uniform grey matrix with no Bonferroni-crossing pairs; the IPE probe therefore cross-validates the adjacent-doublet finding and extends it to the full pair matrix.</div>
+
+<p>The generalisation has a concrete implication: the tail finding is better described as a <strong>no-any-duplicate rule</strong> on the final six characters, not as a no-consecutive-repetition rule. The distinction matters because the two constraints differ in format implication. &quot;No adjacent duplicates&quot; is consistent with a generator that simply rejects immediate repeats. &quot;No pairs of equal characters at any offset within the six-character tail&quot; is a stronger constraint: the six characters collectively form a set with cardinality close to 6, drawn from the 32-symbol alphabet without replacement within this window. The number of such 6-character sequences is 32·31·30·29·28·27 = 6.5·10<sup>8</sup> (about 29.6 bits of information capacity), compared with 32<sup>6</sup>&nbsp;=&nbsp;10.7·10<sup>8</sup> under the uniform null (30 bits) — roughly 0.4 bits lost to the no-duplicate rule, distributed as a uniform constraint on the whole six-character block rather than as a per-pair restriction.</p>
+
 <h2 id="within-key"><span class="num">7.</span>Within-key structural probes</h2>
 
 <p>The preceding sections reject uniformity at the marginal level and reject freshness at the collision level. To complete the statistical portrait, we ask whether the observed payload, considered as output of a deterministic function on unseen inputs, behaves like a strong pseudorandom function within a single prefix. This is equivalent to testing whether, <em>conditional on</em> the first-order marginal deviations and the operational replay structure, the joint structure of body positions is consistent with a PRF.</p>
@@ -1094,11 +1640,11 @@ The empirical marginal distribution of base32 symbols at each body position is u
 
 <p>The observations support a format-level claim and rule out a null, but they do not support identification of a specific cryptographic primitive.</p>
 
-<p><strong>What the data supports.</strong> The 150-bit Group 1 payload is not the output of a single uniform-random-on-Σ<sup>30</sup> generator. It has at least four statistically distinguishable regions along its length: a prefix region (positions 1–2) whose distribution follows the PR identity rather than the body generator; an attenuated-deficit region at positions 3–4; a main-body region (positions 5–18 and 22–24) carrying the full M/5 deficit; a joint attenuation at positions 19–21 in both the marginal and doublet channels; and a no-run region at positions 25–30 in which the consecutive-doublet rate drops roughly 15-fold below the uniform expectation and never recovers. Schematically:</p>
+<p><strong>What the data supports.</strong> The 150-bit Group 1 payload is not the output of a single uniform-random-on-Σ<sup>30</sup> generator. It has at least four statistically distinguishable regions along its length: a prefix region (positions 1–2) whose distribution follows the PR identity rather than the body generator; an attenuated-deficit region at positions 3–4; a main-body region (positions 5–18 and 22–24) carrying the full M/5 deficit; a joint attenuation at positions 19–21 in both the marginal and doublet channels; and a no-duplicate region at positions 25–30 in which the character-equality rate drops roughly 15-fold below the uniform expectation at <em>every one</em> of the fifteen pair-positions within the window — not only at adjacent pairs — so that the six trailing characters are near-certainly pairwise distinct in each message. Schematically:</p>
 
 <div class="eq">c = P<sub>10</sub> ‖ X<sub>10</sub> ‖ B<sub>75</sub> ‖ T<sub>25</sub> ‖ R<sub>30</sub> <span class="eq-num">(2)</span></div>
 
-<p>where the subscripts label region widths in bits: <em>P</em><sub>10</sub> is the 10-bit prefix (positions 1–2, carrying the PR); <em>X</em><sub>10</sub> is a 10-bit region at positions 3–4 in which the M/5 deficit is absent; <em>B</em><sub>75</sub> is the 75 bits at positions 5–19 that carries the main-body M/5 deficit; <em>T</em><sub>25</sub> is a 25-bit region at positions 20–24 in which both the marginal and doublet statistics attenuate relative to <em>B</em>; and <em>R</em><sub>30</sub> is a 30-bit region at positions 25–30 carrying the no-consecutive-repetition constraint. The bit boundaries are approximate and pinned to the character grid; finer resolution awaits the bit-offset scan outlined in §9.4. Equation (2) names regions by their statistical behaviour, not their cryptographic role.</p>
+<p>where the subscripts label region widths in bits: <em>P</em><sub>10</sub> is the 10-bit prefix (positions 1–2, carrying the PR); <em>X</em><sub>10</sub> is a 10-bit region at positions 3–4 in which the M/5 deficit is absent; <em>B</em><sub>75</sub> is the 75 bits at positions 5–19 that carries the main-body M/5 deficit; <em>T</em><sub>25</sub> is a 25-bit region at positions 20–24 in which both the marginal and doublet statistics attenuate relative to <em>B</em>; and <em>R</em><sub>30</sub> is a 30-bit region at positions 25–30 under a pairwise no-duplicate constraint — every pair of positions within the region shows a 15-fold equality suppression, so that the six characters are near-certainly distinct from each other in each message. The bit boundaries are approximate and pinned to the character grid; finer resolution awaits the bit-offset scan outlined in §9.4. Equation (2) names regions by their statistical behaviour, not their cryptographic role.</p>
 
 <figure class="plot" role="img" aria-label="Schematic of the inferred five-field payload format">
 <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
@@ -1142,8 +1688,8 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="fmt-ann" text-anchor="middle" x="221.67" y="148">(pos 5–18, 22–24)</text>
   <text class="fmt-ann" text-anchor="middle" x="388.33" y="135">M/5 attenuated</text>
   <text class="fmt-ann" text-anchor="middle" x="388.33" y="148">+ doublet drop</text>
-  <text class="fmt-ann" text-anchor="middle" x="480" y="135">no-run constraint</text>
-  <text class="fmt-ann" text-anchor="middle" x="480" y="148">(15× suppression)</text>
+  <text class="fmt-ann" text-anchor="middle" x="480" y="135">no-duplicate rule</text>
+  <text class="fmt-ann" text-anchor="middle" x="480" y="148">(15× each pair)</text>
   <!-- Character-position legend below -->
   <line class="ax" x1="30" y1="182" x2="530" y2="182"/>
   <line class="ax-tick" x1="30" y1="178" x2="30" y2="185"/>
@@ -1161,13 +1707,13 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="ax-title" text-anchor="middle" x="280" y="213">corresponding character position</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 4.</span> <strong>Observational</strong> decomposition of the 150-bit Group 1 broadcast body into five regions distinguished by their statistical behaviour, derived from the observations reported in §4 through §7. No cryptographic role is assigned to any region — the figure summarises <em>what the data looks like</em>, not what generates it. The five regions are: (<em>P</em>) positions 1–2, the prefix field, whose symbol distribution follows the PR population rather than the body generator; (<em>X</em>) positions 3–4, a 10-bit region in which the body-wide M/5 deficit is absent (|<em>z</em>|&nbsp;&lt;&nbsp;0.9 for both symbols); (<em>B</em>) positions 5–18 plus 22–24, the body region in which the M/5 deficit is fully active; (<em>T</em>) positions 19–21 (bit offsets 91–105), in which the M/5 deficit attenuates (|<em>z</em>|&nbsp;&lt;&nbsp;1.7) <em>and</em> the consecutive-doublet rate drops sharply (<em>z</em>&nbsp;=&nbsp;−7.63, −6.67); (<em>R</em>) positions 25–30, in which the consecutive-doublet rate drops roughly 15-fold below the uniform expectation (every pair 25–26 through 29–30 at <em>z</em>&nbsp;≤&nbsp;−9.7). Regions are aligned to the character grid; finer resolution awaits the bit-offset scan outlined in §9.4. Bit-offset tick marks on the top axis are geometric landmarks only; we do not read the <em>T</em>-region's coincidence with the 96-bit tick as cryptographically diagnostic (§8.4, §9.1). Group 2 does not exhibit this multi-region structure; see Figure 5.</div>
+<div class="caption"><span class="label">Figure 5.</span> <strong>Observational</strong> decomposition of the 150-bit Group 1 broadcast body into five regions distinguished by their statistical behaviour, derived from the observations reported in §4 through §7. No cryptographic role is assigned to any region — the figure summarises <em>what the data looks like</em>, not what generates it. The five regions are: (<em>P</em>) positions 1–2, the prefix field, whose symbol distribution follows the PR population rather than the body generator; (<em>X</em>) positions 3–4, a 10-bit region in which the body-wide M/5 deficit is absent (|<em>z</em>|&nbsp;&lt;&nbsp;0.9 for both symbols); (<em>B</em>) positions 5–18 plus 22–24, the body region in which the M/5 deficit is fully active; (<em>T</em>) positions 19–21 (bit offsets 91–105), in which the M/5 deficit attenuates (|<em>z</em>|&nbsp;&lt;&nbsp;1.7) <em>and</em> the consecutive-doublet rate drops sharply (<em>z</em>&nbsp;=&nbsp;−7.63, −6.67); (<em>R</em>) positions 25–30, in which character-equality rates drop roughly 15-fold below the uniform expectation at <em>every one</em> of the fifteen pair-positions within the window (every adjacent pair at <em>z</em>&nbsp;≤&nbsp;−9.7 and every non-adjacent pair within the region at <em>z</em>&nbsp;≤&nbsp;−9.3; see §6.3), so the six trailing characters are near-certainly pairwise distinct. Regions are aligned to the character grid; finer resolution awaits the bit-offset scan outlined in §9.4. Bit-offset tick marks on the top axis are geometric landmarks only; we do not read the <em>T</em>-region's coincidence with the 96-bit tick as cryptographically diagnostic (§8.4, §9.1). Group 2 does not exhibit this multi-region structure; see Figure 6.</div>
 
 <p><strong>What the data does not support.</strong> The observations do not identify the <em>B</em> and <em>T</em> regions together with a standard-width cryptographic authenticator — GMAC, Poly1305, a truncated HMAC, SipHash, or a similar construction terminating at the <em>T</em>/<em>R</em> boundary. Standard authenticator primitives are designed to produce output that is computationally indistinguishable from uniform random bits across their entire output width [<a href="#bib-mclmatter2004">3</a>, <a href="#bib-krovetz2011">4</a>, <a href="#bib-bellare1996">5</a>]. Under any such primitive, the main-body region <em>B</em> would exhibit a flat marginal distribution, not the approximately 35% M/5 deficit we observe. The deficit's presence at main-body positions is the direct evidence against standard-authenticator identification in that region: if <em>B</em> carried a uniform-output MAC, the deficit would not be there. Reading the <em>T</em>-region attenuation as "the authenticator ends here" requires assuming the region before it is an authenticator, which the marginal statistics already rule out. And the <em>T</em>-region's position in the vicinity of the 96-bit bit offset — a common tag width in AEAD constructions — is geometry, not evidence. A transition at positions 3–4 is also present in the marginal channel, without any comparable round-number alignment, which underscores that "a body region whose M/5 deficit attenuates" is a general structural feature and not a unique landmark.</p>
 
 <p>The co-localisation of marginal attenuation and doublet suppression at positions 19–21 remains the strongest evidence that the payload has internal boundaries, and the trailing no-run constraint at positions 25–30 is a separate finding that needs no primitive-identification argument — it is a near-deterministic structural rule on the final six characters of the broadcast. Those two findings stand on their own. The 10-bit attenuated region at positions 3–4 is a weaker finding — only the marginal channel carries it — but it is geometrically symmetric to the pattern at 19–21 and is reported here for completeness. What generates the main-body M/5 deficit, and what generates the trailing-region no-run constraint, are open questions for which ciphertext-only analysis does not provide an answer.</p>
 
-<blockquote>The 30-character HFGCS <strong>Group 1</strong> broadcast payload is not the output of a single uniform-random generator. It has at least four distinguishable statistical regions along its 150-bit length, with a joint marginal-plus-doublet transition at positions 19–21 and a near-deterministic no-consecutive-repetition rule on the final six characters (positions 25–30). Identification of any region with a specific cryptographic primitive is not supported by the data: the M/5 deficit in the main body is inconsistent with the uniform-output behaviour of standard authenticators, and no interpretation of the mid-body transition as the terminus of such a primitive survives that constraint.</blockquote>
+<blockquote>The 30-character HFGCS <strong>Group 1</strong> broadcast payload is not the output of a single uniform-random generator. It has at least four distinguishable statistical regions along its 150-bit length, with a joint marginal-plus-doublet transition at positions 19–21 and a near-deterministic pairwise no-duplicate rule on the final six characters (positions 25–30): every one of the fifteen pair-positions within that window shows a ~15× equality suppression, so the six trailing characters are near-certainly pairwise distinct within each message. Identification of any region with a specific cryptographic primitive is not supported by the data: the M/5 deficit in the main body is inconsistent with the uniform-output behaviour of standard authenticators, and no interpretation of the mid-body transition as the terminus of such a primitive survives that constraint.</blockquote>
 
 <h3><span class="num">8.5</span>Group 2 format contrast</h3>
 
@@ -1200,7 +1746,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
 </table></div>
 <div class="caption"><span class="label">Table 8.</span> Side-by-side comparison of the four Figure-4 structural signatures across Group 1, Group 2, and the two G2 addressee-status sub-slices. Only Group 1 carries the boundary and trailing-region signatures; the two G2 sub-slices are statistically indistinguishable from each other and from G2 overall, indicating that addressee status is not a structural variable at this resolution. The position-2 over-representation of "5" in G2 (e.g. <em>z</em>&nbsp;=&nbsp;+12.2 on G2 all, not tabulated above) reflects the G2 PR distribution — Group-2 prefixes disproportionately include "5" as the second character — not a body-generator property.</div>
 
-<p>Within Group 2, the aggregate M/5 body deficit is present but an order of magnitude weaker than in G1 (body z around −3 and −2 respectively), and the position-wise and doublet profiles are flat — every position and every doublet pair behaves as uniform to within ±2σ, apart from the prefix positions 1–2. The appropriate format description for Group 2 is the minimal one shown in Figure 5: a 10-bit prefix field followed by a single 140-bit body field without detectable internal boundaries.</p>
+<p>Within Group 2, the aggregate M/5 body deficit is present but an order of magnitude weaker than in G1 (body z around −3 and −2 respectively), and the position-wise and doublet profiles are flat — every position and every doublet pair behaves as uniform to within ±2σ, apart from the prefix positions 1–2. The appropriate format description for Group 2 is the minimal one shown in Figure 6: a 10-bit prefix field followed by a single 140-bit body field without detectable internal boundaries.</p>
 
 <figure class="plot" role="img" aria-label="Schematic of the two-field Group 2 payload format">
 <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
@@ -1242,7 +1788,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="ax-title" text-anchor="middle" x="280" y="213">corresponding character position</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 5.</span> The inferred two-field payload format for <strong>Group 2</strong>. The 150-bit broadcast body comprises the same 10-bit prefix field <em>P</em> as Group 1 (positions 1–2, carrying the PR) followed by a single 140-bit body field <em>B</em> spanning positions 3–30. Unlike Group 1, no internal field boundary is detected: the per-position M/5 profile is flat, the pairwise doublet profile is flat, and the trailing-region doublet rate matches the uniform expectation. The residual aggregate M/5 deficit of roughly −3σ in G2 is consistent with either a weak shared mechanism (possibly a transcription effect common to both groups) or a mild generator-level non-uniformity without internal structure. Compare with Figure 4 for Group 1.</div>
+<div class="caption"><span class="label">Figure 6.</span> The inferred two-field payload format for <strong>Group 2</strong>. The 150-bit broadcast body comprises the same 10-bit prefix field <em>P</em> as Group 1 (positions 1–2, carrying the PR) followed by a single 140-bit body field <em>B</em> spanning positions 3–30. Unlike Group 1, no internal field boundary is detected: the per-position M/5 profile is flat, the pairwise doublet profile is flat, and the trailing-region doublet rate matches the uniform expectation. The residual aggregate M/5 deficit of roughly −3σ in G2 is consistent with either a weak shared mechanism (possibly a transcription effect common to both groups) or a mild generator-level non-uniformity without internal structure. Compare with Figure 5 for Group 1.</div>
 
 <p>The immediate cryptographic inference: <strong>Group 1 and Group 2 are not the same format.</strong> If both were outputs of the same scheme under different key material, we would expect identical structural signatures up to sampling noise — identical boundary behaviour, identical trailing-region constraints. We do not see that. The two groups either use different underlying generators, or one group's payload is being processed through an additional structural layer absent in the other. Ciphertext-only analysis cannot distinguish these sub-hypotheses, and we note the observation without claiming to identify its cause.</p>
 
@@ -1273,13 +1819,13 @@ The empirical marginal distribution of base32 symbols at each body position is u
 
 <h2 id="conclusion"><span class="num">10.</span>Conclusion</h2>
 
-<p>The 30-character HFGCS broadcast payload body is not a uniform draw from the base32 alphabet. Three independent statistical signatures, each robust to stratification down to individual prefix cells, contradict the uniform-AEAD null: (i) two specific symbols (M and 5) are under-represented by approximately one-third at nearly every body position, persistent at ≥4σ in every large prefix cell; (ii) the position-wise profile of this deficit attenuates sharply at character positions 19 through 21 — and, more weakly, at positions 3–4 — indicating internal structural transitions in the body; and (iii) the rate of consecutive-character repetition drops to roughly one-fifteenth of the uniform expectation across the five final position pairs (25–26 through 29–30), uniformly within every prefix examined — a near-deterministic no-run constraint on the last six characters. Within-prefix probes of pairwise positional independence, compressibility, and inter-message differential structure exhibit no further detectable regularity.</p>
+<p>The 30-character HFGCS broadcast payload body is not a uniform draw from the base32 alphabet. Three independent statistical signatures, each robust to stratification down to individual prefix cells, contradict the uniform-AEAD null: (i) two specific symbols (M and 5) are under-represented by approximately one-third at nearly every body position, persistent at ≥4σ in every large prefix cell; (ii) the position-wise profile of this deficit attenuates sharply at character positions 19 through 21 — and, more weakly, at positions 3–4 — indicating internal structural transitions in the body; and (iii) the rate of character equality at pairs of positions drops to roughly one-fifteenth of the uniform expectation across <em>every one</em> of the fifteen pair-positions within the final six characters (positions 25–30), uniformly within every prefix examined — a near-deterministic pairwise no-duplicate rule rendering the six trailing characters mutually distinct in each message. The rule holds not only at the five adjacent pairs originally detected by the consecutive-doublet probe but at every pair within the six-character window (§6.3). Within-prefix probes of pairwise positional independence, compressibility, and inter-message differential structure exhibit no further detectable regularity.</p>
 
-<p>Taken together these observations are incompatible with the interpretation of the Group 1 broadcast payload as the output of a primitive producing uniform ciphertext across all 150 bits. The payload has internal structural boundaries. The observations support a region-level description of the body — a 10-bit prefix, a 10-bit head region at positions 3–4 where the M/5 deficit is absent, a main body at positions 5–18 and 22–24 where the deficit is fully active, a co-localised marginal-plus-doublet transition at positions 19–21, and a near-deterministic no-consecutive-repetition constraint at positions 25–30 — and this region-level description is the strongest format-level claim the observations license. We deliberately stop short of identifying any region with a specific cryptographic primitive. The main-body M/5 deficit is inconsistent with the uniform-output behaviour that standard authenticator primitives (GMAC, Poly1305, truncated HMAC, SipHash) are designed to produce, so the natural ciphertext-only reading — a truncated-authenticator output terminating at the mid-body transition — is ruled out by the statistics of the region that would carry the authenticator. What generates the main-body deficit, and what generates the trailing-region no-run constraint, remain open questions that ciphertext-only analysis cannot answer. <strong>The same structural probes applied to Group 2 return none of these signatures</strong> (§8.5): the G2 body carries only a mild M/5 deficit and no detectable internal boundary. Whatever each group's generator is, the two are not producing output with the same internal structure.</p>
+<p>Taken together these observations are incompatible with the interpretation of the Group 1 broadcast payload as the output of a primitive producing uniform ciphertext across all 150 bits. The payload has internal structural boundaries. The observations support a region-level description of the body — a 10-bit prefix, a 10-bit head region at positions 3–4 where the M/5 deficit is absent, a main body at positions 5–18 and 22–24 where the deficit is fully active, a co-localised marginal-plus-doublet transition at positions 19–21, and a pairwise no-duplicate region at positions 25–30 in which the six trailing characters are near-certainly distinct from each other — and this region-level description is the strongest format-level claim the observations license. We deliberately stop short of identifying any region with a specific cryptographic primitive. The main-body M/5 deficit is inconsistent with the uniform-output behaviour that standard authenticator primitives (GMAC, Poly1305, truncated HMAC, SipHash) are designed to produce, so the natural ciphertext-only reading — a truncated-authenticator output terminating at the mid-body transition — is ruled out by the statistics of the region that would carry the authenticator. What generates the main-body deficit, and what generates the trailing-region pairwise no-duplicate rule, remain open questions that ciphertext-only analysis cannot answer. <strong>The same structural probes applied to Group 2 return none of these signatures</strong> (§8.5): the G2 body carries only a mild M/5 deficit and no detectable internal boundary. Whatever each group's generator is, the two are not producing output with the same internal structure.</p>
 
-<p>To the reader interested in what is and is not knowable about HFGCS broadcast structure from public observation alone: we have established that the payload is not uniform-output encryption and that it has at least four statistically distinguishable regions along its length, we have identified the positions at which those regions meet, and we have specified the follow-up probes that would refine the format further. The strongest free-standing cryptographic observation — the one that needs no interpretation beyond its data-level statement — is the 15-fold suppression of consecutive-character doublets across the final six positions in every prefix examined. The targeted bit-offset scan across the 150-bit payload and the cross-corpus comparison across broadcast lengths are the natural next steps.</p>
+<p>To the reader interested in what is and is not knowable about HFGCS broadcast structure from public observation alone: we have established that the payload is not uniform-output encryption and that it has at least four statistically distinguishable regions along its length, we have identified the positions at which those regions meet, and we have specified the follow-up probes that would refine the format further. The strongest free-standing cryptographic observation — the one that needs no interpretation beyond its data-level statement — is the 15-fold suppression of pairwise character equality across the fifteen pair-positions within the final six characters, in every prefix examined. The targeted bit-offset scan across the 150-bit payload and the cross-corpus comparison across broadcast lengths are the natural next steps.</p>
 
-<p>The scope of the tail no-run rule is already known to be Group-stratified rather than universal: Group 2 at 30 characters does not carry it (§8.5). Companion per-position structural heatmaps of HFGCS broadcasts at other fixed lengths, conducted as separate work on the same corpus, show no visible analogue at the tail of Group 2 at 75 characters; a corresponding heatmap of Group 4 at 120 characters shows a uniformly low-activity tail that is ambiguous by that method alone and would need a direct doublet-rate test to resolve. The productive open question is therefore whether the tail no-run rule is a property of the Group 1 encoding that reproduces in Group 1 traffic at other fixed lengths, rather than a system-wide HFGCS feature, and applying the doublet-rate probe of §6 to Group 1 cohorts at other lengths would settle it. That test is left to future work.</p>
+<p>The scope of the tail no-duplicate rule is already known to be Group-stratified rather than universal: Group 2 at 30 characters does not carry it (§8.5). Separate per-position structural heatmap work on the broader HFGCS corpus at other fixed lengths finds a variety of format-level structures across lengths and groups, but none of the heatmaps we have examined for Group 2 or Group 4 cohorts at other lengths shows a tail-region signature analogous to the 30-character Group 1 rule. Companion inter-position-equality analyses at other lengths (see the 40-character and 42-character papers) instead find <em>excess</em>-type fixed-offset repeats — characters or substrings that <em>must</em> match at specific offsets — rather than the deficit-type rule found here. Fixed-offset equality structure appears to be a recurring feature of HFGCS format design across multiple length bands and groups, but with different geometries in each. The productive open question is therefore whether the tail no-duplicate rule is a property of the Group 1 encoding that reproduces in Group 1 traffic at other fixed lengths, rather than a system-wide HFGCS feature, and applying the IPE and doublet-rate probes of §6 directly to Group 1 cohorts at other lengths would settle it. That test is left to future work.</p>
 
 <h2 id="refs"><span class="num">11.</span>References</h2>
 
