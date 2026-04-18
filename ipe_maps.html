@@ -54408,6 +54408,26 @@
   const LENGTHS = [17, 19, 21, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 72, 75, 76, 78, 79, 83, 84, 85, 86, 87, 89, 92, 102, 108, 111, 115, 118, 120, 142, 152, 158, 160, 163, 164, 166, 172, 176, 182, 186, 188, 194, 196, 198, 202, 204, 210, 216, 220, 222, 224, 227, 246, 268, 285, 286, 290, 292];
   const LENGTH_CYCLE = ['all'].concat(LENGTHS.map(String));
   let lIdx = 0;
+  // Set of (group|length) pairs that correspond to a visible cell. Used to
+  // skip invalid states when arrow-keying: e.g. if group is fixed to G2 and
+  // G2 has no cohort at length 22, up/down will skip 22 entirely.
+  const PAIR_SET = new Set(["2|17", "2|19", "2|21", "3|22", "2|24", "2|25", "3|25", "2|26", "4|26", "2|27", "3|27", "2|28", "3|29", "1|30", "2|30", "3|30", "2|31", "3|31", "2|32", "3|32", "2|33", "3|33", "2|34", "2|35", "3|35", "3|36", "4|36", "2|37", "3|37", "2|38", "3|38", "4|38", "2|39", "2|40", "3|40", "2|41", "3|41", "2|42", "3|42", "2|43", "3|43", "2|44", "4|44", "2|45", "3|45", "2|46", "3|46", "4|46", "2|47", "3|47", "2|48", "3|48", "2|49", "2|50", "3|50", "4|50", "2|51", "2|52", "3|52", "2|53", "3|53", "2|54", "3|54", "4|54", "2|55", "3|55", "2|56", "4|56", "3|57", "2|58", "2|59", "3|59", "2|60", "4|60", "2|61", "4|62", "2|63", "3|63", "2|64", "2|65", "2|66", "4|66", "3|67", "2|68", "3|68", "4|68", "2|69", "2|70", "3|70", "4|70", "3|72", "2|75", "4|76", "2|78", "2|79", "2|83", "4|84", "2|85", "2|86", "2|87", "2|89", "4|92", "4|102", "4|108", "2|111", "2|115", "4|118", "4|120", "4|142", "4|152", "2|158", "4|158", "4|160", "2|163", "4|164", "4|166", "4|172", "4|176", "4|182", "3|186", "4|186", "4|188", "4|194", "4|196", "4|198", "4|202", "4|204", "4|210", "4|216", "4|220", "4|222", "4|224", "2|227", "4|246", "4|268", "2|285", "4|286", "4|290", "4|292"]);
+  function isValid(g, L) {
+    if (g === 'all' || L === 'all') return true;
+    return PAIR_SET.has(g + '|' + L);
+  }
+  function stepGroup(dir) {
+    for (let step = 1; step <= GROUP_CYCLE.length; step++) {
+      const cand = ((gIdx + dir * step) % GROUP_CYCLE.length + GROUP_CYCLE.length) % GROUP_CYCLE.length;
+      if (isValid(GROUP_CYCLE[cand], LENGTH_CYCLE[lIdx])) { gIdx = cand; return; }
+    }
+  }
+  function stepLength(dir) {
+    for (let step = 1; step <= LENGTH_CYCLE.length; step++) {
+      const cand = ((lIdx + dir * step) % LENGTH_CYCLE.length + LENGTH_CYCLE.length) % LENGTH_CYCLE.length;
+      if (isValid(GROUP_CYCLE[gIdx], LENGTH_CYCLE[cand])) { lIdx = cand; return; }
+    }
+  }
   function render() {
     const groupState = GROUP_CYCLE[gIdx];
     const lengthState = LENGTH_CYCLE[lIdx];
@@ -54435,22 +54455,22 @@
     switch (e.key) {
       case 'ArrowLeft':
         e.preventDefault();
-        gIdx = (gIdx - 1 + GROUP_CYCLE.length) % GROUP_CYCLE.length;
+        stepGroup(-1);
         render();
         break;
       case 'ArrowRight':
         e.preventDefault();
-        gIdx = (gIdx + 1) % GROUP_CYCLE.length;
+        stepGroup(1);
         render();
         break;
       case 'ArrowUp':
         e.preventDefault();
-        lIdx = (lIdx + 1) % LENGTH_CYCLE.length;
+        stepLength(1);
         render();
         break;
       case 'ArrowDown':
         e.preventDefault();
-        lIdx = (lIdx - 1 + LENGTH_CYCLE.length) % LENGTH_CYCLE.length;
+        stepLength(-1);
         render();
         break;
     }
