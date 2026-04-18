@@ -205,7 +205,7 @@
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   th, td {
     padding: 6px 10px;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
     border: none;
   }
@@ -216,7 +216,7 @@
     font-weight: 600;
     white-space: nowrap;
   }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  td.num, th.num { text-align: center; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
   tr:hover td { background: #f6f3e9; }
   tr.highlight td {
     background: #e5ebf0;
@@ -611,7 +611,7 @@
 <p>Tables 1 and 2 report the full 32-symbol tabulations.</p>
 
 <h3><span class="num">3.1</span>Group 2 symbol tabulation</h3>
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class="negative"><td class="num">M</td><td class="num">26</td><td class="num">1.75%</td><td class="num">-3.03</td></tr>
@@ -650,7 +650,7 @@
 <div class="caption"><span class="label">Table 1.</span> G2 body (positions 3&ndash;40) symbol counts, percentages, and Poisson z-scores against the uniform null. Rows sorted by z-score.</div>
 
 <h3><span class="num">3.2</span>Group 3 symbol tabulation</h3>
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">S</td><td class="num">12</td><td class="num">1.58%</td><td class="num">-2.45</td></tr>
@@ -1267,7 +1267,7 @@
 <div class="caption"><span class="label">Figure 8.</span> G3 doublet counts per consecutive position pair. Two pairs stand out: pair (23&ndash;24) with 6 doublets against 0.56 expected (<em>z</em>&nbsp;=&nbsp;+7.37) and pair (32&ndash;33) with 7 doublets against 0.56 expected (<em>z</em>&nbsp;=&nbsp;+8.72). These pairs sit symmetrically around the internal-repeat offset pair (first@22, second@31) discussed in §6 and are the pair-level manifestation of the same structural feature: the two occurrences of the repeated substring share a doublet at position pair (23, 24) on the first copy and at position pair (32, 33) on the second copy. The excesses are not independent evidence; they are projections of the §6 repeat onto the pairwise doublet probe.</div>
 
 <h3><span class="num">5.1</span>Doublet table (G3 pairs, for reference)</h3>
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>pair</th><th class="num">count</th><th class="num">exp</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">1-2</td><td class="num">0</td><td class="num">0.62</td><td class="num">-0.80</td></tr>
@@ -3142,7 +3142,7 @@
 </div>
 
 <h3><span class="num">7.1</span>Per-message repeat table (Group 3)</h3>
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>message</th><th class="num">len</th><th class="num">first@</th><th class="num">second@</th><th>substring</th></tr></thead>
 <tbody>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJTO7B2V2ITMXMWYYSY465NZVRECHW5NZVLCCCBI</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">5NZV</td></tr>
@@ -3171,7 +3171,7 @@
 <h3><span class="num">7.2</span>Per-message repeat table (Group 2)</h3>
 <p>The 2-character repeat identified in §6.1 at positions (16, 17) &rarr; (21, 22) is shorter than the length-3 threshold of the substring-repeat probe, so it does <em>not</em> appear in the longest-internal-repeat table below. The table records length-3-or-longer repeats separately; Group 2 at 40 characters has 9 such messages out of 39, scattered across varied offsets with no concentration:</p>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>message</th><th class="num">len</th><th class="num">first@</th><th class="num">second@</th><th>substring</th></tr></thead>
 <tbody>
 <tr class=""><td style="font-family:monospace;font-size:0.82em">ARALJD5A2DQJUH6IC6BDICGB556IC5BEZ6LQS4YT</td><td class="num">3</td><td class="num">15</td><td class="num">27</td><td style="font-family:monospace">6IC</td></tr>

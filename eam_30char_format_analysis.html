@@ -205,7 +205,7 @@
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   th, td {
     padding: 6px 10px;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
     border: none;
   }
@@ -216,7 +216,7 @@
     font-weight: 600;
     white-space: nowrap;
   }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  td.num, th.num { text-align: center; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
   tr:hover td { background: #f6f3e9; }
   tr.highlight td {
     background: #e5ebf0;
@@ -520,7 +520,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
 
 <p>For each base32 symbol <em>c</em> ∈ Σ, we count its occurrences at body positions 3 through 30 across all Group 1 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;3,519 messages × 28 body positions = 98,532 body characters), compute the Poisson z-score against the uniform expectation (98,532 / 32 ≈ 3,079 per symbol), and rank. Table 2 reports the ten most deviant symbols, compared against a synthetic uniform base32 control of matched size generated with a CSPRNG.</p>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
   <thead>
     <tr>
       <th class="num">symbol</th>
@@ -1008,11 +1008,11 @@ The empirical marginal distribution of base32 symbols at each body position is u
       <th class="num">year</th>
       <th class="num"><em>N</em></th>
       <th class="num">expected</th>
-      <th class="num">pos 25–26</th>
-      <th class="num">pos 26–27</th>
-      <th class="num">pos 27–28</th>
-      <th class="num">pos 28–29</th>
-      <th class="num">pos 29–30</th>
+      <th class="num">25–26</th>
+      <th class="num">26–27</th>
+      <th class="num">27–28</th>
+      <th class="num">28–29</th>
+      <th class="num">29–30</th>
     </tr>
   </thead>
   <tbody>
@@ -1603,7 +1603,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
 
 <p>For each prefix cell with <em>N</em>&nbsp;≥&nbsp;100, we compute the empirical pairwise mutual information between the terminal pair of positions, <em>I</em>(X<sub>29</sub>; X<sub>30</sub>), and its 200-replicate column-shuffle null. Table 7 summarises the result for the ten Group 1 prefix cells with the largest unique-message counts. The same test on the full pooled cohort returns <em>z</em>&nbsp;=&nbsp;+6.23 at this position pair; within any single prefix, the signal disappears.</p>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
   <thead>
     <tr>
       <th class="num">prefix</th>

@@ -227,7 +227,7 @@
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   th, td {
     padding: 6px 10px;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
     border: none;
   }
@@ -238,7 +238,7 @@
     font-weight: 600;
     white-space: nowrap;
   }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  td.num, th.num { text-align: center; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
   tr:hover td { background: var(--tint); }
   tr.highlight td {
     background: #f0eaf6;
@@ -518,7 +518,7 @@
 </figure>
 <div class="caption"><span class="label">Figure 1.</span> Empirical frequency of each base32 symbol across body positions 3&ndash;46 of the 46-character Group 2 first-broadcast cohort (<em>N</em>&nbsp;=&nbsp;7). Dashed line: uniform expectation 1/32 &approx; 3.125%. No symbol crosses the per-symbol Bonferroni threshold for 32 tests at α=0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;3.16) in either direction. The largest deficit is <strong>5 at <em>z</em>&nbsp;=&nbsp;-1.84</strong>; the largest excess is <strong>6 at <em>z</em>&nbsp;=&nbsp;+2.09</strong>. At this sample size, every symbol's count falls within the chance envelope under uniform output.</div>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">5</td><td class="num">4</td><td class="num">1.30%</td><td class="num">-1.84</td></tr>

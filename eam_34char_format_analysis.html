@@ -205,7 +205,7 @@
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   th, td {
     padding: 6px 10px;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
     border: none;
   }
@@ -216,7 +216,7 @@
     font-weight: 600;
     white-space: nowrap;
   }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  td.num, th.num { text-align: center; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
   tr:hover td { background: #f6f3e9; }
   tr.highlight td {
     background: #e5ebf0;
@@ -518,7 +518,7 @@
 </figure>
 <div class="caption"><span class="label">Figure 1.</span> Empirical frequency of each base32 symbol across body positions 3&ndash;34 of the 34-character Group 2 first-broadcast cohort (<em>N</em>&nbsp;=&nbsp;146). Dashed line: uniform expectation 1/32 &approx; 3.125%. Two symbols cross the per-symbol Bonferroni threshold for 32 tests at α=0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;3.16) on the deficit side: <strong>M at <em>z</em>&nbsp;=&nbsp;-4.46</strong> and <strong>5 at <em>z</em>&nbsp;=&nbsp;-3.78</strong>. No other symbol crosses the threshold; the largest excess is E at <em>z</em>&nbsp;=&nbsp;+2.94. The M/5 deficit reproduces the signature of the 30-character Group 1 cohort (where the corresponding z-scores are &minus;21.2 and &minus;20.9) at roughly one-fifth the magnitude.</div>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class="negative"><td class="num">M</td><td class="num">93</td><td class="num">1.99%</td><td class="num">-4.46</td></tr>
@@ -812,7 +812,7 @@
 
 <p>The probe returns <strong>0 pairs above the Bonferroni threshold</strong>. The ten strongest positive pairs are reported in Table 2.</p>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th class="num">pos a</th><th class="num">pos b</th><th class="num">gap</th><th class="num">matches</th><th class="num">exp</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">4</td><td class="num">7</td><td class="num">3</td><td class="num">12</td><td class="num">4.56</td><td class="num">+3.54</td></tr>
@@ -1498,7 +1498,7 @@
 
 <p>An aggregate whole-cohort compressibility probe still runs:</p>
 
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th class="num">body bytes</th><th class="num">obs ratio</th><th class="num">null mean</th><th class="num">null sd</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr><td class="num">4672</td><td class="num">0.6738</td><td class="num">0.6735</td><td class="num">0.0007</td><td class="num">+0.42</td></tr>

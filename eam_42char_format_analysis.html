@@ -205,7 +205,7 @@
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   th, td {
     padding: 6px 10px;
-    text-align: right;
+    text-align: center;
     vertical-align: top;
     border: none;
   }
@@ -216,7 +216,7 @@
     font-weight: 600;
     white-space: nowrap;
   }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  td.num, th.num { text-align: center; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
   tr:hover td { background: #f6f3e9; }
   tr.highlight td {
     background: #e5ebf0;
@@ -604,7 +604,7 @@
 <div class="caption"><span class="label">Figure 2.</span> Group 3 body symbol distribution (<em>N</em>&nbsp;=&nbsp;8). At this sample, individual symbol counts aggregated across all body positions are small integers and the nominal z-scores are discretisation artefacts. The first-order probe cannot produce a credible finding on this cohort.</div>
 
 <h3><span class="num">3.1</span>Group 2 symbol tabulation</h3>
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">5</td><td class="num">11</td><td class="num">1.62%</td><td class="num">-2.26</td></tr>
@@ -643,7 +643,7 @@
 <div class="caption"><span class="label">Table 1.</span> Group 2 body symbol counts, percentages, and z-scores against the uniform null.</div>
 
 <h3><span class="num">3.2</span>Group 3 symbol tabulation</h3>
-<div class="scroll-x"><table>
+<div class="scroll-x"><table class="sym-count">
 <thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">Q</td><td class="num">4</td><td class="num">1.25%</td><td class="num">-1.93</td></tr>
@@ -3234,14 +3234,14 @@
 <div class="scroll-x"><table>
 <thead><tr><th>message</th><th>substr</th><th class="num">len</th><th class="num">copies</th><th class="num">positions</th></tr></thead>
 <tbody>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">72IA225VMX2YRM2EW43F74PAA<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">COH</mark>FR<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">COH</mark>FT<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">COH</mark>LVV4</td><td style="font-family:monospace">COH</td><td class="num">3</td><td class="num">3</td><td class="num">26, 31, 36</td></tr>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">QYPD4SPUGLOUVBJNNTSUUUMDF<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">LU3</mark>VN<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">LU3</mark>VV<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">LU3</mark>QLI5</td><td style="font-family:monospace">LU3</td><td class="num">3</td><td class="num">3</td><td class="num">26, 31, 36</td></tr>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJPJNS2Y3ZECEIXJ<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">CMG</mark>KA<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">CMG</mark>RACMNRA<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">CMG</mark>ZACPNBDA</td><td style="font-family:monospace">CMG</td><td class="num">3</td><td class="num">3</td><td class="num">17, 22, 32</td></tr>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJK2ZB6PJ5LOG62N<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">6GI</mark>XH<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">6GI</mark>PH<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">6GI</mark>6H<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">6GI</mark>4H6GX4QV</td><td style="font-family:monospace">6GI</td><td class="num">3</td><td class="num">4</td><td class="num">17, 22, 27, 32</td></tr>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DXOIVLOOLIHYP2JX<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">U7N</mark>Q6<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">U7N</mark>R6<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">U7N</mark>V6<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">U7N</mark>H6<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">U7N</mark>THT</td><td style="font-family:monospace">U7N</td><td class="num">3</td><td class="num">5</td><td class="num">17, 22, 27, 32, 37</td></tr>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">7ZEL2DQ3RK5TCK2FBKVH<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">WBK</mark>VU<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">WBK</mark>YVWCPYA<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">WBK</mark>YDVR</td><td style="font-family:monospace">WBK</td><td class="num">3</td><td class="num">3</td><td class="num">21, 26, 36</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">72IA225VMX2YRM2EW43F74PAA<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">COH</mark>FR<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">COH</mark>FT<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">COH</mark>LVV4</td><td style="font-family:monospace">COH</td><td class="num">3</td><td class="num">3</td><td class="num">26, 31, 36</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">QYPD4SPUGLOUVBJNNTSUUUMDF<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">LU3</mark>VN<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">LU3</mark>VV<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">LU3</mark>QLI5</td><td style="font-family:monospace">LU3</td><td class="num">3</td><td class="num">3</td><td class="num">26, 31, 36</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJPJNS2Y3ZECEIXJ<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">CMG</mark>KA<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">CMG</mark>RACMNRA<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">CMG</mark>ZACPNBDA</td><td style="font-family:monospace">CMG</td><td class="num">3</td><td class="num">3</td><td class="num">17, 22, 32</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJK2ZB6PJ5LOG62N<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">6GI</mark>XH<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">6GI</mark>PH<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">6GI</mark>6H<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">6GI</mark>4H6GX4QV</td><td style="font-family:monospace">6GI</td><td class="num">3</td><td class="num">4</td><td class="num">17, 22, 27, 32</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DXOIVLOOLIHYP2JX<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">U7N</mark>Q6<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">U7N</mark>R6<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">U7N</mark>V6<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">U7N</mark>H6<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">U7N</mark>THT</td><td style="font-family:monospace">U7N</td><td class="num">3</td><td class="num">5</td><td class="num">17, 22, 27, 32, 37</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">7ZEL2DQ3RK5TCK2FBKVH<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">WBK</mark>VU<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">WBK</mark>YVWCPYA<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">WBK</mark>YDVR</td><td style="font-family:monospace">WBK</td><td class="num">3</td><td class="num">3</td><td class="num">21, 26, 36</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">ESXTKARRNKVHJMNWNEGSGNEJUGN2UMGN2BCGXK6YWF</td><td style="font-family:monospace"></td><td class="num">0</td><td class="num">0</td><td class="num"></td></tr>
-<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">ESU7IVT26SSADSK6<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">GEK</mark>5E<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">GEK</mark>OE<mark style="background:#f3f0e4;padding:0 1px;border-radius:2px">GEK</mark>VEGESLEGZOCC4</td><td style="font-family:monospace">GEK</td><td class="num">3</td><td class="num">3</td><td class="num">17, 22, 27</td></tr>
+<tr class="highlight"><td style="font-family:monospace;font-size:0.82em">ESU7IVT26SSADSK6<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">GEK</mark>5E<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">GEK</mark>OE<mark style="background:none;color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px">GEK</mark>VEGESLEGZOCC4</td><td style="font-family:monospace">GEK</td><td class="num">3</td><td class="num">3</td><td class="num">17, 22, 27</td></tr>
 </tbody></table></div>
 <div class="caption"><span class="label">Table 4.</span> For each Group-3 message, the most-frequent length-3-or-4 substring and its occurrences. Highlighted bands in the message column mark the repeat positions. Note the consistent 5-character interval between successive starts within each message: (17, 22, 27, 32, 37), (21, 26, 31, 36), (26, 31, 36), etc.</div>
 
