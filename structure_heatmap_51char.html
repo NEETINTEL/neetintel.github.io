@@ -1094,6 +1094,27 @@
             checkbox.addEventListener('change', updateHeatmapAndVisibility);
         });
 
+        // URL-parameter-driven group pre-filter.
+        // Supports ?g=N (single) or ?g=N,M,unclassified (comma-separated).
+        // If present, unchecks all group checkboxes, then re-checks only those named,
+        // and re-runs updateHeatmapAndVisibility() so the filter takes effect on load.
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get('g');
+            if (!raw) return;
+            const requested = new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
+            let anyMatched = false;
+            filterCheckboxes.forEach(cb => {
+                const id = cb.id || '';
+                if (!id.startsWith('filter-group-')) return;
+                const key = id.slice('filter-group-'.length);
+                const shouldCheck = requested.has(key);
+                cb.checked = shouldCheck;
+                if (shouldCheck) anyMatched = true;
+            });
+            if (anyMatched) updateHeatmapAndVisibility();
+        })();
+
         // Sorting functionality
         const messagesContainer = document.getElementById('messages-container');
         let currentSortMode = 'grouped';
