@@ -111,11 +111,14 @@
         .notice.info { color: #9a9a9a; }
 
         .notice a {
-            color: #b0b0b0;
+            color: #d4a017;
             text-decoration: underline;
         }
 
-        .notice a:hover { color: #e0e0e0; }
+        .notice a:hover { color: #ffc107; }
+
+        .notice.info a { color: #b0b0b0; }
+        .notice.info a:hover { color: #e0e0e0; }
 
         /* Stats section */
         .stats-section {
@@ -522,8 +525,9 @@
     <h1>Structural Heatmap for 30 Character EAMs</h1>
     <div class="notice">
         <strong>⚠ Group 1 and Group 2 Excluded</strong><br>
-        For Group 1 and 2 30 character messages, of which the dataset contains over 9000 such EAMs, no structural patterns are apparent.<br>
-        For this reason, they are excluded from this report. (This exclusion applies only to Group 1 and 2 30 character messages.)
+        Group 1 and Group 2 30-character messages (the dataset contains over 9,000 such EAMs combined) are excluded from this visualisation by default: at those volumes no individual position-pair clears the 30%-of-messages hot-pair threshold used here, so the heatmap reads as uniform. 
+        Structural signals are nonetheless present in both cohorts and are analysed in detail in the <a href="eam_30char_format_analysis.html">30-character format analysis</a>.
+        This exclusion applies only to Group 1 and 2 messages for this length.
     </div>
     <div class="stats-section">
         <div class="info-box">
