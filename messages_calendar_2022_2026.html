@@ -466,7 +466,10 @@
 
         .group-meta .qty {
             color: #777;
-            font-size: 80%;
+            font-size: 70%;
+            display: inline-block;
+            transform: translateY(-0.5px);
+            margin-left: 3px;
         }
 
         .tooltip-section.vid-section {
@@ -11882,13 +11885,13 @@
                     const rows = [];
                     if (details && details.lengths) {
                         const lengths = Object.entries(details.lengths).sort((a, b) => parseInt(b[0]) - parseInt(a[0]));
-                        rows.push([t('Lengths', '電文長'), lengths.map(([len, cnt]) => `${len}<span class="qty"> [×${cnt}]</span>`).join(', ')]);
+                        rows.push([t('Lengths', '電文長'), lengths.map(([len, cnt]) => `${len}<span class="qty">[×${cnt}]</span>`).join(' ')]);
                     }
                     if (details && details.prefixes) {
                         const prefixes = Object.entries(details.prefixes).sort((a, b) => b[1] - a[1]);
-                        const prefixList = prefixes.slice(0, 5).map(([prefix, cnt]) => `${prefix}<span class="qty"> [×${cnt}]</span>`);
-                        let prefixText = prefixList.join(', ');
-                        if (prefixes.length > 5) prefixText += `, +${prefixes.length - 5} ${t('more', '他')}`;
+                        const prefixList = prefixes.slice(0, 5).map(([prefix, cnt]) => `${prefix}<span class="qty">[×${cnt}]</span>`);
+                        let prefixText = prefixList.join(' ');
+                        if (prefixes.length > 5) prefixText += ` +${prefixes.length - 5} ${t('more', '他')}`;
                         rows.push([t('Prefixes', '接頭辞'), prefixText]);
                     }
                     if (rows.length) {
