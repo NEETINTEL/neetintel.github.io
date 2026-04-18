@@ -738,6 +738,8 @@ The empirical marginal distribution of base32 symbols at each body position is u
 
 <figure class="plot" role="img" aria-label="Line chart of per-position z-scores for symbols M and 5">
 <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg">
+  <!-- head attenuation band at positions 3-4 (M/5 near uniform) -->
+  <rect class="band" x="74.75" y="25" width="33" height="180"/>
   <!-- boundary band at positions 19-21 -->
   <rect class="band" x="338.75" y="25" width="49.5" height="180"/>
   <!-- y-axis and zero line -->
@@ -835,7 +837,8 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="ax-label" text-anchor="middle" x="446" y="218">25</text>
   <text class="ax-label" text-anchor="middle" x="528.5" y="218">30</text>
   <text class="ax-title" text-anchor="middle" x="290" y="235">character position</text>
-  <!-- boundary band annotation -->
+  <!-- band annotations (stacked y's to avoid collision near chart-left edge) -->
+  <text class="ax-label" text-anchor="start" x="50" y="17" style="fill:#3a5a72;font-weight:600">head attenuation (pos 3–4)</text>
   <text class="ax-label" text-anchor="middle" x="363.5" y="37" style="fill:#3a5a72;font-weight:600">mid-body attenuation (pos 19–21)</text>
   <!-- legend -->
   <line class="line-m" x1="400" y1="245" x2="420" y2="245"/>
@@ -846,7 +849,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="legend-txt" text-anchor="start" x="500" y="248">symbol 5</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 2.</span> Per-position Poisson z-score of the two under-represented symbols M (solid red) and 5 (dashed blue) across the thirty character positions of Group 1 first-broadcast messages. Solid horizontal line: the uniform expectation (<em>z</em>&nbsp;=&nbsp;0). Dashed red line: the per-family Bonferroni threshold for 435 position pairs, |<em>z</em>|&nbsp;&gt;&nbsp;3.86. Shaded band: the mid-body attenuation region at positions 19–21 (bit offsets 91–105). Positions 3 and 4 (bits 11–20) also deviate from the surrounding profile: both symbols sit near the uniform expectation (|<em>z</em>|&nbsp;&lt;&nbsp;0.9), unlike positions 5–18 and 22–30 where the deficit is fully active. Positions 1–2 reflect the G1 PR-character distribution (e.g., M at position 1 is massively over-represented at <em>z</em>&nbsp;=&nbsp;+20.12, off-chart, because MQ and MK are frequent G1 prefixes); these are not body-generator properties.</div>
+<div class="caption"><span class="label">Figure 2.</span> Per-position Poisson z-score of the two under-represented symbols M (solid red) and 5 (dashed blue) across the thirty character positions of Group 1 first-broadcast messages. Solid horizontal line: the uniform expectation (<em>z</em>&nbsp;=&nbsp;0). Dashed red line: the per-family Bonferroni threshold for 435 position pairs, |<em>z</em>|&nbsp;&gt;&nbsp;3.86. Shaded bands: the head-attenuation region at positions 3–4 (bits 11–20) and the mid-body attenuation region at positions 19–21 (bit offsets 91–105). In both regions M and 5 sit near the uniform expectation (|<em>z</em>|&nbsp;&lt;&nbsp;0.9 at positions 3–4; |<em>z</em>|&nbsp;&lt;&nbsp;1.7 at 19–21), unlike positions 5–18 and 22–30 where the deficit is fully active. Positions 1–2 reflect the G1 PR-character distribution (e.g., M at position 1 is massively over-represented at <em>z</em>&nbsp;=&nbsp;+20.12, off-chart, because MQ and MK are frequent G1 prefixes); these are not body-generator properties.</div>
 
 <div class="callout key">
   <strong>Two regions of attenuated deficit.</strong> The position-wise M/5 profile is not uniform: two regions break from the surrounding pattern. (i) Positions 3–4, immediately after the prefix, show M and 5 at essentially the uniform expectation (|<em>z</em>|&nbsp;&lt;&nbsp;0.9) while the surrounding body positions show a 4–6σ deficit. (ii) Positions 19–21 show a similar attenuation (|<em>z</em>|&nbsp;&lt;&nbsp;1.7); crucially, this second region is <em>jointly</em> localised with an independent structural signature — the doublet rate at pairs (19, 20) and (20, 21) also drops sharply there (§6, <em>z</em>&nbsp;=&nbsp;−7.63, −6.67). The positions-3–4 region shows attenuation in the marginal channel only; pair (3, 4) doublets are within noise at <em>z</em>&nbsp;=&nbsp;−1.05. Two statistical channels agreeing at positions 19–21 is a stronger signal than one channel at positions 3–4, but both regions establish that the body has internal distributional boundaries.
