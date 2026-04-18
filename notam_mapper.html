@@ -561,6 +561,13 @@ let showAll = false;
 const map = L.map('map', { center: [39.5, -98.5], zoom: 4, zoomControl: true, attributionControl: false });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
 
+// Shift the initial view so the US isn't visually obscured by the right-side panel stack
+map.whenReady(() => {
+  const stack = document.querySelector('.right-stack');
+  const offsetX = stack ? stack.offsetWidth / 2 : 180;
+  map.panBy([offsetX, 0], { animate: false });
+});
+
 // HFGCS Station markers
 const STATIONS = [
   { name: 'ANDREWS', lat: 38.81, lng: -76.87 },
