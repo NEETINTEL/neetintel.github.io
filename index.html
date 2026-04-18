@@ -8757,6 +8757,14 @@
               </div>
             </div>
           </li>
+          <li>
+            <div class="entry">
+              <div class="entry-left">
+                <span class="support-label">Substack</span>
+                <a class="link" href="https://neetintel.substack.com/" target="_blank">https://neetintel.substack.com/</a>
+              </div>
+            </div>
+          </li>
         </ul>
       </div>
 
@@ -9067,6 +9075,24 @@
           showTab(tabOrder[newIndex]);
           e.preventDefault();
         }
+      }
+
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        const activeContent = document.querySelector('.tab-content.active');
+        if (!activeContent) return;
+        if (activeContent.id !== 'skymasters' && activeContent.id !== 'youtube') return;
+
+        const subtabs = Array.from(activeContent.querySelectorAll('.subtab'));
+        if (subtabs.length === 0) return;
+
+        const currentIndex = subtabs.findIndex(s => s.classList.contains('active'));
+        if (currentIndex === -1) return;
+
+        const delta = e.key === 'ArrowUp' ? -1 : 1;
+        const newIndex = (currentIndex + delta + subtabs.length) % subtabs.length;
+
+        subtabs[newIndex].click();
+        e.preventDefault();
       }
     });
 
