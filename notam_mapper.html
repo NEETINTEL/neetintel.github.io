@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOTAM Mapper</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --nerv-orange: #FF9830;
+    --nerv-orange-dim: #C87020;
+    --nerv-orange-hot: #FFCC50;
+    --nerv-green: #50FF50;
+    --nerv-green-dim: #30BB30;
+    --nerv-cyan: #20F0FF;
+    --nerv-cyan-dim: #10A0B0;
+    --nerv-red: #FF3030;
+    --nerv-red-dim: #CC2020;
+    --nerv-amber: #FFAA00;
+    --nerv-yellow: #FFE820;
+    --nerv-magenta: #F030C0;
+    --nerv-steel: #D8D8D0;
+    --nerv-steel-dim: #888880;
+    --nerv-void: #000000;
+    --nerv-panel: #0C0C0A;
+  }
+
+  body {
+    background: var(--nerv-void);
+    color: #D8D8D0;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+  }
+
+  #map { width: 100%; height: 100vh; z-index: 2; position: relative; }
+  .leaflet-control-attribution { display: none !important; }
+  .leaflet-control-zoom a {
+    background: var(--nerv-void) !important;
+    color: #D8D8D0 !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 0 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+  }
+  .leaflet-control-zoom a:hover { background: rgba(255,255,255,0.08) !important; }
+  .leaflet-control-zoom { border-radius: 0 !important; }
+  .leaflet-top.leaflet-left { top: 50px; }
+
+  /* HEADER */
+  .hud-header {
+    position: fixed; top: 0; left: 0; right: 0; height: 40px;
+    background: var(--nerv-void);
+    display: flex; align-items: center; padding: 0 16px;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .hud-header h1 {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+    color: #FFFFFF;
+  }
+  .hud-clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.8);
+    letter-spacing: 0.04em; margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* RIGHT STACK — input on top, active list fills remaining height */
+  .right-stack {
+    position: fixed; top: 54px; right: 10px; bottom: 90px;
+    width: 360px;
+    display: flex; flex-direction: column; gap: 8px;
+    z-index: 1000;
+  }
+
+  /* INPUT PANEL */
+  .input-panel {
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.12);
+    flex-shrink: 0;
+  }
+  .panel-title-bar {
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .panel-title-bar span {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    color: #FFFFFF;
+  }
+  .panel-body { padding: 6px; }
+  .input-panel textarea {
+    width: 100%; height: 90px;
+    min-height: 60px; max-height: 300px;
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 0;
+    color: #D8D8D0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 400;
+    padding: 6px 8px; resize: vertical; outline: none;
+  }
+  .input-panel textarea:focus { border-color: rgba(255,255,255,0.4); }
+  .input-panel textarea::placeholder { color: rgba(255,255,255,0.12); }
+  .input-hint {
+    font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.3); margin-top: 4px; text-transform: uppercase;
+  }
+  .btn-row { display: flex; gap: 4px; margin-top: 2px; }
+  .btn {
+    flex: 1; padding: 5px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid; border-radius: 0;
+    cursor: pointer; background: var(--nerv-void);
+  }
+  .btn-add { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+  .btn-add:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+  .btn-clear { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); flex: 1; }
+  .btn-clear:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+  .btn-fit { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); flex: 1; }
+  .btn-fit:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+
+  .notam-list-footer {
+    padding: 6px; flex-shrink: 0;
+    display: flex; gap: 4px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .notam-list-panel.collapsed .notam-list-footer { display: none; }
+
+  .collapse-toggle {
+    position: absolute; top: 2px; right: 6px;
+    background: none; border: none; color: rgba(255,255,255,0.25);
+    cursor: pointer; font-size: 13px;
+    font-family: 'JetBrains Mono', monospace; padding: 2px 4px;
+  }
+  .collapse-toggle:hover { color: #FFFFFF; }
+  .input-panel.collapsed .panel-body { display: none; }
+
+  /* NOTAM LIST */
+  .notam-list-panel {
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; flex-direction: column;
+    flex: 1 1 auto; min-height: 0;
+  }
+  .notam-list-header {
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+    cursor: pointer;
+  }
+  .notam-list-header:hover { background: rgba(255,255,255,0.08); }
+  .list-collapse-toggle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: rgba(255,255,255,0.5);
+    margin-left: 6px; user-select: none;
+  }
+  .notam-list-panel.collapsed .notam-list-body { display: none; }
+  .notam-list-panel.collapsed .notam-list-header { border-bottom: none; }
+
+  /* Expired NOTAM cards — collapsed to just the header by default */
+  .notam-card.expired .notam-card-details,
+  .notam-card.expired .notam-card-text { display: none; }
+  .notam-card.expired .notam-card-id {
+    opacity: 0.55;
+    cursor: pointer;
+  }
+  .notam-card.expired .notam-card-id::before {
+    content: '+ ';
+    opacity: 0.6;
+  }
+  .notam-card.expired.expanded .notam-card-details,
+  .notam-card.expired.expanded .notam-card-text { display: block; }
+  .notam-card.expired.expanded .notam-card-id { opacity: 0.7; }
+  .notam-card.expired.expanded .notam-card-id::before {
+    content: '− ';
+  }
+  .notam-card.expired .notam-card-type { opacity: 0.4; }
+  .notam-list-header h3 {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    color: #FFFFFF;
+  }
+  .notam-list-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700; color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+  }
+  .notam-list-body { overflow-y: auto; flex: 1; padding: 4px; }
+  .notam-list-body::-webkit-scrollbar { width: 3px; }
+  .notam-list-body::-webkit-scrollbar-track { background: var(--nerv-void); }
+  .notam-list-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+  .notam-card {
+    background: var(--nerv-void);
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 5px 8px;
+    cursor: pointer; transition: background 0.1s;
+  }
+  .notam-card:hover { background: rgba(255,255,255,0.03); }
+  .notam-card.dimmed { opacity: 0.2; }
+  .notam-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .notam-card-id {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em; flex: 1;
+    color: #FFFFFF;
+  }
+  .notam-card-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 700; letter-spacing: 0.08em;
+    padding: 1px 5px; border: 1px solid rgba(255,255,255,0.15);
+    text-transform: uppercase; color: rgba(255,255,255,0.55);
+    white-space: nowrap;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .notam-card-remove {
+    background: none; border: none; color: rgba(255,255,255,0.2);
+    cursor: pointer; font-size: 10px; padding: 0 3px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  }
+  .notam-card-remove:hover { color: var(--nerv-red); }
+  .notam-card-details {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 400; line-height: 1.4; color: rgba(255,255,255,0.45);
+  }
+  .notam-card-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 400; color: rgba(255,255,255,0.2);
+    margin-top: 3px; padding-top: 3px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.2; max-height: 32px; overflow: hidden; word-break: break-all;
+  }
+  .no-data {
+    color: rgba(255,255,255,0.3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 12px; text-align: center;
+    letter-spacing: 0.04em;
+  }
+
+  /* TIMELINE */
+  .timeline-panel {
+    position: fixed;
+    bottom: 22px; left: 0; right: 0;
+    height: 52px;
+    background: var(--nerv-void);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .timeline-panel.hidden { display: none; }
+
+  .timeline-label {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+  }
+
+  .timeline-current {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+    min-width: 160px;
+    white-space: nowrap;
+  }
+
+  .timeline-slider-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+  }
+
+  .timeline-ticks {
+    position: relative;
+    height: 18px;
+    width: 100%;
+    pointer-events: none;
+  }
+  .timeline-ticks .span-bar {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    pointer-events: auto;
+    border-radius: 1px;
+    transition: filter 0.12s, outline 0.12s;
+  }
+  .timeline-ticks .span-bar:hover {
+    filter: brightness(1.6) saturate(1.3);
+    outline: 1px solid rgba(255,255,255,0.7);
+    z-index: 5;
+  }
+  .timeline-ticks .tick {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 18px;
+    background: currentColor;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .timeline-ticks .tick.start { opacity: 0.45; }
+  .timeline-ticks .tick.end { opacity: 0.2; }
+
+  .timeline-range {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; color: rgba(255,255,255,0.3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timeline-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    outline: none;
+    border-radius: 0;
+  }
+
+  .snap-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    padding: 3px 7px;
+    border-radius: 0;
+    line-height: 1;
+  }
+  .snap-btn:hover { color: #FFFFFF; border-color: rgba(255,255,255,0.4); }
+  .timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px; height: 20px;
+    background: #FFFFFF;
+    border: none;
+    cursor: pointer;
+  }
+  .timeline-slider::-moz-range-thumb {
+    width: 14px; height: 20px;
+    background: #FFFFFF;
+    border: none; border-radius: 0;
+    cursor: pointer;
+  }
+
+  .timeline-active-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    font-variant-numeric: tabular-nums;
+    min-width: 80px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .btn-show-all {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 0;
+    background: var(--nerv-void); color: rgba(255,255,255,0.5);
+    padding: 3px 8px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-show-all:hover { color: #FFFFFF; border-color: rgba(255,255,255,0.4); }
+  .btn-show-all.active { color: #FFFFFF; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
+
+  /* STATUS BAR */
+  .status-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 22px;
+    background: var(--nerv-void);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    z-index: 1000;
+    display: flex; align-items: center; padding: 0 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 400; letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.4); gap: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  .status-bar .s-cyan { color: rgba(255,255,255,0.5); }
+
+  /* ON-MAP LABELS — ID only */
+  .notam-map-label {
+    display: inline-block;
+    background: rgba(0,0,0,0.85);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 2px 5px;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+  .notam-map-label .label-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+  }
+
+  /* Popups */
+  .leaflet-popup-content-wrapper {
+    background: var(--nerv-void) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 0 !important; box-shadow: none !important;
+    color: #D8D8D0 !important;
+    font-family: 'JetBrains Mono', monospace !important; font-size: 10px !important;
+  }
+  .leaflet-popup-tip {
+    background: var(--nerv-void) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 0 !important; box-shadow: none !important;
+  }
+  .leaflet-popup-content {
+    color: #D8D8D0 !important; line-height: 1.5 !important;
+    max-width: 300px !important; margin: 8px 10px !important;
+  }
+  .leaflet-popup-content .popup-title {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+    color: #FFFFFF;
+    margin-bottom: 4px; padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .leaflet-popup-content .popup-field { color: rgba(255,255,255,0.5); margin: 2px 0; }
+  .leaflet-popup-content .popup-field .f-label {
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; font-size: 8px;
+    color: rgba(255,255,255,0.7);
+  }
+  .leaflet-popup-content .popup-raw {
+    font-size: 8px; color: rgba(255,255,255,0.2);
+    margin-top: 6px; padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.3; word-break: break-all;
+  }
+  .leaflet-popup-content .popup-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    padding-right: 18px; /* reserve room for Leaflet's close X */
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .leaflet-popup-content .popup-nav-btn {
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .leaflet-popup-content .popup-nav-btn:hover {
+    color: #FFFFFF;
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.08);
+  }
+  .leaflet-popup-content .popup-nav-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.06em;
+  }
+  .leaflet-tooltip.notam-tooltip {
+    background: transparent !important; border: none !important;
+    box-shadow: none !important; padding: 0 !important; border-radius: 0 !important;
+  }
+  .leaflet-tooltip.notam-tooltip::before { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="hud-header">
+  <h1>NOTAM Mapper</h1>
+  <div class="hud-clock" id="clock">--:--:--</div>
+</div>
+
+<div id="map"></div>
+
+<div class="right-stack">
+  <div class="input-panel" id="inputPanel">
+    <button class="collapse-toggle" onclick="togglePanel()">_</button>
+    <div class="panel-title-bar">
+      <span>Input</span>
+    </div>
+    <div class="panel-body">
+      <textarea id="notamInput" placeholder=""></textarea>
+      <div class="btn-row">
+        <button class="btn btn-add" onclick="addNOTAMs()">+ ADD</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="notam-list-panel" id="listPanel">
+    <div class="notam-list-header" onclick="toggleListPanel()">
+      <h3>Active</h3>
+      <span class="notam-list-count" id="listCount">00</span>
+      <span class="list-collapse-toggle" id="listCollapseToggle">−</span>
+    </div>
+    <div class="notam-list-body" id="listBody">
+      <div class="no-data">No data</div>
+    </div>
+    <div class="notam-list-footer">
+      <button class="btn btn-fit" onclick="fitAll()">FIT</button>
+      <button class="btn btn-clear" onclick="clearAll()">CLEAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="timeline-panel hidden" id="timelinePanel">
+  <div class="timeline-label">Time</div>
+  <div class="timeline-current" id="timelineCurrent">--</div>
+  <button class="snap-btn" id="snapPrev" onclick="snapToEvent(-1)" title="Previous event">◀</button>
+  <div class="timeline-slider-wrap">
+    <div class="timeline-ticks" id="timelineTicks"></div>
+    <input type="range" class="timeline-slider" id="timelineSlider" min="0" max="1000" value="0" oninput="onTimelineChange()">
+    <div class="timeline-range">
+      <span id="timelineStart">--</span>
+      <span id="timelineEnd">--</span>
+    </div>
+  </div>
+  <button class="snap-btn" id="snapNext" onclick="snapToEvent(1)" title="Next event">▶</button>
+  <div class="timeline-active-count" id="timelineActive">--</div>
+  <button class="btn-show-all" id="btnShowAll" onclick="toggleShowAll()">SHOW ALL</button>
+</div>
+
+<div class="status-bar">
+  <span id="plotCount" class="s-cyan">Plots: 00</span>
+  <span style="margin-left:auto;" id="cursorPos">--</span>
+</div>
+
+<script>
+// Colors assigned after all NOTAMs parsed, based on duration
+
+const allNotams = [];
+let showAll = false;
+
+const map = L.map('map', { center: [39.5, -98.5], zoom: 4, zoomControl: true, attributionControl: false });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+
+// HFGCS Station markers
+const STATIONS = [
+  { name: 'ANDREWS', lat: 38.81, lng: -76.87 },
+  { name: 'OFFUTT', lat: 41.12, lng: -95.91 },
+  { name: 'CROUGHTON', lat: 51.99, lng: -1.21 },
+  { name: 'LAJES', lat: 38.76, lng: -27.09 },
+  { name: 'SIGONELLA', lat: 37.40, lng: 14.92 },
+  { name: 'DIEGO GARCIA', lat: -7.32, lng: 72.41 },
+  { name: 'ASCENSION', lat: -7.97, lng: -14.39 },
+  { name: 'SOUTH ATLANTIC', lat: -51.82, lng: -58.44 },
+  { name: 'GUAM', lat: 13.58, lng: 144.92 },
+  { name: 'HICKAM', lat: 21.32, lng: -157.95 },
+  { name: 'PUERTO RICO', lat: 17.97, lng: -66.30 },
+  { name: 'ELMENDORF', lat: 61.25, lng: -149.80 },
+  { name: 'WEST COAST', lat: 38.67, lng: -121.40 },
+  { name: 'YOKOTA', lat: 35.75, lng: 139.35 }
+];
+STATIONS.forEach(s => {
+  const icon = L.divIcon({
+    html: '<div style="width:6px;height:6px;background:#fff;border:1px solid rgba(255,255,255,0.4);"></div>',
+    className: '', iconSize: [6, 6], iconAnchor: [3, 3]
+  });
+  const label = L.divIcon({
+    html: '<div style="font-family:JetBrains Mono,monospace;font-size:7px;color:rgba(255,255,255,0.5);white-space:nowrap;letter-spacing:0.06em;">' + s.name + '</div>',
+    className: '', iconSize: [80, 0], iconAnchor: [-5, 4]
+  });
+  L.marker([s.lat, s.lng], { icon, interactive: false }).addTo(map);
+  L.marker([s.lat, s.lng], { icon: label, interactive: false }).addTo(map);
+});
+
+// Clock
+function updateClock() {
+  const n = new Date();
+  document.getElementById('clock').textContent =
+    `${String(n.getUTCHours()).padStart(2,'0')}:${String(n.getUTCMinutes()).padStart(2,'0')}:${String(n.getUTCSeconds()).padStart(2,'0')} UTC`;
+
+}
+setInterval(updateClock, 1000); updateClock();
+
+map.on('mousemove', e => {
+  document.getElementById('cursorPos').textContent =
+    `${Math.abs(e.latlng.lat).toFixed(4)}${e.latlng.lat>=0?'N':'S'} ${Math.abs(e.latlng.lng).toFixed(4)}${e.latlng.lng>=0?'E':'W'}`;
+});
+
+// === PARSERS ===
+function parseDMS(str) {
+  const re = /(\d{2,3})(\d{2})(\d{2})([NS])\s*(\d{2,4})(\d{2})(\d{2})([EW])/g;
+  const coords = []; let m;
+  while ((m = re.exec(str)) !== null) {
+    let lat = parseInt(m[1]) + parseInt(m[2])/60 + parseInt(m[3])/3600;
+    let lng = parseInt(m[5]) + parseInt(m[6])/60 + parseInt(m[7])/3600;
+    if (m[4]==='S') lat = -lat;
+    if (m[8]==='W') lng = -lng;
+    coords.push({ lat, lng, raw: m[0] });
+  }
+  return coords;
+}
+
+// ICAO-style degree-only coords like "41N130W", "40N180E"
+function parseDegOnly(str) {
+  const re = /(?<!\d)(\d{1,3})([NS])(\d{1,3})([EW])(?!\d)/g;
+  const coords = []; let m;
+  while ((m = re.exec(str)) !== null) {
+    let lat = parseInt(m[1]);
+    let lng = parseInt(m[3]);
+    if (m[2]==='S') lat = -lat;
+    if (m[4]==='W') lng = -lng;
+    coords.push({ lat, lng, raw: m[0] });
+  }
+  return coords;
+}
+
+function parseCoords(str) {
+  const dms = parseDMS(str);
+  if (dms.length > 0) return dms;
+  return parseDegOnly(str);
+}
+
+// Split a NOTAM body into distinct polygon areas if it defines several
+// (e.g. "AREA D DEFINED AS ... POINT OF ORIGIN. AREA E DEFINED AS ...")
+function splitIntoAreas(text) {
+  const re = /AREA\s+([A-Z0-9]+)\s+DEFINED\s+AS\s+([\s\S]*?)(?:POINT\s+OF\s+ORIGIN|(?=AREA\s+[A-Z0-9]+\s+DEFINED\s+AS)|$)/gi;
+  const areas = []; let m;
+  while ((m = re.exec(text)) !== null) {
+    areas.push({ label: m[1], text: m[2] });
+  }
+  return areas;
+}
+
+// Keep polyline tracks continuous across the antimeridian
+function normalizeTrackLngs(coords) {
+  if (!coords.length) return coords;
+  const out = [{ lat: coords[0].lat, lng: coords[0].lng, raw: coords[0].raw }];
+  for (let i = 1; i < coords.length; i++) {
+    let lng = coords[i].lng;
+    const prev = out[i-1];
+    while (lng - prev.lng > 180) lng -= 360;
+    while (prev.lng - lng > 180) lng += 360;
+    out.push({ lat: coords[i].lat, lng, raw: coords[i].raw });
+  }
+  return out;
+}
+
+function parseRadius(t) { const m = t.match(/(\d+)\s*NM\s*RADIUS/i); return m ? parseInt(m[1]) : null; }
+
+// === SPECIAL USE AIRSPACE LOOKUP (FAA ArcGIS FeatureServer) ===
+const SUA_SERVICE_URL = 'https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/Special_Use_Airspace/FeatureServer/0/query';
+const suaCache = new Map();
+
+// Normalize NOTAM airspace token (W237J, R-2508) → canonical NAME form ("W-237J")
+function normalizeAirspaceId(raw) {
+  const m = /^([WRPA])-?(\d{1,4})([A-Z])?$/i.exec(raw);
+  if (!m) return null;
+  return m[1].toUpperCase() + '-' + m[2] + (m[3] || '').toUpperCase();
+}
+
+// Extract airspace designators referenced in the NOTAM text
+function extractAirspaceRefs(text) {
+  const re = /\b([WRPA])-?(\d{1,4})([A-Z])?\b/gi;
+  const seen = new Set(); const out = [];
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const canon = normalizeAirspaceId(m[0]);
+    if (canon && !seen.has(canon)) { seen.add(canon); out.push(canon); }
+  }
+  return out;
+}
+
+async function fetchSuaFeature(canonical) {
+  if (suaCache.has(canonical)) return suaCache.get(canonical);
+  const url = SUA_SERVICE_URL +
+    '?where=' + encodeURIComponent("NAME='" + canonical + "'") +
+    '&outFields=NAME,TYPE_CODE,UPPER_VAL,LOWER_VAL,REMARKS,CONT_AGENT' +
+    '&returnGeometry=true&outSR=4326&f=geojson';
+  try {
+    const r = await fetch(url);
+    if (!r.ok) { suaCache.set(canonical, null); return null; }
+    const data = await r.json();
+    const feat = (data.features && data.features[0]) || null;
+    suaCache.set(canonical, feat);
+    return feat;
+  } catch (e) {
+    console.error('SUA fetch failed for', canonical, e);
+    suaCache.set(canonical, null);
+    return null;
+  }
+}
+
+function parseAlt(t) { const m = t.match(/(SFC|FL\d+|\d+FT)[\s-]*(FL\d+|\d+FT|UNL)?/i); return m ? m[0] : null; }
+
+// Parse NOTAM time string like 2604141400 → Date object
+function parseNotamTs(s) {
+  if (!s || s.length < 10) return null;
+  const yr = 2000 + parseInt(s.slice(0,2));
+  const mo = parseInt(s.slice(2,4)) - 1;
+  const dy = parseInt(s.slice(4,6));
+  const hr = parseInt(s.slice(6,8));
+  const mn = parseInt(s.slice(8,10));
+  return new Date(Date.UTC(yr, mo, dy, hr, mn));
+}
+
+function parseTime(t) {
+  // Match the overall validity period (10-digit timestamps)
+  let startTs, endTs;
+  const m = t.match(/(\d{10,12})-(\d{10,12})/);
+  if (m) {
+    startTs = parseNotamTs(m[1]);
+    endTs = parseNotamTs(m[2]);
+  } else {
+    // ICAO B)/C) fields — "B) 2604180500" and "C) 2604182100" or "C) PERM"
+    const b = t.match(/\bB\)\s*(\d{10,12})/);
+    const c = t.match(/\bC\)\s*(\d{10,12}|PERM)/);
+    if (!b || !c) return null;
+    startTs = parseNotamTs(b[1]);
+    endTs = c[1] === 'PERM' ? new Date(Date.UTC(2099, 11, 31)) : parseNotamTs(c[1]);
+  }
+  if (!startTs || !endTs) return null;
+
+  // Check for DLY (daily) recurrence window like "DLY 1830-1930"
+  const dlyMatch = t.match(/DLY\s+(\d{4})-(\d{4})/i);
+  let dailyWindows = null;
+  if (dlyMatch) {
+    const dlyStart = dlyMatch[1]; // e.g. "1830"
+    const dlyEnd = dlyMatch[2];   // e.g. "1930"
+    const dlyStartH = parseInt(dlyStart.slice(0,2));
+    const dlyStartM = parseInt(dlyStart.slice(2,4));
+    const dlyEndH = parseInt(dlyEnd.slice(0,2));
+    const dlyEndM = parseInt(dlyEnd.slice(2,4));
+
+    // Build array of active windows for each day in the validity period.
+    // If end <= start (e.g. DLY 2100-1600), the window crosses midnight —
+    // end belongs to the next UTC day.
+    const crossesMidnight = (dlyEndH * 60 + dlyEndM) <= (dlyStartH * 60 + dlyStartM);
+    dailyWindows = [];
+    const cursor = new Date(startTs);
+    while (cursor <= endTs) {
+      const winStart = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), cursor.getUTCDate(), dlyStartH, dlyStartM));
+      const endDay = crossesMidnight ? cursor.getUTCDate() + 1 : cursor.getUTCDate();
+      const winEnd = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), endDay, dlyEndH, dlyEndM));
+      if (winStart >= startTs && winEnd <= new Date(endTs.getTime() + 60000)) {
+        dailyWindows.push({ start: winStart.getTime(), end: winEnd.getTime() });
+      }
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+  }
+
+  function fmtDisplay(d) {
+    if (!d) return '??';
+    const yr = String(d.getUTCFullYear()).slice(2);
+    const mo = String(d.getUTCMonth()+1).padStart(2,'0');
+    const dy = String(d.getUTCDate()).padStart(2,'0');
+    const hr = String(d.getUTCHours()).padStart(2,'0');
+    const mn = String(d.getUTCMinutes()).padStart(2,'0');
+    return `${yr}${mo}${dy} ${hr}:${mn} UTC`;
+  }
+
+  const dlyLabel = dlyMatch ? ` (DLY ${dlyMatch[1]}-${dlyMatch[2]})` : '';
+  return { from: fmtDisplay(startTs), to: fmtDisplay(endTs), startTs, endTs, dailyWindows, dlyLabel };
+}
+
+function parseId(t) {
+  const faa = t.match(/!(\w+)\s+(\d+\/\d+)/);
+  if (faa) return `${faa[1]} ${faa[2]}`;
+  const icao = t.match(/\b([A-Z]\d{3,5}\/\d{2})\s+NOTAM/);
+  const fir = t.match(/\bA\)\s*([A-Z]{4})/);
+  if (icao) return fir ? `${fir[1]} ${icao[1]}` : icao[1];
+  return 'UNKNOWN';
+}
+function nmToM(nm) { return nm * 1852; }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function trunc(s, n) { return s.length > n ? s.slice(0,n) + '...' : s; }
+
+// Format timestamp for timeline display
+function fmtTimeline(d) {
+  const yr = String(d.getUTCFullYear()).slice(2);
+  const mo = String(d.getUTCMonth()+1).padStart(2,'0');
+  const dy = String(d.getUTCDate()).padStart(2,'0');
+  const hr = String(d.getUTCHours()).padStart(2,'0');
+  const mn = String(d.getUTCMinutes()).padStart(2,'0');
+  return `${yr}${mo}${dy} ${hr}:${mn} UTC`;
+}
+
+// Simple on-map ID label — just the NOTAM ID, placed at center
+function makeLabel(centerLL, e) {
+  const ll = Array.isArray(centerLL) ? centerLL : [centerLL.lat, centerLL.lng];
+  const html = `<div class="notam-map-label" style="border-color:${e.color};">
+    <div class="label-id" style="color:${e.color};">${esc(e.id)}</div>
+  </div>`;
+
+  return L.marker(ll, {
+    icon: L.divIcon({ html, className: 'notam-tooltip', iconSize: [0, 0], iconAnchor: [0, 10] }),
+    interactive: false
+  }).addTo(map);
+}
+
+// Color by duration: red=longest, orange=mid, yellow=shortest
+// Effective duration: for DLY NOTAMs, use the per-day window; otherwise use full validity
+function getEffectiveDuration(e) {
+  if (!e.time || !e.time.startTs || !e.time.endTs) return 0;
+  if (e.time.dailyWindows && e.time.dailyWindows.length > 0) {
+    return e.time.dailyWindows[0].end - e.time.dailyWindows[0].start;
+  }
+  return e.time.endTs.getTime() - e.time.startTs.getTime();
+}
+
+function getDurationColor(entry, allEntries) {
+  if (!entry.time || !entry.time.startTs || !entry.time.endTs) return '#FFFFFF';
+
+  const durations = allEntries
+    .filter(e => e.time && e.time.startTs && e.time.endTs)
+    .map(e => getEffectiveDuration(e));
+
+  if (durations.length === 0) return '#FFFFFF';
+
+  const dur = getEffectiveDuration(entry);
+  const minD = Math.min(...durations);
+  const maxD = Math.max(...durations);
+
+  if (maxD === minD) return '#FFAA00'; // all same duration
+
+  const t = (dur - minD) / (maxD - minD); // 0=shortest, 1=longest
+
+  // Yellow (#FFE820) → Orange (#FF8800) → Red (#FF3030)
+  if (t < 0.5) {
+    const s = t * 2; // 0-1 within yellow→orange
+    const r = 255;
+    const g = Math.round(232 - (232 - 136) * s);
+    const b = Math.round(32 - 32 * s);
+    return `rgb(${r},${g},${b})`;
+  } else {
+    const s = (t - 0.5) * 2; // 0-1 within orange→red
+    const r = 255;
+    const g = Math.round(136 - (136 - 48) * s);
+    const b = Math.round(0 + 48 * s);
+    return `rgb(${r},${g},${b})`;
+  }
+}
+
+function makePopup(e, group, idx) {
+  const nav = (group && group.length > 1)
+    ? `<div class="popup-nav">
+         <button class="popup-nav-btn" onclick="event.stopPropagation();cyclePopup(-1);return false;" title="Previous">&#9664;</button>
+         <span class="popup-nav-label">${(idx||0)+1} / ${group.length}</span>
+         <button class="popup-nav-btn" onclick="event.stopPropagation();cyclePopup(1);return false;" title="Next">&#9654;</button>
+       </div>`
+    : '';
+  const geomField = e.suaFeature
+    ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">AIRSPACE: </span>${esc(e.suaFeature.properties.NAME || '')}</div>`
+    : e.isTrack
+      ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">WAYPOINTS: </span>${e.coords.map(c=>c.raw).join(' ')}</div>`
+      : `<div class="popup-field"><span class="f-label" style="color:${e.color}">CENTER: </span>${e.coords.map(c=>c.raw).join(', ')}</div>`;
+  return `${nav}<div class="popup-title" style="color:${e.color}">${esc(e.id)}</div>
+    ${geomField}
+    ${e.radiusNM ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">RADIUS: </span>${e.radiusNM} NM</div>` : ''}
+    ${e.alt ? `<div class="popup-field"><span class="f-label" style="color:#FFAA00">ALT: </span>${esc(e.alt)}</div>` : ''}
+    ${e.time ? `<div class="popup-field"><span class="f-label" style="color:#888880">TIME: </span>${e.time.from} — ${e.time.to}</div>` : ''}
+    <div class="popup-raw">${esc(e.text)}</div>`;
+}
+
+// === POPUP GROUP NAVIGATION ===
+// When multiple NOTAMs share the same geometry, let the user cycle through them in the popup.
+function geometrySignature(entry) {
+  if (!entry || !entry.coords || !entry.coords.length) return null;
+  if (entry.radiusNM && entry.coords.length === 1) {
+    const c = entry.coords[0];
+    return 'c:' + c.lat.toFixed(4) + ':' + c.lng.toFixed(4) + ':' + entry.radiusNM;
+  }
+  if (entry.coords.length >= 3) {
+    const verts = entry.coords.map(c => c.lat.toFixed(4) + ',' + c.lng.toFixed(4)).sort().join('|');
+    return 'p:' + verts;
+  }
+  const c = entry.coords[0];
+  return 'pt:' + c.lat.toFixed(4) + ':' + c.lng.toFixed(4);
+}
+
+function groupAndBindPopups() {
+  // Build groups of entries sharing the same geometry signature
+  const groups = new Map();
+  allNotams.forEach(entry => {
+    const sig = geometrySignature(entry);
+    if (!sig) return;
+    if (!groups.has(sig)) groups.set(sig, []);
+    groups.get(sig).push(entry);
+  });
+  // Sort each group by NOTAM sort key so navigation is chronological-ish
+  groups.forEach(list => {
+    list.sort((a, b) => {
+      const ka = notamSortKey(a), kb = notamSortKey(b);
+      if (ka[0] !== kb[0]) return ka[0] < kb[0] ? -1 : 1;
+      if (ka[1] !== kb[1]) return ka[1] - kb[1];
+      return ka[2] - kb[2];
+    });
+  });
+  // Walk every plotted layer that has a popup and attach the group + index
+  allNotams.forEach(entry => {
+    const sig = geometrySignature(entry);
+    const group = sig ? groups.get(sig) : [entry];
+    const idxInGroup = group ? group.indexOf(entry) : 0;
+    entry.layers.forEach(layer => {
+      if (!layer || !layer.getPopup) return;
+      if (!layer.getPopup()) return;
+      layer._notamGroup = group;
+      layer._notamIdx = idxInGroup;
+      layer.setPopupContent(makePopup(entry, group, idxInGroup));
+      // Track which layer opened the popup, so cyclePopup can update it
+      if (!layer._popupBound) {
+        layer.on('popupopen', function() { window.__popupLayer = layer; });
+        layer._popupBound = true;
+      }
+    });
+  });
+}
+
+function cyclePopup(dir) {
+  const layer = window.__popupLayer;
+  if (!layer || !layer._notamGroup) return;
+  const g = layer._notamGroup;
+  layer._notamIdx = ((layer._notamIdx || 0) + dir + g.length) % g.length;
+  const next = g[layer._notamIdx];
+  layer.setPopupContent(makePopup(next, g, layer._notamIdx));
+}
+
+// === TIMELINE ===
+// Cache of unique sorted event timestamps for snap-to-event
+let timelineEvents = [];
+
+function rebuildTimeline() {
+  const withTime = allNotams.filter(n => n.time && n.time.startTs && n.time.endTs);
+  const panel = document.getElementById('timelinePanel');
+
+  if (withTime.length === 0) {
+    panel.classList.add('hidden');
+    timelineEvents = [];
+    return;
+  }
+
+  panel.classList.remove('hidden');
+
+  const earliest = Math.min(...withTime.map(n => n.time.startTs.getTime()));
+  const latest = Math.max(...withTime.map(n => n.time.endTs.getTime()));
+
+  const slider = document.getElementById('timelineSlider');
+  // Capture the previous value BEFORE changing min/max — range inputs auto-clamp
+  const prevValue = parseFloat(slider.value);
+  slider.min = earliest;
+  slider.max = latest;
+
+  // Default to "now" if within range, else earliest
+  if (!Number.isFinite(prevValue) || prevValue < earliest || prevValue > latest) {
+    const now = Date.now();
+    slider.value = (now >= earliest && now <= latest) ? now : earliest;
+  }
+
+  document.getElementById('timelineStart').textContent = fmtTimeline(new Date(earliest));
+  document.getElementById('timelineEnd').textContent = fmtTimeline(new Date(latest));
+
+  // === BUILD SPAN BARS + TICK MARKS + EVENT LIST ===
+  const ticksEl = document.getElementById('timelineTicks');
+  ticksEl.innerHTML = '';
+  const span = latest - earliest;
+  const eventSet = new Set();
+
+  // Lane packing — up to 3 lanes, minimising total pairwise overlap.
+  // Each lane stores its concrete active intervals (for DLY NOTAMs: one per day window).
+  const MAX_LANES = 3;
+  const laneIntervals = [[], [], []];
+  const laneOf = new Map(); // entry uid -> lane index
+
+  function entryActiveIntervals(n) {
+    if (n.time.dailyWindows && n.time.dailyWindows.length > 0) {
+      return n.time.dailyWindows.map(w => ({ start: w.start, end: w.end }));
+    }
+    return [{ start: n.time.startTs.getTime(), end: n.time.endTs.getTime() }];
+  }
+
+  function intervalOverlap(a, b) {
+    return Math.max(0, Math.min(a.end, b.end) - Math.max(a.start, b.start));
+  }
+
+  // Sort by total active duration descending so long NOTAMs claim lanes first
+  const sortedForPacking = withTime.slice().sort((a, b) => {
+    const aIvs = entryActiveIntervals(a);
+    const bIvs = entryActiveIntervals(b);
+    const aDur = aIvs.reduce((s, iv) => s + (iv.end - iv.start), 0);
+    const bDur = bIvs.reduce((s, iv) => s + (iv.end - iv.start), 0);
+    return bDur - aDur;
+  });
+
+  sortedForPacking.forEach(n => {
+    const ivs = entryActiveIntervals(n);
+    let bestLane = 0;
+    let bestOverlap = Infinity;
+    for (let i = 0; i < MAX_LANES; i++) {
+      let total = 0;
+      for (const newIv of ivs) {
+        for (const existing of laneIntervals[i]) {
+          total += intervalOverlap(newIv, existing);
+        }
+      }
+      // Prefer earliest lane on ties so we don't leave empty lanes
+      if (total < bestOverlap) {
+        bestOverlap = total;
+        bestLane = i;
+        if (total === 0) break;
+      }
+    }
+    ivs.forEach(iv => laneIntervals[bestLane].push(iv));
+    laneOf.set(n.uid, bestLane);
+  });
+
+  function laneGeometry(laneIdx) {
+    // Container is 18px. Top padding 1px, 5px lane, 1px gap, 5px lane, 1px gap, 5px lane, 0px.
+    return { top: 1 + laneIdx * 6, height: 5 };
+  }
+
+  // Render in original order (stable) so z-order follows the NOTAM order
+  withTime.forEach(n => {
+    const lane = laneOf.get(n.uid) || 0;
+    const g = laneGeometry(lane);
+    if (n.time.dailyWindows && n.time.dailyWindows.length > 0) {
+      n.time.dailyWindows.forEach(w => {
+        addSpan(ticksEl, w.start, w.end, earliest, span, n.color, n, g.top, g.height);
+        eventSet.add(w.start);
+        eventSet.add(w.end);
+      });
+    } else {
+      const s = n.time.startTs.getTime();
+      const e = n.time.endTs.getTime();
+      addSpan(ticksEl, s, e, earliest, span, n.color, n, g.top, g.height);
+      eventSet.add(s);
+      eventSet.add(e);
+    }
+  });
+
+  // Always include earliest and latest as snap targets
+  eventSet.add(earliest);
+  eventSet.add(latest);
+  timelineEvents = Array.from(eventSet).sort((a, b) => a - b);
+
+  // Bind popup group navigation (idempotent — safe to call repeatedly)
+  try { groupAndBindPopups(); } catch(e) {}
+
+  onTimelineChange();
+}
+
+function addTick(container, ts, earliest, span, color, type) {
+  if (span <= 0) return;
+  const pct = ((ts - earliest) / span) * 100;
+  if (pct < 0 || pct > 100) return;
+  const tick = document.createElement('div');
+  tick.className = 'tick ' + type;
+  tick.style.left = pct + '%';
+  tick.style.color = color;
+  container.appendChild(tick);
+}
+
+function addSpan(container, startTs, endTs, earliest, totalSpan, color, entry, top, height) {
+  if (totalSpan <= 0) return;
+  const leftPct = ((startTs - earliest) / totalSpan) * 100;
+  const widthPct = ((endTs - startTs) / totalSpan) * 100;
+  if (widthPct <= 0) return;
+  const bar = document.createElement('div');
+  bar.className = 'span-bar';
+  bar.style.left = leftPct + '%';
+  bar.style.width = Math.max(widthPct, 0.2) + '%';
+  if (typeof top === 'number') bar.style.top = top + 'px';
+  if (typeof height === 'number') {
+    bar.style.height = height + 'px';
+    bar.style.bottom = 'auto';
+  }
+  // Translucent fill so overlaps stack visibly
+  bar.style.background = hexToRgba(color, 0.5);
+  // Tooltip on hover — just the NOTAM id
+  if (entry) {
+    bar.title = entry.id;
+    bar.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      flyTo(entry.uid);
+    });
+  }
+  container.appendChild(bar);
+}
+
+// Convert #rrggbb or rgb(...) to rgba with given alpha
+function hexToRgba(color, alpha) {
+  if (!color) return 'rgba(255,255,255,' + alpha + ')';
+  if (color[0] === '#') {
+    const hex = color.slice(1);
+    const r = parseInt(hex.slice(0,2), 16);
+    const g = parseInt(hex.slice(2,4), 16);
+    const b = parseInt(hex.slice(4,6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+  const m = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(color);
+  if (m) return 'rgba(' + m[1] + ',' + m[2] + ',' + m[3] + ',' + alpha + ')';
+  return color;
+}
+
+function snapToEvent(direction) {
+  if (timelineEvents.length === 0) return;
+  const slider = document.getElementById('timelineSlider');
+  const cur = parseFloat(slider.value);
+  const min = parseFloat(slider.min);
+  const max = parseFloat(slider.max);
+  const now = Date.now();
+  // Include "now" as a snap target — but only when the slider isn't already parked
+  // on "now" (otherwise Next would just chase the moving current time).
+  const nearNow = Math.abs(cur - now) < 60 * 1000;
+  const events = (!nearNow && now >= min && now <= max)
+    ? [...new Set([...timelineEvents, now])].sort((a, b) => a - b)
+    : timelineEvents;
+  let target = null;
+  if (direction > 0) {
+    // Next event strictly after current
+    for (const ts of events) {
+      if (ts > cur + 100) { target = ts; break; }
+    }
+    if (target === null) target = events[events.length - 1];
+  } else {
+    // Previous event strictly before current
+    for (let i = events.length - 1; i >= 0; i--) {
+      if (events[i] < cur - 100) { target = events[i]; break; }
+    }
+    if (target === null) target = events[0];
+  }
+  // Pause auto-play and jump
+  if (typeof window.__tlPlaying !== 'undefined') window.__tlPlaying = false;
+  slider.value = target;
+  onTimelineChange();
+}
+
+function onTimelineChange() {
+  if (showAll) return;
+
+  const ts = parseFloat(document.getElementById('timelineSlider').value);
+  const currentDate = new Date(ts);
+  document.getElementById('timelineCurrent').textContent = fmtTimeline(currentDate);
+
+  let activeCount = 0;
+
+  allNotams.forEach(n => {
+    let isActive;
+    if (n.time && n.time.startTs && n.time.endTs) {
+      if (n.time.dailyWindows) {
+        // DLY: only active during specific daily windows (end is exclusive)
+        isActive = n.time.dailyWindows.some(w => ts >= w.start && ts < w.end);
+      } else {
+        isActive = ts >= n.time.startTs.getTime() && ts < n.time.endTs.getTime();
+      }
+    } else {
+      isActive = true;
+    }
+
+    if (isActive) activeCount++;
+    const opacity = isActive ? 1 : 0.08;
+
+    n.layers.forEach(l => {
+      if (l.setOpacity) l.setOpacity(opacity);
+      if (l.setStyle) l.setStyle({ opacity, fillOpacity: isActive ? 0.12 : 0.01 });
+      // For DivIcon markers (labels)
+      if (l._icon) l._icon.style.opacity = opacity;
+    });
+
+    // Dim card in list
+    const card = document.querySelector(`[data-uid="${n.uid}"]`);
+    if (card) card.classList.toggle('dimmed', !isActive);
+  });
+
+  document.getElementById('timelineActive').textContent = `${activeCount}/${allNotams.length} ACTIVE`;
+}
+
+function toggleShowAll() {
+  showAll = !showAll;
+  const btn = document.getElementById('btnShowAll');
+  btn.classList.toggle('active', showAll);
+  btn.textContent = showAll ? 'FILTERING' : 'SHOW ALL';
+
+  if (showAll) {
+    document.getElementById('timelineCurrent').textContent = 'ALL';
+    document.getElementById('timelineActive').textContent = `${allNotams.length}/${allNotams.length} ACTIVE`;
+    allNotams.forEach(n => {
+      n.layers.forEach(l => {
+        if (l.setOpacity) l.setOpacity(1);
+        if (l.setStyle) l.setStyle({ opacity: 1, fillOpacity: 0.12 });
+        if (l._icon) l._icon.style.opacity = 1;
+      });
+      const card = document.querySelector(`[data-uid="${n.uid}"]`);
+      if (card) card.classList.remove('dimmed');
+    });
+  } else {
+    onTimelineChange();
+  }
+}
+
+// === ADD ===
+async function addNOTAMs() {
+  const raw = document.getElementById('notamInput').value;
+  if (!raw.trim()) return;
+
+  const notams = raw.replace(/\r\n/g,'\n').split(/(?=![A-Z]{3,4}\s+\d{2}\/\d{1,4})|(?=^[A-Z]\d{3,5}\/\d{2}\s+NOTAM)/m).filter(s=>s.trim());
+  let added = 0;
+  let skipped = 0;
+  const existingIds = new Set(allNotams.map(n => n.id));
+
+  // First pass: parse all NOTAMs; fetch SUA polygons for airspace-only NOTAMs
+  const parsed = [];
+  for (const nt of notams) {
+    try {
+      const flat = nt.replace(/\n/g,' ').trim();
+      const radiusNM = parseRadius(flat);
+      const alt = parseAlt(flat);
+      const time = parseTime(flat);
+      const id = parseId(flat);
+
+      // Multi-area NOTAMs define each polygon separately (AREA D / AREA E / ...)
+      const areas = splitIntoAreas(flat);
+      if (areas.length >= 2) {
+        for (const area of areas) {
+          const areaCoords = parseCoords(area.text);
+          if (areaCoords.length < 3) continue;
+          const areaId = `${id} AREA ${area.label}`;
+          if (existingIds.has(areaId)) { skipped++; continue; }
+          existingIds.add(areaId);
+          const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '_' + area.label;
+          parsed.push({
+            id: areaId, uid, color: '#FFFFFF',
+            coords: areaCoords, radiusNM: null, alt, time,
+            isTrack: false, suaFeature: null, text: flat, layers: []
+          });
+        }
+        continue;
+      }
+
+      let coords = parseCoords(flat);
+      let suaFeature = null;
+
+      if (!coords.length) {
+        const refs = extractAirspaceRefs(flat);
+        for (const ref of refs) {
+          const feat = await fetchSuaFeature(ref);
+          if (feat) { suaFeature = feat; break; }
+        }
+        if (!suaFeature) continue;
+      }
+
+      if (existingIds.has(id)) { skipped++; continue; }
+      existingIds.add(id);
+      const isTrack = !radiusNM && !suaFeature && coords.length >= 2 && (/\bTDM\s+TRK\b/i.test(flat) || /\bTRK\s+[A-Z]\b/i.test(flat));
+      const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8);
+      parsed.push({ id, uid, color: '#FFFFFF', coords, radiusNM, alt, time, isTrack, suaFeature, text: flat, layers: [] });
+    } catch(err) { console.error('Parse error:', err, nt.slice(0,60)); }
+  }
+
+  // Assign colors by duration
+  parsed.forEach(entry => { entry.color = getDurationColor(entry, parsed); });
+
+  // Second pass: plot on map
+  parsed.forEach(entry => {
+    try {
+    const color = entry.color;
+    let labelLL;
+
+    if (entry.suaFeature) {
+      const gj = L.geoJSON(entry.suaFeature, {
+        style: { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }
+      }).addTo(map);
+      gj.bindPopup(makePopup(entry));
+      entry.layers.push(gj);
+      const b = gj.getBounds();
+      const ctr = b.getCenter();
+      labelLL = [ctr.lat, ctr.lng];
+      entry.type = 'airspace';
+
+    } else if (entry.isTrack && entry.coords.length >= 2) {
+      const norm = normalizeTrackLngs(entry.coords);
+      const ll = norm.map(c => [c.lat, c.lng]);
+      const line = L.polyline(ll, { color, weight: 2, opacity: 0.9, dashArray: '6 3' }).addTo(map);
+      line.bindPopup(makePopup(entry));
+      entry.layers.push(line);
+      norm.forEach(c => {
+        const mk = L.circleMarker([c.lat, c.lng], { radius: 2.5, color, fillColor: color, fillOpacity: 0.9, weight: 1 }).addTo(map);
+        entry.layers.push(mk);
+      });
+      const midIdx = Math.floor(norm.length / 2);
+      labelLL = [norm[midIdx].lat, norm[midIdx].lng];
+      entry.type = 'track';
+
+    } else if (entry.radiusNM && entry.coords.length >= 1) {
+      const c = [entry.coords[0].lat, entry.coords[0].lng];
+      labelLL = c;
+      const circle = L.circle(c, {
+        radius: nmToM(entry.radiusNM), color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3'
+      }).addTo(map);
+      const dot = L.circleMarker(c, { radius: 4, color, fillColor: color, fillOpacity: 1, weight: 2 }).addTo(map);
+      const popup = makePopup(entry);
+      circle.bindPopup(popup); dot.bindPopup(popup);
+      entry.layers.push(circle, dot);
+      entry.type = 'circle';
+
+    } else if (entry.coords.length >= 3) {
+      const ll = entry.coords.map(c => [c.lat, c.lng]);
+      const poly = L.polygon(ll, { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }).addTo(map);
+      const ctr = poly.getBounds().getCenter();
+      labelLL = [ctr.lat, ctr.lng];
+      poly.bindPopup(makePopup(entry));
+      entry.layers.push(poly);
+      entry.type = 'polygon';
+      entry.coords.forEach(c => {
+        const mk = L.circleMarker([c.lat, c.lng], { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+        entry.layers.push(mk);
+      });
+
+    } else {
+      labelLL = [entry.coords[0].lat, entry.coords[0].lng];
+      entry.coords.forEach(c => {
+        const mk = L.circleMarker([c.lat, c.lng], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+        mk.bindPopup(makePopup(entry));
+        entry.layers.push(mk);
+      });
+      entry.type = 'point';
+    }
+
+    entry.layers.push(makeLabel(labelLL, entry));
+    allNotams.push(entry);
+    added++;
+    } catch(err) { console.error('Plot error:', err, entry.id); }
+  });
+
+  if (added || skipped) {
+    document.getElementById('notamInput').value = '';
+  }
+  if (added) {
+    updateList();
+    rebuildTimeline();
+    fitAll();
+  }
+}
+
+function removeNotam(uid) {
+  const i = allNotams.findIndex(n=>n.uid===uid);
+  if (i===-1) return;
+  allNotams[i].layers.forEach(l=>map.removeLayer(l));
+  allNotams.splice(i,1);
+  updateList();
+  rebuildTimeline();
+}
+
+// Compute padding so map content sits in the left ~80% of the viewport
+function leftBiasedPadding() {
+  const w = window.innerWidth || document.documentElement.clientWidth || 1000;
+  return {
+    paddingTopLeft: [0, 0],
+    paddingBottomRight: [Math.round(w * 0.20), 0]
+  };
+}
+
+function flyTo(uid) {
+  const e = allNotams.find(n=>n.uid===uid);
+  if (!e) return;
+  if (e.type==='circle' && e.radiusNM) {
+    map.fitBounds(L.circle([e.coords[0].lat,e.coords[0].lng],{radius:nmToM(e.radiusNM)}).getBounds().pad(0.3), leftBiasedPadding());
+  } else {
+    const g = L.featureGroup(e.layers.filter(l=>l.getBounds||l.getLatLng));
+    if (g.getLayers().length) map.fitBounds(g.getBounds().pad(0.3), leftBiasedPadding());
+  }
+}
+
+// Sort key: prefix (e.g. CARF), then year, then number
+// Extract the operation codename from a NOTAM's raw text.
+// Returns something like "KELLY THREE", "SHADO (IBEX)", "MONK 2 (OAK BRAVO)",
+// "SHADO (IBEX / OAK ALPHA)", or null if nothing matches.
+function extractCodename(text) {
+  if (!text) return null;
+  const t = text.toUpperCase();
+
+  // DCC-prefixed ZAK-style ops
+  const dcc = /DCC\s+(KELLY|BRAVO|IRON|ECHO|DELTA|GOLF|HOTEL|XRAY|YANKEE|ZULU)\s+THREE/.exec(t);
+  if (dcc) return dcc[1] + ' THREE';
+
+  // Named reservations with aircraft in parens — collect all distinct aircraft identifiers
+  // Operation name: first word after "RESERVATION" (may include a trailing number)
+  const opMatch = /RESERVATION\s+([A-Z][A-Z]*(?:\s+\d+)?)\s*\(/.exec(t);
+  if (opMatch) {
+    const op = opMatch[1].trim();
+    // Collect every (AIRCRAFT) group that follows (IBEX, OAK ALPHA, OAK BRAVO, etc.)
+    const aircraft = [];
+    const re = /\(([A-Z][A-Z ]*)\)/g;
+    let m;
+    while ((m = re.exec(t)) !== null) {
+      const code = m[1].trim();
+      // Skip short generic tokens that aren't operation aircraft (e.g. IFR in parens, if any)
+      if (/^(IBEX|OAK ALPHA|OAK BRAVO|OAK CHARLIE|OAK DELTA)$/.test(code)) {
+        if (!aircraft.includes(code)) aircraft.push(code);
+      }
+    }
+    if (aircraft.length > 0) return op + ' (' + aircraft.join(' / ') + ')';
+    return op;
+  }
+
+  return null;
+}
+
+function notamSortKey(e) {
+  const m = /^(\S+)\s+(\d+)\/(\d+)/.exec(e.id || '');
+  if (!m) return ['~', 0, 0];
+  return [m[1], parseInt(m[2],10), parseInt(m[3],10)];
+}
+
+function updateList() {
+  const body = document.getElementById('listBody');
+  const ct = allNotams.length;
+  document.getElementById('listCount').textContent = String(ct).padStart(2,'0');
+  document.getElementById('plotCount').textContent = `Plots: ${String(ct).padStart(2,'0')}`;
+
+  if (!ct) {
+    body.innerHTML = '<div class="no-data">No data</div>';
+    return;
+  }
+
+  // Sort a copy of allNotams by ID without mutating the source array
+  const sorted = allNotams.slice().sort((a, b) => {
+    const ka = notamSortKey(a), kb = notamSortKey(b);
+    if (ka[0] !== kb[0]) return ka[0] < kb[0] ? -1 : 1;
+    if (ka[1] !== kb[1]) return ka[1] - kb[1];
+    return ka[2] - kb[2];
+  });
+
+  const nowTs = Date.now();
+  body.innerHTML = sorted.map(e => {
+    const expired = !!(e.time && e.time.endTs && e.time.endTs.getTime() < nowTs);
+    const codename = extractCodename(e.text);
+    const showTag = codename || (e.type === 'track' || e.type === 'airspace');
+    const tagText = codename || (e.type || '').toUpperCase();
+    return `
+    <div class="notam-card${expired ? ' expired' : ''}" data-uid="${e.uid}" style="border-left-color:${e.color};" onclick="flyTo('${e.uid}')">
+      <div class="notam-card-header">
+        <span class="notam-card-id" style="color:${e.color}" ${expired ? `onclick="event.stopPropagation(); this.closest('.notam-card').classList.toggle('expanded');"` : ''}>${esc(e.id)}</span>
+        ${showTag ? `<span class="notam-card-type" style="color:${e.color};border-color:${e.color};">${esc(tagText)}</span>` : ''}
+        <button class="notam-card-remove" onclick="event.stopPropagation();removeNotam('${e.uid}')" title="Remove">X</button>
+      </div>
+      <div class="notam-card-details">
+        ${e.coords.map(c=>c.raw).join(', ')}${e.radiusNM ? ` / ${e.radiusNM}NM` : ''}${e.alt ? ` / ${esc(e.alt)}` : ''}
+        ${e.time ? `<br>${e.time.from} — ${e.time.to}` : ''}
+      </div>
+      <div class="notam-card-text">${esc(e.text)}</div>
+    </div>
+  `;
+  }).join('');
+}
+
+// Collapse / expand the Active NOTAM list panel by clicking the header
+function toggleListPanel() {
+  const panel = document.getElementById('listPanel');
+  if (!panel) return;
+  panel.classList.toggle('collapsed');
+  const toggle = document.getElementById('listCollapseToggle');
+  if (toggle) toggle.textContent = panel.classList.contains('collapsed') ? '+' : '−';
+}
+
+function fitAll() {
+  const all = allNotams.flatMap(n=>n.layers.filter(l=>l.getBounds||l.getLatLng));
+  if (all.length) map.fitBounds(L.featureGroup(all).getBounds().pad(0.2), leftBiasedPadding());
+}
+
+function clearAll() {
+  allNotams.forEach(n=>n.layers.forEach(l=>map.removeLayer(l)));
+  allNotams.length = 0;
+  document.getElementById('notamInput').value = '';
+  updateList(); rebuildTimeline();
+}
+
+function togglePanel() {
+  const p = document.getElementById('inputPanel');
+  p.classList.toggle('collapsed');
+  document.querySelector('.collapse-toggle').textContent = p.classList.contains('collapsed') ? '+' : '_';
+}
+</script>
+</body>
+</html>
