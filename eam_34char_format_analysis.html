@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On the Observable Ciphertext Properties of 34-Character HFGCS Broadcasts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --bg:        #fdfcf7;
+    --ink:       #181818;
+    --muted:    #58564f;
+    --rule:     #2a2a2a;
+    --soft:     #c9c5b4;
+    --accent:   #5c1f1f;
+    --accent-2: #7c3a3a;
+    --tint:     #f3f0e4;
+  }
+  body {
+    font-family: 'IBM Plex Serif', 'Times New Roman', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 0;
+    margin: 0;
+    line-height: 1.55;
+    font-size: clamp(15px, 2.1vw, 17px);
+    font-feature-settings: "liga", "kern";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 72px) clamp(18px, 4vw, 28px) 64px;
+  }
+  .nav-bar {
+    font-size: 0.82em;
+    margin-bottom: 32px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--soft);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .nav-bar a { color: var(--accent); text-decoration: none; }
+  .nav-bar a:hover { text-decoration: underline; }
+  .title-block {
+    text-align: center;
+    margin: 18px 0 36px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--soft);
+  }
+  h1 {
+    font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+    line-height: 1.24;
+    margin: 0 0 14px;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .subtitle {
+    font-style: italic;
+    color: var(--muted);
+    font-size: clamp(0.95rem, 2.4vw, 1.05rem);
+    margin: 0 auto 18px;
+    max-width: 92%;
+    text-wrap: balance;
+  }
+  .byline {
+    color: var(--muted);
+    font-size: 0.82em;
+    margin: 0;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+  }
+  .abstract {
+    margin: 28px auto 24px;
+    padding: 0 28px;
+    font-size: 0.94em;
+    line-height: 1.55;
+  }
+  .abstract p { margin: 0 0 10px; text-align: justify; hyphens: auto; }
+  .abstract .lead-in {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .abstract-plain {
+    margin: 12px auto 44px;
+    padding: 16px 28px;
+    font-size: 0.93em;
+    line-height: 1.6;
+    border-top: 0.6px solid var(--soft);
+    border-bottom: 0.6px solid var(--soft);
+    background: #faf6ea;
+  }
+  .abstract-plain p { margin: 0 0 10px; text-align: left; hyphens: none; }
+  .abstract-plain p:last-child { margin-bottom: 0; }
+  .abstract-plain .lead-in {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  h2, h3 { font-weight: 600; color: var(--ink); }
+  h2 > a, h3 > a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+  }
+  h2 > a:hover::after, h3 > a:hover::after {
+    content: " #";
+    color: var(--muted);
+    font-weight: 400;
+    opacity: 0.5;
+    margin-left: 0.2em;
+  }
+  h2 > a:target, h3 > a:target,
+  :target > h2 > a, :target > h3 > a { color: var(--accent); }
+  h2 {
+    font-size: clamp(1.05rem, 2.8vw, 1.18rem);
+    margin: 44px 0 14px;
+  }
+  h2 .num, h3 .num {
+    display: inline-block;
+    color: var(--accent);
+    min-width: 1.8em;
+    font-variant-numeric: tabular-nums;
+  }
+  h3 {
+    font-size: clamp(0.98rem, 2.4vw, 1.06rem);
+    margin: 26px 0 8px;
+    font-style: italic;
+    font-weight: 600;
+    color: #2a2a2a;
+  }
+  p { margin: 0.55em 0; text-align: justify; hyphens: auto; }
+  p + p { text-indent: 1.6em; }
+  h2 + p, h3 + p, .callout + p, figure + p, .scroll-x + p,
+  ul + p, ol + p, .eq + p, table + p, blockquote + p { text-indent: 0; }
+  .lead {
+    font-size: 1.02em;
+    color: var(--ink);
+    text-align: justify;
+  }
+  .lead:first-letter {
+    font-size: 2.6em;
+    float: left;
+    line-height: 0.85;
+    padding: 0.08em 0.08em 0 0;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  code, .mono, pre {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 0.86em;
+  }
+  code { background: var(--tint); padding: 1px 4px; border-radius: 2px; }
+  pre {
+    background: var(--tint);
+    padding: 10px 14px;
+    border-radius: 3px;
+    overflow-x: auto;
+    border-left: 2px solid var(--accent);
+    font-size: 0.82em;
+    line-height: 1.5;
+  }
+  sup { font-size: 0.72em; vertical-align: super; line-height: 0; }
+  sub { font-size: 0.72em; vertical-align: sub; line-height: 0; }
+  a { color: var(--accent); }
+  a.secref { text-decoration: none; border-bottom: 1px dotted currentColor; }
+  a.secref:hover { border-bottom-style: solid; }
+  .keyword { font-variant: small-caps; letter-spacing: 0.06em; color: var(--accent); }
+  .eq {
+    display: block;
+    margin: 16px auto;
+    text-align: center;
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 0.98em;
+    padding: 4px 0;
+    position: relative;
+  }
+  .eq .eq-num {
+    float: right;
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-style: normal;
+    color: var(--muted);
+    font-size: 0.88em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 10px;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 0.82em;
+    border-top: 1.5px solid var(--rule);
+    border-bottom: 1.5px solid var(--rule);
+  }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  th, td {
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+    border: none;
+  }
+  thead tr:last-child th { border-bottom: 0.6px solid var(--rule); }
+  th {
+    background: none;
+    color: var(--ink);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.92em; }
+  tr:hover td { background: #f6f3e9; }
+  tr.highlight td {
+    background: #e5ebf0;
+    border-top: 1px solid #7a96ad;
+    border-bottom: 1px solid #7a96ad;
+  }
+  tr.highlight:hover td { background: #d4dde6; }
+  tr.highlight:first-of-type td { border-top: 1.5px solid #4a6b82; }
+  tr.highlight:last-of-type td { border-bottom: 1.5px solid #4a6b82; }
+  .caption {
+    text-align: left;
+    font-size: 0.82em;
+    color: var(--muted);
+    font-style: italic;
+    margin: 4px 0 16px;
+    padding: 0;
+  }
+  .caption .label {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-caps: small-caps;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+  }
+  .callout {
+    margin: 18px 0;
+    padding: 10px 16px 10px 18px;
+    border-left: 2px solid var(--accent);
+    background: var(--tint);
+    font-size: 0.92em;
+    border-radius: 0 3px 3px 0;
+  }
+  .callout strong { color: var(--accent); font-variant-caps: small-caps; letter-spacing: 0.04em; }
+  .callout.warn { border-left-color: #7a5320; background: #f5ecd8; }
+  .callout.warn strong { color: #5e3f18; }
+  .callout.key { border-left-color: #2a4a5e; background: #e8ecef; }
+  .callout.key strong { color: #2a4a5e; }
+  blockquote {
+    margin: 16px 0 16px 0;
+    padding: 8px 18px;
+    border-left: 2px solid var(--soft);
+    color: #2a2a2a;
+    font-style: italic;
+    font-size: 0.96em;
+    background: #faf8ee;
+  }
+  .toc {
+    background: none;
+    padding: 14px 0;
+    border: none;
+    border-top: 0.6px solid var(--soft);
+    border-bottom: 0.6px solid var(--soft);
+    margin: 0 0 36px;
+    font-size: 0.88em;
+  }
+  .toc-head {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--muted);
+  }
+  .toc ol { margin: 0; padding: 0; list-style: none; counter-reset: tocc; }
+  .toc li { margin: 2px 0; counter-increment: tocc; }
+  .toc li::before { content: counter(tocc) ".  "; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  ul, ol { padding-left: 1.3em; }
+  li { margin: 3px 0; }
+  .refs ol {
+    padding-left: 1.6em;
+    font-size: 0.88em;
+  }
+  .refs li { margin: 6px 0; }
+  footer {
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 0.6px solid var(--soft);
+    font-size: 0.78em;
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+  }
+  /* --- Figures (inline SVG) --- */
+  figure.plot {
+    margin: 22px 0;
+    padding: 0;
+  }
+  figure.plot svg { display: block; width: 100%; height: auto; max-width: 100%; }
+  figure.plot svg rect, figure.plot svg circle, figure.plot svg polyline, figure.plot svg path {
+    transition: opacity 0.12s ease;
+  }
+  figure.plot svg rect:hover, figure.plot svg circle:hover, figure.plot svg polyline:hover, figure.plot svg path:hover {
+    opacity: 0.5;
+    cursor: help;
+  }
+  .ax { stroke: var(--muted); stroke-width: 1; fill: none; }
+  .ax-tick { stroke: var(--muted); stroke-width: 0.6; }
+  .ax-label { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; fill: var(--muted); }
+  .ax-title { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; fill: var(--ink); font-weight: 600; }
+  .bar { fill: var(--muted); }
+  .bar-out { fill: var(--accent); }
+  .bar-hi { fill: #7c3a3a; }
+  .line-m { stroke: var(--accent); stroke-width: 1.4; fill: none; }
+  .line-5 { stroke: #3a5a72; stroke-width: 1.4; fill: none;}
+  .dot-m { fill: var(--accent); }
+  .dot-5 { fill: #3a5a72; }
+  .ref { stroke: var(--accent); stroke-width: 0.8; stroke-dasharray: 2,2; fill: none; }
+  .ref-zero { stroke: var(--muted); stroke-width: 0.8; fill: none; }
+  .band { fill: #e5ebf0; opacity: 0.6; }
+  .band-strong { fill: #f0dcdc; opacity: 0.7; }
+  .legend-txt { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; fill: var(--ink); }
+  /* Four-field palette forms a luminance ladder (P lightest → R darkest).
+     Each adjacent pair differs by at least 12 points of luminance, so fields
+     remain distinguishable in grayscale and under deuteranopia / protanopia /
+     tritanopia simulation without requiring hatching or other texture. */
+  .fmt-p { fill: #8a7f55; }   /* tan, L ≈ 125 */
+  .fmt-x { fill: #5a7d8a; }   /* muted teal, L ≈ 115 */
+  .fmt-b { fill: #5c5a4e; }   /* medium stone, L ≈ 90 */
+  .fmt-t { fill: #7c3a3a; }   /* burgundy accent, L ≈ 78 */
+  .fmt-r { fill: #1f2f44; }   /* deep navy, L ≈ 46 */
+  .fmt-lbl { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; fill: #fff; font-weight: 600; }
+  .fmt-ann { font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; fill: var(--muted); }
+  /* Observational region schematic: hovering a region reveals vertical
+     dividers at every internal character boundary within that region. */
+  .fmt-region { cursor: help; }
+  .fmt-divider {
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 0.6;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease;
+  }
+  .fmt-region:hover .fmt-divider { opacity: 1; }
+
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:       #15130f;
+      --ink:      #e8e4d2;
+      --muted:    #a29e8a;
+      --rule:     #e8e4d2;
+      --soft:     #3d382b;
+      --accent:   #d17a7a;
+      --accent-2: #e89a9a;
+      --tint:     #1e1c14;
+    }
+    .band { fill: #1a2431; opacity: 0.7; }
+    .band-strong { fill: #2b1818; opacity: 0.7; }
+    .line-5 { stroke: #8fbadc; fill: none; }
+    .dot-5 { stroke: #8fbadc; fill: #8fbadc; }
+    .fmt-r { fill: #4a6b82; }
+    .fmt-t { fill: #d17a7a; }
+    .fmt-divider { stroke: rgba(232, 228, 210, 0.50); }
+
+    .fmt-b { fill: #a29e8a; }
+    .fmt-p { fill: #b5ad8a; }
+    h3 { color: #cfcab8; }
+    pre, code { background: var(--tint); }
+    tr:hover td { background: var(--tint); }
+    .callout.warn { background: #2a2115; }
+    .callout.key { background: #14202a; border-left-color: #6e92ac; }
+    .callout.key strong { color: #9cc0dc; }
+    blockquote { background: #1c1a12; color: #cfcab8; }
+    tr.highlight td { background: #1a2431; border-top-color: #4a6b82; border-bottom-color: #4a6b82; }
+    tr.highlight:hover td { background: #253241; }
+    tr.highlight:first-of-type td { border-top-color: #6e92ac; }
+    tr.highlight:last-of-type td { border-bottom-color: #6e92ac; }
+    .abstract-plain { background: #1c1a12; border-top-color: #3d382b; border-bottom-color: #3d382b; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="nav-bar"><a href="index.html">&larr; Index</a> &middot; <a href="eam_30char_format_analysis.html">30-char (base)</a> &middot; 34-char cohort</div>
+<div class="title-block">
+  <h1>On the Observable Ciphertext Properties of 34-Character HFGCS Broadcasts</h1>
+  <div class="subtitle">A cohort analysis of the 34-character HFGCS broadcast band; one cohort (G2) at <em>N</em>&nbsp;=&nbsp;146.</div>
+  <p class="byline">2026&middot;04&middot;17 &nbsp;|&nbsp; G2 N=146, years 2022&ndash;2024</p>
+</div>
+<div class="abstract">
+  <p><span class="lead-in">Abstract.</span> We apply the probe battery of the 30-character format analysis, extended with an inter-position equality (IPE) probe, to the 34-character HFGCS broadcast cohort. After standard filtering, forward-fill group resolution, and first-broadcast itemisation, the corpus retains <em>N</em>&nbsp;=&nbsp;146 unique messages. The 34-character band is populated entirely by Group 2 broadcasts (no G1 or G3 messages at this length resolve under forward-fill); the paper therefore covers a single cohort.</p>
+  <p>The first-order probe returns a reproducible but mild M/5 deficit: M is under-represented at aggregate <em>z</em>&nbsp;=&nbsp;-4.46 and 5 at <em>z</em>&nbsp;=&nbsp;-3.78, both crossing the per-symbol Bonferroni threshold for 32 tests at α=0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;3.16) but roughly a factor of five weaker than the 30-character Group 1 signal (where each symbol sits near <em>z</em>&nbsp;=&nbsp;&minus;21). The deficit is spread roughly evenly across body positions 3&ndash;34: no position shows a per-position z for either symbol that exceeds the corrected threshold, and no attenuation region analogous to the 30-character positions-19&ndash;21 boundary is visible.</p>
+  <p>The remaining probes return null results at this sample size. The consecutive-doublet rate is within the uniform envelope across all 33 position pairs, including the tail region — no trailing no-duplicate rule like the 30-character Group 1 finding. The inter-position equality probe returns 0 Bonferroni-crossing pairs out of 561 tested: the strongest signal is 12 matches at pair (4, 7) against an expected 4.56 (<em>z</em>&nbsp;=&nbsp;+3.54), just below the corrected threshold. The internal-repeat probe finds only 1 of 146 messages with any length-&geq;3 substring coincidence. Compressibility matches the synthetic-uniform null (<em>z</em>&nbsp;=&nbsp;+0.42). Within-prefix probes cannot be run: the most populous prefix cell has 16 messages, well below the <em>N</em>&nbsp;&geq;&nbsp;50 threshold needed for credible per-cell z-scores.</p>
+  <p>The 34-character Group 2 payload therefore carries a weaker analogue of the 30-character Group 1 symbol-level deficit and none of the structural signatures present in the 40-character or 42-character Group 2 cohorts. Its profile is closer to &quot;uniform output plus a mild per-symbol bias&quot; than to the template-repeat formats observed at 40 and 42 characters.</p>
+</div>
+<div class="abstract-plain">
+  <p><span class="lead-in">In plain language.</span> The entire 34-character HFGCS broadcast corpus belongs to Group&nbsp;2; there are no Group 1 or Group 3 broadcasts at this length. After deduplication we have 146 unique messages — enough to run the standard tests properly, though not enough to detect very subtle patterns.</p>
+  <p>Two characters — the letter <strong>M</strong> and the digit <strong>5</strong> — are mildly less common than they should be, showing up about 85&ndash;90% as often as expected. The shortage is qualitatively the same signature as the 30-character Group 1 cohort reports (see the <a href="eam_30char_format_analysis.html">30-character paper</a>), but at roughly one-fifth the strength. No other character deviates from expectation by enough to count as a real finding.</p>
+  <p>Beyond that mild symbol bias, the 34-character cohort looks approximately random on every other test applied: no mid-body transition, no tail constraint, no repeated substrings, no matched-character-at-two-positions pattern. The inter-position equality probe returns no statistically significant pair at this sample size.</p>
+</div>
+<nav class="toc">
+  <div class="toc-head">Contents</div>
+  <ol>
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#corpus">Observation corpus</a></li>
+    <li><a href="#marginals">First-order symbol distribution</a></li>
+    <li><a href="#profile">Position-wise bias profile</a></li>
+    <li><a href="#doublets">Doublet profile</a></li>
+    <li><a href="#ipe">Inter-position equality probe</a></li>
+    <li><a href="#repeats">Internal-repeat structure</a></li>
+    <li><a href="#within-key">Within-prefix structural probes</a></li>
+    <li><a href="#synthesis">Synthesis</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ol>
+</nav>
+<h2 id="intro"><span class="num">1.</span>Introduction</h2>
+<p class="lead">The 34-character HFGCS broadcast band holds <em>N</em>&nbsp;=&nbsp;146 unique first-broadcast messages across the 2022&ndash;2026 observation window after filtering and deduplication, all of which resolve to Group 2 under forward-fill on the <code>PR_GROUPS</code> reference table. No Group 1 or Group 3 broadcasts of this length appear in the corpus; the paper covers a single cohort.</p>
+<p>We apply the probe battery established for the <a href="eam_30char_format_analysis.html">30-character paper</a> (the base paper in this project), extended with an inter-position equality (IPE) probe: first-order symbol marginals, per-position marginal z-scores by symbol, consecutive-character doublet rates, inter-position equalities at every pair of positions, length-&geq;3 internal-substring repeats, aggregate compressibility, and (where per-prefix <em>N</em>&nbsp;&geq;&nbsp;50) within-prefix probes.</p>
+<h2 id="corpus"><span class="num">2.</span>Observation corpus</h2>
+<p>Standard filters: quality-flag exclusion of &quot;\&quot; and &quot;*&quot;; placeholder-character exclusion of &quot;?&quot;, &quot;_&quot;, &quot;.&quot;; length-exact match to 34. Forward-fill group resolution is applied to every row. 241 raw broadcast-level observations remain, all resolving to Group 2 under forward-fill. First-broadcast itemisation on the message string retains 146 unique messages.</p>
+<p>The cohort spans calendar years 2022&ndash;2024. Prefix identities in the retained set include DC (16 messages), F6 (10), IE (9), 6V (9), EG (8), PM (7), T5 (7), SI (7), QK (6), BQ (6), and a long tail of smaller prefixes. No prefix exceeds the <em>N</em>&nbsp;&geq;&nbsp;50 threshold used by the 30-character paper's within-prefix probes; §8 reports this and skips the per-prefix scans.</p>
+<h2 id="marginals"><span class="num">3.</span>First-order symbol distribution</h2>
+<p>We test the null that each base32 symbol appears with uniform probability 1/32 at every body position (positions 3&ndash;34, carrying 32·log&#8322;(32)&nbsp;=&nbsp;160 bits). Aggregate body-position counts are plotted in Figure 1 and tabulated in Table 1.</p>
+
+<figure class="plot" role="img" aria-label="Base32 symbol frequency in 34-character G2 body">
+<svg viewBox="0 0 590 220" xmlns="http://www.w3.org/2000/svg">
+<line class="ax-tick" x1="40" y1="180.0" x2="44" y2="180.0"/>
+<text class="ax-label" text-anchor="end" x="38" y="183.0">0%</text>
+<line class="ax-tick" x1="40" y1="142.66666666666669" x2="44" y2="142.66666666666669"/>
+<text class="ax-label" text-anchor="end" x="38" y="145.66666666666669">1%</text>
+<line class="ax-tick" x1="40" y1="105.33333333333334" x2="44" y2="105.33333333333334"/>
+<text class="ax-label" text-anchor="end" x="38" y="108.33333333333334">2%</text>
+<line class="ax-tick" x1="40" y1="68.0" x2="44" y2="68.0"/>
+<text class="ax-label" text-anchor="end" x="38" y="71.0">3%</text>
+<line class="ax-tick" x1="40" y1="30.666666666666686" x2="44" y2="30.666666666666686"/>
+<text class="ax-label" text-anchor="end" x="38" y="33.666666666666686">4%</text>
+<line class="ax" x1="44" y1="12" x2="44" y2="180"/>
+<line class="ax" x1="44" y1="180" x2="540" y2="180"/>
+<line class="ref-line" x1="44" y1="63.33333333333334" x2="540" y2="63.33333333333334" stroke="#5c1f1f" stroke-dasharray="4,3" stroke-width="0.8" opacity="0.5"/>
+<text class="ax-label" text-anchor="start" x="542" y="66.33333333333334" fill="#5c1f1f">uniform</text>
+<rect class="bar" x="45.9" y="76.92" width="11.6" height="103.08"><title>A: 2.76% (count 129; z = -1.43)</title></rect>
+<text class="ax-label" text-anchor="middle" x="51.8" y="192" style="font-size:8.5px">A</text>
+<rect class="bar" x="61.4" y="47.35" width="11.6" height="132.65"><title>B: 3.55% (count 166; z = +1.68)</title></rect>
+<text class="ax-label" text-anchor="middle" x="67.2" y="192" style="font-size:8.5px">B</text>
+<rect class="bar" x="76.9" y="67.33" width="11.6" height="112.67"><title>C: 3.02% (count 141; z = -0.42)</title></rect>
+<text class="ax-label" text-anchor="middle" x="82.8" y="192" style="font-size:8.5px">C</text>
+<rect class="bar" x="92.4" y="71.32" width="11.6" height="108.68"><title>D: 2.91% (count 136; z = -0.84)</title></rect>
+<text class="ax-label" text-anchor="middle" x="98.2" y="192" style="font-size:8.5px">D</text>
+<rect class="bar-hi" x="107.9" y="35.37" width="11.6" height="144.63"><title>E: 3.87% (count 181; z = +2.94)</title></rect>
+<text class="ax-label" text-anchor="middle" x="113.8" y="192" style="font-size:8.5px">E</text>
+<rect class="bar" x="123.4" y="47.35" width="11.6" height="132.65"><title>F: 3.55% (count 166; z = +1.68)</title></rect>
+<text class="ax-label" text-anchor="middle" x="129.2" y="192" style="font-size:8.5px">F</text>
+<rect class="bar" x="138.9" y="59.34" width="11.6" height="120.66"><title>G: 3.23% (count 151; z = +0.42)</title></rect>
+<text class="ax-label" text-anchor="middle" x="144.8" y="192" style="font-size:8.5px">G</text>
+<rect class="bar" x="154.4" y="62.53" width="11.6" height="117.47"><title>H: 3.15% (count 147; z = +0.08)</title></rect>
+<text class="ax-label" text-anchor="middle" x="160.2" y="192" style="font-size:8.5px">H</text>
+<rect class="bar" x="169.9" y="60.14" width="11.6" height="119.86"><title>I: 3.21% (count 150; z = +0.34)</title></rect>
+<text class="ax-label" text-anchor="middle" x="175.8" y="192" style="font-size:8.5px">I</text>
+<rect class="bar" x="185.4" y="72.92" width="11.6" height="107.08"><title>J: 2.87% (count 134; z = -1.01)</title></rect>
+<text class="ax-label" text-anchor="middle" x="191.2" y="192" style="font-size:8.5px">J</text>
+<rect class="bar" x="200.9" y="59.34" width="11.6" height="120.66"><title>K: 3.23% (count 151; z = +0.42)</title></rect>
+<text class="ax-label" text-anchor="middle" x="206.8" y="192" style="font-size:8.5px">K</text>
+<rect class="bar" x="216.4" y="58.54" width="11.6" height="121.46"><title>L: 3.25% (count 152; z = +0.50)</title></rect>
+<text class="ax-label" text-anchor="middle" x="222.2" y="192" style="font-size:8.5px">L</text>
+<rect class="bar-out" x="231.9" y="105.68" width="11.6" height="74.32"><title>M: 1.99% (count 93; z = -4.46)</title></rect>
+<text class="ax-label" text-anchor="middle" x="237.8" y="192" style="font-size:8.5px">M</text>
+<rect class="bar" x="247.4" y="52.95" width="11.6" height="127.05"><title>N: 3.40% (count 159; z = +1.09)</title></rect>
+<text class="ax-label" text-anchor="middle" x="253.2" y="192" style="font-size:8.5px">N</text>
+<rect class="bar" x="262.9" y="53.74" width="11.6" height="126.26"><title>O: 3.38% (count 158; z = +1.01)</title></rect>
+<text class="ax-label" text-anchor="middle" x="268.8" y="192" style="font-size:8.5px">O</text>
+<rect class="bar" x="278.4" y="68.13" width="11.6" height="111.87"><title>P: 3.00% (count 140; z = -0.50)</title></rect>
+<text class="ax-label" text-anchor="middle" x="284.2" y="192" style="font-size:8.5px">P</text>
+<rect class="bar" x="293.9" y="70.53" width="11.6" height="109.47"><title>Q: 2.93% (count 137; z = -0.76)</title></rect>
+<text class="ax-label" text-anchor="middle" x="299.8" y="192" style="font-size:8.5px">Q</text>
+<rect class="bar" x="309.4" y="62.53" width="11.6" height="117.47"><title>R: 3.15% (count 147; z = +0.08)</title></rect>
+<text class="ax-label" text-anchor="middle" x="315.2" y="192" style="font-size:8.5px">R</text>
+<rect class="bar" x="324.9" y="50.55" width="11.6" height="129.45"><title>S: 3.47% (count 162; z = +1.35)</title></rect>
+<text class="ax-label" text-anchor="middle" x="330.8" y="192" style="font-size:8.5px">S</text>
+<rect class="bar" x="340.4" y="67.33" width="11.6" height="112.67"><title>T: 3.02% (count 141; z = -0.42)</title></rect>
+<text class="ax-label" text-anchor="middle" x="346.2" y="192" style="font-size:8.5px">T</text>
+<rect class="bar" x="355.9" y="51.35" width="11.6" height="128.65"><title>U: 3.45% (count 161; z = +1.26)</title></rect>
+<text class="ax-label" text-anchor="middle" x="361.8" y="192" style="font-size:8.5px">U</text>
+<rect class="bar" x="371.4" y="73.72" width="11.6" height="106.28"><title>V: 2.85% (count 133; z = -1.09)</title></rect>
+<text class="ax-label" text-anchor="middle" x="377.2" y="192" style="font-size:8.5px">V</text>
+<rect class="bar" x="386.9" y="51.35" width="11.6" height="128.65"><title>W: 3.45% (count 161; z = +1.26)</title></rect>
+<text class="ax-label" text-anchor="middle" x="392.8" y="192" style="font-size:8.5px">W</text>
+<rect class="bar" x="402.4" y="56.14" width="11.6" height="123.86"><title>X: 3.32% (count 155; z = +0.76)</title></rect>
+<text class="ax-label" text-anchor="middle" x="408.2" y="192" style="font-size:8.5px">X</text>
+<rect class="bar" x="417.9" y="61.74" width="11.6" height="118.26"><title>Y: 3.17% (count 148; z = +0.17)</title></rect>
+<text class="ax-label" text-anchor="middle" x="423.8" y="192" style="font-size:8.5px">Y</text>
+<rect class="bar" x="433.4" y="55.34" width="11.6" height="124.66"><title>Z: 3.34% (count 156; z = +0.84)</title></rect>
+<text class="ax-label" text-anchor="middle" x="439.2" y="192" style="font-size:8.5px">Z</text>
+<rect class="bar" x="448.9" y="57.74" width="11.6" height="122.26"><title>2: 3.27% (count 153; z = +0.59)</title></rect>
+<text class="ax-label" text-anchor="middle" x="454.8" y="192" style="font-size:8.5px">2</text>
+<rect class="bar" x="464.4" y="66.53" width="11.6" height="113.47"><title>3: 3.04% (count 142; z = -0.34)</title></rect>
+<text class="ax-label" text-anchor="middle" x="470.2" y="192" style="font-size:8.5px">3</text>
+<rect class="bar" x="479.9" y="72.92" width="11.6" height="107.08"><title>4: 2.87% (count 134; z = -1.01)</title></rect>
+<text class="ax-label" text-anchor="middle" x="485.8" y="192" style="font-size:8.5px">4</text>
+<rect class="bar-out" x="495.4" y="99.29" width="11.6" height="80.71"><title>5: 2.16% (count 101; z = -3.78)</title></rect>
+<text class="ax-label" text-anchor="middle" x="501.2" y="192" style="font-size:8.5px">5</text>
+<rect class="bar" x="510.9" y="70.53" width="11.6" height="109.47"><title>6: 2.93% (count 137; z = -0.76)</title></rect>
+<text class="ax-label" text-anchor="middle" x="516.8" y="192" style="font-size:8.5px">6</text>
+<rect class="bar" x="526.4" y="60.14" width="11.6" height="119.86"><title>7: 3.21% (count 150; z = +0.34)</title></rect>
+<text class="ax-label" text-anchor="middle" x="532.2" y="192" style="font-size:8.5px">7</text>
+<text class="ax-title" text-anchor="middle" x="292.0" y="214">G2 body symbol distribution (N=146)</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 1.</span> Empirical frequency of each base32 symbol across body positions 3&ndash;34 of the 34-character Group 2 first-broadcast cohort (<em>N</em>&nbsp;=&nbsp;146). Dashed line: uniform expectation 1/32 &approx; 3.125%. Two symbols cross the per-symbol Bonferroni threshold for 32 tests at α=0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;3.16) on the deficit side: <strong>M at <em>z</em>&nbsp;=&nbsp;-4.46</strong> and <strong>5 at <em>z</em>&nbsp;=&nbsp;-3.78</strong>. No other symbol crosses the threshold; the largest excess is E at <em>z</em>&nbsp;=&nbsp;+2.94. The M/5 deficit reproduces the signature of the 30-character Group 1 cohort (where the corresponding z-scores are &minus;21.2 and &minus;20.9) at roughly one-fifth the magnitude.</div>
+
+<div class="scroll-x"><table>
+<thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
+<tbody>
+<tr class="negative"><td class="num">M</td><td class="num">93</td><td class="num">1.99%</td><td class="num">-4.46</td></tr>
+<tr class="negative"><td class="num">5</td><td class="num">101</td><td class="num">2.16%</td><td class="num">-3.78</td></tr>
+<tr class=""><td class="num">A</td><td class="num">129</td><td class="num">2.76%</td><td class="num">-1.43</td></tr>
+<tr class=""><td class="num">V</td><td class="num">133</td><td class="num">2.85%</td><td class="num">-1.09</td></tr>
+<tr class=""><td class="num">J</td><td class="num">134</td><td class="num">2.87%</td><td class="num">-1.01</td></tr>
+<tr class=""><td class="num">4</td><td class="num">134</td><td class="num">2.87%</td><td class="num">-1.01</td></tr>
+<tr class=""><td class="num">D</td><td class="num">136</td><td class="num">2.91%</td><td class="num">-0.84</td></tr>
+<tr class=""><td class="num">Q</td><td class="num">137</td><td class="num">2.93%</td><td class="num">-0.76</td></tr>
+<tr class=""><td class="num">6</td><td class="num">137</td><td class="num">2.93%</td><td class="num">-0.76</td></tr>
+<tr class=""><td class="num">P</td><td class="num">140</td><td class="num">3.00%</td><td class="num">-0.50</td></tr>
+<tr class=""><td class="num">C</td><td class="num">141</td><td class="num">3.02%</td><td class="num">-0.42</td></tr>
+<tr class=""><td class="num">T</td><td class="num">141</td><td class="num">3.02%</td><td class="num">-0.42</td></tr>
+<tr class=""><td class="num">3</td><td class="num">142</td><td class="num">3.04%</td><td class="num">-0.34</td></tr>
+<tr class=""><td class="num">H</td><td class="num">147</td><td class="num">3.15%</td><td class="num">+0.08</td></tr>
+<tr class=""><td class="num">R</td><td class="num">147</td><td class="num">3.15%</td><td class="num">+0.08</td></tr>
+<tr class=""><td class="num">Y</td><td class="num">148</td><td class="num">3.17%</td><td class="num">+0.17</td></tr>
+<tr class=""><td class="num">I</td><td class="num">150</td><td class="num">3.21%</td><td class="num">+0.34</td></tr>
+<tr class=""><td class="num">7</td><td class="num">150</td><td class="num">3.21%</td><td class="num">+0.34</td></tr>
+<tr class=""><td class="num">G</td><td class="num">151</td><td class="num">3.23%</td><td class="num">+0.42</td></tr>
+<tr class=""><td class="num">K</td><td class="num">151</td><td class="num">3.23%</td><td class="num">+0.42</td></tr>
+<tr class=""><td class="num">L</td><td class="num">152</td><td class="num">3.25%</td><td class="num">+0.50</td></tr>
+<tr class=""><td class="num">2</td><td class="num">153</td><td class="num">3.27%</td><td class="num">+0.59</td></tr>
+<tr class=""><td class="num">X</td><td class="num">155</td><td class="num">3.32%</td><td class="num">+0.76</td></tr>
+<tr class=""><td class="num">Z</td><td class="num">156</td><td class="num">3.34%</td><td class="num">+0.84</td></tr>
+<tr class=""><td class="num">O</td><td class="num">158</td><td class="num">3.38%</td><td class="num">+1.01</td></tr>
+<tr class=""><td class="num">N</td><td class="num">159</td><td class="num">3.40%</td><td class="num">+1.09</td></tr>
+<tr class=""><td class="num">U</td><td class="num">161</td><td class="num">3.45%</td><td class="num">+1.26</td></tr>
+<tr class=""><td class="num">W</td><td class="num">161</td><td class="num">3.45%</td><td class="num">+1.26</td></tr>
+<tr class=""><td class="num">S</td><td class="num">162</td><td class="num">3.47%</td><td class="num">+1.35</td></tr>
+<tr class=""><td class="num">B</td><td class="num">166</td><td class="num">3.55%</td><td class="num">+1.68</td></tr>
+<tr class=""><td class="num">F</td><td class="num">166</td><td class="num">3.55%</td><td class="num">+1.68</td></tr>
+<tr class="positive"><td class="num">E</td><td class="num">181</td><td class="num">3.87%</td><td class="num">+2.94</td></tr>
+</tbody></table></div>
+<div class="caption"><span class="label">Table 1.</span> G2 body (positions 3&ndash;34) symbol counts, percentages, and Poisson z-scores against the uniform null. Rows sorted by z-score. M and 5 cross the per-symbol Bonferroni threshold; all other symbols fall within the noise envelope.</div>
+<h2 id="profile"><span class="num">4.</span>Position-wise bias profile</h2>
+<p>The per-position M/5 probe from the 30-character paper tracks Poisson z-scores for those two symbols at each body position. At <em>N</em>&nbsp;=&nbsp;146 with per-position expectation 4.56, per-position z-scores are discretised to roughly &minus;2.2, &minus;1.2, &minus;0.3, +0.7, +1.6, +2.6, +3.5 at counts 0, 1, 2, 3, 4, 5, 6.</p>
+
+<figure class="plot" role="img" aria-label="Per-position M and 5 z-scores for 34-character G2">
+<svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg">
+<line class="ax" x1="48" y1="119.0" x2="540" y2="119.0"/>
+<line class="ax-tick" x1="44" y1="210.0" x2="48" y2="210.0"/>
+<text class="ax-label" text-anchor="end" x="42" y="213.0">-4</text>
+<line class="ax-tick" x1="44" y1="164.5" x2="48" y2="164.5"/>
+<text class="ax-label" text-anchor="end" x="42" y="167.5">-2</text>
+<line class="ax-tick" x1="44" y1="119.0" x2="48" y2="119.0"/>
+<text class="ax-label" text-anchor="end" x="42" y="122.0">0</text>
+<line class="ax-tick" x1="44" y1="73.5" x2="48" y2="73.5"/>
+<text class="ax-label" text-anchor="end" x="42" y="76.5">2</text>
+<line class="ax-tick" x1="44" y1="28.0" x2="48" y2="28.0"/>
+<text class="ax-label" text-anchor="end" x="42" y="31.0">4</text>
+<line class="ax" x1="48" y1="28" x2="48" y2="210"/>
+<line x1="48" y1="31.185000000000002" x2="540" y2="31.185000000000002" stroke="#5c1f1f" stroke-dasharray="3,3" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="206.815" x2="540" y2="206.815" stroke="#5c1f1f" stroke-dasharray="3,3" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="73.5" x2="540" y2="73.5" stroke="#888" stroke-dasharray="3,3" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="164.5" x2="540" y2="164.5" stroke="#888" stroke-dasharray="3,3" stroke-width="0.6" opacity="0.5"/>
+<path class="line-m" d="M48.00,81.80C50.48,78.19 57.93,49.34 62.90,60.16C67.87,70.98 72.83,132.30 77.80,146.73C82.77,161.16 87.73,144.93 92.70,146.73C97.67,148.53 102.63,155.75 107.60,157.55C112.57,159.35 117.52,157.55 122.50,157.55C127.48,157.55 132.52,161.16 137.50,157.55C142.48,153.94 147.43,144.93 152.40,135.91C157.37,126.89 162.33,108.85 167.30,103.44C172.27,98.03 177.23,101.63 182.20,103.44C187.17,105.25 192.13,108.86 197.10,114.27C202.07,119.68 207.03,132.30 212.00,135.91C216.97,139.52 221.93,139.52 226.90,135.91C231.87,132.30 236.83,116.07 241.80,114.27C246.77,112.47 251.73,119.68 256.70,125.09C261.67,130.50 266.63,141.32 271.60,146.73C276.57,152.14 281.52,155.75 286.50,157.55C291.48,159.35 296.52,159.35 301.50,157.55C306.48,155.75 311.43,148.53 316.40,146.73C321.37,144.93 326.33,146.73 331.30,146.73C336.27,146.73 341.23,148.53 346.20,146.73C351.17,144.93 356.13,135.91 361.10,135.91C366.07,135.91 371.03,143.12 376.00,146.73C380.97,150.34 385.93,162.96 390.90,157.55C395.87,152.14 400.83,112.47 405.80,114.27C410.77,116.07 415.73,162.96 420.70,168.37C425.67,173.78 430.63,153.94 435.60,146.73C440.57,139.52 445.52,128.70 450.50,125.09C455.48,121.48 460.52,123.29 465.50,125.09C470.48,126.89 475.43,135.91 480.40,135.91C485.37,135.91 490.33,126.89 495.30,125.09C500.27,123.29 505.23,130.50 510.20,125.09C515.17,119.68 520.13,89.01 525.10,92.62C530.07,96.23 537.52,137.71 540.00,146.73" fill="none" stroke="#5c1f1f" stroke-width="1.3"/>
+<circle cx="48.0" cy="81.80" r="2" fill="#5c1f1f"><title>M at pos 1: z = +1.64</title></circle>
+<circle cx="62.9" cy="60.16" r="2" fill="#5c1f1f"><title>M at pos 2: z = +2.59</title></circle>
+<circle cx="77.8" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 3: z = -1.22</title></circle>
+<circle cx="92.7" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 4: z = -1.22</title></circle>
+<circle cx="107.6" cy="157.55" r="2" fill="#5c1f1f"><title>M at pos 5: z = -1.69</title></circle>
+<circle cx="122.5" cy="157.55" r="2" fill="#5c1f1f"><title>M at pos 6: z = -1.69</title></circle>
+<circle cx="137.5" cy="157.55" r="2" fill="#5c1f1f"><title>M at pos 7: z = -1.69</title></circle>
+<circle cx="152.4" cy="135.91" r="2" fill="#5c1f1f"><title>M at pos 8: z = -0.74</title></circle>
+<circle cx="167.3" cy="103.44" r="2" fill="#5c1f1f"><title>M at pos 9: z = +0.68</title></circle>
+<circle cx="182.2" cy="103.44" r="2" fill="#5c1f1f"><title>M at pos 10: z = +0.68</title></circle>
+<circle cx="197.1" cy="114.27" r="2" fill="#5c1f1f"><title>M at pos 11: z = +0.21</title></circle>
+<circle cx="212.0" cy="135.91" r="2" fill="#5c1f1f"><title>M at pos 12: z = -0.74</title></circle>
+<circle cx="226.9" cy="135.91" r="2" fill="#5c1f1f"><title>M at pos 13: z = -0.74</title></circle>
+<circle cx="241.8" cy="114.27" r="2" fill="#5c1f1f"><title>M at pos 14: z = +0.21</title></circle>
+<circle cx="256.7" cy="125.09" r="2" fill="#5c1f1f"><title>M at pos 15: z = -0.27</title></circle>
+<circle cx="271.6" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 16: z = -1.22</title></circle>
+<circle cx="286.5" cy="157.55" r="2" fill="#5c1f1f"><title>M at pos 17: z = -1.69</title></circle>
+<circle cx="301.5" cy="157.55" r="2" fill="#5c1f1f"><title>M at pos 18: z = -1.69</title></circle>
+<circle cx="316.4" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 19: z = -1.22</title></circle>
+<circle cx="331.3" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 20: z = -1.22</title></circle>
+<circle cx="346.2" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 21: z = -1.22</title></circle>
+<circle cx="361.1" cy="135.91" r="2" fill="#5c1f1f"><title>M at pos 22: z = -0.74</title></circle>
+<circle cx="376.0" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 23: z = -1.22</title></circle>
+<circle cx="390.9" cy="157.55" r="2" fill="#5c1f1f"><title>M at pos 24: z = -1.69</title></circle>
+<circle cx="405.8" cy="114.27" r="2" fill="#5c1f1f"><title>M at pos 25: z = +0.21</title></circle>
+<circle cx="420.7" cy="168.37" r="2" fill="#5c1f1f"><title>M at pos 26: z = -2.17</title></circle>
+<circle cx="435.6" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 27: z = -1.22</title></circle>
+<circle cx="450.5" cy="125.09" r="2" fill="#5c1f1f"><title>M at pos 28: z = -0.27</title></circle>
+<circle cx="465.5" cy="125.09" r="2" fill="#5c1f1f"><title>M at pos 29: z = -0.27</title></circle>
+<circle cx="480.4" cy="135.91" r="2" fill="#5c1f1f"><title>M at pos 30: z = -0.74</title></circle>
+<circle cx="495.3" cy="125.09" r="2" fill="#5c1f1f"><title>M at pos 31: z = -0.27</title></circle>
+<circle cx="510.2" cy="125.09" r="2" fill="#5c1f1f"><title>M at pos 32: z = -0.27</title></circle>
+<circle cx="525.1" cy="92.62" r="2" fill="#5c1f1f"><title>M at pos 33: z = +1.16</title></circle>
+<circle cx="540.0" cy="146.73" r="2" fill="#5c1f1f"><title>M at pos 34: z = -1.22</title></circle>
+<path class="line-5" d="M48.00,168.37C50.48,146.73 57.93,45.73 62.90,38.52C67.87,31.31 72.83,110.66 77.80,125.09C82.77,139.52 87.73,119.68 92.70,125.09C97.67,130.50 102.63,153.94 107.60,157.55C112.57,161.16 117.52,152.14 122.50,146.73C127.48,141.32 132.52,125.09 137.50,125.09C142.48,125.09 147.43,153.94 152.40,146.73C157.37,139.51 162.33,85.41 167.30,81.80C172.27,78.19 177.23,114.27 182.20,125.09C187.17,135.91 192.13,144.93 197.10,146.73C202.07,148.53 207.03,143.12 212.00,135.91C216.97,128.69 221.93,101.64 226.90,103.44C231.87,105.24 236.83,137.71 241.80,146.73C246.77,155.75 251.73,157.55 256.70,157.55C261.67,157.55 266.63,150.34 271.60,146.73C276.57,143.12 281.52,139.52 286.50,135.91C291.48,132.30 296.52,119.68 301.50,125.09C306.48,130.50 311.43,164.76 316.40,168.37C321.37,171.98 326.33,153.94 331.30,146.73C336.27,139.52 341.23,126.89 346.20,125.09C351.17,123.29 356.13,130.50 361.10,135.91C366.07,141.32 371.03,159.35 376.00,157.55C380.97,155.75 385.93,126.89 390.90,125.09C395.87,123.29 400.83,141.32 405.80,146.73C410.77,152.14 415.73,159.35 420.70,157.55C425.67,155.75 430.63,143.12 435.60,135.91C440.57,128.70 445.52,117.88 450.50,114.27C455.48,110.66 460.52,110.66 465.50,114.27C470.48,117.88 475.43,135.91 480.40,135.91C485.37,135.91 490.33,116.07 495.30,114.27C500.27,112.47 505.23,121.48 510.20,125.09C515.17,128.70 520.13,135.91 525.10,135.91C530.07,135.91 537.52,126.89 540.00,125.09" fill="none" stroke="#1f5c7c" stroke-width="1.3"/>
+<circle cx="48.0" cy="168.37" r="2" fill="#1f5c7c"><title>5 at pos 1: z = -2.17</title></circle>
+<circle cx="62.9" cy="38.52" r="2" fill="#1f5c7c"><title>5 at pos 2: z = +3.54</title></circle>
+<circle cx="77.8" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 3: z = -0.27</title></circle>
+<circle cx="92.7" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 4: z = -0.27</title></circle>
+<circle cx="107.6" cy="157.55" r="2" fill="#1f5c7c"><title>5 at pos 5: z = -1.69</title></circle>
+<circle cx="122.5" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 6: z = -1.22</title></circle>
+<circle cx="137.5" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 7: z = -0.27</title></circle>
+<circle cx="152.4" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 8: z = -1.22</title></circle>
+<circle cx="167.3" cy="81.80" r="2" fill="#1f5c7c"><title>5 at pos 9: z = +1.64</title></circle>
+<circle cx="182.2" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 10: z = -0.27</title></circle>
+<circle cx="197.1" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 11: z = -1.22</title></circle>
+<circle cx="212.0" cy="135.91" r="2" fill="#1f5c7c"><title>5 at pos 12: z = -0.74</title></circle>
+<circle cx="226.9" cy="103.44" r="2" fill="#1f5c7c"><title>5 at pos 13: z = +0.68</title></circle>
+<circle cx="241.8" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 14: z = -1.22</title></circle>
+<circle cx="256.7" cy="157.55" r="2" fill="#1f5c7c"><title>5 at pos 15: z = -1.69</title></circle>
+<circle cx="271.6" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 16: z = -1.22</title></circle>
+<circle cx="286.5" cy="135.91" r="2" fill="#1f5c7c"><title>5 at pos 17: z = -0.74</title></circle>
+<circle cx="301.5" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 18: z = -0.27</title></circle>
+<circle cx="316.4" cy="168.37" r="2" fill="#1f5c7c"><title>5 at pos 19: z = -2.17</title></circle>
+<circle cx="331.3" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 20: z = -1.22</title></circle>
+<circle cx="346.2" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 21: z = -0.27</title></circle>
+<circle cx="361.1" cy="135.91" r="2" fill="#1f5c7c"><title>5 at pos 22: z = -0.74</title></circle>
+<circle cx="376.0" cy="157.55" r="2" fill="#1f5c7c"><title>5 at pos 23: z = -1.69</title></circle>
+<circle cx="390.9" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 24: z = -0.27</title></circle>
+<circle cx="405.8" cy="146.73" r="2" fill="#1f5c7c"><title>5 at pos 25: z = -1.22</title></circle>
+<circle cx="420.7" cy="157.55" r="2" fill="#1f5c7c"><title>5 at pos 26: z = -1.69</title></circle>
+<circle cx="435.6" cy="135.91" r="2" fill="#1f5c7c"><title>5 at pos 27: z = -0.74</title></circle>
+<circle cx="450.5" cy="114.27" r="2" fill="#1f5c7c"><title>5 at pos 28: z = +0.21</title></circle>
+<circle cx="465.5" cy="114.27" r="2" fill="#1f5c7c"><title>5 at pos 29: z = +0.21</title></circle>
+<circle cx="480.4" cy="135.91" r="2" fill="#1f5c7c"><title>5 at pos 30: z = -0.74</title></circle>
+<circle cx="495.3" cy="114.27" r="2" fill="#1f5c7c"><title>5 at pos 31: z = +0.21</title></circle>
+<circle cx="510.2" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 32: z = -0.27</title></circle>
+<circle cx="525.1" cy="135.91" r="2" fill="#1f5c7c"><title>5 at pos 33: z = -0.74</title></circle>
+<circle cx="540.0" cy="125.09" r="2" fill="#1f5c7c"><title>5 at pos 34: z = -0.27</title></circle>
+<text class="ax-label" text-anchor="middle" x="48.0" y="224">1</text>
+<text class="ax-label" text-anchor="middle" x="107.6" y="224">5</text>
+<text class="ax-label" text-anchor="middle" x="182.2" y="224">10</text>
+<text class="ax-label" text-anchor="middle" x="256.7" y="224">15</text>
+<text class="ax-label" text-anchor="middle" x="331.3" y="224">20</text>
+<text class="ax-label" text-anchor="middle" x="405.8" y="224">25</text>
+<text class="ax-label" text-anchor="middle" x="480.4" y="224">30</text>
+<text class="ax-label" text-anchor="middle" x="540.0" y="224">34</text>
+<text class="ax-title" text-anchor="middle" x="294.0" y="238">character position</text>
+<line class="line-m" x1="400" y1="250" x2="420" y2="250"/>
+<circle class="dot-m" cx="410" cy="250" r="2.2"/>
+<text class="legend-txt" text-anchor="start" x="425" y="253">symbol M</text>
+<line class="line-5" x1="475" y1="250" x2="495" y2="250"/>
+<circle class="dot-5" cx="485" cy="250" r="2.2"/>
+<text class="legend-txt" text-anchor="start" x="500" y="253">symbol 5</text>
+<text class="ax-title" text-anchor="middle" x="294.0" y="14">G2: per-position z-scores (M, 5)</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 2.</span> Per-position Poisson z-scores for symbols M and 5 across the 34-character Group 2 first-broadcast cohort. Solid horizontal line: uniform expectation (<em>z</em>&nbsp;=&nbsp;0). Dashed red line: per-family Bonferroni threshold for 2·32&nbsp;=&nbsp;64 tests at α=0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;2.94). Positions 1 and 2 reflect the PR distribution — Group 2 prefixes disproportionately place certain symbols in the prefix positions. Across body positions 3&ndash;34, both M and 5 carry mild negative z-scores consistent with a per-position deficit of roughly 0.5&ndash;1σ, distributed evenly with no position crossing the corrected threshold. No attenuation region analogous to the 30-character Group 1 positions-19&ndash;21 boundary is visible.</div>
+
+<h3><span class="num">4.1</span>Per-position all-symbol probe</h3>
+<p>The M/5 projection reports only two channels of a 32-channel probe. The full scan reports, for each body position, the largest |<em>z</em>|-score attained by any of the 32 symbols at that position.</p>
+
+<figure class="plot" role="img" aria-label="Per-position max-|z| across all 32 symbols for 34-character G2">
+<svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+<line class="ax" x1="48" y1="28" x2="48" y2="172"/>
+<line class="ax" x1="48" y1="172" x2="540" y2="172"/>
+<line class="ax-tick" x1="44" y1="172.0" x2="48" y2="172.0"/>
+<text class="ax-label" text-anchor="end" x="42" y="175.0">0</text>
+<line class="ax-tick" x1="44" y1="153.58235817806997" x2="48" y2="153.58235817806997"/>
+<text class="ax-label" text-anchor="end" x="42" y="156.58235817806997">1</text>
+<line class="ax-tick" x1="44" y1="135.16471635613993" x2="48" y2="135.16471635613993"/>
+<text class="ax-label" text-anchor="end" x="42" y="138.16471635613993">2</text>
+<line class="ax-tick" x1="44" y1="116.7470745342099" x2="48" y2="116.7470745342099"/>
+<text class="ax-label" text-anchor="end" x="42" y="119.7470745342099">3</text>
+<line class="ax-tick" x1="44" y1="98.32943271227987" x2="48" y2="98.32943271227987"/>
+<text class="ax-label" text-anchor="end" x="42" y="101.32943271227987">4</text>
+<line class="ax-tick" x1="44" y1="79.91179089034983" x2="48" y2="79.91179089034983"/>
+<text class="ax-label" text-anchor="end" x="42" y="82.91179089034983">5</text>
+<line class="ax-tick" x1="44" y1="61.4941490684198" x2="48" y2="61.4941490684198"/>
+<text class="ax-label" text-anchor="end" x="42" y="64.4941490684198">6</text>
+<line class="ax-tick" x1="44" y1="43.07650724648977" x2="48" y2="43.07650724648977"/>
+<text class="ax-label" text-anchor="end" x="42" y="46.07650724648977">7</text>
+<line x1="48" y1="97.20288943322754" x2="540" y2="97.20288943322754" stroke="#5c1f1f" stroke-dasharray="3,3" stroke-width="0.6" opacity="0.55"/>
+<line x1="48" y1="119.1413679710608" x2="540" y2="119.1413679710608" stroke="#888" stroke-dasharray="3,3" stroke-width="0.6" opacity="0.55"/>
+<rect class="bar-hi" x="49.4" y="28.00" width="11.6" height="144.00"><title>pos 1: max D=21 (z=7.818590533590356)</title></rect>
+<rect class="bar-hi" x="63.9" y="71.80" width="11.6" height="100.20"><title>pos 2: max C=16 (z=5.440312044285305)</title></rect>
+<rect class="bar-out" x="78.4" y="106.84" width="11.6" height="65.16"><title>pos 3: max R=12 (z=3.537689252841264)</title></rect>
+<rect class="bar" x="92.9" y="133.13" width="11.6" height="38.87"><title>pos 4: max B=9 (z=2.1107221592582333)</title></rect>
+<rect class="bar" x="107.3" y="124.37" width="11.6" height="47.63"><title>pos 5: max E=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="121.8" y="133.13" width="11.6" height="38.87"><title>pos 6: max E=9 (z=2.1107221592582333)</title></rect>
+<rect class="bar" x="136.3" y="133.13" width="11.6" height="38.87"><title>pos 7: max E=9 (z=2.1107221592582333)</title></rect>
+<rect class="bar-out" x="150.7" y="115.60" width="11.6" height="56.40"><title>pos 8: max C=11 (z=3.0620335549802538)</title></rect>
+<rect class="bar" x="165.2" y="124.37" width="11.6" height="47.63"><title>pos 9: max W=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="179.7" y="172.00" width="11.6" height="0.00"><title>pos 10: max Q=0 (z=-2.1701791214908592)</title></rect>
+<rect class="bar" x="194.2" y="172.00" width="11.6" height="0.00"><title>pos 11: max F=1 (z=-1.6945234236298492)</title></rect>
+<rect class="bar" x="208.6" y="172.00" width="11.6" height="0.00"><title>pos 12: max C=0 (z=-2.1701791214908592)</title></rect>
+<rect class="bar" x="223.1" y="172.00" width="11.6" height="0.00"><title>pos 13: max X=1 (z=-1.6945234236298492)</title></rect>
+<rect class="bar-out" x="237.6" y="115.60" width="11.6" height="56.40"><title>pos 14: max B=11 (z=3.0620335549802538)</title></rect>
+<rect class="bar" x="252.0" y="133.13" width="11.6" height="38.87"><title>pos 15: max H=9 (z=2.1107221592582333)</title></rect>
+<rect class="bar" x="266.5" y="124.37" width="11.6" height="47.63"><title>pos 16: max F=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="281.0" y="124.37" width="11.6" height="47.63"><title>pos 17: max D=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="295.4" y="124.37" width="11.6" height="47.63"><title>pos 18: max E=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="309.9" y="124.37" width="11.6" height="47.63"><title>pos 19: max 3=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="324.4" y="172.00" width="11.6" height="0.00"><title>pos 20: max C=1 (z=-1.6945234236298492)</title></rect>
+<rect class="bar" x="338.9" y="141.89" width="11.6" height="30.11"><title>pos 21: max F=8 (z=1.6350664613972228)</title></rect>
+<rect class="bar" x="353.3" y="133.13" width="11.6" height="38.87"><title>pos 22: max K=9 (z=2.1107221592582333)</title></rect>
+<rect class="bar" x="367.8" y="172.00" width="11.6" height="0.00"><title>pos 23: max D=1 (z=-1.6945234236298492)</title></rect>
+<rect class="bar" x="382.3" y="124.37" width="11.6" height="47.63"><title>pos 24: max B=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar" x="396.7" y="172.00" width="11.6" height="0.00"><title>pos 25: max W=0 (z=-2.1701791214908592)</title></rect>
+<rect class="bar" x="411.2" y="124.37" width="11.6" height="47.63"><title>pos 26: max T=10 (z=2.5863778571192433)</title></rect>
+<rect class="bar-out" x="425.7" y="115.60" width="11.6" height="56.40"><title>pos 27: max E=11 (z=3.0620335549802538)</title></rect>
+<rect class="bar" x="440.2" y="172.00" width="11.6" height="0.00"><title>pos 28: max 2=1 (z=-1.6945234236298492)</title></rect>
+<rect class="bar" x="454.6" y="172.00" width="11.6" height="0.00"><title>pos 29: max A=2 (z=-1.2188677257688387)</title></rect>
+<rect class="bar" x="469.1" y="172.00" width="11.6" height="0.00"><title>pos 30: max N=0 (z=-2.1701791214908592)</title></rect>
+<rect class="bar" x="483.6" y="172.00" width="11.6" height="0.00"><title>pos 31: max 6=0 (z=-2.1701791214908592)</title></rect>
+<rect class="bar-out" x="498.0" y="115.60" width="11.6" height="56.40"><title>pos 32: max F=11 (z=3.0620335549802538)</title></rect>
+<rect class="bar" x="512.5" y="141.89" width="11.6" height="30.11"><title>pos 33: max Q=8 (z=1.6350664613972228)</title></rect>
+<rect class="bar" x="527.0" y="172.00" width="11.6" height="0.00"><title>pos 34: max Z=1 (z=-1.6945234236298492)</title></rect>
+<text class="ax-label" text-anchor="middle" x="55.2" y="184">1</text>
+<text class="ax-label" text-anchor="middle" x="113.1" y="184">5</text>
+<text class="ax-label" text-anchor="middle" x="185.5" y="184">10</text>
+<text class="ax-label" text-anchor="middle" x="257.8" y="184">15</text>
+<text class="ax-label" text-anchor="middle" x="330.2" y="184">20</text>
+<text class="ax-label" text-anchor="middle" x="402.5" y="184">25</text>
+<text class="ax-label" text-anchor="middle" x="474.9" y="184">30</text>
+<text class="ax-label" text-anchor="middle" x="532.8" y="184">34</text>
+<text class="ax-title" text-anchor="middle" x="294.0" y="214">character position</text>
+<text class="ax-title" text-anchor="middle" x="294.0" y="14">G2: per-position max-|z| across all 32 symbols</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 3.</span> Per-position max-|<em>z</em>| across all 32 symbols in the 34-character Group 2 cohort. Dashed red line: per-family Bonferroni threshold for 32·32&nbsp;=&nbsp;1,024 body-cell tests at α=0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;4.06). Dashed grey: uncorrected per-position α=0.05 for 32 symbols (|<em>z</em>|&nbsp;&gt;&nbsp;2.87). No body position crosses the Bonferroni threshold. 5 body positions attain max-|<em>z</em>|&nbsp;&gt;&nbsp;2.87 (notably position 3 with R at count 12, <em>z</em>&nbsp;=&nbsp;+3.54, and positions 8, 14, 27, 32 at <em>z</em>&nbsp;=&nbsp;+3.06 each), against the 1.6 expected under the uniform null — an excess consistent with weak per-position preferences or chance-tail at this sample.</div>
+<h2 id="doublets"><span class="num">5.</span>Doublet profile</h2>
+<p>We test the rate of consecutive-character doublets at each of the 33 position pairs (<em>i</em>, <em>i</em>+1). Under the uniform null the probability is 1/32 at each pair, so the expected doublet count is <em>N</em>/32 &approx; 4.56.</p>
+
+<figure class="plot" role="img" aria-label="Doublet counts per position pair in 34-character G2">
+<svg viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg">
+<line class="ax" x1="44" y1="28" x2="44" y2="192"/>
+<line class="ax" x1="44" y1="192" x2="560" y2="192"/>
+<line x1="44" y1="137.33333333333334" x2="560" y2="137.33333333333334" stroke="#5c1f1f" stroke-dasharray="4,3" stroke-width="0.8" opacity="0.5"/>
+<text class="ax-label" text-anchor="start" x="562" y="140.33333333333334" fill="#5c1f1f">expected</text>
+<line class="ax-tick" x1="40" y1="192.0" x2="44" y2="192.0"/>
+<text class="ax-label" text-anchor="end" x="38" y="195.0">0</text>
+<line class="ax-tick" x1="40" y1="168.0365296803653" x2="44" y2="168.0365296803653"/>
+<text class="ax-label" text-anchor="end" x="38" y="171.0365296803653">2</text>
+<line class="ax-tick" x1="40" y1="144.0730593607306" x2="44" y2="144.0730593607306"/>
+<text class="ax-label" text-anchor="end" x="38" y="147.0730593607306">4</text>
+<line class="ax-tick" x1="40" y1="120.10958904109589" x2="44" y2="120.10958904109589"/>
+<text class="ax-label" text-anchor="end" x="38" y="123.10958904109589">6</text>
+<line class="ax-tick" x1="40" y1="96.14611872146119" x2="44" y2="96.14611872146119"/>
+<text class="ax-label" text-anchor="end" x="38" y="99.14611872146119">8</text>
+<line class="ax-tick" x1="40" y1="72.1826484018265" x2="44" y2="72.1826484018265"/>
+<text class="ax-label" text-anchor="end" x="38" y="75.1826484018265">10</text>
+<line class="ax-tick" x1="40" y1="48.219178082191775" x2="44" y2="48.219178082191775"/>
+<text class="ax-label" text-anchor="end" x="38" y="51.219178082191775">12</text>
+<rect class="bar" x="46.0" y="120.11" width="11.7" height="71.89"><title>pos 1-2: 6 doublets (z = +0.68)</title></rect>
+<text class="ax-label" text-anchor="middle" x="51.8" y="204" style="font-size:8.5px">1-2</text>
+<rect class="bar" x="61.6" y="144.07" width="11.7" height="47.93"><title>pos 2-3: 4 doublets (z = -0.27)</title></rect>
+<rect class="bar" x="77.2" y="132.09" width="11.7" height="59.91"><title>pos 3-4: 5 doublets (z = +0.21)</title></rect>
+<rect class="bar" x="92.9" y="84.16" width="11.7" height="107.84"><title>pos 4-5: 9 doublets (z = +2.11)</title></rect>
+<rect class="bar" x="108.5" y="120.11" width="11.7" height="71.89"><title>pos 5-6: 6 doublets (z = +0.68)</title></rect>
+<text class="ax-label" text-anchor="middle" x="114.4" y="204" style="font-size:8.5px">5-6</text>
+<rect class="bar" x="124.1" y="132.09" width="11.7" height="59.91"><title>pos 6-7: 5 doublets (z = +0.21)</title></rect>
+<rect class="bar" x="139.8" y="132.09" width="11.7" height="59.91"><title>pos 7-8: 5 doublets (z = +0.21)</title></rect>
+<rect class="bar" x="155.4" y="120.11" width="11.7" height="71.89"><title>pos 8-9: 6 doublets (z = +0.68)</title></rect>
+<rect class="bar" x="171.0" y="156.05" width="11.7" height="35.95"><title>pos 9-10: 3 doublets (z = -0.74)</title></rect>
+<rect class="bar" x="186.7" y="132.09" width="11.7" height="59.91"><title>pos 10-11: 5 doublets (z = +0.21)</title></rect>
+<text class="ax-label" text-anchor="middle" x="192.5" y="204" style="font-size:8.5px">10-11</text>
+<rect class="bar" x="202.3" y="108.13" width="11.7" height="83.87"><title>pos 11-12: 7 doublets (z = +1.16)</title></rect>
+<rect class="bar" x="218.0" y="144.07" width="11.7" height="47.93"><title>pos 12-13: 4 doublets (z = -0.27)</title></rect>
+<rect class="bar" x="233.6" y="132.09" width="11.7" height="59.91"><title>pos 13-14: 5 doublets (z = +0.21)</title></rect>
+<rect class="bar" x="249.2" y="120.11" width="11.7" height="71.89"><title>pos 14-15: 6 doublets (z = +0.68)</title></rect>
+<rect class="bar" x="264.9" y="156.05" width="11.7" height="35.95"><title>pos 15-16: 3 doublets (z = -0.74)</title></rect>
+<text class="ax-label" text-anchor="middle" x="270.7" y="204" style="font-size:8.5px">15-16</text>
+<rect class="bar" x="280.5" y="156.05" width="11.7" height="35.95"><title>pos 16-17: 3 doublets (z = -0.74)</title></rect>
+<rect class="bar" x="296.1" y="120.11" width="11.7" height="71.89"><title>pos 17-18: 6 doublets (z = +0.68)</title></rect>
+<rect class="bar" x="311.8" y="120.11" width="11.7" height="71.89"><title>pos 18-19: 6 doublets (z = +0.68)</title></rect>
+<rect class="bar" x="327.4" y="156.05" width="11.7" height="35.95"><title>pos 19-20: 3 doublets (z = -0.74)</title></rect>
+<rect class="bar" x="343.0" y="144.07" width="11.7" height="47.93"><title>pos 20-21: 4 doublets (z = -0.27)</title></rect>
+<text class="ax-label" text-anchor="middle" x="348.9" y="204" style="font-size:8.5px">20-21</text>
+<rect class="bar" x="358.7" y="84.16" width="11.7" height="107.84"><title>pos 21-22: 9 doublets (z = +2.11)</title></rect>
+<rect class="bar" x="374.3" y="132.09" width="11.7" height="59.91"><title>pos 22-23: 5 doublets (z = +0.21)</title></rect>
+<rect class="bar" x="390.0" y="180.02" width="11.7" height="11.98"><title>pos 23-24: 1 doublets (z = -1.69)</title></rect>
+<rect class="bar" x="405.6" y="168.04" width="11.7" height="23.96"><title>pos 24-25: 2 doublets (z = -1.22)</title></rect>
+<rect class="bar" x="421.2" y="156.05" width="11.7" height="35.95"><title>pos 25-26: 3 doublets (z = -0.74)</title></rect>
+<text class="ax-label" text-anchor="middle" x="427.1" y="204" style="font-size:8.5px">25-26</text>
+<rect class="bar" x="436.9" y="156.05" width="11.7" height="35.95"><title>pos 26-27: 3 doublets (z = -0.74)</title></rect>
+<rect class="bar" x="452.5" y="168.04" width="11.7" height="23.96"><title>pos 27-28: 2 doublets (z = -1.22)</title></rect>
+<rect class="bar" x="468.1" y="156.05" width="11.7" height="35.95"><title>pos 28-29: 3 doublets (z = -0.74)</title></rect>
+<rect class="bar" x="483.8" y="156.05" width="11.7" height="35.95"><title>pos 29-30: 3 doublets (z = -0.74)</title></rect>
+<rect class="bar" x="499.4" y="108.13" width="11.7" height="83.87"><title>pos 30-31: 7 doublets (z = +1.16)</title></rect>
+<text class="ax-label" text-anchor="middle" x="505.3" y="204" style="font-size:8.5px">30-31</text>
+<rect class="bar" x="515.0" y="132.09" width="11.7" height="59.91"><title>pos 31-32: 5 doublets (z = +0.21)</title></rect>
+<rect class="bar" x="530.7" y="120.11" width="11.7" height="71.89"><title>pos 32-33: 6 doublets (z = +0.68)</title></rect>
+<rect class="bar" x="546.3" y="144.07" width="11.7" height="47.93"><title>pos 33-34: 4 doublets (z = -0.27)</title></rect>
+<text class="ax-label" text-anchor="middle" x="552.2" y="204" style="font-size:8.5px">33-34</text>
+<text class="ax-title" text-anchor="middle" x="302.0" y="234">consecutive position pair</text>
+<text class="ax-title" text-anchor="middle" x="302.0" y="14">G2: doublet count per consecutive position pair</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 4.</span> Doublet count per consecutive position pair in the 34-character Group 2 cohort. Dashed line: uniform expectation. Position pair (1&ndash;2) carries the prefix-distribution signature. All body-position pairs (2&ndash;3 through 33&ndash;34) fall within the uniform envelope (|<em>z</em>|&nbsp;&lt;&nbsp;3 across every pair). The final five pairs (29&ndash;30 through 33&ndash;34), which in the 30-character Group 1 cohort carry the 15-fold doublet suppression, show no suppression here; their counts sit between 3 and 7 against the expected 4.6, with z-scores within the noise envelope.</div>
+<h2 id="ipe"><span class="num">6.</span>Inter-position equality probe</h2>
+<p>The consecutive-doublet probe of §5 tests only adjacent position pairs. Its generalisation tests every position pair (<em>i</em>, <em>j</em>) with <em>j</em>&nbsp;&gt;&nbsp;<em>i</em> — including non-adjacent pairs — for character equality. At 34 characters there are 34·33/2&nbsp;=&nbsp;561 such tests; the per-family Bonferroni threshold at α=0.05 is |<em>z</em>|&nbsp;&gt;&nbsp;3.92. Under the uniform null the expected match count at each pair is <em>N</em>/32&nbsp;=&nbsp;4.56.</p>
+
+<p>The probe returns <strong>0 pairs above the Bonferroni threshold</strong>. The ten strongest positive pairs are reported in Table 2.</p>
+
+<div class="scroll-x"><table>
+<thead><tr><th class="num">pos a</th><th class="num">pos b</th><th class="num">gap</th><th class="num">matches</th><th class="num">exp</th><th class="num">z</th></tr></thead>
+<tbody>
+<tr class=""><td class="num">4</td><td class="num">7</td><td class="num">3</td><td class="num">12</td><td class="num">4.56</td><td class="num">+3.54</td></tr>
+<tr class=""><td class="num">11</td><td class="num">14</td><td class="num">3</td><td class="num">12</td><td class="num">4.56</td><td class="num">+3.54</td></tr>
+<tr class=""><td class="num">13</td><td class="num">16</td><td class="num">3</td><td class="num">12</td><td class="num">4.56</td><td class="num">+3.54</td></tr>
+<tr class=""><td class="num">18</td><td class="num">26</td><td class="num">8</td><td class="num">11</td><td class="num">4.56</td><td class="num">+3.06</td></tr>
+<tr class=""><td class="num">23</td><td class="num">31</td><td class="num">8</td><td class="num">11</td><td class="num">4.56</td><td class="num">+3.06</td></tr>
+<tr class=""><td class="num">19</td><td class="num">26</td><td class="num">7</td><td class="num">10</td><td class="num">4.56</td><td class="num">+2.59</td></tr>
+<tr class=""><td class="num">1</td><td class="num">9</td><td class="num">8</td><td class="num">9</td><td class="num">4.56</td><td class="num">+2.11</td></tr>
+<tr class=""><td class="num">4</td><td class="num">5</td><td class="num">1</td><td class="num">9</td><td class="num">4.56</td><td class="num">+2.11</td></tr>
+<tr class=""><td class="num">4</td><td class="num">19</td><td class="num">15</td><td class="num">9</td><td class="num">4.56</td><td class="num">+2.11</td></tr>
+<tr class=""><td class="num">5</td><td class="num">17</td><td class="num">12</td><td class="num">9</td><td class="num">4.56</td><td class="num">+2.11</td></tr>
+</tbody></table></div>
+<div class="caption"><span class="label">Table 2.</span> Top ten inter-position equality pairs in the 34-character Group 2 cohort, by z-score. Expected count per pair: 4.56. The strongest pair is (4, 7) with 12 matches at <em>z</em>&nbsp;=&nbsp;+3.54, just short of the per-family Bonferroni threshold 3.92. No pair crosses the threshold. Three pairs — (4, 7), (11, 14), (13, 16) — happen to share a gap of 3 characters, but each is individually sub-threshold and the clustering does not reach combined significance.</div>
+
+<figure class="plot" role="img" aria-label="Inter-position equality z-score heatmap for 34-character G2">
+<svg viewBox="0 0 560 594.0" xmlns="http://www.w3.org/2000/svg">
+<style>.ipe-matrix-bg   { fill: #f3f0e4; }.ipe-grid        { stroke: #f3f0e4; stroke-width: 0.5; }.ipe-grid-major  { stroke: #f3f0e4; stroke-width: 1.0; }.ipe-excess      { fill: rgb(190, 45, 45); }.ipe-deficit     { fill: rgb(40, 95, 170); }.ipe-noise       { fill: #e8e4d2; }@media (prefers-color-scheme: dark) {  .ipe-matrix-bg  { fill: #15130f; }  .ipe-grid       { stroke: #15130f; }  .ipe-grid-major { stroke: #15130f; }}</style>
+<text class="ax-title" text-anchor="middle" x="280.0" y="16">G2: inter-position equality z-score heatmap</text>
+<rect class="ipe-matrix-bg" x="40.0" y="34.0" width="480.0" height="480.0" stroke="none"/>
+<rect class="ipe-noise" fill-opacity="0.40" x="54.1" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 2): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="68.2" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 3): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="82.4" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 4): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="96.5" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 5): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="110.6" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 6): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="124.7" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 7): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 8): count=1, z=-1.69</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="152.9" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 9): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 10): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 11): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 12): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 13): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 14): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 15): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 16): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 17): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 18): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 19): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 20): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 21): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 22): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 23): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 24): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 25): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 26): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 27): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 29): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 31): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="34.0" width="14.1" height="14.1" stroke="none"><title>pos (1, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="68.2" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 3): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="82.4" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 4): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="96.5" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 5): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="110.6" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 6): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="124.7" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 7): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 8): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 9): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 10): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 11): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 12): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 13): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 14): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 15): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 16): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 17): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 18): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 19): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 20): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 21): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 22): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 23): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 24): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 25): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 26): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 27): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 28): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 29): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 31): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="48.1" width="14.1" height="14.1" stroke="none"><title>pos (2, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="82.4" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 4): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="96.5" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 5): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="110.6" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 6): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="124.7" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 7): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 8): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 9): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 10): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 11): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 12): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 13): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 14): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 15): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 16): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 17): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 18): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 19): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 20): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 21): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 22): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 23): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 24): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 25): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 26): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 28): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 29): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 32): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 33): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="62.2" width="14.1" height="14.1" stroke="none"><title>pos (3, 34): count=7, z=+1.16</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="96.5" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 5): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="110.6" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 6): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.27" x="124.7" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 7): count=12, z=+3.54</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 8): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 9): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 10): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 11): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 12): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 13): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 14): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 15): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 16): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 17): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 18): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="294.1" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 19): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 20): count=4, z=-0.27</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="322.4" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 21): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 22): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 23): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 24): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 25): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 26): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 27): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 28): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 30): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="76.4" width="14.1" height="14.1" stroke="none"><title>pos (4, 34): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="110.6" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 6): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="124.7" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 7): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 8): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 9): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 10): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 11): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 12): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 13): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 14): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 15): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 16): count=4, z=-0.27</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="265.9" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 17): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 18): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 19): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 20): count=6, z=+0.68</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="322.4" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 21): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 22): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 23): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 24): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 25): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 26): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 27): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 29): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 30): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 31): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="90.5" width="14.1" height="14.1" stroke="none"><title>pos (5, 34): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="124.7" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 7): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 8): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 9): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 10): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 11): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 12): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 13): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 14): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 15): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 16): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 17): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 18): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 19): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 20): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 21): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 22): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 23): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 24): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 25): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 26): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 27): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 29): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 30): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 31): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 33): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="104.6" width="14.1" height="14.1" stroke="none"><title>pos (6, 34): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="138.8" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 8): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 9): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 10): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 11): count=4, z=-0.27</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="195.3" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 12): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 13): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 14): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 15): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 16): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 17): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 18): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 19): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 20): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 21): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 22): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 23): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 24): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 25): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 26): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 27): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 28): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 29): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 30): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 33): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="118.7" width="14.1" height="14.1" stroke="none"><title>pos (7, 34): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="152.9" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 9): count=6, z=+0.68</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="167.1" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 10): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 11): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 12): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 13): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 14): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 15): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 16): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 17): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 18): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 19): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 20): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 21): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 22): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 23): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 24): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 25): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 26): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 27): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 28): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 29): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 30): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 31): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 33): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="132.8" width="14.1" height="14.1" stroke="none"><title>pos (8, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="167.1" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 10): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 11): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 12): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 13): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 14): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 15): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 16): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 17): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 18): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 19): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 20): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 21): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 22): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 23): count=3, z=-0.74</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="364.7" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 24): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 25): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 26): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 28): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 29): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 31): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 33): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="146.9" width="14.1" height="14.1" stroke="none"><title>pos (9, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="181.2" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 11): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 12): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 13): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 14): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 15): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 16): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 17): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 18): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 19): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 20): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 21): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 22): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 23): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 24): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 25): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 26): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 27): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 30): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 31): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 33): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="161.1" width="14.1" height="14.1" stroke="none"><title>pos (10, 34): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="195.3" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 12): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 13): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.27" x="223.5" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 14): count=12, z=+3.54</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 15): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 16): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 17): count=8, z=+1.64</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="280.0" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 18): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 19): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 20): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 21): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 22): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 23): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 24): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 25): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="392.9" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 26): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 28): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 29): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 30): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 33): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="175.2" width="14.1" height="14.1" stroke="none"><title>pos (11, 34): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="209.4" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 13): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 14): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 15): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 16): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 17): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 18): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 19): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 20): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 21): count=2, z=-1.22</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="336.5" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 22): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 23): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 24): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 25): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 26): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 27): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 28): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 29): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 30): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 33): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="189.3" width="14.1" height="14.1" stroke="none"><title>pos (12, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="223.5" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 14): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="237.6" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 15): count=9, z=+2.11</title></rect>
+<rect class="ipe-excess" fill-opacity="0.27" x="251.8" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 16): count=12, z=+3.54</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 17): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 18): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 19): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 20): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 21): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 22): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 23): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 24): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 25): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 26): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 27): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 28): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="449.4" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 30): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 31): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 33): count=3, z=-0.74</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="505.9" y="203.4" width="14.1" height="14.1" stroke="none"><title>pos (13, 34): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="237.6" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 15): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 16): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 17): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 18): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 19): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 20): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 21): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 22): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 23): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 24): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 25): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 26): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 27): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 28): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="463.5" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 31): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 33): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="217.5" width="14.1" height="14.1" stroke="none"><title>pos (14, 34): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="251.8" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 16): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 17): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 18): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 19): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 20): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 21): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 22): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 23): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 24): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 25): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 26): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 27): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 28): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 29): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 30): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 32): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="231.6" width="14.1" height="14.1" stroke="none"><title>pos (15, 34): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="265.9" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 17): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 18): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 19): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 20): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 21): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 22): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 23): count=2, z=-1.22</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="364.7" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 24): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 25): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 26): count=4, z=-0.27</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="407.1" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 27): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 28): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 29): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 30): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 31): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="245.8" width="14.1" height="14.1" stroke="none"><title>pos (16, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="280.0" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 18): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 19): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 20): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 21): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 22): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 23): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 24): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 25): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 26): count=4, z=-0.27</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="407.1" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 27): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 29): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 30): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 31): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="259.9" width="14.1" height="14.1" stroke="none"><title>pos (17, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="294.1" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 19): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 20): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 21): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 22): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 23): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 24): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 25): count=1, z=-1.69</title></rect>
+<rect class="ipe-excess" fill-opacity="0.19" x="392.9" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 26): count=11, z=+3.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 28): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 29): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 30): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 31): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="274.0" width="14.1" height="14.1" stroke="none"><title>pos (18, 34): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="308.2" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 20): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 21): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 22): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 23): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 24): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 25): count=6, z=+0.68</title></rect>
+<rect class="ipe-excess" fill-opacity="0.10" x="392.9" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 26): count=10, z=+2.59</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 27): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 28): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 30): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 31): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 32): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="288.1" width="14.1" height="14.1" stroke="none"><title>pos (19, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="322.4" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 21): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="336.5" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 22): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 23): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 24): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 25): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 26): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 27): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 28): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 30): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 31): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="302.2" width="14.1" height="14.1" stroke="none"><title>pos (20, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="336.5" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 22): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 23): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 24): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 25): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 26): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 29): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 30): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 31): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 32): count=6, z=+0.68</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="491.8" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 33): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="316.4" width="14.1" height="14.1" stroke="none"><title>pos (21, 34): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="350.6" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 23): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 24): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 25): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 26): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 27): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 28): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 29): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 32): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="330.5" width="14.1" height="14.1" stroke="none"><title>pos (22, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="364.7" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 24): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 25): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 26): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 27): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 28): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 29): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 30): count=5, z=+0.21</title></rect>
+<rect class="ipe-excess" fill-opacity="0.19" x="463.5" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 31): count=11, z=+3.06</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="344.6" width="14.1" height="14.1" stroke="none"><title>pos (23, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="378.8" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 25): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 26): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 28): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 29): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 30): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 31): count=1, z=-1.69</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 32): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 33): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="358.7" width="14.1" height="14.1" stroke="none"><title>pos (24, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="392.9" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 26): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 27): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 28): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 29): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 30): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 31): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="372.8" width="14.1" height="14.1" stroke="none"><title>pos (25, 34): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="407.1" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 27): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 28): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 29): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 30): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 31): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="386.9" width="14.1" height="14.1" stroke="none"><title>pos (26, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="421.2" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 28): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 29): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 30): count=8, z=+1.64</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 32): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 33): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="401.1" width="14.1" height="14.1" stroke="none"><title>pos (27, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="435.3" y="415.2" width="14.1" height="14.1" stroke="none"><title>pos (28, 29): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="415.2" width="14.1" height="14.1" stroke="none"><title>pos (28, 30): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="415.2" width="14.1" height="14.1" stroke="none"><title>pos (28, 31): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="415.2" width="14.1" height="14.1" stroke="none"><title>pos (28, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="415.2" width="14.1" height="14.1" stroke="none"><title>pos (28, 33): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="415.2" width="14.1" height="14.1" stroke="none"><title>pos (28, 34): count=2, z=-1.22</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="449.4" y="429.3" width="14.1" height="14.1" stroke="none"><title>pos (29, 30): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="429.3" width="14.1" height="14.1" stroke="none"><title>pos (29, 31): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="429.3" width="14.1" height="14.1" stroke="none"><title>pos (29, 32): count=3, z=-0.74</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="429.3" width="14.1" height="14.1" stroke="none"><title>pos (29, 33): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="429.3" width="14.1" height="14.1" stroke="none"><title>pos (29, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="463.5" y="443.4" width="14.1" height="14.1" stroke="none"><title>pos (30, 31): count=7, z=+1.16</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="443.4" width="14.1" height="14.1" stroke="none"><title>pos (30, 32): count=4, z=-0.27</title></rect>
+<rect class="ipe-excess" fill-opacity="0.02" x="491.8" y="443.4" width="14.1" height="14.1" stroke="none"><title>pos (30, 33): count=9, z=+2.11</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="443.4" width="14.1" height="14.1" stroke="none"><title>pos (30, 34): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="477.6" y="457.5" width="14.1" height="14.1" stroke="none"><title>pos (31, 32): count=5, z=+0.21</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="457.5" width="14.1" height="14.1" stroke="none"><title>pos (31, 33): count=4, z=-0.27</title></rect>
+<rect class="ipe-deficit" fill-opacity="0.03" x="505.9" y="457.5" width="14.1" height="14.1" stroke="none"><title>pos (31, 34): count=0, z=-2.17</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="491.8" y="471.6" width="14.1" height="14.1" stroke="none"><title>pos (32, 33): count=6, z=+0.68</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="471.6" width="14.1" height="14.1" stroke="none"><title>pos (32, 34): count=4, z=-0.27</title></rect>
+<rect class="ipe-noise" fill-opacity="0.40" x="505.9" y="485.8" width="14.1" height="14.1" stroke="none"><title>pos (33, 34): count=4, z=-0.27</title></rect>
+<line class="ipe-grid-major" x1="40.0" y1="34.0" x2="40.0" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="34.0" x2="520.0" y2="34.0"/>
+<line class="ipe-grid" x1="54.1" y1="34.0" x2="54.1" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="48.1" x2="520.0" y2="48.1"/>
+<line class="ipe-grid" x1="68.2" y1="34.0" x2="68.2" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="62.2" x2="520.0" y2="62.2"/>
+<line class="ipe-grid" x1="82.4" y1="34.0" x2="82.4" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="76.4" x2="520.0" y2="76.4"/>
+<line class="ipe-grid" x1="96.5" y1="34.0" x2="96.5" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="90.5" x2="520.0" y2="90.5"/>
+<line class="ipe-grid-major" x1="110.6" y1="34.0" x2="110.6" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="104.6" x2="520.0" y2="104.6"/>
+<line class="ipe-grid" x1="124.7" y1="34.0" x2="124.7" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="118.7" x2="520.0" y2="118.7"/>
+<line class="ipe-grid" x1="138.8" y1="34.0" x2="138.8" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="132.8" x2="520.0" y2="132.8"/>
+<line class="ipe-grid" x1="152.9" y1="34.0" x2="152.9" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="146.9" x2="520.0" y2="146.9"/>
+<line class="ipe-grid" x1="167.1" y1="34.0" x2="167.1" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="161.1" x2="520.0" y2="161.1"/>
+<line class="ipe-grid-major" x1="181.2" y1="34.0" x2="181.2" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="175.2" x2="520.0" y2="175.2"/>
+<line class="ipe-grid" x1="195.3" y1="34.0" x2="195.3" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="189.3" x2="520.0" y2="189.3"/>
+<line class="ipe-grid" x1="209.4" y1="34.0" x2="209.4" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="203.4" x2="520.0" y2="203.4"/>
+<line class="ipe-grid" x1="223.5" y1="34.0" x2="223.5" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="217.5" x2="520.0" y2="217.5"/>
+<line class="ipe-grid" x1="237.6" y1="34.0" x2="237.6" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="231.6" x2="520.0" y2="231.6"/>
+<line class="ipe-grid-major" x1="251.8" y1="34.0" x2="251.8" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="245.8" x2="520.0" y2="245.8"/>
+<line class="ipe-grid" x1="265.9" y1="34.0" x2="265.9" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="259.9" x2="520.0" y2="259.9"/>
+<line class="ipe-grid" x1="280.0" y1="34.0" x2="280.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="274.0" x2="520.0" y2="274.0"/>
+<line class="ipe-grid" x1="294.1" y1="34.0" x2="294.1" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="288.1" x2="520.0" y2="288.1"/>
+<line class="ipe-grid" x1="308.2" y1="34.0" x2="308.2" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="302.2" x2="520.0" y2="302.2"/>
+<line class="ipe-grid-major" x1="322.4" y1="34.0" x2="322.4" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="316.4" x2="520.0" y2="316.4"/>
+<line class="ipe-grid" x1="336.5" y1="34.0" x2="336.5" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="330.5" x2="520.0" y2="330.5"/>
+<line class="ipe-grid" x1="350.6" y1="34.0" x2="350.6" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="344.6" x2="520.0" y2="344.6"/>
+<line class="ipe-grid" x1="364.7" y1="34.0" x2="364.7" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="358.7" x2="520.0" y2="358.7"/>
+<line class="ipe-grid" x1="378.8" y1="34.0" x2="378.8" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="372.8" x2="520.0" y2="372.8"/>
+<line class="ipe-grid-major" x1="392.9" y1="34.0" x2="392.9" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="386.9" x2="520.0" y2="386.9"/>
+<line class="ipe-grid" x1="407.1" y1="34.0" x2="407.1" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="401.1" x2="520.0" y2="401.1"/>
+<line class="ipe-grid" x1="421.2" y1="34.0" x2="421.2" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="415.2" x2="520.0" y2="415.2"/>
+<line class="ipe-grid" x1="435.3" y1="34.0" x2="435.3" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="429.3" x2="520.0" y2="429.3"/>
+<line class="ipe-grid" x1="449.4" y1="34.0" x2="449.4" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="443.4" x2="520.0" y2="443.4"/>
+<line class="ipe-grid-major" x1="463.5" y1="34.0" x2="463.5" y2="514.0"/>
+<line class="ipe-grid-major" x1="40.0" y1="457.5" x2="520.0" y2="457.5"/>
+<line class="ipe-grid" x1="477.6" y1="34.0" x2="477.6" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="471.6" x2="520.0" y2="471.6"/>
+<line class="ipe-grid" x1="491.8" y1="34.0" x2="491.8" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="485.8" x2="520.0" y2="485.8"/>
+<line class="ipe-grid" x1="505.9" y1="34.0" x2="505.9" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="499.9" x2="520.0" y2="499.9"/>
+<line class="ipe-grid" x1="520.0" y1="34.0" x2="520.0" y2="514.0"/>
+<line class="ipe-grid" x1="40.0" y1="514.0" x2="520.0" y2="514.0"/>
+<text class="ax-label" text-anchor="middle" x="47.1" y="530.0">1</text>
+<text class="ax-label" text-anchor="end" x="36" y="44.1">1</text>
+<text class="ax-label" text-anchor="middle" x="103.5" y="530.0">5</text>
+<text class="ax-label" text-anchor="end" x="36" y="100.5">5</text>
+<text class="ax-label" text-anchor="middle" x="174.1" y="530.0">10</text>
+<text class="ax-label" text-anchor="end" x="36" y="171.1">10</text>
+<text class="ax-label" text-anchor="middle" x="244.7" y="530.0">15</text>
+<text class="ax-label" text-anchor="end" x="36" y="241.7">15</text>
+<text class="ax-label" text-anchor="middle" x="315.3" y="530.0">20</text>
+<text class="ax-label" text-anchor="end" x="36" y="312.3">20</text>
+<text class="ax-label" text-anchor="middle" x="385.9" y="530.0">25</text>
+<text class="ax-label" text-anchor="end" x="36" y="382.9">25</text>
+<text class="ax-label" text-anchor="middle" x="456.5" y="530.0">30</text>
+<text class="ax-label" text-anchor="end" x="36" y="453.5">30</text>
+<text class="ax-label" text-anchor="middle" x="512.9" y="530.0">34</text>
+<text class="ax-label" text-anchor="end" x="36" y="509.9">34</text>
+<text class="ax-title" text-anchor="middle" x="280.0" y="550.0">position j</text>
+<text class="ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0">position i</text>
+<rect class="ipe-deficit" fill-opacity="0.85" x="165.0" y="566.0" width="12" height="12"/>
+<text class="ax-label" x="182.0" y="576.0">deficit</text>
+<rect class="ipe-noise" fill-opacity="0.4" x="245.0" y="566.0" width="12" height="12"/>
+<text class="ax-label" x="262.0" y="576.0">noise</text>
+<rect class="ipe-excess" fill-opacity="0.85" x="315.0" y="566.0" width="12" height="12"/>
+<text class="ax-label" x="332.0" y="576.0">excess</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 5.</span> Inter-position equality z-score heatmap across all 561 position pairs (<em>i</em>, <em>j</em>) for the 34-character Group 2 cohort. Red cells: excess (pair carries more matches than expected under uniform); blue cells: deficit; pale cream: within the chance envelope. The matrix is visually dominated by the chance-envelope cream, with sub-threshold red speckles distributed across the body. No concentrated signature of the kind observed in the 40-character or 42-character Group 2 cohorts (both of which showed individual cells at <em>z</em>&nbsp;&gt;&nbsp;20) appears here.</div>
+<h2 id="repeats"><span class="num">7.</span>Internal-repeat structure</h2>
+<p>Applying the longest-internal-repeat probe — find the longest substring of length 3&ndash;10 that appears at two disjoint positions within each message — to the 34-character Group 2 cohort: <strong>1 of 146 messages</strong> carry any repeat of length &geq;&nbsp;3. The chance rate under the uniform null is approximately 2.21 messages expected, so the observed count is within the chance range. No common offset pair dominates; the probe returns no structural signature.</p>
+<h2 id="within-key"><span class="num">8.</span>Within-prefix structural probes</h2>
+<p>The 30-character paper reports three within-prefix probes — pairwise positional mutual information, LZMA compressibility, and modular-difference structure across date-ordered consecutive messages — each requiring <em>N</em>&nbsp;&geq;&nbsp;50 per prefix cell for credible z-scores. The 34-character cohort has no such cell: the most populous prefix (DC) carries 16 messages, followed by F6 at 10. Per-prefix probes are skipped.</p>
+
+<p>An aggregate whole-cohort compressibility probe still runs:</p>
+
+<div class="scroll-x"><table>
+<thead><tr><th class="num">body bytes</th><th class="num">obs ratio</th><th class="num">null mean</th><th class="num">null sd</th><th class="num">z</th></tr></thead>
+<tbody>
+<tr><td class="num">4672</td><td class="num">0.6738</td><td class="num">0.6735</td><td class="num">0.0007</td><td class="num">+0.42</td></tr>
+</tbody></table></div>
+<div class="caption"><span class="label">Table 3.</span> Aggregate LZMA compressibility of the body (positions 3&ndash;34) of the 34-character Group 2 cohort versus a 50-draw synthetic uniform base32 null of matched length. The observed ratio sits +0.42σ from the null mean — within the chance envelope.</div>
+<h2 id="synthesis"><span class="num">9.</span>Synthesis</h2>
+<p>The 34-character Group 2 cohort carries a single positive finding. The probe battery returns a mild aggregate M/5 symbol deficit at <em>z</em>&nbsp;=&nbsp;-4.46 and -3.78, crossing the per-symbol Bonferroni threshold for 32 tests. Every other probe returns a null: the per-position all-symbol profile is flat (no Bonferroni-crossing cells), the doublet rate is within the uniform envelope across all 33 adjacent pairs including the tail, the inter-position equality heatmap is mostly empty of significant signal (no Bonferroni-crossing pairs), and the internal-repeat probe finds only a chance-rate number of length-&geq;3 coincidences.</p>
+
+<figure class="plot" role="img" aria-label="34-character G2 region schematic">
+<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg">
+<line class="ax-tick" x1="30.0" y1="27" x2="30.0" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="30.0" y="23">0</text>
+<line class="ax-tick" x1="124.1" y1="27" x2="124.1" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="124.1" y="23">32</text>
+<line class="ax-tick" x1="218.2" y1="27" x2="218.2" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="218.2" y="23">64</text>
+<line class="ax-tick" x1="312.4" y1="27" x2="312.4" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="312.4" y="23">96</text>
+<line class="ax-tick" x1="406.5" y1="27" x2="406.5" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="406.5" y="23">128</text>
+<line class="ax-tick" x1="500.6" y1="27" x2="500.6" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="500.6" y="23">160</text>
+<line class="ax-tick" x1="530.0" y1="27" x2="530.0" y2="40"/>
+<text class="ax-label" text-anchor="middle" x="530.0" y="23">170</text>
+<text class="ax-title" text-anchor="middle" x="280.0" y="10">bit offset along the 170-bit payload</text>
+<g class="fmt-region"><rect class="fmt-p" x="30.0" y="45" width="29.4" height="48"/><line class="fmt-divider" x1="44.71" y1="45.00" x2="44.71" y2="93.00"/></g>
+<text class="fmt-lbl" text-anchor="middle" x="44.7" y="67">P</text>
+<text class="fmt-lbl" text-anchor="middle" x="44.7" y="83" style="font-size:8px">10 bits</text>
+<text class="fmt-ann" text-anchor="middle" x="44.7" y="105">prefix</text>
+<text class="fmt-ann" text-anchor="middle" x="44.7" y="118">(PR)</text>
+<g class="fmt-region"><rect class="fmt-b" x="59.4" y="45" width="470.6" height="48"/><line class="fmt-divider" x1="74.11" y1="45.00" x2="74.11" y2="93.00"/><line class="fmt-divider" x1="88.81" y1="45.00" x2="88.81" y2="93.00"/><line class="fmt-divider" x1="103.52" y1="45.00" x2="103.52" y2="93.00"/><line class="fmt-divider" x1="118.22" y1="45.00" x2="118.22" y2="93.00"/><line class="fmt-divider" x1="132.93" y1="45.00" x2="132.93" y2="93.00"/><line class="fmt-divider" x1="147.64" y1="45.00" x2="147.64" y2="93.00"/><line class="fmt-divider" x1="162.34" y1="45.00" x2="162.34" y2="93.00"/><line class="fmt-divider" x1="177.05" y1="45.00" x2="177.05" y2="93.00"/><line class="fmt-divider" x1="191.75" y1="45.00" x2="191.75" y2="93.00"/><line class="fmt-divider" x1="206.46" y1="45.00" x2="206.46" y2="93.00"/><line class="fmt-divider" x1="221.16" y1="45.00" x2="221.16" y2="93.00"/><line class="fmt-divider" x1="235.87" y1="45.00" x2="235.87" y2="93.00"/><line class="fmt-divider" x1="250.58" y1="45.00" x2="250.58" y2="93.00"/><line class="fmt-divider" x1="265.28" y1="45.00" x2="265.28" y2="93.00"/><line class="fmt-divider" x1="279.99" y1="45.00" x2="279.99" y2="93.00"/><line class="fmt-divider" x1="294.69" y1="45.00" x2="294.69" y2="93.00"/><line class="fmt-divider" x1="309.40" y1="45.00" x2="309.40" y2="93.00"/><line class="fmt-divider" x1="324.11" y1="45.00" x2="324.11" y2="93.00"/><line class="fmt-divider" x1="338.81" y1="45.00" x2="338.81" y2="93.00"/><line class="fmt-divider" x1="353.52" y1="45.00" x2="353.52" y2="93.00"/><line class="fmt-divider" x1="368.22" y1="45.00" x2="368.22" y2="93.00"/><line class="fmt-divider" x1="382.93" y1="45.00" x2="382.93" y2="93.00"/><line class="fmt-divider" x1="397.64" y1="45.00" x2="397.64" y2="93.00"/><line class="fmt-divider" x1="412.34" y1="45.00" x2="412.34" y2="93.00"/><line class="fmt-divider" x1="427.05" y1="45.00" x2="427.05" y2="93.00"/><line class="fmt-divider" x1="441.75" y1="45.00" x2="441.75" y2="93.00"/><line class="fmt-divider" x1="456.46" y1="45.00" x2="456.46" y2="93.00"/><line class="fmt-divider" x1="471.16" y1="45.00" x2="471.16" y2="93.00"/><line class="fmt-divider" x1="485.87" y1="45.00" x2="485.87" y2="93.00"/><line class="fmt-divider" x1="500.58" y1="45.00" x2="500.58" y2="93.00"/><line class="fmt-divider" x1="515.28" y1="45.00" x2="515.28" y2="93.00"/></g>
+<text class="fmt-lbl" text-anchor="middle" x="294.7" y="67">B</text>
+<text class="fmt-lbl" text-anchor="middle" x="294.7" y="83" style="font-size:8px">160 bits</text>
+<text class="fmt-ann" text-anchor="middle" x="294.7" y="105">body</text>
+<text class="fmt-ann" text-anchor="middle" x="294.7" y="118">(mild M/5 deficit;</text>
+<text class="fmt-ann" text-anchor="middle" x="294.7" y="131">no internal structure</text>
+<text class="fmt-ann" text-anchor="middle" x="294.7" y="144">detected)</text>
+<line class="ax" x1="30" y1="150" x2="530" y2="150"/>
+<line class="ax-tick" x1="37.35" y1="146" x2="37.35" y2="154"/>
+<text class="ax-label" text-anchor="middle" x="37.35" y="164">1</text>
+<line class="ax-tick" x1="66.76" y1="146" x2="66.76" y2="154"/>
+<text class="ax-label" text-anchor="middle" x="66.76" y="164">3</text>
+<line class="ax-tick" x1="522.65" y1="146" x2="522.65" y2="154"/>
+<text class="ax-label" text-anchor="middle" x="522.65" y="164">34</text>
+<text class="ax-title" text-anchor="middle" x="280.0" y="194">character position</text>
+</svg>
+</figure>
+<div class="caption"><span class="label">Figure 6.</span> 34-character Group 2 observational region schematic. The 170-bit payload comprises the standard 10-bit prefix field (P, positions 1&ndash;2, carrying the PR) followed by a single 160-bit body region (B, positions 3&ndash;34) within which no internal structural boundary is detected. The body carries a mild M/5 per-symbol deficit spread roughly evenly across positions, but no positional transitions, no doublet suppression, no fixed-offset equality structure, and no internal-substring repeats. The schematic is intentionally minimal.</div>
+
+<h3><span class="num">9.1</span>Relationship to the 30-character base case</h3>
+<p>The 30-character base-case analysis (see the <a href="eam_30char_format_analysis.html">30-character paper</a>) identifies three structural signatures in its Group 1 cohort — a strong M/5 marginal deficit (<em>z</em>&nbsp;&asymp;&nbsp;&minus;21), a mid-body positional transition at positions 19&ndash;21, and a near-deterministic pairwise no-duplicate rule on the final six characters (positions 25&ndash;30). None of the positional or pairwise-equality signatures reproduces in the 34-character Group 2 cohort, and the M/5 deficit reproduces in the same qualitative direction (both symbols under-represented) but at roughly one-fifth the magnitude. The 30-character Group 2 cohort, for comparison, also carries a mild M/5 deficit of similar strength (<em>z</em>&nbsp;&asymp;&nbsp;&minus;3) with no positional or pairwise-equality structure; the 34-character Group 2 profile is therefore closer in character to the 30-character Group 2 profile than to the 30-character Group 1 profile.</p>
+<h2 id="conclusion"><span class="num">10.</span>Conclusion</h2>
+<p>The 34-character HFGCS broadcast band is populated entirely by Group 2 traffic at <em>N</em>&nbsp;=&nbsp;146 unique messages. The probe battery returns a single positive finding: a mild M/5 symbol deficit (<em>z</em>&nbsp;=&nbsp;-4.46 and -3.78, each crossing the per-symbol Bonferroni threshold but roughly one-fifth the strength of the 30-character Group 1 signal). No positional transitions, no doublet suppression, no inter-position equality structure, and no internal repeats are detected. The 34-character Group 2 format is consistent with &quot;uniform output plus a weak per-symbol bias&quot; — no more, no less.</p>
+
+<footer style="margin-top:48px;padding-top:16px;border-top:1px solid var(--soft);color:var(--muted);font-size:0.82em;">
+<p>Cohort analysis of the 34-character HFGCS broadcast band. Forward-fill group resolution; first-broadcast itemisation; probe battery established in the <a href="eam_30char_format_analysis.html">30-character base paper</a>, extended with the inter-position equality probe. The 34-character cohort is single-group (all Group 2).</p>
+</footer>
+</div>
+<script>
+// Make every h2/h3 in the paper clickable, wrapping each heading's contents
+// in an anchor that points to the heading's own id. h3 subsections without
+// an explicit id get one derived from the section number (e.g., "2.1" -> "s2-1").
+(function() {
+  var headings = document.querySelectorAll('.wrap h2, .wrap h3');
+  for (var i = 0; i < headings.length; i++) {
+    var h = headings[i];
+    // Skip if already wrapped
+    if (h.children.length === 1 && h.firstElementChild.tagName === 'A') continue;
+    // Assign id from section number if missing
+    if (!h.id) {
+      var numSpan = h.querySelector('.num');
+      if (numSpan) {
+        var num = numSpan.textContent.replace(/[^\w.]/g, '');
+        h.id = 's' + num.replace(/\./g, '-');
+      }
+    }
+    if (!h.id) continue;
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    while (h.firstChild) a.appendChild(h.firstChild);
+    h.appendChild(a);
+  }
+})();
+
+// Autolink inline section references (e.g. "§5", "§8.5") in the paper's prose
+// to their corresponding heading anchors. Builds a runtime map from h2/h3 .num
+// spans to each heading's id, so h2 sections with semantic ids (e.g. #synthesis)
+// are linked correctly alongside h3 subsections (#s8-5).
+(function() {
+  var sectionMap = {};
+  var hs = document.querySelectorAll('.wrap h2, .wrap h3');
+  for (var i = 0; i < hs.length; i++) {
+    var ns = hs[i].querySelector('.num');
+    if (!ns || !hs[i].id) continue;
+    var key = ns.textContent.replace(/[^\w.]/g, '').replace(/\.$/, '');
+    sectionMap[key] = hs[i].id;
+  }
+  var SECTION_RE = /§(\d+)(?:\.(\d+))?/g;
+  function shouldSkip(node) {
+    for (var p = node.parentNode; p; p = p.parentNode) {
+      var t = p.tagName;
+      if (t === 'A' || t === 'H1' || t === 'H2' || t === 'H3' ||
+          t === 'SCRIPT' || t === 'STYLE') return true;
+      if (p.classList && p.classList.contains('toc')) return true;
+    }
+    return false;
+  }
+  var root = document.querySelector('.wrap') || document.body;
+  var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  var nodes = [];
+  var n;
+  while ((n = walker.nextNode())) {
+    if (!shouldSkip(n) && n.nodeValue.indexOf('§') !== -1) nodes.push(n);
+  }
+  for (var k = 0; k < nodes.length; k++) {
+    var node = nodes[k];
+    var text = node.nodeValue;
+    SECTION_RE.lastIndex = 0;
+    var frag = document.createDocumentFragment();
+    var last = 0;
+    var m;
+    var replaced = false;
+    while ((m = SECTION_RE.exec(text)) !== null) {
+      var num = m[2] ? (m[1] + '.' + m[2]) : m[1];
+      var id = sectionMap[num];
+      if (!id) continue;
+      if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var aa = document.createElement('a');
+      aa.href = '#' + id;
+      aa.className = 'secref';
+      aa.textContent = m[0];
+      frag.appendChild(aa);
+      last = m.index + m[0].length;
+      replaced = true;
+    }
+    if (!replaced) continue;
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+})();
+</script>
+</body>
+</html>

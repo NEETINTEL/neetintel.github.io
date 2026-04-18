@@ -307,10 +307,10 @@
     padding: 0;
   }
   figure.plot svg { display: block; width: 100%; height: auto; max-width: 100%; }
-  figure.plot svg rect, figure.plot svg circle, figure.plot svg polyline {
+  figure.plot svg rect, figure.plot svg circle, figure.plot svg polyline, figure.plot svg path {
     transition: opacity 0.12s ease;
   }
-  figure.plot svg rect:hover, figure.plot svg circle:hover, figure.plot svg polyline:hover {
+  figure.plot svg rect:hover, figure.plot svg circle:hover, figure.plot svg polyline:hover, figure.plot svg path:hover {
     opacity: 0.5;
     cursor: help;
   }
@@ -322,7 +322,7 @@
   .bar-out { fill: var(--accent); }
   .bar-hi { fill: #7c3a3a; }
   .line-m { stroke: var(--accent); stroke-width: 1.4; fill: none; }
-  .line-5 { stroke: #3a5a72; stroke-width: 1.4; fill: none; stroke-dasharray: 3,2; }
+  .line-5 { stroke: #3a5a72; stroke-width: 1.4; fill: none;}
   .dot-m { fill: var(--accent); }
   .dot-5 { fill: #3a5a72; }
   .ref { stroke: var(--accent); stroke-width: 0.8; stroke-dasharray: 2,2; fill: none; }
@@ -341,6 +341,18 @@
   .fmt-r { fill: #1f2f44; }   /* deep navy, L ≈ 46 */
   .fmt-lbl { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; fill: #fff; font-weight: 600; }
   .fmt-ann { font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; fill: var(--muted); }
+  /* Observational region schematic: hovering a region reveals vertical
+     dividers at every internal character boundary within that region. */
+  .fmt-region { cursor: help; }
+  .fmt-divider {
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 0.6;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease;
+  }
+  .fmt-region:hover .fmt-divider { opacity: 1; }
+
 
   @media (prefers-color-scheme: dark) {
     :root {
@@ -355,9 +367,12 @@
     }
     .band { fill: #1a2431; opacity: 0.7; }
     .band-strong { fill: #2b1818; opacity: 0.7; }
-    .line-5, .dot-5 { stroke: #8fbadc; fill: #8fbadc; }
+    .line-5 { stroke: #8fbadc; fill: none; }
+    .dot-5 { stroke: #8fbadc; fill: #8fbadc; }
     .fmt-r { fill: #4a6b82; }
     .fmt-t { fill: #d17a7a; }
+    .fmt-divider { stroke: rgba(232, 228, 210, 0.50); }
+
     .fmt-b { fill: #a29e8a; }
     .fmt-p { fill: #b5ad8a; }
     h3 { color: #cfcab8; }
@@ -533,7 +548,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
 <div class="caption"><span class="label">Table 2.</span> The ten most deviant base32 symbols in Group 1 body positions, by Poisson z-score. The final column reports the same statistic on a synthetic uniform base32 corpus of matched size (28·3,519 = 98,532 characters) drawn from a CSPRNG, showing z-scores in the expected ±2σ range. Symbols M and 5 on real data exceed the CSPRNG noise envelope by roughly an order of magnitude.</div>
 
 <figure class="plot" role="img" aria-label="Bar chart of base32 symbol frequencies in Group 1 body positions">
-<svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 580 230" xmlns="http://www.w3.org/2000/svg">
   <!-- y-axis & ticks -->
   <line class="ax" x1="30" y1="20" x2="30" y2="190"/>
   <line class="ax" x1="30" y1="190" x2="542" y2="190"/>
@@ -745,9 +760,9 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <!-- reference: Bonferroni-like threshold at z = -3.86 (upper bound of suspicion, 435 tests) -->
   <line class="ref" x1="45" y1="160.18" x2="535" y2="160.18"/>
   <!-- M data line (accent colour); position-1 clipped to y=25 (actual z=+20.12 off chart) -->
-  <polyline class="line-m" points="50,25.50 66.5,201.00 83,116.16 99.5,116.16 116,169.47 132.5,170.71 149,170.71 165.5,160.79 182,170.71 198.5,173.18 215,181.86 231.5,166.99 248,178.14 264.5,188.06 281,178.14 297.5,165.75 314,157.07 330.5,176.90 347,116.16 363.5,124.84 380,116.16 396.5,171.95 413,175.66 429.5,178.14 446,179.38 462.5,171.95 479,168.23 495.5,188.06 512,160.79 528.5,144.67"/>
+  <path class="line-m" d="M50.00,25.50C52.75,54.75 61.00,185.89 66.50,201.00C72.00,216.11 77.50,130.30 83.00,116.16C88.50,102.02 94.00,107.27 99.50,116.16C105.00,125.05 110.50,160.38 116.00,169.47C121.50,178.56 127.00,170.50 132.50,170.71C138.00,170.92 143.50,172.36 149.00,170.71C154.50,169.06 160.00,160.79 165.50,160.79C171.00,160.79 176.50,168.65 182.00,170.71C187.50,172.78 193.00,171.32 198.50,173.18C204.00,175.04 209.50,182.89 215.00,181.86C220.50,180.83 226.00,167.61 231.50,166.99C237.00,166.37 242.50,174.63 248.00,178.14C253.50,181.65 259.00,188.06 264.50,188.06C270.00,188.06 275.50,181.86 281.00,178.14C286.50,174.42 292.00,169.26 297.50,165.75C303.00,162.24 308.50,155.21 314.00,157.07C319.50,158.93 325.00,183.72 330.50,176.90C336.00,170.08 341.50,124.84 347.00,116.16C352.50,107.48 358.00,124.84 363.50,124.84C369.00,124.84 374.50,108.31 380.00,116.16C385.50,124.01 391.00,162.03 396.50,171.95C402.00,181.87 407.50,174.63 413.00,175.66C418.50,176.69 424.00,177.52 429.50,178.14C435.00,178.76 440.50,180.41 446.00,179.38C451.50,178.35 457.00,173.81 462.50,171.95C468.00,170.09 473.50,165.54 479.00,168.23C484.50,170.91 490.00,189.30 495.50,188.06C501.00,186.82 506.50,168.02 512.00,160.79C517.50,153.56 525.75,147.36 528.50,144.67"/>
   <!-- 5 data line (blue dashed) -->
-  <polyline class="line-5" points="50,174.42 66.5,67.81 83,121.12 99.5,109.96 116,175.66 132.5,171.95 149,170.71 165.5,173.18 182,178.14 198.5,162.03 215,162.03 231.5,170.71 248,165.75 264.5,191.78 281,173.18 297.5,152.11 314,160.79 330.5,174.42 347,126.08 363.5,114.92 380,131.04 396.5,155.83 413,168.23 429.5,178.14 446,170.71 462.5,170.71 479,166.99 495.5,173.18 512,180.62 528.5,166.99"/>
+  <path class="line-5" d="M50.00,174.42C52.75,156.65 61.00,76.69 66.50,67.81C72.00,58.93 77.50,114.09 83.00,121.12C88.50,128.15 94.00,100.87 99.50,109.96C105.00,119.05 110.50,165.33 116.00,175.66C121.50,185.99 127.00,172.77 132.50,171.95C138.00,171.12 143.50,170.50 149.00,170.71C154.50,170.92 160.00,171.94 165.50,173.18C171.00,174.42 176.50,180.00 182.00,178.14C187.50,176.28 193.00,164.72 198.50,162.03C204.00,159.34 209.50,160.58 215.00,162.03C220.50,163.48 226.00,170.09 231.50,170.71C237.00,171.33 242.50,162.24 248.00,165.75C253.50,169.26 259.00,190.54 264.50,191.78C270.00,193.02 275.50,179.79 281.00,173.18C286.50,166.57 292.00,154.18 297.50,152.11C303.00,150.05 308.50,157.07 314.00,160.79C319.50,164.51 325.00,180.20 330.50,174.42C336.00,168.63 341.50,136.00 347.00,126.08C352.50,116.16 358.00,114.09 363.50,114.92C369.00,115.75 374.50,124.22 380.00,131.04C385.50,137.86 391.00,149.63 396.50,155.83C402.00,162.03 407.50,164.51 413.00,168.23C418.50,171.95 424.00,177.73 429.50,178.14C435.00,178.55 440.50,171.95 446.00,170.71C451.50,169.47 457.00,171.33 462.50,170.71C468.00,170.09 473.50,166.58 479.00,166.99C484.50,167.40 490.00,170.91 495.50,173.18C501.00,175.45 506.50,181.65 512.00,180.62C517.50,179.59 525.75,169.26 528.50,166.99"/>
   <!-- M dots -->
   <circle class="dot-m" cx="50" cy="25.50" r="2.2"><title>M at position 1: z = +20.12 (clipped; PR-driven over-representation off-chart)</title></circle>
   <circle class="dot-m" cx="66.5" cy="201.00" r="2.2"><title>M at position 2: z = −7.15 (clipped)</title></circle>
@@ -898,7 +913,7 @@ The empirical marginal distribution of base32 symbols at each body position is u
 <div class="caption"><span class="label">Table 5.</span> Doublet (character-repetition) count at each of the 29 consecutive-position pairs in Group 1 first-broadcast messages (<em>N</em>=3,519), Group 2 (<em>N</em>=1,858), and a synthetic uniform base32 control of matched Group 1 size. Expected count per position pair under the uniform null: ~110 for G1 and synthetic, ~58 for G2; Poisson z-scores reported. Position pair (1–2) carries a prefix-driven over-representation in both real groups. Highlighted rows in the G1 column mark two regimes of strong doublet suppression: pairs (19–20) and (20–21) at the mid-body transition — co-localised with the marginal attenuation of §5 — and pairs (25–26) through (29–30) at the trailing no-run region, where the doublet count drops to 5–8 observed against ~110 expected, a 15-fold reduction. G2 exhibits neither regime; the synthetic control shows none.</div>
 
 <figure class="plot" role="img" aria-label="Bar chart of doublet count per position pair in G1 messages">
-<svg viewBox="0 0 580 260" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
   <!-- Highlighted bands for the two suppression regions (shifted +17 for position-1 gap) -->
   <rect class="band" x="365" y="25" width="47" height="180"/>
   <rect class="band-strong" x="467" y="25" width="81" height="180"/>
@@ -957,9 +972,17 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="ax-label" text-anchor="middle" x="456.5" y="218">25</text>
   <text class="ax-label" text-anchor="middle" x="541.5" y="218">30</text>
   <text class="ax-title" text-anchor="middle" x="300" y="235">character position — does it match the preceding one?</text>
-  <!-- annotations for the suppression regions -->
-  <text class="ax-label" text-anchor="middle" x="388.5" y="37" style="fill:#3a5a72;font-weight:600">mid-body suppression (pos 20–21)</text>
-  <text class="ax-label" text-anchor="middle" x="507.5" y="37" style="fill:var(--accent);font-weight:600">trailing no-run region (pos 26–30)</text>
+  <!-- annotations for the suppression regions; two-line labels to keep
+       each title narrow enough to fit its band; vertically staggered so
+       the two labels don't collide. -->
+  <text class="ax-label" text-anchor="middle" x="388.5" y="15" style="fill:#3a5a72;font-weight:600">
+    <tspan x="388.5">mid-body suppression</tspan>
+    <tspan x="388.5" dy="11">(pos 20–21)</tspan>
+  </text>
+  <text class="ax-label" text-anchor="end" x="575" y="37" style="fill:var(--accent);font-weight:600">
+    <tspan x="575">trailing no-run region</tspan>
+    <tspan x="575" dy="11">(pos 26–30)</tspan>
+  </text>
   <!-- legend -->
   <rect class="bar" x="40" y="243" width="12" height="8"/>
   <text class="legend-txt" x="57" y="251">normal</text>
@@ -1663,11 +1686,11 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="ax-label" text-anchor="middle" x="530" y="40">150</text>
   <text class="ax-title" text-anchor="middle" x="280" y="22">bit offset along the 150-bit payload</text>
   <!-- Field blocks: P, X (new), B, T, R -->
-  <rect class="fmt-p" x="30" y="65" width="33.33" height="50"/>
-  <rect class="fmt-x" x="63.33" y="65" width="33.33" height="50"/>
-  <rect class="fmt-b" x="96.67" y="65" width="250" height="50"/>
-  <rect class="fmt-t" x="346.67" y="65" width="83.33" height="50"/>
-  <rect class="fmt-r" x="430" y="65" width="100" height="50"/>
+  <g class="fmt-region"><rect class="fmt-p" x="30" y="65" width="33.33" height="50"/><line class="fmt-divider" x1="46.67" y1="65.00" x2="46.67" y2="115.00"/></g>
+  <g class="fmt-region"><rect class="fmt-x" x="63.33" y="65" width="33.33" height="50"/><line class="fmt-divider" x1="80.00" y1="65.00" x2="80.00" y2="115.00"/></g>
+  <g class="fmt-region"><rect class="fmt-b" x="96.67" y="65" width="250" height="50"/><line class="fmt-divider" x1="113.34" y1="65.00" x2="113.34" y2="115.00"/><line class="fmt-divider" x1="130.00" y1="65.00" x2="130.00" y2="115.00"/><line class="fmt-divider" x1="146.67" y1="65.00" x2="146.67" y2="115.00"/><line class="fmt-divider" x1="163.34" y1="65.00" x2="163.34" y2="115.00"/><line class="fmt-divider" x1="180.00" y1="65.00" x2="180.00" y2="115.00"/><line class="fmt-divider" x1="196.67" y1="65.00" x2="196.67" y2="115.00"/><line class="fmt-divider" x1="213.34" y1="65.00" x2="213.34" y2="115.00"/><line class="fmt-divider" x1="230.00" y1="65.00" x2="230.00" y2="115.00"/><line class="fmt-divider" x1="246.67" y1="65.00" x2="246.67" y2="115.00"/><line class="fmt-divider" x1="263.34" y1="65.00" x2="263.34" y2="115.00"/><line class="fmt-divider" x1="280.00" y1="65.00" x2="280.00" y2="115.00"/><line class="fmt-divider" x1="296.67" y1="65.00" x2="296.67" y2="115.00"/><line class="fmt-divider" x1="313.34" y1="65.00" x2="313.34" y2="115.00"/><line class="fmt-divider" x1="330.00" y1="65.00" x2="330.00" y2="115.00"/></g>
+  <g class="fmt-region"><rect class="fmt-t" x="346.67" y="65" width="83.33" height="50"/><line class="fmt-divider" x1="363.34" y1="65.00" x2="363.34" y2="115.00"/><line class="fmt-divider" x1="380.00" y1="65.00" x2="380.00" y2="115.00"/><line class="fmt-divider" x1="396.67" y1="65.00" x2="396.67" y2="115.00"/><line class="fmt-divider" x1="413.34" y1="65.00" x2="413.34" y2="115.00"/></g>
+  <g class="fmt-region"><rect class="fmt-r" x="430" y="65" width="100" height="50"/><line class="fmt-divider" x1="446.67" y1="65.00" x2="446.67" y2="115.00"/><line class="fmt-divider" x1="463.33" y1="65.00" x2="463.33" y2="115.00"/><line class="fmt-divider" x1="480.00" y1="65.00" x2="480.00" y2="115.00"/><line class="fmt-divider" x1="496.67" y1="65.00" x2="496.67" y2="115.00"/><line class="fmt-divider" x1="513.33" y1="65.00" x2="513.33" y2="115.00"/></g>
   <!-- Field labels inside blocks -->
   <text class="fmt-lbl" text-anchor="middle" x="46.67" y="88">P</text>
   <text class="fmt-lbl" text-anchor="middle" x="46.67" y="104" style="font-size:8px">10 bits</text>
@@ -1692,18 +1715,18 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="fmt-ann" text-anchor="middle" x="480" y="148">(15× each pair)</text>
   <!-- Character-position legend below -->
   <line class="ax" x1="30" y1="182" x2="530" y2="182"/>
-  <line class="ax-tick" x1="30" y1="178" x2="30" y2="185"/>
-  <line class="ax-tick" x1="63.33" y1="178" x2="63.33" y2="185"/>
-  <line class="ax-tick" x1="96.67" y1="178" x2="96.67" y2="185"/>
-  <line class="ax-tick" x1="346.67" y1="178" x2="346.67" y2="185"/>
-  <line class="ax-tick" x1="430" y1="178" x2="430" y2="185"/>
-  <line class="ax-tick" x1="530" y1="178" x2="530" y2="185"/>
-  <text class="ax-label" text-anchor="middle" x="30" y="197">1</text>
-  <text class="ax-label" text-anchor="middle" x="63.33" y="197">3</text>
-  <text class="ax-label" text-anchor="middle" x="96.67" y="197">5</text>
-  <text class="ax-label" text-anchor="middle" x="346.67" y="197">20</text>
-  <text class="ax-label" text-anchor="middle" x="430" y="197">25</text>
-  <text class="ax-label" text-anchor="middle" x="530" y="197">30</text>
+  <line class="ax-tick" x1="38.33" y1="178" x2="38.33" y2="185"/>
+  <line class="ax-tick" x1="71.67" y1="178" x2="71.67" y2="185"/>
+  <line class="ax-tick" x1="105.00" y1="178" x2="105.00" y2="185"/>
+  <line class="ax-tick" x1="355.00" y1="178" x2="355.00" y2="185"/>
+  <line class="ax-tick" x1="438.33" y1="178" x2="438.33" y2="185"/>
+  <line class="ax-tick" x1="521.67" y1="178" x2="521.67" y2="185"/>
+  <text class="ax-label" text-anchor="middle" x="38.33" y="197">1</text>
+  <text class="ax-label" text-anchor="middle" x="71.67" y="197">3</text>
+  <text class="ax-label" text-anchor="middle" x="105.00" y="197">5</text>
+  <text class="ax-label" text-anchor="middle" x="355.00" y="197">20</text>
+  <text class="ax-label" text-anchor="middle" x="438.33" y="197">25</text>
+  <text class="ax-label" text-anchor="middle" x="521.67" y="197">30</text>
   <text class="ax-title" text-anchor="middle" x="280" y="213">corresponding character position</text>
 </svg>
 </figure>
@@ -1765,8 +1788,8 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="ax-label" text-anchor="middle" x="530" y="40">150</text>
   <text class="ax-title" text-anchor="middle" x="280" y="22">bit offset along the 150-bit payload</text>
   <!-- Field blocks: P + B (no internal boundary) -->
-  <rect class="fmt-p" x="30" y="65" width="33.33" height="50"/>
-  <rect class="fmt-b" x="63.33" y="65" width="466.67" height="50"/>
+  <g class="fmt-region"><rect class="fmt-p" x="30" y="65" width="33.33" height="50"/><line class="fmt-divider" x1="46.67" y1="65.00" x2="46.67" y2="115.00"/></g>
+  <g class="fmt-region"><rect class="fmt-b" x="63.33" y="65" width="466.67" height="50"/><line class="fmt-divider" x1="80.00" y1="65.00" x2="80.00" y2="115.00"/><line class="fmt-divider" x1="96.66" y1="65.00" x2="96.66" y2="115.00"/><line class="fmt-divider" x1="113.33" y1="65.00" x2="113.33" y2="115.00"/><line class="fmt-divider" x1="130.00" y1="65.00" x2="130.00" y2="115.00"/><line class="fmt-divider" x1="146.66" y1="65.00" x2="146.66" y2="115.00"/><line class="fmt-divider" x1="163.33" y1="65.00" x2="163.33" y2="115.00"/><line class="fmt-divider" x1="180.00" y1="65.00" x2="180.00" y2="115.00"/><line class="fmt-divider" x1="196.66" y1="65.00" x2="196.66" y2="115.00"/><line class="fmt-divider" x1="213.33" y1="65.00" x2="213.33" y2="115.00"/><line class="fmt-divider" x1="230.00" y1="65.00" x2="230.00" y2="115.00"/><line class="fmt-divider" x1="246.66" y1="65.00" x2="246.66" y2="115.00"/><line class="fmt-divider" x1="263.33" y1="65.00" x2="263.33" y2="115.00"/><line class="fmt-divider" x1="280.00" y1="65.00" x2="280.00" y2="115.00"/><line class="fmt-divider" x1="296.66" y1="65.00" x2="296.66" y2="115.00"/><line class="fmt-divider" x1="313.33" y1="65.00" x2="313.33" y2="115.00"/><line class="fmt-divider" x1="330.00" y1="65.00" x2="330.00" y2="115.00"/><line class="fmt-divider" x1="346.66" y1="65.00" x2="346.66" y2="115.00"/><line class="fmt-divider" x1="363.33" y1="65.00" x2="363.33" y2="115.00"/><line class="fmt-divider" x1="380.00" y1="65.00" x2="380.00" y2="115.00"/><line class="fmt-divider" x1="396.66" y1="65.00" x2="396.66" y2="115.00"/><line class="fmt-divider" x1="413.33" y1="65.00" x2="413.33" y2="115.00"/><line class="fmt-divider" x1="430.00" y1="65.00" x2="430.00" y2="115.00"/><line class="fmt-divider" x1="446.66" y1="65.00" x2="446.66" y2="115.00"/><line class="fmt-divider" x1="463.33" y1="65.00" x2="463.33" y2="115.00"/><line class="fmt-divider" x1="480.00" y1="65.00" x2="480.00" y2="115.00"/><line class="fmt-divider" x1="496.66" y1="65.00" x2="496.66" y2="115.00"/><line class="fmt-divider" x1="513.33" y1="65.00" x2="513.33" y2="115.00"/></g>
   <!-- Field labels inside blocks -->
   <text class="fmt-lbl" text-anchor="middle" x="46.67" y="88">P</text>
   <text class="fmt-lbl" text-anchor="middle" x="46.67" y="104" style="font-size:8px">10 bits</text>
@@ -1779,12 +1802,12 @@ The empirical marginal distribution of base32 symbols at each body position is u
   <text class="fmt-ann" text-anchor="middle" x="296.67" y="148">(mild M/5 deficit only; no internal boundary)</text>
   <!-- Character-position legend below -->
   <line class="ax" x1="30" y1="182" x2="530" y2="182"/>
-  <line class="ax-tick" x1="30" y1="178" x2="30" y2="185"/>
-  <line class="ax-tick" x1="63.33" y1="178" x2="63.33" y2="185"/>
-  <line class="ax-tick" x1="530" y1="178" x2="530" y2="185"/>
-  <text class="ax-label" text-anchor="middle" x="30" y="197">1</text>
-  <text class="ax-label" text-anchor="middle" x="63.33" y="197">3</text>
-  <text class="ax-label" text-anchor="middle" x="530" y="197">30</text>
+  <line class="ax-tick" x1="38.33" y1="178" x2="38.33" y2="185"/>
+  <line class="ax-tick" x1="71.67" y1="178" x2="71.67" y2="185"/>
+  <line class="ax-tick" x1="521.67" y1="178" x2="521.67" y2="185"/>
+  <text class="ax-label" text-anchor="middle" x="38.33" y="197">1</text>
+  <text class="ax-label" text-anchor="middle" x="71.67" y="197">3</text>
+  <text class="ax-label" text-anchor="middle" x="521.67" y="197">30</text>
   <text class="ax-title" text-anchor="middle" x="280" y="213">corresponding character position</text>
 </svg>
 </figure>
