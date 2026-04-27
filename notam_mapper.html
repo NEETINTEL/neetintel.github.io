@@ -246,6 +246,19 @@
     margin-top: 3px; padding-top: 3px;
     border-top: 1px solid rgba(255,255,255,0.04);
     line-height: 1.2; max-height: 32px; overflow: hidden; word-break: break-all;
+    cursor: pointer; transition: background 0.15s, color 0.15s;
+  }
+  .notam-card-text:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.55); }
+  .leaflet-popup-content .popup-raw { cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .leaflet-popup-content .popup-raw:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); }
+  .notam-card-text.copied,
+  .leaflet-popup-content .popup-raw.copied {
+    animation: copy-dip 0.22s ease-out;
+  }
+  @keyframes copy-dip {
+    0%   { transform: scale(1); filter: brightness(1); }
+    30%  { transform: scale(0.99); filter: brightness(0.45); }
+    100% { transform: scale(1); filter: brightness(1); }
   }
   .no-data {
     color: rgba(255,255,255,0.3);
@@ -923,14 +936,18 @@ function makePopup(e, group, idx) {
     : e.isTrack
       ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">WAYPOINTS: </span>${e.coords.map(c=>c.raw).join(' ')}</div>`
       : `<div class="popup-field"><span class="f-label" style="color:${e.color}">CENTER: </span>${e.coords.map(c=>c.raw).join(', ')}</div>`;
+  // Mirror the sidebar badge: show whenever extractCodename or track/airspace types fire,
+  // using the same text fallback.
   const codename = extractCodename(e.text);
-  const badge = codename ? `<span class="popup-badge" style="color:${e.color};border-color:${e.color}">${esc(codename)}</span>` : '';
+  const showBadge = codename || (e.type === 'track' || e.type === 'airspace');
+  const badgeText = codename || (e.type || '').toUpperCase();
+  const badge = showBadge ? `<span class="popup-badge" style="color:${e.color};border-color:${e.color}">${esc(badgeText)}</span>` : '';
   return `${nav}<div class="popup-title" style="color:${e.color}"><span class="popup-id">${esc(e.id)}</span>${badge}</div>
     ${geomField}
     ${e.radiusNM ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">RADIUS: </span>${e.radiusNM} NM</div>` : ''}
     ${e.alt ? `<div class="popup-field"><span class="f-label" style="color:#FFAA00">ALT: </span>${esc(e.alt)}</div>` : ''}
     ${e.time ? `<div class="popup-field"><span class="f-label" style="color:#888880">TIME: </span>${e.time.from} — ${e.time.to}</div>` : ''}
-    <div class="popup-raw">${esc(e.text)}</div>`;
+    <div class="popup-raw" onclick="copyNotamText(this, event)" title="Click to copy">${esc(e.text)}</div>`;
 }
 
 // === POPUP GROUP NAVIGATION ===
@@ -1480,6 +1497,26 @@ function extractCodename(text) {
   return null;
 }
 
+// Click NOTAM text to copy to clipboard
+function copyNotamText(el, ev) {
+  if (ev) ev.stopPropagation();
+  const text = el.textContent || el.innerText || '';
+  if (!text.trim()) return;
+  const flash = () => {
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 700);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(flash).catch(() => {});
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); flash(); } catch(e){}
+    ta.remove();
+  }
+}
+
 function notamSortKey(e) {
   const m = /^(\S+)\s+(\d+)\/(\d+)/.exec(e.id || '');
   if (!m) return ['~', 0, 0];
@@ -1522,7 +1559,7 @@ function updateList() {
         ${e.coords.map(c=>c.raw).join(', ')}${e.radiusNM ? ` / ${e.radiusNM}NM` : ''}${e.alt ? ` / ${esc(e.alt)}` : ''}
         ${e.time ? `<br>${e.time.from} — ${e.time.to}` : ''}
       </div>
-      <div class="notam-card-text">${esc(e.text)}</div>
+      <div class="notam-card-text" onclick="copyNotamText(this, event)" title="Click to copy">${esc(e.text)}</div>
     </div>
   `;
   }).join('');
