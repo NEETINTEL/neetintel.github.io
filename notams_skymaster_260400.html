@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKYMASTER 2604 NOTAMs</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --nerv-orange: #FF9830;
+    --nerv-orange-dim: #C87020;
+    --nerv-orange-hot: #FFCC50;
+    --nerv-green: #50FF50;
+    --nerv-green-dim: #30BB30;
+    --nerv-cyan: #20F0FF;
+    --nerv-cyan-dim: #10A0B0;
+    --nerv-red: #FF3030;
+    --nerv-red-dim: #CC2020;
+    --nerv-amber: #FFAA00;
+    --nerv-yellow: #FFE820;
+    --nerv-magenta: #F030C0;
+    --nerv-steel: #D8D8D0;
+    --nerv-steel-dim: #888880;
+    --nerv-void: #000000;
+    --nerv-panel: #0C0C0A;
+  }
+
+  body {
+    background: var(--nerv-void);
+    color: var(--nerv-orange);
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+  }
+
+  #map { width: 100%; height: 100vh; z-index: 2; position: relative; }
+
+  .leaflet-tile-pane { filter: sepia(1) saturate(4) hue-rotate(-10deg) brightness(0.9); will-change: filter; transform: translateZ(0); }
+  .leaflet-control-attribution { display: none !important; }
+  .leaflet-control-zoom a {
+    background: var(--nerv-void) !important;
+    color: var(--nerv-orange) !important;
+    border: 1px solid var(--nerv-orange-dim) !important;
+    border-radius: 0 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+  }
+  .leaflet-control-zoom a:hover { background: rgba(255,152,48,0.08) !important; }
+  .leaflet-control-zoom { border-radius: 0 !important; }
+  .leaflet-top { top: 54px; }
+
+  /* HEADER */
+  .hud-header {
+    position: fixed; top: 0; left: 0; right: 0; height: 44px;
+    background: var(--nerv-void);
+    display: flex; align-items: center; padding: 0 16px;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .header-class-mark {
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-weight: 700; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #FFFFFF; background: var(--nerv-red);
+    padding: 2px 8px; margin-right: 14px;
+  }
+  .hud-header h1 {
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-size: 16px; font-weight: 700; letter-spacing: 0.04em;
+    color: #FFFFFF;
+  }
+  .header-jp {
+    font-family: 'Shippori Mincho B1', serif;
+    font-weight: 700; font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-left: 12px; transform: scaleX(0.82); transform-origin: left center;
+  }
+  .header-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.15); margin: 0 14px; }
+  .hud-clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700; color: #FFFFFF;
+    letter-spacing: 0.08em; margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+  .header-status {
+    display: flex; align-items: center; gap: 6px; margin-left: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500; font-size: 9px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--nerv-red);
+  }
+  .header-url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 400; color: var(--nerv-red);
+    margin-left: 10px; letter-spacing: 0.04em;
+  }
+  .status-led {
+    width: 6px; height: 6px;
+    background: var(--nerv-red); box-shadow: 0 0 6px var(--nerv-red);
+    animation: led-blink 1s infinite;
+  }
+  @keyframes led-blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* INPUT PANEL */
+  .input-panel {
+    position: fixed; top: 54px; left: 10px; width: 430px;
+    z-index: 1000; background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .panel-title-bar {
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .panel-title-bar span {
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    color: #FFFFFF;
+  }
+  .panel-title-bar .jp-sub {
+    font-family: 'Shippori Mincho B1', serif;
+    font-weight: 700; font-size: 10px; color: rgba(255,255,255,0.25);
+    transform: scaleX(0.82); transform-origin: left center; display: inline-block;
+  }
+  .panel-body { padding: 10px; }
+  .input-panel textarea {
+    width: 100%; height: 90px;
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 0;
+    color: #D8D8D0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 400;
+    padding: 6px 8px; resize: vertical; outline: none;
+  }
+  .input-panel textarea:focus { border-color: rgba(255,255,255,0.4); }
+  .input-panel textarea::placeholder { color: rgba(255,255,255,0.12); }
+  .input-hint {
+    font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.3); margin-top: 4px; text-transform: uppercase;
+  }
+  .btn-row { display: flex; gap: 4px; margin-top: 8px; }
+  .btn {
+    flex: 1; padding: 5px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid; border-radius: 0;
+    cursor: pointer; background: var(--nerv-void);
+  }
+  .btn-add { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+  .btn-add:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+  .btn-clear { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); flex: 0.35; }
+  .btn-clear:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+  .btn-fit { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); flex: 0.3; }
+  .btn-fit:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+
+  .collapse-toggle {
+    position: absolute; top: 2px; right: 6px;
+    background: none; border: none; color: rgba(255,255,255,0.25);
+    cursor: pointer; font-size: 13px;
+    font-family: 'JetBrains Mono', monospace; padding: 2px 4px;
+  }
+  .collapse-toggle:hover { color: #FFFFFF; }
+  .input-panel.collapsed .panel-body { display: none; }
+
+  /* NOTAM LIST */
+  .notam-list-panel {
+    position: fixed; top: 54px; right: 10px; width: 360px;
+    max-height: calc(100vh - 130px);
+    z-index: 1000; background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; flex-direction: column;
+  }
+  .notam-list-header {
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+    cursor: pointer;
+  }
+  .notam-list-header:hover { background: rgba(255,255,255,0.08); }
+  .list-collapse-toggle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: rgba(255,255,255,0.5);
+    margin-left: 6px; user-select: none;
+  }
+  .notam-list-panel.collapsed .notam-list-body { display: none; }
+  .notam-list-panel.collapsed .notam-list-header { border-bottom: none; }
+
+  /* Expired NOTAM cards — collapsed to just the header by default */
+  .notam-card.expired .notam-card-details,
+  .notam-card.expired .notam-card-text { display: none; }
+  .notam-card.expired .notam-card-id {
+    opacity: 0.55;
+    cursor: pointer;
+  }
+  .notam-card.expired .notam-card-id::before {
+    content: '+ ';
+    opacity: 0.6;
+  }
+  .notam-card.expired.expanded .notam-card-details,
+  .notam-card.expired.expanded .notam-card-text { display: block; }
+  .notam-card.expired.expanded .notam-card-id { opacity: 0.7; }
+  .notam-card.expired.expanded .notam-card-id::before {
+    content: '− ';
+  }
+  .notam-card.expired .notam-card-type { opacity: 0.4; }
+  .notam-list-header h3 {
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    color: #FFFFFF;
+  }
+  .notam-list-header .jp-sub {
+    font-family: 'Shippori Mincho B1', serif;
+    font-weight: 700; font-size: 10px; color: rgba(255,255,255,0.25);
+    transform: scaleX(0.82); transform-origin: left center;
+    display: inline-block; margin-left: 6px;
+  }
+  .notam-list-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700; color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+  }
+  .notam-list-body { overflow-y: auto; flex: 1; padding: 4px; }
+  .notam-list-body::-webkit-scrollbar { width: 3px; }
+  .notam-list-body::-webkit-scrollbar-track { background: var(--nerv-void); }
+  .notam-list-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+  .notam-card {
+    background: var(--nerv-void);
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 5px 8px;
+    cursor: pointer; transition: background 0.1s;
+  }
+  .notam-card:hover { background: rgba(255,255,255,0.03); }
+  .notam-card.dimmed { opacity: 0.2; }
+  .notam-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .notam-card-id {
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.03em; flex: 1;
+    color: #FFFFFF;
+  }
+  .notam-card-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 700; letter-spacing: 0.08em;
+    padding: 1px 5px; border: 1px solid rgba(255,255,255,0.15);
+    text-transform: uppercase; color: rgba(255,255,255,0.55);
+    white-space: nowrap;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .notam-card-remove {
+    background: none; border: none; color: rgba(255,255,255,0.2);
+    cursor: pointer; font-size: 10px; padding: 0 3px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  }
+  .notam-card-remove:hover { color: var(--nerv-red); }
+  .notam-card-details {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 400; line-height: 1.4; color: rgba(255,255,255,0.45);
+  }
+  .notam-card-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 400; color: rgba(255,255,255,0.2);
+    margin-top: 3px; padding-top: 3px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.2; max-height: 32px; overflow: hidden; word-break: break-all;
+  }
+  .no-data {
+    color: rgba(255,255,255,0.3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 12px; text-align: center;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .no-data .jp-empty {
+    font-family: 'Shippori Mincho B1', serif;
+    font-weight: 700; font-size: 10px; color: rgba(255,255,255,0.15);
+    transform: scaleX(0.82); display: inline-block; margin-top: 4px;
+  }
+
+  /* TIMELINE */
+  .timeline-panel {
+    position: fixed;
+    bottom: 22px; left: 0; right: 0;
+    height: 52px;
+    background: var(--nerv-void);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .timeline-panel.hidden { display: none; }
+
+  .timeline-label {
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+  }
+  .timeline-label .jp-sub {
+    font-family: 'Shippori Mincho B1', serif;
+    font-weight: 700; font-size: 9px; color: rgba(255,255,255,0.15);
+    transform: scaleX(0.82); transform-origin: left center; display: inline-block;
+  }
+
+  .timeline-current {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    color: #FFFFFF;
+    font-variant-numeric: tabular-nums;
+    min-width: 160px;
+    white-space: nowrap;
+  }
+
+  .timeline-slider-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+  }
+
+  .timeline-ticks {
+    position: relative;
+    height: 26px;
+    width: 100%;
+    pointer-events: none;
+  }
+  .timeline-ticks .span-bar {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    pointer-events: auto;
+    border-radius: 1px;
+    transition: filter 0.12s, outline 0.12s;
+  }
+  .timeline-ticks .span-bar:hover {
+    filter: brightness(1.6) saturate(1.3);
+    outline: 1px solid rgba(255,255,255,0.7);
+    z-index: 5;
+  }
+  .timeline-ticks .tick {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 18px;
+    background: currentColor;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .timeline-ticks .tick.start { opacity: 0.45; }
+  .timeline-ticks .tick.end { opacity: 0.2; }
+  .timeline-ticks .eam-dot {
+    position: absolute;
+    top: 20px;
+    width: 3px;
+    height: 4px;
+    margin-left: -1px;
+    pointer-events: auto;
+    border-radius: 1px;
+    opacity: 0.85;
+  }
+  .timeline-ticks .eam-dot:hover {
+    transform: scaleY(1.6);
+    opacity: 1;
+    z-index: 6;
+  }
+
+  .timeline-range {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; color: rgba(255,255,255,0.3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timeline-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    outline: none;
+    border-radius: 0;
+  }
+
+  .snap-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    padding: 3px 7px;
+    border-radius: 0;
+    line-height: 1;
+  }
+  .snap-btn:hover { color: #FFFFFF; border-color: rgba(255,255,255,0.4); }
+  .timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px; height: 20px;
+    background: #FFFFFF;
+    border: none;
+    cursor: pointer;
+  }
+  .timeline-slider::-moz-range-thumb {
+    width: 14px; height: 20px;
+    background: #FFFFFF;
+    border: none; border-radius: 0;
+    cursor: pointer;
+  }
+
+  .timeline-active-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    font-variant-numeric: tabular-nums;
+    min-width: 80px;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .btn-show-all {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 0;
+    background: var(--nerv-void); color: rgba(255,255,255,0.5);
+    padding: 3px 8px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-show-all:hover { color: #FFFFFF; border-color: rgba(255,255,255,0.4); }
+  .btn-show-all.active { color: #FFFFFF; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
+
+  /* STATUS BAR */
+  .status-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 22px;
+    background: var(--nerv-void);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    z-index: 1000;
+    display: flex; align-items: center; padding: 0 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.3); gap: 16px;
+    text-transform: uppercase; font-variant-numeric: tabular-nums;
+  }
+  .status-bar .s-green { color: rgba(255,255,255,0.4); }
+  .status-bar .s-orange { color: rgba(255,255,255,0.25); }
+  .status-bar .s-cyan { color: rgba(255,255,255,0.35); }
+
+  /* ON-MAP LABELS — ID only */
+  .notam-map-label {
+    background: rgba(0,0,0,0.85);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 2px 5px;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+  .notam-map-label .label-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+  }
+
+  /* Popups */
+  .leaflet-popup-content-wrapper {
+    background: var(--nerv-void) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 0 !important; box-shadow: none !important;
+    color: #D8D8D0 !important;
+    font-family: 'JetBrains Mono', monospace !important; font-size: 10px !important;
+  }
+  .leaflet-popup-tip {
+    background: var(--nerv-void) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 0 !important; box-shadow: none !important;
+  }
+  .leaflet-popup-content {
+    color: #D8D8D0 !important; line-height: 1.5 !important;
+    max-width: 300px !important; margin: 8px 10px !important;
+  }
+  .leaflet-popup-content .popup-title {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    font-family: 'ITC Avant Garde Gothic', 'Barlow Semi Condensed', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.03em;
+    color: #FFFFFF;
+    margin-bottom: 4px; padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .leaflet-popup-content .popup-field { color: rgba(255,255,255,0.5); margin: 2px 0; }
+  .leaflet-popup-content .popup-field .f-label {
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; font-size: 8px;
+    color: rgba(255,255,255,0.7);
+  }
+  .leaflet-popup-content .popup-raw {
+    font-size: 8px; color: rgba(255,255,255,0.2);
+    margin-top: 6px; padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.3; word-break: break-all;
+  }
+  .leaflet-popup-content .popup-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .leaflet-popup-content .popup-nav-btn {
+    background: var(--nerv-void);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .leaflet-popup-content .popup-nav-btn:hover {
+    color: #FFFFFF;
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.08);
+  }
+  .leaflet-popup-content .popup-nav-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.06em;
+  }
+  .leaflet-tooltip.notam-tooltip {
+    background: transparent !important; border: none !important;
+    box-shadow: none !important; padding: 0 !important; border-radius: 0 !important;
+  }
+  .leaflet-tooltip.notam-tooltip::before { display: none !important; }
+
+  .leaflet-popup-close-button { display: none !important; }
+  .leaflet-popup-content .popup-title .popup-id { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .leaflet-popup-content .popup-badge { font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.08em; padding: 1px 5px; border: 1px solid; text-transform: uppercase; white-space: nowrap; max-width: 65%; overflow: hidden; text-overflow: ellipsis; }
+  .notam-card-text { cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .notam-card-text:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.55); }
+  
+  .leaflet-popup-content .popup-raw { cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .leaflet-popup-content .popup-raw:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); }
+  .notam-card-text.copied, .leaflet-popup-content .popup-raw.copied { animation: copy-dip 0.22s ease-out; }
+  @keyframes copy-dip {
+    0%   { transform: scale(1); filter: brightness(1); }
+    30%  { transform: scale(0.99); filter: brightness(0.45); }
+    100% { transform: scale(1); filter: brightness(1); }
+  }</style>
+</head>
+<body>
+
+<div class="hud-header">
+  <div class="header-class-mark">JWSSC</div>
+  <h1>April 2026 SKYMASTER event NOTAM timeline</h1>
+  <span class="header-jp">2026年4月 スカイマスター演習 航空情報時系列</span>
+</div>
+
+<div id="map"></div>
+
+<div class="notam-list-panel" id="listPanel">
+  <div class="notam-list-header" onclick="toggleListPanel()">
+    <h3>Active <span class="jp-sub">有効</span></h3>
+    <span class="notam-list-count" id="listCount">00</span>
+    <span class="list-collapse-toggle" id="listCollapseToggle">−</span>
+  </div>
+  <div class="notam-list-body" id="listBody">
+    <div class="no-data">LOADING...<br><span class="jp-empty">読み込み中</span></div>
+  </div>
+</div>
+
+<div class="timeline-panel hidden" id="timelinePanel">
+  <div class="timeline-label">T<br><span class="jp-sub">時</span></div>
+  <div class="timeline-current" id="timelineCurrent">--</div>
+  <button class="snap-btn" id="snapPrev" onclick="snapToEvent(-1)" title="Previous event">◀</button>
+  <div class="timeline-slider-wrap">
+    <div class="timeline-ticks" id="timelineTicks"></div>
+    <input type="range" class="timeline-slider" id="timelineSlider" min="0" max="1000" value="0" oninput="onTimelineChange()">
+    <div class="timeline-range">
+      <span id="timelineStart">--</span>
+      <span id="timelineEnd">--</span>
+    </div>
+  </div>
+  <button class="snap-btn" id="snapNext" onclick="snapToEvent(1)" title="Next event">▶</button>
+  <div class="timeline-active-count" id="timelineActive">--</div>
+  <button class="btn-show-all" id="btnShowAll" onclick="toggleShowAll()">SHOW ALL</button>
+</div>
+
+<div class="status-bar">
+  <span class="s-orange">EAM transcription non-exhaustive</span>
+  <span style="margin-left:auto;" id="cursorPos">--</span>
+</div>
+
+<script>
+
+// Colors assigned after all NOTAMs parsed, based on duration
+
+const allNotams = [];
+const EAM_DATA = [{"t":1776117360000,"cs":"MILKWEED","pr":"6F","p6":"6FGLCG","cl":22,"g":3,"q":"+"},{"t":1776175680000,"cs":"EXTRADITE","pr":"6F","p6":"6FLOFQ","cl":27,"g":3,"q":"+"},{"t":1776175800000,"cs":"EXTRADITE","pr":"6F","p6":"6F277L","cl":27,"g":3,"q":"+"},{"t":1776178020000,"cs":"EXTRADITE","pr":"34","p6":"34N6E4","cl":30,"g":1,"q":""},{"t":1776178200000,"cs":"EXTRADITE","pr":"34","p6":"34ZZFH","cl":30,"g":1,"q":""},{"t":1776178380000,"cs":"EXTRADITE","pr":"34","p6":"34Y42A","cl":30,"g":1,"q":""},{"t":1776178620000,"cs":"EXTRADITE","pr":"34","p6":"34HQX2","cl":30,"g":1,"q":""},{"t":1776179040000,"cs":"EXTRADITE","pr":"34","p6":"34ZZFH","cl":30,"g":1,"q":""},{"t":1776179280000,"cs":"EXTRADITE","pr":"34","p6":"34Y42A","cl":30,"g":1,"q":""},{"t":1776179460000,"cs":"EXTRADITE","pr":"34","p6":"34HQX2","cl":6,"g":1,"q":"\\"},{"t":1776179580000,"cs":"EXTRADITE","pr":"34","p6":"34R33R","cl":30,"g":1,"q":""},{"t":1776179880000,"cs":"EXTRADITE","pr":"6C","p6":"6C7A6L","cl":39,"g":2,"q":"+"},{"t":1776181260000,"cs":"EXTRADITE","pr":"6C","p6":"6CHS5X","cl":30,"g":2,"q":""},{"t":1776182700000,"cs":"EXTRADITE","pr":"34","p6":"34ADMA","cl":30,"g":1,"q":""},{"t":1776182880000,"cs":"EXTRADITE","pr":"34","p6":"34SDGN","cl":30,"g":1,"q":""},{"t":1776201900000,"cs":"EXTRADITE","pr":"6C","p6":"6C2SON","cl":35,"g":2,"q":"+"},{"t":1776258120000,"cs":"OUTFACE","pr":"6C","p6":"6C6Y7Q","cl":30,"g":2,"q":">"},{"t":1776259920000,"cs":"OUTFACE","pr":"6C","p6":"6CM4R7","cl":30,"g":2,"q":">"},{"t":1776261720000,"cs":"OUTFACE","pr":"6C","p6":"6CVT24","cl":30,"g":2,"q":">"},{"t":1776262560000,"cs":"OUTFACE","pr":"34","p6":"34HZJV","cl":30,"g":1,"q":""},{"t":1776263580000,"cs":"OUTFACE","pr":"6C","p6":"6C25JE","cl":30,"g":2,"q":">"},{"t":1776274860000,"cs":"OUTFACE","pr":"34","p6":"34C3TX","cl":30,"g":1,"q":""},{"t":1776275520000,"cs":"OUTFACE","pr":"UQ","p6":"UQ2T6Q","cl":164,"g":4,"q":"+"},{"t":1776331380000,"cs":"RAISINMAN","pr":"6C","p6":"6CEUYO","cl":43,"g":2,"q":"+"},{"t":1776331620000,"cs":"RAISINMAN","pr":"6C","p6":"6CEUYO","cl":43,"g":2,"q":"+"},{"t":1776342780000,"cs":"RAISINMAN","pr":"6C","p6":"6CNRC6","cl":30,"g":2,"q":">"},{"t":1776343260000,"cs":"RAISINMAN","pr":"6C","p6":"6CNRC6","cl":30,"g":2,"q":">"},{"t":1776343740000,"cs":"RAISINMAN","pr":"6C","p6":"6C7OEZ","cl":30,"g":2,"q":">"},{"t":1776344400000,"cs":"RAISINMAN","pr":"6C","p6":"6C7OEZ","cl":30,"g":2,"q":">"},{"t":1776344580000,"cs":"RAISINMAN","pr":"6C","p6":"6C6QLX","cl":30,"g":2,"q":">"},{"t":1776344880000,"cs":"RAISINMAN","pr":"6C","p6":"6C7OEZ","cl":30,"g":2,"q":">"},{"t":1776345060000,"cs":"RAISINMAN","pr":"6C","p6":"6C6QLX","cl":30,"g":2,"q":">"},{"t":1776345540000,"cs":"RAISINMAN","pr":"6C","p6":"6CE2J7","cl":30,"g":2,"q":">"},{"t":1776351000000,"cs":"RAISINMAN","pr":"6C","p6":"6CS62Z","cl":30,"g":2,"q":"\\"},{"t":1776351180000,"cs":"RAISINMAN","pr":"6C","p6":"6CS62Z","cl":30,"g":2,"q":""},{"t":1776351960000,"cs":"RAISINMAN","pr":"34","p6":"34J6NW","cl":30,"g":1,"q":""},{"t":1776352860000,"cs":"RAISINMAN","pr":"34","p6":"34LLN4","cl":30,"g":1,"q":""},{"t":1776353040000,"cs":"RAISINMAN","pr":"34","p6":"34WJ27","cl":30,"g":1,"q":""},{"t":1776355260000,"cs":"RAISINMAN","pr":"34","p6":"34WJ27","cl":30,"g":1,"q":"&"},{"t":1776355260000,"cs":"RAISINMAN","pr":"34","p6":"34LLN4","cl":30,"g":1,"q":""},{"t":1776357060000,"cs":"RAISINMAN","pr":"34","p6":"34WJ27","cl":30,"g":1,"q":"&"},{"t":1776357060000,"cs":"RAISINMAN","pr":"34","p6":"34LLN4","cl":30,"g":1,"q":""},{"t":1776358260000,"cs":"RAISINMAN","pr":"34","p6":"343XSB","cl":30,"g":1,"q":""},{"t":1776358500000,"cs":"RAISINMAN","pr":"34","p6":"34RZ4W","cl":30,"g":1,"q":""},{"t":1776358800000,"cs":"RAISINMAN","pr":"34","p6":"34N3LE","cl":30,"g":1,"q":""},{"t":1776358920000,"cs":"RAISINMAN","pr":"34","p6":"34HLU3","cl":30,"g":1,"q":""},{"t":1776359160000,"cs":"RAISINMAN","pr":"34","p6":"34SNKP","cl":30,"g":1,"q":""},{"t":1776359340000,"cs":"RAISINMAN","pr":"34","p6":"345PSB","cl":30,"g":1,"q":""},{"t":1776361560000,"cs":"RAISINMAN","pr":"6C","p6":"6CRIHL","cl":30,"g":2,"q":">"},{"t":1776362640000,"cs":"RAISINMAN","pr":"6C","p6":"6CKV4O","cl":30,"g":2,"q":">"},{"t":1776363060000,"cs":"RAISINMAN","pr":"6C","p6":"6CKV4O","cl":30,"g":2,"q":">"},{"t":1776387660000,"cs":"DECK BOAT","pr":"6C","p6":"6CJEML","cl":64,"g":2,"q":"+"},{"t":1776446880000,"cs":"DECK BOAT","pr":"6C","p6":"6CFPK3","cl":35,"g":2,"q":"+"},{"t":1776524700000,"cs":"AROMATIC","pr":"6F","p6":"6FUUYN","cl":32,"g":3,"q":"+"},{"t":1776524880000,"cs":"AROMATIC","pr":"6F","p6":"6FNWGT","cl":27,"g":3,"q":"+"},{"t":1776535980000,"cs":"AROMATIC","pr":"6F","p6":"6FYB6H","cl":22,"g":3,"q":"+"},{"t":1776594720000,"cs":"LEG BRACE","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776603720000,"cs":"LEG BRACE","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776609360000,"cs":"LEG BRACE","pr":"43","p6":"43YOK3","cl":32,"g":3,"q":"+"},{"t":1776609540000,"cs":"LEG BRACE","pr":"43","p6":"43KPYR","cl":27,"g":3,"q":"+"},{"t":1776609960000,"cs":"LEG BRACE","pr":"6C","p6":"6CW7JY","cl":30,"g":2,"q":""},{"t":1776610860000,"cs":"LEG BRACE","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":""},{"t":1776613980000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776613980000,"cs":"GLASSFUL","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776615600000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776615600000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776615600000,"cs":"GLASSFUL","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776617400000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776617400000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776617400000,"cs":"GLASSFUL","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776618600000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776618600000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776618600000,"cs":"FERN POT","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776620220000,"cs":"LEG BRACE","pr":"6C","p6":"6CO6ED","cl":40,"g":2,"q":"+"},{"t":1776620460000,"cs":"LEG BRACE","pr":"6C","p6":"6CUHMT","cl":35,"g":2,"q":"+"},{"t":1776620640000,"cs":"LEG BRACE","pr":"43","p6":"43HHR4","cl":27,"g":3,"q":"+"},{"t":1776620820000,"cs":"LEG BRACE","pr":"43","p6":"434WBE","cl":31,"g":3,"q":"+"},{"t":1776621000000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776621000000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776621000000,"cs":"GLASSFUL","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776622200000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776622200000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776622200000,"cs":"FERN POT","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776622800000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776622800000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776622800000,"cs":"GLASSFUL","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776623400000,"cs":"LEG BRACE","pr":"6C","p6":"6CUHMT","cl":35,"g":2,"q":"+"},{"t":1776623400000,"cs":"LEG BRACE","pr":"6C","p6":"6CO6ED","cl":40,"g":2,"q":"+"},{"t":1776624000000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776624000000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":"&"},{"t":1776624000000,"cs":"FERN POT","pr":"34","p6":"343SJB","cl":30,"g":1,"q":""},{"t":1776624120000,"cs":"LEG BRACE","pr":"6C","p6":"6CISPV","cl":35,"g":2,"q":"+"},{"t":1776624240000,"cs":"LEG BRACE","pr":"43","p6":"4345ZZ","cl":22,"g":3,"q":"+"},{"t":1776624360000,"cs":"LEG BRACE","pr":"6C","p6":"6CWHWF","cl":30,"g":2,"q":""},{"t":1776624600000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776624600000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776625020000,"cs":"LEG BRACE","pr":"UQ","p6":"UQSZPD","cl":50,"g":4,"q":"\\"},{"t":1776625320000,"cs":"LEG BRACE","pr":"UQ","p6":"UQSZPD","cl":50,"g":4,"q":"+"},{"t":1776625620000,"cs":"LEG BRACE","pr":"34","p6":"34RUEK","cl":30,"g":1,"q":""},{"t":1776625800000,"cs":"LEG BRACE","pr":"34","p6":"3434NK","cl":30,"g":1,"q":""},{"t":1776626100000,"cs":"LEG BRACE","pr":"6C","p6":"6CUHMT","cl":35,"g":2,"q":"+"},{"t":1776626100000,"cs":"LEG BRACE","pr":"6C","p6":"6CO6ED","cl":40,"g":2,"q":"+"},{"t":1776626400000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776626400000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776627600000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776627600000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776628200000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776628200000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776629400000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776629400000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776630000000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776630000000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776631200000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776631200000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776631740000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776631740000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776633000000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776633000000,"cs":"FERN POT","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776633600000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":"&"},{"t":1776633600000,"cs":"GLASSFUL","pr":"34","p6":"34GCAX","cl":30,"g":1,"q":""},{"t":1776634680000,"cs":"LEG BRACE","pr":"34","p6":"34PNGB","cl":30,"g":1,"q":""},{"t":1776634800000,"cs":"LEG BRACE","pr":"34","p6":"34DTY6","cl":30,"g":1,"q":""},{"t":1776635400000,"cs":"GLASSFUL","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":""},{"t":1776636000000,"cs":"LEG BRACE","pr":"34","p6":"34DTY6","cl":30,"g":1,"q":"&"},{"t":1776636000000,"cs":"LEG BRACE","pr":"34","p6":"34PNGB","cl":30,"g":1,"q":""},{"t":1776636600000,"cs":"FERN POT","pr":"34","p6":"34DPY3","cl":30,"g":1,"q":""},{"t":1776637020000,"cs":"LEG BRACE","pr":"34","p6":"34Q23P","cl":30,"g":1,"q":""},{"t":1776637260000,"cs":"LEG BRACE","pr":"34","p6":"34FGW4","cl":30,"g":1,"q":""},{"t":1776637800000,"cs":"LEG BRACE","pr":"34","p6":"34FGW4","cl":30,"g":1,"q":"&"},{"t":1776637800000,"cs":"LEG BRACE","pr":"34","p6":"34Q23P","cl":30,"g":1,"q":"&"},{"t":1776637800000,"cs":"LEG BRACE","pr":"34","p6":"34DTY6","cl":30,"g":1,"q":""},{"t":1776638160000,"cs":"LEG BRACE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776639600000,"cs":"LEG BRACE","pr":"34","p6":"34FGW4","cl":30,"g":1,"q":"&"},{"t":1776639600000,"cs":"LEG BRACE","pr":"34","p6":"34Q23P","cl":30,"g":1,"q":"&"},{"t":1776639600000,"cs":"LEG BRACE","pr":"34","p6":"34DTY6","cl":30,"g":1,"q":""},{"t":1776643860000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776645600000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776647400000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776649200000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776649800000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776651000000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776652800000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776653400000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776654600000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776655200000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776656400000,"cs":"POSTULATE","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776657000000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776658200000,"cs":"PIG IRON","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776658800000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776658800000,"cs":"GLOAMING","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776659040000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776659940000,"cs":"GLOAMING","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776660000000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776660600000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776660600000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776661800000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776661800000,"cs":"PIG IRON","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776662400000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776662400000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776663600000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776663600000,"cs":"PIG IRON","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776664200000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776664200000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776665400000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776665400000,"cs":"PIG IRON","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776666000000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776666000000,"cs":"OUTCLASS","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776667200000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776667200000,"cs":"PIG IRON","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776667800000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776669000000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":"&"},{"t":1776669000000,"cs":"PIG IRON","pr":"34","p6":"34WIVG","cl":30,"g":1,"q":""},{"t":1776669600000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776671400000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776672600000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776673200000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776674400000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776675000000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776676200000,"cs":"PIG IRON","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776676800000,"cs":"OUTCLASS","pr":"34","p6":"34FKGW","cl":30,"g":1,"q":""},{"t":1776676920000,"cs":"GLOAMING","pr":"6C","p6":"6CI2LZ","cl":43,"g":2,"q":"+"},{"t":1776692640000,"cs":"GLOAMING","pr":"6C","p6":"6C3A3V","cl":30,"g":2,"q":">"},{"t":1776693300000,"cs":"GLOAMING","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776703200000,"cs":"POSTULATE","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776705000000,"cs":"POSTULATE","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776705660000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776706800000,"cs":"POSTULATE","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776707100000,"cs":"GLOAMING","pr":"34","p6":"34POKB","cl":30,"g":1,"q":""},{"t":1776707400000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776707460000,"cs":"GLOAMING","pr":"34","p6":"34A5TV","cl":30,"g":1,"q":""},{"t":1776707640000,"cs":"GLOAMING","pr":"43","p6":"43W5YI","cl":25,"g":3,"q":"+"},{"t":1776707820000,"cs":"GLOAMING","pr":"6C","p6":"6CQV4N","cl":39,"g":2,"q":"+"},{"t":1776708240000,"cs":"GLOAMING","pr":"34","p6":"34A5TV","cl":30,"g":1,"q":""},{"t":1776708240000,"cs":"GLOAMING","pr":"34","p6":"34POKB","cl":30,"g":1,"q":""},{"t":1776708600000,"cs":"POSTULATE","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776708840000,"cs":"GLOAMING","pr":"UQ","p6":"UQFHWZ","cl":50,"g":4,"q":"+"},{"t":1776709200000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776709860000,"cs":"GLOAMING","pr":"6C","p6":"6CQV4N","cl":39,"g":2,"q":"+"},{"t":1776709860000,"cs":"GLOAMING","pr":"34","p6":"34A5TV","cl":30,"g":1,"q":"&"},{"t":1776709860000,"cs":"GLOAMING","pr":"34","p6":"34POKB","cl":30,"g":1,"q":""},{"t":1776710400000,"cs":"GLOAMING","pr":"34","p6":"346XG3","cl":30,"g":1,"q":""},{"t":1776710580000,"cs":"GLOAMING","pr":"34","p6":"34ZOTS","cl":30,"g":1,"q":""},{"t":1776711540000,"cs":"GLOAMING","pr":"34","p6":"34ZOTS","cl":30,"g":1,"q":"&"},{"t":1776711540000,"cs":"GLOAMING","pr":"34","p6":"346XG3","cl":30,"g":1,"q":"&"},{"t":1776711540000,"cs":"GLOAMING","pr":"6C","p6":"6CQV4N","cl":39,"g":2,"q":"+"},{"t":1776712800000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776714600000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776716400000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776717600000,"cs":"POSTULATE","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776718200000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776720000000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776721800000,"cs":"SHOE GUM","pr":"34","p6":"346YFO","cl":30,"g":1,"q":""},{"t":1776724920000,"cs":"GLOAMING","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776725400000,"cs":"SHOE GUM","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776727200000,"cs":"SHOE GUM","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776729000000,"cs":"SHOE GUM","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776729600000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776730200000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776730800000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776732000000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776732600000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776733860000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776734400000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776735600000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776736200000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776737400000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776738000000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776739200000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776739800000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776741000000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776741600000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776742800000,"cs":"BACKBONE","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776743400000,"cs":"OIL PUMP","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776744600000,"cs":"MEDALLION","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776746400000,"cs":"MEDALLION","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776746760000,"cs":"UNANIMOUS","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":""},{"t":1776747120000,"cs":"INTEGRAL","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":"&"},{"t":1776747120000,"cs":"INTEGRAL","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776748200000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":"&"},{"t":1776748200000,"cs":"MEDALLION","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776748980000,"cs":"UNANIMOUS","pr":"34","p6":"345RQZ","cl":30,"g":1,"q":""},{"t":1776749100000,"cs":"UNANIMOUS","pr":"34","p6":"34VF3F","cl":30,"g":1,"q":""},{"t":1776749400000,"cs":"UNANIMOUS","pr":"34","p6":"34VF3F","cl":30,"g":1,"q":"&"},{"t":1776749400000,"cs":"UNANIMOUS","pr":"34","p6":"345RQZ","cl":30,"g":1,"q":""},{"t":1776750000000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":"&"},{"t":1776750000000,"cs":"MEDALLION","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776751080000,"cs":"UNANIMOUS","pr":"34","p6":"347GKG","cl":30,"g":1,"q":""},{"t":1776751320000,"cs":"UNANIMOUS","pr":"34","p6":"347GKG","cl":30,"g":1,"q":"&"},{"t":1776751320000,"cs":"UNANIMOUS","pr":"34","p6":"34VF3F","cl":30,"g":1,"q":""},{"t":1776751620000,"cs":"UNANIMOUS","pr":"34","p6":"34I2FS","cl":30,"g":1,"q":""},{"t":1776751860000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":"&"},{"t":1776751860000,"cs":"MEDALLION","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776752400000,"cs":"INTEGRAL","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":"&"},{"t":1776752400000,"cs":"INTEGRAL","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776753600000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":"&"},{"t":1776753600000,"cs":"MEDALLION","pr":"34","p6":"343AXP","cl":30,"g":1,"q":""},{"t":1776754200000,"cs":"INTEGRAL","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":""},{"t":1776755400000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":""},{"t":1776756000000,"cs":"INTEGRAL","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":""},{"t":1776757200000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":""},{"t":1776759960000,"cs":"UNANIMOUS","pr":"UQ","p6":"UQQ525","cl":6,"g":4,"q":"\\"},{"t":1776760020000,"cs":"UNANIMOUS","pr":"UQ","p6":"UQQ525","cl":218,"g":4,"q":"+"},{"t":1776760800000,"cs":"UNANIMOUS","pr":"34","p6":"34VRHB","cl":30,"g":1,"q":""},{"t":1776762600000,"cs":"MEDALLION","pr":"34","p6":"34VRHB","cl":30,"g":1,"q":"&"},{"t":1776762600000,"cs":"MEDALLION","pr":"34","p6":"34HRH4","cl":30,"g":1,"q":""},{"t":1776793020000,"cs":"UNANIMOUS","pr":"34","p6":"34ABDM","cl":30,"g":1,"q":""},{"t":1776793260000,"cs":"UNANIMOUS","pr":"34","p6":"34EELP","cl":30,"g":1,"q":""},{"t":1776794400000,"cs":"UNANIMOUS","pr":"UQ","p6":"UQ66HM","cl":26,"g":4,"q":"+"},{"t":1776794640000,"cs":"UNANIMOUS","pr":"UQ","p6":"UQ26AT","cl":26,"g":4,"q":"+"},{"t":1776796320000,"cs":"UNANIMOUS","pr":"UQ","p6":"UQ26AT","cl":26,"g":4,"q":"+"},{"t":1776796320000,"cs":"UNANIMOUS","pr":"UQ","p6":"UQ66HM","cl":26,"g":4,"q":"+"},{"t":1776797220000,"cs":"UNANIMOUS","pr":"34","p6":"34RTG4","cl":30,"g":1,"q":""},{"t":1776797640000,"cs":"UNANIMOUS","pr":"6C","p6":"6CUMFS","cl":37,"g":2,"q":"+"},{"t":1776797820000,"cs":"UNANIMOUS","pr":"6C","p6":"6C3DBP","cl":30,"g":2,"q":""},{"t":1776798060000,"cs":"UNANIMOUS","pr":"6C","p6":"6CUMFS","cl":37,"g":2,"q":"+"},{"t":1776798180000,"cs":"UNANIMOUS","pr":"6C","p6":"6C3DBP","cl":30,"g":2,"q":""},{"t":1776799380000,"cs":"UNANIMOUS","pr":"34","p6":"34MBC3","cl":30,"g":1,"q":""},{"t":1776799500000,"cs":"UNANIMOUS","pr":"34","p6":"34YCCG","cl":30,"g":1,"q":""},{"t":1776799860000,"cs":"UNANIMOUS","pr":"34","p6":"34YCCG","cl":30,"g":1,"q":"&"},{"t":1776799860000,"cs":"UNANIMOUS","pr":"34","p6":"34MBC3","cl":30,"g":1,"q":"&"},{"t":1776799860000,"cs":"UNANIMOUS","pr":"34","p6":"34RTG4","cl":30,"g":1,"q":""},{"t":1776816600000,"cs":"AIRSPACE","pr":"6C","p6":"6CDRBV","cl":30,"g":2,"q":""},{"t":1776819180000,"cs":"AIRSPACE","pr":"34","p6":"34JEXP","cl":30,"g":1,"q":""},{"t":1776819360000,"cs":"AIRSPACE","pr":"34","p6":"34736H","cl":30,"g":1,"q":""},{"t":1776820200000,"cs":"AIRSPACE","pr":"6C","p6":"6C3NJQ","cl":30,"g":2,"q":""},{"t":1776820860000,"cs":"AIRSPACE","pr":"34","p6":"34S7IC","cl":30,"g":1,"q":""},{"t":1776821700000,"cs":"AIRSPACE","pr":"34","p6":"34XNHB","cl":30,"g":1,"q":""},{"t":1776822120000,"cs":"AIRSPACE","pr":"6C","p6":"6CEYSH","cl":30,"g":2,"q":""},{"t":1776836820000,"cs":"AIRSPACE","pr":"43","p6":"43I634","cl":22,"g":3,"q":"+"},{"t":1776838500000,"cs":"AIRSPACE","pr":"43","p6":"43B7DP","cl":22,"g":3,"q":"+"},{"t":1776840420000,"cs":"AIRSPACE","pr":"34","p6":"34IFDQ","cl":30,"g":1,"q":""},{"t":1776840540000,"cs":"AIRSPACE","pr":"34","p6":"346DLI","cl":30,"g":1,"q":""},{"t":1776841200000,"cs":"AIRSPACE","pr":"34","p6":"346DLI","cl":30,"g":1,"q":"*"},{"t":1776841320000,"cs":"AIRSPACE","pr":"34","p6":"346VBU","cl":30,"g":1,"q":""},{"t":1776841500000,"cs":"AIRSPACE","pr":"34","p6":"34IFDQ","cl":30,"g":1,"q":""},{"t":1776849720000,"cs":"AIRSPACE","pr":"6C","p6":"6C5MLP","cl":43,"g":2,"q":"+"},{"t":1776862920000,"cs":"AIRSPACE","pr":"6C","p6":"6CEBLH","cl":30,"g":2,"q":">"},{"t":1776864780000,"cs":"AIRSPACE","pr":"6C","p6":"6CCRQQ","cl":30,"g":2,"q":">"},{"t":1776865020000,"cs":"AIRSPACE","pr":"43","p6":"43CQHT","cl":6,"g":3,"q":"\\"},{"t":1776865080000,"cs":"AIRSPACE","pr":"43","p6":"43CQHT","cl":63,"g":3,"q":"+"},{"t":1776865500000,"cs":"AIRSPACE","pr":"43","p6":"43SMVN","cl":25,"g":3,"q":"+"},{"t":1776867360000,"cs":"AIRSPACE","pr":"6C","p6":"6C4QNI","cl":30,"g":2,"q":">"},{"t":1776868320000,"cs":"AIRSPACE","pr":"43","p6":"43AJKF","cl":27,"g":3,"q":"+"},{"t":1776868500000,"cs":"AIRSPACE","pr":"6C","p6":"6C4RHP","cl":30,"g":2,"q":">"},{"t":1776869160000,"cs":"AIRSPACE","pr":"6C","p6":"6CLJHY","cl":30,"g":2,"q":">"},{"t":1776869340000,"cs":"AIRSPACE","pr":"43","p6":"43HDOH","cl":31,"g":3,"q":"+"},{"t":1776870120000,"cs":"AIRSPACE","pr":"6C","p6":"6CJYOH","cl":30,"g":2,"q":">"},{"t":1776872040000,"cs":"AIRSPACE","pr":"6C","p6":"6CP5OV","cl":30,"g":2,"q":">"},{"t":1776872520000,"cs":"AIRSPACE","pr":"6C","p6":"6CWLE4","cl":30,"g":2,"q":">"},{"t":1776876360000,"cs":"AIRSPACE","pr":"6C","p6":"6CG64N","cl":30,"g":2,"q":">"},{"t":1776925080000,"cs":"ARCHIBALD","pr":"43","p6":"43TE6J","cl":32,"g":3,"q":"+"},{"t":1776926280000,"cs":"ARCHIBALD","pr":"43","p6":"43QHMQ","cl":37,"g":3,"q":"+"},{"t":1776990240000,"cs":"RELIGIOUS","pr":"6C","p6":"6CES6E","cl":30,"g":2,"q":""},{"t":1776990480000,"cs":"RELIGIOUS","pr":"6C","p6":"6CES6E","cl":30,"g":2,"q":""},{"t":1776995940000,"cs":"RELIGIOUS","pr":"6C","p6":"6CQ3TI","cl":30,"g":2,"q":""},{"t":1777005240000,"cs":"RADFIELD","pr":"43","p6":"43D66W","cl":25,"g":3,"q":"+"},{"t":1777008900000,"cs":"RADFIELD","pr":"43","p6":"43EQTH","cl":30,"g":3,"q":""},{"t":1777063920000,"cs":"RADFIELD","pr":"6C","p6":"6CWCH7","cl":21,"g":2,"q":"+"},{"t":1777083360000,"cs":"RELIGIOUS","pr":"6C","p6":"6CMUAM","cl":21,"g":2,"q":"+"},{"t":1777091220000,"cs":"RELIGIOUS","pr":"6C","p6":"6CU4Y2","cl":60,"g":2,"q":"+"},{"t":1777091460000,"cs":"RELIGIOUS","pr":"6C","p6":"6CU4Y2","cl":60,"g":2,"q":"+"},{"t":1777093560000,"cs":"RELIGIOUS","pr":"43","p6":"43NSWF","cl":41,"g":3,"q":"+"},{"t":1777154640000,"cs":"RELIGIOUS","pr":"6C","p6":"6CMLUW","cl":35,"g":2,"q":"+"},{"t":1777175580000,"cs":"NECTARINE","pr":"6C","p6":"6CMVUG","cl":35,"g":2,"q":"+"},{"t":1777350720000,"cs":"IMPLICATE","pr":"43","p6":"43Q5Q3","cl":22,"g":3,"q":"+"},{"t":1777352040000,"cs":"IMPLICATE","pr":"GX","p6":"GXG2UR","cl":30,"g":1,"q":""},{"t":1777352400000,"cs":"IMPLICATE","pr":"GX","p6":"GXG2UR","cl":30,"g":1,"q":""},{"t":1777354200000,"cs":"IMPLICATE","pr":"GX","p6":"GXG2UR","cl":30,"g":1,"q":""},{"t":1777356000000,"cs":"IMPLICATE","pr":"GX","p6":"GXG2UR","cl":30,"g":1,"q":""},{"t":1777385100000,"cs":"IMPLICATE","pr":"6C","p6":"6CJQVI","cl":30,"g":2,"q":""},{"t":1777436820000,"cs":"MEMORIZE","pr":"43","p6":"43KHHE","cl":22,"g":3,"q":"+"},{"t":1777448160000,"cs":"MEMORIZE","pr":"GX","p6":"GXSP7I","cl":30,"g":1,"q":""},{"t":1777493640000,"cs":"MEMORIZE","pr":"GX","p6":"GXWGTD","cl":30,"g":1,"q":""},{"t":1777508520000,"cs":"DEAD BALL","pr":"6C","p6":"6CZZ52","cl":30,"g":2,"q":""},{"t":1777509540000,"cs":"DEAD BALL","pr":"GX","p6":"GXLROU","cl":30,"g":1,"q":""},{"t":1777510200000,"cs":"EMANATION","pr":"GX","p6":"GXLROU","cl":30,"g":1,"q":""},{"t":1777510800000,"cs":"DEAD BALL","pr":"GX","p6":"GXLROU","cl":30,"g":1,"q":""},{"t":1777512600000,"cs":"ANT HOUSE","pr":"6C","p6":"6CA665","cl":25,"g":2,"q":"+"},{"t":1777513200000,"cs":"ANT HOUSE","pr":"GX","p6":"GXLROU","cl":30,"g":1,"q":""},{"t":1777515000000,"cs":"ANT HOUSE","pr":"GX","p6":"GXLROU","cl":30,"g":1,"q":""},{"t":1777516380000,"cs":"ANT HOUSE","pr":"GX","p6":"GXZCFP","cl":30,"g":1,"q":""},{"t":1777516800000,"cs":"ANT HOUSE","pr":"GX","p6":"GXZCFP","cl":30,"g":1,"q":"&"},{"t":1777516800000,"cs":"ANT HOUSE","pr":"GX","p6":"GXLROU","cl":30,"g":1,"q":""},{"t":1777528200000,"cs":"EMANATION","pr":"GX","p6":"GX2X6S","cl":30,"g":1,"q":"&"},{"t":1777528200000,"cs":"EMANATION","pr":"GX","p6":"GXUQFK","cl":30,"g":1,"q":"&"},{"t":1777528200000,"cs":"EMANATION","pr":"GX","p6":"GXVJBR","cl":30,"g":1,"q":""},{"t":1777529400000,"cs":"ANT HOUSE","pr":"GX","p6":"GX2X6S","cl":30,"g":1,"q":"&"},{"t":1777529400000,"cs":"ANT HOUSE","pr":"GX","p6":"GXUQFK","cl":30,"g":1,"q":"&"},{"t":1777529700000,"cs":"ANT HOUSE","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":""},{"t":1777529760000,"cs":"EMANATION","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":""},{"t":1777529760000,"cs":"SHOWBOAT","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":""},{"t":1777530000000,"cs":"EMANATION","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777530000000,"cs":"EMANATION","pr":"GX","p6":"GX2X6S","cl":30,"g":1,"q":"&"},{"t":1777530000000,"cs":"EMANATION","pr":"GX","p6":"GXUQFK","cl":30,"g":1,"q":""},{"t":1777530600000,"cs":"SHOWBOAT","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777530600000,"cs":"SHOWBOAT","pr":"GX","p6":"GX2X6S","cl":30,"g":1,"q":"\\"},{"t":1777530840000,"cs":"SHOWBOAT","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777530840000,"cs":"SHOWBOAT","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777530840000,"cs":"SHOWBOAT","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777531200000,"cs":"ANT HOUSE","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777531200000,"cs":"ANT HOUSE","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777531200000,"cs":"ANT HOUSE","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777531800000,"cs":"EMANATION","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777531800000,"cs":"EMANATION","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777531800000,"cs":"EMANATION","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777532400000,"cs":"SHOWBOAT","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777532400000,"cs":"SHOWBOAT","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777532400000,"cs":"SHOWBOAT","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777533000000,"cs":"ANT HOUSE","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777533000000,"cs":"ANT HOUSE","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777533000000,"cs":"ANT HOUSE","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777533600000,"cs":"EMANATION","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777533600000,"cs":"EMANATION","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777533600000,"cs":"EMANATION","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777534200000,"cs":"SHOWBOAT","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777534200000,"cs":"SHOWBOAT","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777534200000,"cs":"SHOWBOAT","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777534800000,"cs":"ANT HOUSE","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777534800000,"cs":"ANT HOUSE","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":"&"},{"t":1777534800000,"cs":"ANT HOUSE","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777534800000,"cs":"ANT HOUSE","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":"&"},{"t":1777534800000,"cs":"ANT HOUSE","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777534980000,"cs":"EMANATION","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777534980000,"cs":"SHOWBOAT","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777535400000,"cs":"EMANATION","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":"&"},{"t":1777535400000,"cs":"EMANATION","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777535400000,"cs":"EMANATION","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":""},{"t":1777536000000,"cs":"SHOWBOAT","pr":"GX","p6":"GXSH6C","cl":30,"g":1,"q":"&"},{"t":1777536000000,"cs":"SHOWBOAT","pr":"GX","p6":"GXI35W","cl":30,"g":1,"q":""},{"t":1777536000000,"cs":"SHOWBOAT","pr":"GX","p6":"GX67WQ","cl":30,"g":1,"q":""},{"t":1777536600000,"cs":"ANT HOUSE","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777537200000,"cs":"EMANATION","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777537800000,"cs":"SHOWBOAT","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777538400000,"cs":"ANT HOUSE","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777539000000,"cs":"EMANATION","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777539600000,"cs":"SHOWBOAT","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777540200000,"cs":"ANT HOUSE","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777540800000,"cs":"EMANATION","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777541400000,"cs":"SHOWBOAT","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777542000000,"cs":"ANT HOUSE","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777542600000,"cs":"EMANATION","pr":"GX","p6":"GXHLCC","cl":30,"g":1,"q":""},{"t":1777554300000,"cs":"DEAD BALL","pr":"43","p6":"437PQH","cl":25,"g":3,"q":"+"},{"t":1777554780000,"cs":"DEAD BALL","pr":"43","p6":"43NREA","cl":63,"g":3,"q":"+"},{"t":1777557480000,"cs":"DEAD BALL","pr":"43","p6":"435MYS","cl":27,"g":3,"q":"+"},{"t":1777558020000,"cs":"DEAD BALL","pr":"43","p6":"43R5DY","cl":31,"g":3,"q":"+"},{"t":1777559640000,"cs":"DEAD BALL","pr":"GX","p6":"GXQJZJ","cl":30,"g":1,"q":""},{"t":1777559760000,"cs":"DEAD BALL","pr":"GX","p6":"GXF6TS","cl":30,"g":1,"q":""},{"t":1777563900000,"cs":"DEAD BALL","pr":"6C","p6":"6COWPG","cl":35,"g":2,"q":"+"},{"t":1777564860000,"cs":"DEAD BALL","pr":"6C","p6":"6CFBNO","cl":59,"g":2,"q":"+"},{"t":1777573680000,"cs":"DEAD BALL","pr":"GX","p6":"GXB6SA","cl":30,"g":1,"q":""},{"t":1777599120000,"cs":"SODA POP","pr":"6C","p6":"6COGLT","cl":30,"g":2,"q":""},{"t":1777600920000,"cs":"SODA POP","pr":"6C","p6":"6C3VP6","cl":24,"g":2,"q":"+"},{"t":1777608240000,"cs":"SODA POP","pr":"6C","p6":"6CAROV","cl":24,"g":2,"q":"+"},{"t":1777660920000,"cs":"SODA POP","pr":"43","p6":"43ZZ2J","cl":25,"g":3,"q":"+"},{"t":1777661280000,"cs":"SODA POP","pr":"43","p6":"432UV6","cl":63,"g":3,"q":"+"}];
+let showAll = false;
+
+const map = L.map('map', { center: [35,-120], zoom: 5, zoomControl: true, attributionControl: false });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+
+// HFGCS Station markers
+const STATIONS = [
+  { name: 'ANDREWS', lat: 38.81, lng: -76.87 },
+  { name: 'OFFUTT', lat: 41.12, lng: -95.91 },
+  { name: 'CROUGHTON', lat: 51.99, lng: -1.21 },
+  { name: 'LAJES', lat: 38.76, lng: -27.09 },
+  { name: 'SIGONELLA', lat: 37.40, lng: 14.92 },
+  { name: 'DIEGO GARCIA', lat: -7.32, lng: 72.41 },
+  { name: 'ASCENSION', lat: -7.97, lng: -14.39 },
+  { name: 'SOUTH ATLANTIC', lat: -51.82, lng: -58.44 },
+  { name: 'GUAM', lat: 13.58, lng: 144.92 },
+  { name: 'HICKAM', lat: 21.32, lng: -157.95 },
+  { name: 'PUERTO RICO', lat: 17.97, lng: -66.30 },
+  { name: 'ELMENDORF', lat: 61.25, lng: -149.80 },
+  { name: 'WEST COAST', lat: 38.67, lng: -121.40 },
+  { name: 'YOKOTA', lat: 35.75, lng: 139.35 }
+];
+STATIONS.forEach(s => {
+  const icon = L.divIcon({
+    html: '<div style="width:6px;height:6px;background:#fff;border:1px solid rgba(255,255,255,0.4);"></div>',
+    className: '', iconSize: [6, 6], iconAnchor: [3, 3]
+  });
+  const label = L.divIcon({
+    html: '<div style="font-family:JetBrains Mono,monospace;font-size:7px;color:rgba(255,255,255,0.5);white-space:nowrap;letter-spacing:0.06em;">' + s.name + '</div>',
+    className: '', iconSize: [80, 0], iconAnchor: [-5, 4]
+  });
+  L.marker([s.lat, s.lng], { icon, interactive: false }).addTo(map);
+  L.marker([s.lat, s.lng], { icon: label, interactive: false }).addTo(map);
+});
+
+map.on('mousemove', e => {
+  document.getElementById('cursorPos').textContent =
+    `${Math.abs(e.latlng.lat).toFixed(4)}${e.latlng.lat>=0?'N':'S'} ${Math.abs(e.latlng.lng).toFixed(4)}${e.latlng.lng>=0?'E':'W'}`;
+});
+
+// === PARSERS ===
+function parseDMS(str) {
+  const re = /(\d{2,3})(\d{2})(\d{2})([NS])\s*(\d{2,4})(\d{2})(\d{2})([EW])/g;
+  const coords = []; let m;
+  while ((m = re.exec(str)) !== null) {
+    let lat = parseInt(m[1]) + parseInt(m[2])/60 + parseInt(m[3])/3600;
+    let lng = parseInt(m[5]) + parseInt(m[6])/60 + parseInt(m[7])/3600;
+    if (m[4]==='S') lat = -lat;
+    if (m[8]==='W') lng = -lng;
+    coords.push({ lat, lng, raw: m[0] });
+  }
+  return coords;
+}
+
+
+function parseAreas(str) {
+  if (!str) return [];
+  const segments = str.split(/AREA DEFINED AS/i);
+  const areas = [];
+  for (let i = 1; i < segments.length; i++) {
+    const segText = segments[i].split(/POINT OF ORIGIN/i)[0];
+    const coords = parseDMS(segText);
+    if (coords.length > 0) areas.push(coords);
+  }
+  return areas;
+}
+
+function parseRadius(t) { const m = t.match(/(\d+)\s*NM\s*RADIUS/i); return m ? parseInt(m[1]) : null; }
+
+function parseAlt(t) { const m = t.match(/(SFC|FL\d+|\d+FT)[\s-]*(FL\d+|\d+FT|UNL)?/i); return m ? m[0] : null; }
+
+// Parse NOTAM time string like 2604141400 → Date object
+function parseNotamTs(s) {
+  if (!s || s.length < 10) return null;
+  const yr = 2000 + parseInt(s.slice(0,2));
+  const mo = parseInt(s.slice(2,4)) - 1;
+  const dy = parseInt(s.slice(4,6));
+  const hr = parseInt(s.slice(6,8));
+  const mn = parseInt(s.slice(8,10));
+  return new Date(Date.UTC(yr, mo, dy, hr, mn));
+}
+
+function parseTime(t) {
+  // Match the overall validity period (10-digit timestamps)
+  const m = t.match(/(\d{10,12})-(\d{10,12})/);
+  if (!m) return null;
+  const startTs = parseNotamTs(m[1]);
+  const endTs = parseNotamTs(m[2]);
+  if (!startTs || !endTs) return null;
+
+  // Check for DLY (daily) recurrence window like "DLY 1830-1930"
+  const dlyMatch = t.match(/DLY\s+(\d{4})-(\d{4})/i);
+  let dailyWindows = null;
+  if (dlyMatch) {
+    const dlyStart = dlyMatch[1]; // e.g. "1830"
+    const dlyEnd = dlyMatch[2];   // e.g. "1930"
+    const dlyStartH = parseInt(dlyStart.slice(0,2));
+    const dlyStartM = parseInt(dlyStart.slice(2,4));
+    const dlyEndH = parseInt(dlyEnd.slice(0,2));
+    const dlyEndM = parseInt(dlyEnd.slice(2,4));
+
+    // Build array of active windows for each day in the validity period
+    dailyWindows = [];
+    const cursor = new Date(startTs);
+    while (cursor <= endTs) {
+      const winStart = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), cursor.getUTCDate(), dlyStartH, dlyStartM));
+      const winEnd = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), cursor.getUTCDate(), dlyEndH, dlyEndM));
+      if (winStart >= startTs && winEnd <= new Date(endTs.getTime() + 60000)) {
+        dailyWindows.push({ start: winStart.getTime(), end: winEnd.getTime() });
+      }
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+  }
+
+  function fmtDisplay(d) {
+    if (!d) return '??';
+    const yr = String(d.getUTCFullYear()).slice(2);
+    const mo = String(d.getUTCMonth()+1).padStart(2,'0');
+    const dy = String(d.getUTCDate()).padStart(2,'0');
+    const hr = String(d.getUTCHours()).padStart(2,'0');
+    const mn = String(d.getUTCMinutes()).padStart(2,'0');
+    return `${yr}${mo}${dy} ${hr}:${mn} UTC`;
+  }
+
+  const dlyLabel = dlyMatch ? ` (DLY ${dlyMatch[1]}-${dlyMatch[2]})` : '';
+  return { from: fmtDisplay(startTs), to: fmtDisplay(endTs), startTs, endTs, dailyWindows, dlyLabel };
+}
+
+function parseId(t) { const m = t.match(/!(\w+)\s+(\d+\/\d+)/); return m ? `${m[1]} ${m[2]}` : 'UNKNOWN'; }
+function nmToM(nm) { return nm * 1852; }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function trunc(s, n) { return s.length > n ? s.slice(0,n) + '...' : s; }
+
+// Format timestamp for timeline display
+function fmtTimeline(d) {
+  const yr = String(d.getUTCFullYear()).slice(2);
+  const mo = String(d.getUTCMonth()+1).padStart(2,'0');
+  const dy = String(d.getUTCDate()).padStart(2,'0');
+  const hr = String(d.getUTCHours()).padStart(2,'0');
+  const mn = String(d.getUTCMinutes()).padStart(2,'0');
+  return `${yr}${mo}${dy} ${hr}:${mn} UTC`;
+}
+
+// Simple on-map ID label — just the NOTAM ID, placed at center
+function makeLabel(centerLL, e) {
+  const ll = Array.isArray(centerLL) ? centerLL : [centerLL.lat, centerLL.lng];
+  const html = `<div class="notam-map-label" style="border-color:${e.color};">
+    <div class="label-id" style="color:${e.color};">${esc(e.id)}</div>
+  </div>`;
+
+  return L.marker(ll, {
+    icon: L.divIcon({ html, className: 'notam-tooltip', iconSize: [100, 0], iconAnchor: [50, 10] }),
+    interactive: false
+  }).addTo(map);
+}
+
+// Color by duration: red=longest, orange=mid, yellow=shortest
+// Effective duration: for DLY NOTAMs, use the per-day window; otherwise use full validity
+function getEffectiveDuration(e) {
+  if (!e.time || !e.time.startTs || !e.time.endTs) return 0;
+  if (e.time.dailyWindows && e.time.dailyWindows.length > 0) {
+    return e.time.dailyWindows[0].end - e.time.dailyWindows[0].start;
+  }
+  return e.time.endTs.getTime() - e.time.startTs.getTime();
+}
+
+function getDurationColor(entry, allEntries) {
+  if (!entry.time || !entry.time.startTs || !entry.time.endTs) return '#FFFFFF';
+
+  const durations = allEntries
+    .filter(e => e.time && e.time.startTs && e.time.endTs)
+    .map(e => getEffectiveDuration(e));
+
+  if (durations.length === 0) return '#FFFFFF';
+
+  const dur = getEffectiveDuration(entry);
+  const minD = Math.min(...durations);
+  const maxD = Math.max(...durations);
+
+  if (maxD === minD) return '#FFAA00'; // all same duration
+
+  const t = (dur - minD) / (maxD - minD); // 0=shortest, 1=longest
+
+  // Yellow (#FFE820) → Orange (#FF8800) → Red (#FF3030)
+  if (t < 0.5) {
+    const s = t * 2; // 0-1 within yellow→orange
+    const r = 255;
+    const g = Math.round(232 - (232 - 136) * s);
+    const b = Math.round(32 - 32 * s);
+    return `rgb(${r},${g},${b})`;
+  } else {
+    const s = (t - 0.5) * 2; // 0-1 within orange→red
+    const r = 255;
+    const g = Math.round(136 - (136 - 48) * s);
+    const b = Math.round(0 + 48 * s);
+    return `rgb(${r},${g},${b})`;
+  }
+}
+
+function makePopup(e, group, idx) {
+  const nav = (group && group.length > 1)
+    ? `<div class="popup-nav">
+         <button class="popup-nav-btn" onclick="event.stopPropagation();cyclePopup(-1);return false;" title="Previous">&#9664;</button>
+         <span class="popup-nav-label">${(idx||0)+1} / ${group.length}</span>
+         <button class="popup-nav-btn" onclick="event.stopPropagation();cyclePopup(1);return false;" title="Next">&#9654;</button>
+       </div>`
+    : '';
+  return `${nav}<div class="popup-title" style="color:${e.color}"><span class="popup-id">${esc(e.id)}</span>${(function(){ const t = extractCodename(e.text) || (e.type || "").toUpperCase(); return t ? `<span class="popup-badge" style="color:${e.color};border-color:${e.color}">${esc(t)}</span>` : ""; })()}</div>
+    <div class="popup-field"><span class="f-label" style="color:${e.color}">CENTER: </span>${e.coords.map(c=>c.raw).join(', ')}</div>
+    ${e.radiusNM ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">RADIUS: </span>${e.radiusNM} NM</div>` : ''}
+    ${e.alt ? `<div class="popup-field"><span class="f-label" style="color:#FFAA00">ALT: </span>${esc(e.alt)}</div>` : ''}
+    ${e.time ? `<div class="popup-field"><span class="f-label" style="color:#888880">TIME: </span>${e.time.from} — ${e.time.to}</div>` : ''}
+    <div class="popup-raw" onclick="copyNotamText(this, event)" title="Click to copy">${esc(e.text)}</div>`;
+}
+
+// === POPUP GROUP NAVIGATION ===
+// When multiple NOTAMs share the same geometry, let the user cycle through them in the popup.
+function geometrySignature(entry) {
+  if (!entry || !entry.coords || !entry.coords.length) return null;
+  if (entry.radiusNM && entry.coords.length === 1) {
+    const c = entry.coords[0];
+    return 'c:' + c.lat.toFixed(4) + ':' + c.lng.toFixed(4) + ':' + entry.radiusNM;
+  }
+  if (entry.coords.length >= 3) {
+    const verts = entry.coords.map(c => c.lat.toFixed(4) + ',' + c.lng.toFixed(4)).sort().join('|');
+    return 'p:' + verts;
+  }
+  const c = entry.coords[0];
+  return 'pt:' + c.lat.toFixed(4) + ':' + c.lng.toFixed(4);
+}
+
+function groupAndBindPopups() {
+  // Build groups of entries sharing the same geometry signature
+  const groups = new Map();
+  allNotams.forEach(entry => {
+    const sig = geometrySignature(entry);
+    if (!sig) return;
+    if (!groups.has(sig)) groups.set(sig, []);
+    groups.get(sig).push(entry);
+  });
+  // Sort each group by NOTAM sort key so navigation is chronological-ish
+  groups.forEach(list => {
+    list.sort((a, b) => {
+      const ka = notamSortKey(a), kb = notamSortKey(b);
+      if (ka[0] !== kb[0]) return ka[0] < kb[0] ? -1 : 1;
+      if (ka[1] !== kb[1]) return ka[1] - kb[1];
+      return ka[2] - kb[2];
+    });
+  });
+  // Walk every plotted layer that has a popup and attach the group + index
+  allNotams.forEach(entry => {
+    const sig = geometrySignature(entry);
+    const group = sig ? groups.get(sig) : [entry];
+    const idxInGroup = group ? group.indexOf(entry) : 0;
+    entry.layers.forEach(layer => {
+      if (!layer || !layer.getPopup) return;
+      if (!layer.getPopup()) return;
+      layer._notamGroup = group;
+      layer._notamIdx = idxInGroup;
+      layer.setPopupContent(makePopup(entry, group, idxInGroup));
+      // Track which layer opened the popup, so cyclePopup can update it
+      if (!layer._popupBound) {
+        layer.on('popupopen', function() { window.__popupLayer = layer; });
+        layer._popupBound = true;
+      }
+    });
+  });
+}
+
+function cyclePopup(dir) {
+  const layer = window.__popupLayer;
+  if (!layer || !layer._notamGroup) return;
+  const g = layer._notamGroup;
+  layer._notamIdx = ((layer._notamIdx || 0) + dir + g.length) % g.length;
+  const next = g[layer._notamIdx];
+  layer.setPopupContent(makePopup(next, g, layer._notamIdx));
+}
+
+// === TIMELINE ===
+// Cache of unique sorted event timestamps for snap-to-event
+let timelineEvents = [];
+
+function rebuildTimeline() {
+  const withTime = allNotams.filter(n => n.time && n.time.startTs && n.time.endTs);
+  const panel = document.getElementById('timelinePanel');
+
+  if (withTime.length === 0) {
+    panel.classList.add('hidden');
+    timelineEvents = [];
+    return;
+  }
+
+  panel.classList.remove('hidden');
+
+  const earliest = Math.min(...withTime.map(n => n.time.startTs.getTime()));
+  const latest = Math.max(...withTime.map(n => n.time.endTs.getTime()));
+
+  const slider = document.getElementById('timelineSlider');
+  slider.min = earliest;
+  slider.max = latest;
+
+  // Default to earliest
+  if (parseFloat(slider.value) < earliest || parseFloat(slider.value) > latest) {
+    slider.value = earliest;
+  }
+
+  document.getElementById('timelineStart').textContent = fmtTimeline(new Date(earliest));
+  document.getElementById('timelineEnd').textContent = fmtTimeline(new Date(latest));
+
+  // === BUILD SPAN BARS + TICK MARKS + EVENT LIST ===
+  const ticksEl = document.getElementById('timelineTicks');
+  ticksEl.innerHTML = '';
+  const span = latest - earliest;
+  const eventSet = new Set();
+
+  // Lane packing — up to 3 lanes, minimising total pairwise overlap.
+  // Each lane stores its concrete active intervals (for DLY NOTAMs: one per day window).
+  const MAX_LANES = 3;
+  const laneIntervals = [[], [], []];
+  const laneOf = new Map(); // entry uid -> lane index
+
+  function entryActiveIntervals(n) {
+    if (n.time.dailyWindows && n.time.dailyWindows.length > 0) {
+      return n.time.dailyWindows.map(w => ({ start: w.start, end: w.end }));
+    }
+    return [{ start: n.time.startTs.getTime(), end: n.time.endTs.getTime() }];
+  }
+
+  function intervalOverlap(a, b) {
+    return Math.max(0, Math.min(a.end, b.end) - Math.max(a.start, b.start));
+  }
+
+  // Sort by total active duration descending so long NOTAMs claim lanes first
+  const sortedForPacking = withTime.slice().sort((a, b) => {
+    const aIvs = entryActiveIntervals(a);
+    const bIvs = entryActiveIntervals(b);
+    const aDur = aIvs.reduce((s, iv) => s + (iv.end - iv.start), 0);
+    const bDur = bIvs.reduce((s, iv) => s + (iv.end - iv.start), 0);
+    return bDur - aDur;
+  });
+
+  sortedForPacking.forEach(n => {
+    const ivs = entryActiveIntervals(n);
+    let bestLane = 0;
+    let bestOverlap = Infinity;
+    for (let i = 0; i < MAX_LANES; i++) {
+      let total = 0;
+      for (const newIv of ivs) {
+        for (const existing of laneIntervals[i]) {
+          total += intervalOverlap(newIv, existing);
+        }
+      }
+      // Prefer earliest lane on ties so we don't leave empty lanes
+      if (total < bestOverlap) {
+        bestOverlap = total;
+        bestLane = i;
+        if (total === 0) break;
+      }
+    }
+    ivs.forEach(iv => laneIntervals[bestLane].push(iv));
+    laneOf.set(n.uid, bestLane);
+  });
+
+  function laneGeometry(laneIdx) {
+    // Container is 18px. Top padding 1px, 5px lane, 1px gap, 5px lane, 1px gap, 5px lane, 0px.
+    return { top: 1 + laneIdx * 6, height: 5 };
+  }
+
+  // Render in original order (stable) so z-order follows the NOTAM order
+  withTime.forEach(n => {
+    const lane = laneOf.get(n.uid) || 0;
+    const g = laneGeometry(lane);
+    if (n.time.dailyWindows && n.time.dailyWindows.length > 0) {
+      n.time.dailyWindows.forEach(w => {
+        addSpan(ticksEl, w.start, w.end, earliest, span, n.color, n, g.top, g.height);
+        eventSet.add(w.start);
+        eventSet.add(w.end);
+      });
+    } else {
+      const s = n.time.startTs.getTime();
+      const e = n.time.endTs.getTime();
+      addSpan(ticksEl, s, e, earliest, span, n.color, n, g.top, g.height);
+      eventSet.add(s);
+      eventSet.add(e);
+    }
+  });
+
+  renderEAMs(ticksEl, earliest, span);
+
+  // Always include earliest and latest as snap targets
+  eventSet.add(earliest);
+  eventSet.add(latest);
+  timelineEvents = Array.from(eventSet).sort((a, b) => a - b);
+
+  // Bind popup group navigation (idempotent — safe to call repeatedly)
+  try { groupAndBindPopups(); } catch(e) {}
+
+  onTimelineChange();
+}
+
+function addTick(container, ts, earliest, span, color, type) {
+  if (span <= 0) return;
+  const pct = ((ts - earliest) / span) * 100;
+  if (pct < 0 || pct > 100) return;
+  const tick = document.createElement('div');
+  tick.className = 'tick ' + type;
+  tick.style.left = pct + '%';
+  tick.style.color = color;
+  container.appendChild(tick);
+}
+
+function addSpan(container, startTs, endTs, earliest, totalSpan, color, entry, top, height) {
+  if (totalSpan <= 0) return;
+  const leftPct = ((startTs - earliest) / totalSpan) * 100;
+  const widthPct = ((endTs - startTs) / totalSpan) * 100;
+  if (widthPct <= 0) return;
+  const bar = document.createElement('div');
+  bar.className = 'span-bar';
+  bar.style.left = leftPct + '%';
+  bar.style.width = Math.max(widthPct, 0.2) + '%';
+  if (typeof top === 'number') bar.style.top = top + 'px';
+  if (typeof height === 'number') {
+    bar.style.height = height + 'px';
+    bar.style.bottom = 'auto';
+  }
+  // Translucent fill so overlaps stack visibly
+  bar.style.background = hexToRgba(color, 0.5);
+  // Tooltip on hover — just the NOTAM id
+  if (entry) {
+    bar.title = entry.id;
+    bar.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      flyTo(entry.uid);
+    });
+  }
+  container.appendChild(bar);
+}
+
+const EAM_GROUP_COLORS = { 1:'#06b050', 2:'#ff9000', 3:'#ffcc00', 4:'#ff0467', 5:'#9063cd', 0:'#556677' };
+function renderEAMs(container, earliest, totalSpan) {
+  if (!Array.isArray(EAM_DATA) || totalSpan <= 0) return;
+  const fmt = ts => {
+    const d = new Date(ts);
+    const pad = n => String(n).padStart(2,'0');
+    return pad(d.getUTCMonth()+1)+'/'+pad(d.getUTCDate())+' '+
+           pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+'Z';
+  };
+  EAM_DATA.forEach(e => {
+    const pct = ((e.t - earliest) / totalSpan) * 100;
+    if (pct < 0 || pct > 100) return;
+    const dot = document.createElement('div');
+    dot.className = 'eam-dot';
+    dot.style.left = pct + '%';
+    dot.style.background = EAM_GROUP_COLORS[e.g] || EAM_GROUP_COLORS[0];
+    dot.title = `EAM — ${fmt(e.t)}  ${e.cs}  ${e.p6} (${e.cl})`;
+    container.appendChild(dot);
+  });
+}
+
+// Convert #rrggbb or rgb(...) to rgba with given alpha
+function hexToRgba(color, alpha) {
+  if (!color) return 'rgba(255,255,255,' + alpha + ')';
+  if (color[0] === '#') {
+    const hex = color.slice(1);
+    const r = parseInt(hex.slice(0,2), 16);
+    const g = parseInt(hex.slice(2,4), 16);
+    const b = parseInt(hex.slice(4,6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+  const m = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(color);
+  if (m) return 'rgba(' + m[1] + ',' + m[2] + ',' + m[3] + ',' + alpha + ')';
+  return color;
+}
+
+function snapToEvent(direction) {
+  if (timelineEvents.length === 0) return;
+  const slider = document.getElementById('timelineSlider');
+  const cur = parseFloat(slider.value);
+  let target = null;
+  if (direction > 0) {
+    // Next event strictly after current
+    for (const ts of timelineEvents) {
+      if (ts > cur + 100) { target = ts; break; }
+    }
+    if (target === null) target = timelineEvents[timelineEvents.length - 1];
+  } else {
+    // Previous event strictly before current
+    for (let i = timelineEvents.length - 1; i >= 0; i--) {
+      if (timelineEvents[i] < cur - 100) { target = timelineEvents[i]; break; }
+    }
+    if (target === null) target = timelineEvents[0];
+  }
+  // Pause auto-play and jump
+  if (typeof window.__tlPlaying !== 'undefined') window.__tlPlaying = false;
+  slider.value = target;
+  onTimelineChange();
+}
+
+function onTimelineChange() {
+  if (showAll) return;
+
+  const ts = parseFloat(document.getElementById('timelineSlider').value);
+  const currentDate = new Date(ts);
+  document.getElementById('timelineCurrent').textContent = fmtTimeline(currentDate);
+
+  let activeCount = 0;
+
+  allNotams.forEach(n => {
+    let isActive;
+    if (n.time && n.time.startTs && n.time.endTs) {
+      if (n.time.dailyWindows) {
+        // DLY: only active during specific daily windows
+        isActive = n.time.dailyWindows.some(w => ts >= w.start && ts <= w.end);
+      } else {
+        isActive = ts >= n.time.startTs.getTime() && ts <= n.time.endTs.getTime();
+      }
+    } else {
+      isActive = true;
+    }
+
+    if (isActive) activeCount++;
+    const opacity = isActive ? 1 : 0.08;
+
+    n.layers.forEach(l => {
+      if (l.setOpacity) l.setOpacity(opacity);
+      if (l.setStyle) l.setStyle({ opacity, fillOpacity: isActive ? 0.12 : 0.01 });
+      // For DivIcon markers (labels)
+      if (l._icon) l._icon.style.opacity = opacity;
+    });
+
+    // Dim card in list
+    const card = document.querySelector(`[data-uid="${n.uid}"]`);
+    if (card) card.classList.toggle('dimmed', !isActive);
+  });
+
+  document.getElementById('timelineActive').textContent = `${activeCount}/${allNotams.length} ACTIVE`;
+}
+
+function toggleShowAll() {
+  showAll = !showAll;
+  const btn = document.getElementById('btnShowAll');
+  btn.classList.toggle('active', showAll);
+  btn.textContent = showAll ? 'FILTERING' : 'SHOW ALL';
+
+  if (showAll) {
+    document.getElementById('timelineCurrent').textContent = 'ALL';
+    document.getElementById('timelineActive').textContent = `${allNotams.length}/${allNotams.length} ACTIVE`;
+    allNotams.forEach(n => {
+      n.layers.forEach(l => {
+        if (l.setOpacity) l.setOpacity(1);
+        if (l.setStyle) l.setStyle({ opacity: 1, fillOpacity: 0.12 });
+        if (l._icon) l._icon.style.opacity = 1;
+      });
+      const card = document.querySelector(`[data-uid="${n.uid}"]`);
+      if (card) card.classList.remove('dimmed');
+    });
+  } else {
+    onTimelineChange();
+  }
+}
+
+// === ADD ===
+function addNOTAMs() {
+  const raw = document.getElementById('notamInput').value;
+  if (!raw.trim()) return;
+
+  const notams = raw.replace(/\r\n/g,'\n').split(/(?=![A-Z]{3,4}\s+\d{2}\/\d{1,4})/).filter(s=>s.trim());
+  let added = 0;
+
+  // First pass: parse all NOTAMs
+  const parsed = [];
+  notams.forEach(nt => {
+    try {
+      const flat = nt.replace(/\n/g,' ').trim();
+      const coords = parseDMS(flat);
+      const radiusNM = parseRadius(flat);
+      const alt = parseAlt(flat);
+      const time = parseTime(flat);
+      const id = parseId(flat);
+      if (!coords.length) return;
+      const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8);
+      parsed.push({ id, uid, color: '#FFFFFF', coords, radiusNM, alt, time, text: flat, layers: [] });
+    } catch(err) { console.error('Parse error:', err, nt.slice(0,60)); }
+  });
+
+  // Assign colors by duration
+  parsed.forEach(entry => { entry.color = getDurationColor(entry, parsed); });
+
+  // Second pass: plot on map
+  parsed.forEach(entry => {
+    try {
+    const color = entry.color;
+    let labelLL;
+
+    if (entry.radiusNM && entry.coords.length >= 1) {
+      const c = [entry.coords[0].lat, entry.coords[0].lng];
+      labelLL = c;
+      const circle = L.circle(c, {
+        radius: nmToM(entry.radiusNM), color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3'
+      }).addTo(map);
+      const dot = L.circleMarker(c, { radius: 4, color, fillColor: color, fillOpacity: 1, weight: 2 }).addTo(map);
+      const popup = makePopup(entry);
+      circle.bindPopup(popup); dot.bindPopup(popup);
+      entry.layers.push(circle, dot);
+      entry.type = 'circle';
+
+    } else if (entry.coords.length >= 3) {
+      const areasToRender = (entry.areas && entry.areas.length > 0) ? entry.areas : [entry.coords];
+      areasToRender.forEach((areaCoords, areaIdx) => {
+        const ll = areaCoords.map(c => [c.lat, c.lng]);
+        const poly = L.polygon(ll, { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }).addTo(map);
+        poly.bindPopup(makePopup(entry));
+        entry.layers.push(poly);
+        if (areaIdx === 0) {
+          const ctr = poly.getBounds().getCenter();
+          labelLL = [ctr.lat, ctr.lng];
+        }
+        areaCoords.forEach(c => {
+          const mk = L.circleMarker([c.lat, c.lng], { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+          entry.layers.push(mk);
+        });
+      });
+      entry.type = 'polygon';
+
+    } else {
+      labelLL = [entry.coords[0].lat, entry.coords[0].lng];
+      entry.coords.forEach(c => {
+        const mk = L.circleMarker([c.lat, c.lng], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+        mk.bindPopup(makePopup(entry));
+        entry.layers.push(mk);
+      });
+      entry.type = 'point';
+    }
+
+    entry.layers.push(makeLabel(labelLL, entry));
+    allNotams.push(entry);
+    added++;
+    } catch(err) { console.error('Plot error:', err, entry.id); }
+  });
+
+  if (added) {
+    document.getElementById('notamInput').value = '';
+    updateList();
+    rebuildTimeline();
+    fitAll();
+  }
+}
+
+function removeNotam(uid) {
+  const i = allNotams.findIndex(n=>n.uid===uid);
+  if (i===-1) return;
+  allNotams[i].layers.forEach(l=>map.removeLayer(l));
+  allNotams.splice(i,1);
+  updateList();
+  rebuildTimeline();
+}
+
+// Compute padding so map content sits in the left ~75% of the viewport
+function leftBiasedPadding() {
+  const w = window.innerWidth || document.documentElement.clientWidth || 1000;
+  return {
+    paddingTopLeft: [0, 0],
+    paddingBottomRight: [Math.round(w * 0.25), 0]
+  };
+}
+
+function flyTo(uid) {
+  const e = allNotams.find(n=>n.uid===uid);
+  if (!e) return;
+  if (e.type==='circle' && e.radiusNM) {
+    map.fitBounds(L.circle([e.coords[0].lat,e.coords[0].lng],{radius:nmToM(e.radiusNM)}).getBounds().pad(0.3), leftBiasedPadding());
+  } else {
+    const g = L.featureGroup(e.layers.filter(l=>l.getBounds||l.getLatLng));
+    if (g.getLayers().length) map.fitBounds(g.getBounds().pad(0.3), leftBiasedPadding());
+  }
+}
+
+// Sort key: prefix (e.g. CARF), then year, then number
+// Extract the operation codename from a NOTAM's raw text.
+// Returns something like "KELLY THREE", "SHADO (IBEX)", "MONK 2 (OAK BRAVO)",
+// "SHADO (IBEX / OAK ALPHA)", or null if nothing matches.
+function extractCodename(text) {
+  if (!text) return null;
+  const t = text.toUpperCase();
+
+  // DCC-prefixed ZAK-style ops
+  const dcc = /DCC\s+(KELLY|BRAVO|IRON|ECHO|DELTA|GOLF|HOTEL|XRAY|YANKEE|ZULU)\s+THREE/.exec(t);
+  if (dcc) return dcc[1] + ' THREE';
+
+  // Generic DCC <name> followed by STNR (catches things like "DCC TRAILING WIRE")
+  const dcc2 = /DCC\s+([A-Z][A-Z0-9 ]*?)\s+STNR/.exec(t);
+  if (dcc2) return dcc2[1].trim();
+
+  // Named reservations with aircraft in parens — collect all distinct aircraft identifiers
+  // Operation name: first word after "RESERVATION" (may include a trailing number)
+  const opMatch = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)[\s,]*\(/.exec(t);
+  if (opMatch) {
+    const op = opMatch[1].trim();
+    // Collect every (AIRCRAFT) group that follows (IBEX, OAK ALPHA, OAK BRAVO, etc.)
+    const aircraft = [];
+    const re = /\(([A-Z][A-Z ]*)\)/g;
+    let m;
+    while ((m = re.exec(t)) !== null) {
+      const code = m[1].trim();
+      // Skip short generic tokens that aren't operation aircraft (e.g. IFR in parens, if any)
+      if (/^(IBEX|CIRCUS|MANATEE|NOVEMBER|OAK ALPHA|OAK BRAVO|OAK CHARLIE|OAK DELTA|OAK OSCAR)$/.test(code)) {
+        if (!aircraft.includes(code)) aircraft.push(code);
+      }
+    }
+    if (aircraft.length > 0) return op + ' (' + aircraft.join(' / ') + ')';
+    return op;
+  }
+
+  // RESERVATION <NAME> with no aircraft parens (e.g. "RESERVATION CGULL WI ...")
+  const opOnly = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)\s+(WI|W\/I)\b/.exec(t);
+  if (opOnly) return opOnly[1].trim();
+
+  return null;
+}
+
+function notamSortKey(e) {
+  const m = /^(\S+)\s+(\d+)\/(\d+)/.exec(e.id || '');
+  if (!m) return ['~', 0, 0];
+  return [m[1], parseInt(m[2],10), parseInt(m[3],10)];
+}
+
+function updateList() {
+  const body = document.getElementById('listBody');
+  const ct = allNotams.length;
+  document.getElementById('listCount').textContent = String(ct).padStart(2,'0');
+
+  if (!ct) {
+    body.innerHTML = '<div class="no-data">NO DATA<br><span class="jp-empty">データなし</span></div>';
+    return;
+  }
+
+  // Sort a copy of allNotams by ID without mutating the source array
+  const sorted = allNotams.slice().sort((a, b) => {
+    const ka = notamSortKey(a), kb = notamSortKey(b);
+    if (ka[0] !== kb[0]) return ka[0] < kb[0] ? -1 : 1;
+    if (ka[1] !== kb[1]) return ka[1] - kb[1];
+    return ka[2] - kb[2];
+  });
+
+  const nowTs = Date.now();
+  body.innerHTML = sorted.map(e => {
+    const expired = !!(e.time && e.time.endTs && e.time.endTs.getTime() < nowTs);
+    return `
+    <div class="notam-card${expired ? ' expired' : ''}" data-uid="${e.uid}" style="border-left-color:${e.color};" onclick="flyTo('${e.uid}')">
+      <div class="notam-card-header">
+        <span class="notam-card-id" style="color:${e.color}" ${expired ? `onclick="event.stopPropagation(); this.closest('.notam-card').classList.toggle('expanded');"` : ''}>${esc(e.id)}</span>
+        <span class="notam-card-type" style="color:${e.color};border-color:${e.color};">${esc(extractCodename(e.text) || (e.type || '').toUpperCase())}</span>
+        <button class="notam-card-remove" onclick="event.stopPropagation();removeNotam('${e.uid}')" title="Remove">X</button>
+      </div>
+      <div class="notam-card-details">
+        ${e.coords.map(c=>c.raw).join(', ')}${e.radiusNM ? ` / ${e.radiusNM}NM` : ''}${e.alt ? ` / ${esc(e.alt)}` : ''}
+        ${e.time ? `<br>${e.time.from} — ${e.time.to}` : ''}
+      </div>
+      <div class="notam-card-text" onclick="copyNotamText(this, event)" title="Click to copy">${esc(e.text)}</div>
+    </div>
+  `;
+  }).join('');
+}
+
+// Collapse / expand the Active NOTAM list panel by clicking the header
+function toggleListPanel() {
+  const panel = document.getElementById('listPanel');
+  if (!panel) return;
+  panel.classList.toggle('collapsed');
+  const toggle = document.getElementById('listCollapseToggle');
+  if (toggle) toggle.textContent = panel.classList.contains('collapsed') ? '+' : '−';
+}
+
+function fitAll() {
+  const all = allNotams.flatMap(n=>n.layers.filter(l=>l.getBounds||l.getLatLng));
+  if (all.length) map.fitBounds(L.featureGroup(all).getBounds().pad(0.2), leftBiasedPadding());
+}
+
+function clearAll() {
+  allNotams.forEach(n=>n.layers.forEach(l=>map.removeLayer(l)));
+  allNotams.length = 0;
+  document.getElementById('notamInput').value = '';
+  updateList(); rebuildTimeline();
+}
+
+function togglePanel() {
+  const p = document.getElementById('inputPanel');
+  p.classList.toggle('collapsed');
+  document.querySelector('.collapse-toggle').textContent = p.classList.contains('collapsed') ? '+' : '_';
+}
+
+
+// Click NOTAM text to copy to clipboard
+function copyNotamText(el, ev) {
+  if (ev) ev.stopPropagation();
+  const text = el.textContent || el.innerText || "";
+  if (!text.trim()) return;
+  const flash = () => {
+    el.classList.add("copied");
+    setTimeout(() => el.classList.remove("copied"), 700);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(flash).catch(() => {});
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); flash(); } catch(e){}
+    ta.remove();
+  }
+}
+
+// Auto-load hardcoded NOTAMs
+(function() {
+  const notamData = "!CARF 04/240 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL230 2604141400-2604142359\n\n!CARF 04/242 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604141400-2604142359\n\n!CARF 04/244 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL230 2604150000-2604152359\n\n!CARF 04/245 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604150000-2604152359\n\n!CARF 04/186 ZWY AIRSPACE STNR ALT RESERVATION MONK 2(OAK BRAVO) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 370000N0724000W TO 370000N0700000W TO 350000N0700000W TO 350000N0724800W TO 350600N0724000W TO POINT OF ORIGIN. SFC-FL250 2604132003-2604132303\n\n!CARF 04/239 ZWY AIRSPACE STNR ALT RESERVATION SHADO (IBEX) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 390000N0670000W TO 400000N0670000W TO 395900N0683000W TO 394100N0711500W TO POINT OF ORIGIN. SFC-FL200 AND (OAK ALPHA) WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN. SFC-FL210 2604142000-2604150001\n\n!CARF 04/194 ZWY AIRSPACE STNR ALT RESERVATION FIRST (OAK ALPHA) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN SFC-FL210 DLY 1830-1930 2604131830-2604161930\n\n!CARF 04/193 ZWY AIRSPACE STNR ALT RESERVATION FIRST (OAK ALPHA) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN SFC-FL210 DLY 1515-1615 2604131515-2604161615\n\n!CARF 04/259 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL230 2604160000-2604162359\n\n!CARF 04/260 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604160000-2604162359\n\n!CARF 04/261 ZWY AIRSPACE STNR ALT RESERVATION SHADO (IBEX) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 390000N0670000W TO 400000N0670000W TO 395900N0683000W TO 394100N0711500W TO POINT OF ORIGIN. SFC-FL200 AND (OAK ALPHA) WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN. SFC-FL210 2604142200-2604150300\n\n!CARF 04/267 ZAK AIRSPACE DCC IRON THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 430000N1310000W SFC-FL270 2604170000-2604172359\n\n!CARF 04/276 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604170000-2604172359\n\n!CARF 04/288 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604170000-2604172359\n\n!CARF 04/278 ZAK AIRSPACE DCC IRON THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 430000N1310000W SFC-FL270 2604180000-2604182359\n\n!CARF 04/284 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604180000-2604182359\n\n!CARF 04/290 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604180000-2604182359\n\n!CARF 04/289 ZWY AIRSPACE STNR ALT RESERVATION SHADO (IBEX) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 390000N0670000W TO 400000N0670000W TO 395900N0683000W TO 394100N0711500W TO POINT OF ORIGIN. SFC-FL200 DLY 2215-2359 2604152215-2604192359\n\n!CARF 04/287 ZWY AIRSPACE STNR ALT RESERVATION SHADO(OAK BRAVO) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 370000N0724000W TO 370000N0700000W TO 350000N0700000W TO 350000N0724800W TO 350600N0724000W TO POINT OF ORIGIN. SFC-FL250 2604170001-2604182359\n\n!CARF 04/299 ZAK AIRSPACE DCC IRON THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 430000N1310000W SFC-FL270 2604190000-2604192359\n\n!CARF 04/300 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604190000-2604192359\n\n!CARF 04/301 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604190000-2604192359\n\n!CARF 04/291 ZWY AIRSPACE STNR ALT RESERVATION SHADO (IBEX) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 390000N0670000W TO 400000N0670000W TO 395900N0683000W TO 394100N0711500W TO POINT OF ORIGIN. SFC-FL200 2604152215-2604192359\n\n!CARF 04/343 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604200000-2604202359\n\n!CARF 04/347 ZAK AIRSPACE DCC IRON THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 430000N1310000W SFC-FL270 2604200000-2604202359\n\n!CARF 04/348 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604200000-2604202359\n\n!CARF 04/326 ZWY AIRSPACE STNR ALT RESERVATION SHADO (OAK BRAVO) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 370000N0724000W TO 370000N0700000W TO 350000N0700000W TO 350000N0724800W TO 350600N0724000W TO POINT OF ORIGIN. SFC-FL250 2604200001-2604202359\n\n!CARF 04/405 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL230 2604210000-2604212359\n\n!CARF 04/407 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604210000-2604212359\n\n!CARF 04/330 ZWY AIRSPACE STNR ALT RESERVATION SHADO(CIRCUS) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 330000N0754300W TO 330000N0730000W TO 300000N0730000W TO 300000N0760000W TO 324800N0760000W TO POINT OF ORIGIN. SFC-FL250 2604180910-2604192359\n\n!CARF 04/328 ZWY AIRSPACE STNR ALT RESERVATION SHADO(CIRCUS) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 330000N0754300W TO 330000N0730000W TO 300000N0730000W TO 300000N0760000W TO 324800N0760000W TO POINT OF ORIGIN. SFC-FL250 2604210001-2604212359\n\n!CARF 04/376 ZWY AIRSPACE DUE TO A MIL STNR ALT RESERVATION, SHADO4 (OAK ALPHA) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN SFC-FL210 2604191730-2604212359\n\n!CARF 04/377 ZWY AIRSPACE STNR ALT RESERVATION SHADO (IBEX) NEW YORK OCEANIC WILL NOT ACCEPT IFR FLT WI AN AREA DEFINED AS 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 390000N0670000W TO 400000N0670000W TO 395900N0683000W TO 394100N0711500W TO POINT OF ORIGIN. SFC-FL200 2604190034-2604222359\n\n!CARF 04/525 ZAK AIRSPACE DCC KELLY THREE WEEK 4 STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604240121-2604240551\n\n!CARF 04/526 ZAK AIRSPACE DCC IRON THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 430000N1310000W SFC-FL270 2604242131-2604250031\n\n!CARF 04/535 ZAK AIRSPACE DCC KELLY THREE WEEK 4 STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604242131-2604250201\n\n!CARF 04/539 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL270 2604250151-2604250621\n\n!CARF 04/536 ZWY AIRSPACE STNR ALT RESERVATION ASHEN (OAK CHARLIE) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLIGHT WI AN AREA DEFINED AS 330000N0754300W TO 350000N0724800W TO 350000N0700000W TO 330000N0700000W TO POINT OF ORIGIN. SFC-FL250 2604241957-2604242257\n\n!CARF 04/543 ZWY AIRSPACE DUE TO A STNR ALT RESERVATION SLOPE (IBEX) W/I THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLIGHT WI AN AREA DEFINED AS 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 390000N0670000W TO 400000N0670000W TO 395900N0683000W TO 394100N0711500W TO POINT OF ORIGIN. SFC-FL200 AND WI AN AREA DEFINED AS (NOVEMBER) 400000N0670000W TO 400000N0660000W TO 370000N0660000W TO 370000N0690000W TO 383000N0690000W TO 390000N0670000W TO POINT OF ORIGIN, SFC-FL200 AND WI AN AREA DEFINED AS (OAK OSCAR) 400000N0660000W TO 400000N0620000W TO 360000N0620000W TO 360000N0660000W TO POINT OF ORIGIN. SFC-FL250 2604250130-2604250530\n\n!CARF 04/546 ZAK AIRSPACE DCC BRAVO THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 404000N1271000W TO 404000N1320000W TO 373000N1320000W TO 373000N1271000W TO POINT OF ORIGIN SFC-FL270 2604261400-2604262000\n\n!CARF 04/547 ZAK AIRSPACE DCC IRON THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 430000N1310000W SFC-FL270 2604261430-2604261930\n\n!CARF 04/545 ZAK AIRSPACE DCC KELLY THREE WEEK 4 STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604262051-2604270121\n\n!CARF 04/551 ZWY AIRSPACE STNR ALT RESERVATION FIRST (OAK ALPHA) WI THE NEW YORK OCEANIC CTA/FIR ZNY WILL NOT ACCEPT IFR FLIGHTS WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN. SFC-FL210 2604241545-2604241730\n\n!CARF 04/550 ZWY AIRSPACE DUE TO MIL STNR ALT RESERVATION, (CIRCUS) WI THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLIGHT WI AN AREA DEFINED AS 330000N0754300W TO 330000N0730000W TO 300000N0730000W TO 300000N0760000W TO 324800N0760000W TO POINT OF ORIGIN. SFC-FL250 2604262051-2604270051\n\n!CARF 04/640 ZWY AIRSPACE STNR ALT RESERVATION SCORE (OAK BRAVO) W/I THE NEW YORK OCEANIC CTA/FIR, NEW YORK OCEANIC WILL NOT ACCEPT IFR FLIGHT WI AN AREA DEFINED AS 370000N0724000W TO 370000N0700000W TO 350000N0700000W TO 350000N0724800W TO 350600N0724000W TO POINT OF ORIGIN. SFC-FL250 DLY 1400-2100 2604281400-2605012100\n\n!CARF 04/613 ZMP AIRSPACE DCC TRAILING WIRE STNR ALT RESERVATION WI AN AREA DEFINED AS 471300N0900500W TO 463700N0871100W TO 470700N0870900W TO 474500N0900500W TO POINT OF ORIGIN FL200-FL250 2604292200-2604301000\n\n!CARF 04/669 ZAK AIRSPACE DCC KELLY THREE STNR ALT RESERVATION WI AN AREA DEFINED AS 80NM RADIUS OF 342500N1293000W SFC-FL270 2604292300-2604301100\n\n!CARF 04/697 ZWY AIRSPACE STNR ALT RESERVATION FIRST (OAK ALPHA) WI THE NEW YORK OCEANIC CTA/FIR ZNY WILL NOT ACCEPT IFR FLIGHTS WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN. SFC-FL210 2604291400-2604291530\n\n!CARF 04/667 ZWY AIRSPACE STNR ALT RESERVATION FIRST (OAK ALPHA) WI THE NEW YORK OCEANIC CTA/FIR ZNY WILL NOT ACCEPT IFR FLIGHTS WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN. SFC-FL210 2604281400-2604281600\n\n!CARF 04/731 ZWY AIRSPACE STNR ALT RESERVATION PETE, (OAK ALPHA) WI THE NEW YORK OCEANIC CTA/FIR ZNY WILL NOT ACCEPT IFR FLIGHTS WI AN AREA DEFINED AS 384600N0723000W TO 390700N0715300W TO 384100N0715500W TO 382000N0695700W TO 383000N0690000W TO 370000N0690000W TO 370000N0724000W TO 371500N0724000W TO 375700N0730000W TO 382000N0724800W TO POINT OF ORIGIN SFC-210 AND WI AN AREA DEFINED AS (CIRCUS) 330000N0754300W TO 330000N0730000W TO 300000N0730000W TO 300000N0760000W TO 324800N0760000W TO POINT OF ORIGIN SFC-FL250 AND WI AN AREA DEFINED AS (MANATEE) 290000N0720000W TO 260000N0720000W TO 260000N 0750000W TO 290000N0750000W TO POINT OF ORIGIN SFC-FL250 2604302300-2605011100\n\n!CARF 04/671 ZMP AIRSPACE DCC RIB MOUNTAIN STNR ALT RESERVATION WI AN AREA DEFINED AS 444200N0902000W TO 444800N0902200W TO 445700N0901600W TO 445900N0900200W TO 444800N0890200W TO 444100N0885500W TO 442900N0890000W TO POINT OF ORIGIN FL180-FL240 2604301415-2604301645";
+
+  const notams = notamData.split(/(?=![A-Z]{3,4}\s+\d{2}\/\d{1,4})/).filter(s=>s.trim());
+  let added = 0;
+
+  const parsed = [];
+  notams.forEach(nt => {
+    try {
+      const flat = nt.replace(/\n/g,' ').trim();
+      const coords = parseDMS(flat);
+      const radiusNM = parseRadius(flat);
+      const alt = parseAlt(flat);
+      const time = parseTime(flat);
+      const id = parseId(flat);
+      if (!coords.length) return;
+      const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8);
+      parsed.push({ id, uid, color: '#FFFFFF', coords, areas: parseAreas(flat), radiusNM, alt, time, text: flat, layers: [] });
+    } catch(err) { console.error('Parse error:', err); }
+  });
+
+  parsed.forEach(entry => { entry.color = getDurationColor(entry, parsed); });
+
+  parsed.forEach(entry => {
+    try {
+      const color = entry.color;
+      let labelLL;
+
+      if (entry.radiusNM && entry.coords.length >= 1) {
+        const c = [entry.coords[0].lat, entry.coords[0].lng];
+        labelLL = c;
+        const circle = L.circle(c, {
+          radius: nmToM(entry.radiusNM), color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3'
+        }).addTo(map);
+        const dot = L.circleMarker(c, { radius: 4, color, fillColor: color, fillOpacity: 1, weight: 2 }).addTo(map);
+        const popup = makePopup(entry);
+        circle.bindPopup(popup); dot.bindPopup(popup);
+        entry.layers.push(circle, dot);
+        entry.type = 'circle';
+      } else if (entry.coords.length >= 3) {
+        const areasToRender = (entry.areas && entry.areas.length > 0) ? entry.areas : [entry.coords];
+        areasToRender.forEach((areaCoords, areaIdx) => {
+          const ll = areaCoords.map(c => [c.lat, c.lng]);
+          const poly = L.polygon(ll, { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }).addTo(map);
+          poly.bindPopup(makePopup(entry));
+          entry.layers.push(poly);
+          if (areaIdx === 0) {
+            const ctr = poly.getBounds().getCenter();
+            labelLL = [ctr.lat, ctr.lng];
+          }
+          areaCoords.forEach(c => {
+            const mk = L.circleMarker([c.lat, c.lng], { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+            entry.layers.push(mk);
+          });
+        });
+        entry.type = 'polygon';
+      } else {
+        labelLL = [entry.coords[0].lat, entry.coords[0].lng];
+        entry.coords.forEach(c => {
+          const mk = L.circleMarker([c.lat, c.lng], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+          mk.bindPopup(makePopup(entry));
+          entry.layers.push(mk);
+        });
+        entry.type = 'point';
+      }
+
+      entry.layers.push(makeLabel(labelLL, entry));
+      allNotams.push(entry);
+      added++;
+    } catch(err) { console.error('Plot error:', err, entry.id); }
+  });
+
+  if (added) {
+    updateList();
+    rebuildTimeline();
+    fitAll();
+
+    // Auto-tab through events at 1-second intervals — same effect as the
+    // user repeatedly clicking the ▶ snap button. User interaction with
+    // the timeline permanently ends the automated playback.
+    const slider = document.getElementById('timelineSlider');
+    function stopAuto() {
+      if (autoTick !== null) { clearInterval(autoTick); autoTick = null; }
+    }
+    let autoTick = setInterval(function() {
+      if (!timelineEvents || timelineEvents.length === 0) return;
+      const cur = parseFloat(slider.value);
+      let target = null;
+      for (const ts of timelineEvents) {
+        if (ts > cur + 100) { target = ts; break; }
+      }
+      // Wrap to first event when we run off the end
+      if (target === null) target = timelineEvents[0];
+      slider.value = target;
+      onTimelineChange();
+    }, 1000);
+    slider.addEventListener('input', stopAuto);
+    slider.addEventListener('pointerdown', stopAuto);
+    slider.addEventListener('keydown', stopAuto);
+    document.getElementById('snapPrev').addEventListener('click', stopAuto);
+    document.getElementById('snapNext').addEventListener('click', stopAuto);
+  }
+})();
+</script>
+</body>
+</html>
