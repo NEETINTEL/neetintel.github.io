@@ -761,7 +761,7 @@
 
       <div class="start-section">
         <h2>If you came for EAM structure analysis</h2>
-        <p>The <a class="tab-jump" href="#" onclick="showTab('heatmaps'); return false;">EAM Structure Analysis</a> tab groups EAMs by character length and highlights repeating segments across messages. Suggested entry points: <a href="eam_46char_format_analysis.html" target="_blank">46-char format analysis</a>, <a href="block_structure.html" target="_blank">block structure</a>, and <a href="cross_length_patterns.html" target="_blank">cross-length patterns</a>. The <a href="about_structure_heatmaps.html" target="_blank">"How to read these heatmaps"</a> page explains the visualization.</p>
+        <p>The <a class="tab-jump" href="#" onclick="showTab('heatmaps'); return false;">EAM Structure Analysis</a> tab groups EAMs by character length and highlights repeating segments across messages. The <a href="about_structure_heatmaps.html" target="_blank">"How to read these heatmaps"</a> page explains the visualization.</p>
       </div>
 
       <div class="start-section">
@@ -9144,23 +9144,11 @@
 
         if (currentIndex === -1) return;
 
-        let newIndex = null;
-        if (e.key === 'ArrowLeft') {
-          // Don't wrap around at the beginning
-          if (currentIndex > 0) {
-            newIndex = currentIndex - 1;
-          }
-        } else {
-          // Don't wrap around at the end
-          if (currentIndex < tabOrder.length - 1) {
-            newIndex = currentIndex + 1;
-          }
-        }
+        const delta = e.key === 'ArrowLeft' ? -1 : 1;
+        const newIndex = (currentIndex + delta + tabOrder.length) % tabOrder.length;
 
-        if (newIndex !== null) {
-          showTab(tabOrder[newIndex]);
-          e.preventDefault();
-        }
+        showTab(tabOrder[newIndex]);
+        e.preventDefault();
       }
 
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
