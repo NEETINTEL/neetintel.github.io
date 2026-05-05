@@ -225,6 +225,39 @@
         .group-heading-5 { border-left-color: #9063cd; color: #9063cd; }
         .group-heading-unclassified { border-left-color: #555; color: #aaa; }
 
+        /* Stat cards */
+        .stat-card {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #9063cd;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 140px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #e0e0e0;
+            line-height: 1;
+        }
+
+        .stat-card .stat-sub {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 3px;
+        }
+
         /* Heatmap */
         .heatmap-container {
             position: sticky;
@@ -405,6 +438,11 @@
             .filter-controls, .sort-controls {
                 min-width: 100%;
             }
+
+            .stat-card {
+                min-width: 0;
+                flex: 1;
+            }
         }
     </style>
 </head>
@@ -549,6 +587,11 @@
                     <label for="filter-group-4"><span class="group-label group-label-4">Group 4</span></label>
                 </div>
             </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Messages</div>
+            <div class="stat-value" id="stat-message-count">14</div>
+            <div class="stat-sub" id="stat-message-sub">of 14 total</div>
         </div>
     </div>
     <div class="heatmap-container">
@@ -955,6 +998,13 @@
                     }
                 }
             });
+
+            // Update message count stat card
+            const totalBlocks = document.querySelectorAll('.message-block').length;
+            const countEl = document.getElementById('stat-message-count');
+            const subEl = document.getElementById('stat-message-sub');
+            if (countEl) countEl.textContent = visibleMessages.length.toLocaleString();
+            if (subEl) subEl.textContent = 'of ' + totalBlocks.toLocaleString() + ' total';
 
             // Recalculate heatmap
             const positionCounts = new Array(messageLength).fill(0);
