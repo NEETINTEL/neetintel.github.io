@@ -703,6 +703,56 @@ function parseCoords(str) {
   return parseDegOnly(str);
 }
 
+// ICAO Q-line trailer: ".../<lat><N|S><lng><E|W><RRR>" where RRR is radius in NM.
+// e.g. "Q) EGXX/QRDCA/IV/BO /W /050/660/5453N00036E062" → center 54°53'N 0°36'E, 62 NM.
+// Anchored to the Q) field so random digit runs elsewhere don't get misread as radius.
+function parseQLine(text) {
+  const qIdx = text.search(/\bQ\)/);
+  if (qIdx === -1) return null;
+  const aIdx = text.indexOf('A)', qIdx);
+  const qSection = aIdx > qIdx ? text.slice(qIdx, aIdx) : text.slice(qIdx, qIdx + 200);
+  const m = /(\d{4}|\d{6})([NS])(\d{5}|\d{7})([EW])(\d{3})\b/.exec(qSection);
+  if (!m) return null;
+  const lat = dmsTokenToDecimal(m[1], m[2]);
+  const lng = dmsTokenToDecimal(m[3], m[4]);
+  const radiusNM = parseInt(m[5], 10);
+  if (lat === null || lng === null || !Number.isFinite(radiusNM)) return null;
+  return { lat, lng, radiusNM, raw: m[1] + m[2] + m[3] + m[4] + m[5] };
+}
+
+// Complex airspace activation list — UK "DANGER AREAS ARE ACTIVATED" style.
+// Finds repeated "<DESIGNATOR> HHMM-HHMM <ALT>-<ALT>" rows and groups them by
+// designator so each sub-airspace becomes one entry with multiple activation
+// windows (reused on the timeline as dailyWindows).
+function parseComplexActivations(text, baseDate) {
+  if (!baseDate) return null;
+  const re = /\b([A-Z]{2,5}\d{2,4}[A-Z]?)\s+(\d{4})-(\d{4})\s+(SFC|FL\d{2,3})-(FL\d{2,3}|UNL)\b/g;
+  const byDesignator = new Map();
+  const baseY = baseDate.getUTCFullYear();
+  const baseMo = baseDate.getUTCMonth();
+  const baseDy = baseDate.getUTCDate();
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const desig = m[1].toUpperCase();
+    // Skip the parent NOTAM id itself (e.g. "M3283/26") — its trailing year/serial
+    // wouldn't match the HHMM-HHMM frame, but guard anyway.
+    if (/^M\d/.test(desig)) continue;
+    const sH = parseInt(m[2].slice(0, 2), 10);
+    const sM = parseInt(m[2].slice(2, 4), 10);
+    const eH = parseInt(m[3].slice(0, 2), 10);
+    const eM = parseInt(m[3].slice(2, 4), 10);
+    const crossesMidnight = (eH * 60 + eM) <= (sH * 60 + sM);
+    const winStart = Date.UTC(baseY, baseMo, baseDy, sH, sM);
+    const winEnd = Date.UTC(baseY, baseMo, baseDy + (crossesMidnight ? 1 : 0), eH, eM);
+    const altBand = `${m[4].toUpperCase()}-${m[5].toUpperCase()}`;
+    if (!byDesignator.has(desig)) {
+      byDesignator.set(desig, { designator: desig, windows: [], altBand });
+    }
+    byDesignator.get(desig).windows.push({ start: winStart, end: winEnd });
+  }
+  return byDesignator.size > 0 ? Array.from(byDesignator.values()) : null;
+}
+
 // Split a NOTAM body into distinct polygon areas if it defines several
 // (e.g. "AREA D DEFINED AS ... POINT OF ORIGIN. AREA E DEFINED AS ...")
 function splitIntoAreas(text) {
@@ -946,7 +996,7 @@ function makePopup(e, group, idx) {
     ${geomField}
     ${e.radiusNM ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">RADIUS: </span>${e.radiusNM} NM</div>` : ''}
     ${e.alt ? `<div class="popup-field"><span class="f-label" style="color:#FFAA00">ALT: </span>${esc(e.alt)}</div>` : ''}
-    ${e.time ? `<div class="popup-field"><span class="f-label" style="color:#888880">TIME: </span>${e.time.from} — ${e.time.to}</div>` : ''}
+    ${e.time ? `<div class="popup-field"><span class="f-label" style="color:#888880">TIME: </span>${e.time.from} — ${e.time.to}${e.time.dailyWindows && e.time.dailyWindows.length > 1 ? ` (${e.time.dailyWindows.length} windows)` : ''}</div>` : ''}
     <div class="popup-raw" onclick="copyNotamText(this, event)" title="Click to copy">${esc(e.text)}</div>`;
 }
 
@@ -1324,6 +1374,45 @@ async function addNOTAMs() {
         continue;
       }
 
+      // Complex airspace-activation NOTAMs (e.g. UK "DANGER AREAS ARE ACTIVATED"
+      // listing many <EGD323A> <HHMM>-<HHMM> <FL___>-<FL___> rows). Expand into one
+      // entry per sub-airspace, all sharing the Q-line geometry, each carrying its
+      // own activation windows on the timeline.
+      const qInfo = parseQLine(flat);
+      const baseDate = time && time.startTs;
+      const activations = parseComplexActivations(flat, baseDate);
+      if (activations) {
+        let centerCoords = parseCoords(flat);
+        if (!centerCoords.length && qInfo) {
+          centerCoords = [{ lat: qInfo.lat, lng: qInfo.lng, raw: qInfo.raw }];
+        }
+        const subRadius = (qInfo && qInfo.radiusNM) || parseRadius(flat) || null;
+        if (centerCoords.length && subRadius) {
+          let labelPlaced = false;
+          for (const act of activations) {
+            const subId = `${id} ${act.designator}`;
+            if (existingIds.has(subId)) { skipped++; continue; }
+            existingIds.add(subId);
+            const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '_' + act.designator;
+            const subTime = time ? {
+              from: time.from, to: time.to,
+              startTs: time.startTs, endTs: time.endTs,
+              dailyWindows: act.windows,
+              dlyLabel: ''
+            } : null;
+            parsed.push({
+              id: subId, uid, color: '#FFFFFF',
+              coords: centerCoords, radiusNM: subRadius,
+              alt: act.altBand, time: subTime,
+              isTrack: false, suaFeature: null, text: flat, layers: [],
+              _skipLabel: labelPlaced
+            });
+            labelPlaced = true;
+          }
+          continue;
+        }
+      }
+
       let coords = parseCoords(flat);
       let suaFeature = null;
 
@@ -1413,7 +1502,7 @@ async function addNOTAMs() {
       entry.type = 'point';
     }
 
-    entry.layers.push(makeLabel(labelLL, entry));
+    if (!entry._skipLabel) entry.layers.push(makeLabel(labelLL, entry));
     allNotams.push(entry);
     added++;
     } catch(err) { console.error('Plot error:', err, entry.id); }
@@ -1477,7 +1566,7 @@ function extractCodename(text) {
   // Named reservations with aircraft in parens — collect all distinct aircraft identifiers
   // Operation name: first word after "RESERVATION" (may include a trailing number).
   // Tolerate punctuation (e.g. "RESERVATION, SHADO4 (...)") and digits inside the op name.
-  const opMatch = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)\s*\(/.exec(t);
+  const opMatch = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)[\s,]*\(/.exec(t);
   if (opMatch) {
     const op = opMatch[1].trim();
     // Collect every (AIRCRAFT) group that follows
@@ -1486,13 +1575,17 @@ function extractCodename(text) {
     let m;
     while ((m = re.exec(t)) !== null) {
       const code = m[1].trim();
-      if (/^(IBEX|CIRCUS|NOVEMBER|OAK ALPHA|OAK BRAVO|OAK CHARLIE|OAK DELTA|OAK OSCAR)$/.test(code)) {
+      if (/^(IBEX|CIRCUS|MANATEE|NOVEMBER|OAK ALPHA|OAK BRAVO|OAK CHARLIE|OAK DELTA|OAK OSCAR)$/.test(code)) {
         if (!aircraft.includes(code)) aircraft.push(code);
       }
     }
     if (aircraft.length > 0) return op + ' (' + aircraft.join(' / ') + ')';
     return op;
   }
+
+  // RESERVATION <NAME> with no aircraft parens (e.g. "RESERVATION CGULL WI ...")
+  const opOnly = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)\s+(WI|W\/I)\b/.exec(t);
+  if (opOnly) return opOnly[1].trim();
 
   return null;
 }
