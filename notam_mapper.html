@@ -823,7 +823,18 @@ async function fetchSuaFeature(canonical) {
   }
 }
 
-function parseAlt(t) { const m = t.match(/(SFC|FL\d+|\d+FT)[\s-]*(FL\d+|\d+FT|UNL)?/i); return m ? m[0] : null; }
+function parseAlt(t) {
+  // ICAO F)/G) fields — canonical lower / upper altitude bounds.
+  // Restricted pattern (altitude-shaped tokens only) so it doesn't run past
+  // the field into trailing prose like "CREATED:" / "SOURCE:".
+  const altTok = '(SFC|GND|UNL|FL\\s*\\d+|\\d+\\s*(?:FT|M)(?:\\s+(?:AMSL|AGL))?)';
+  const f = new RegExp('\\bF\\)\\s*' + altTok, 'i').exec(t);
+  const g = new RegExp('\\bG\\)\\s*' + altTok, 'i').exec(t);
+  if (f && g) return f[1].trim() + '-' + g[1].trim();
+  // Fallback: inline range like "SFC-FL050" or "FL050"
+  const m = t.match(/(SFC|FL\d+|\d+FT)[\s-]*(FL\d+|\d+FT|UNL)?/i);
+  return m ? m[0] : null;
+}
 
 // Parse NOTAM time string like 2604141400 → Date object
 function parseNotamTs(s) {
@@ -1350,7 +1361,7 @@ async function addNOTAMs() {
   for (const nt of notams) {
     try {
       const flat = nt.replace(/\n/g,' ').trim();
-      const radiusNM = parseRadius(flat);
+      let radiusNM = parseRadius(flat);
       const alt = parseAlt(flat);
       const time = parseTime(flat);
       const id = parseId(flat);
@@ -1415,6 +1426,13 @@ async function addNOTAMs() {
 
       let coords = parseCoords(flat);
       let suaFeature = null;
+
+      // ICAO Q-line radius fallback: standard NOTAMs encode the affected area
+      // as a circle in the Q-line trailer (e.g. ".../5914N02556E013" → 13 NM).
+      // If no explicit "NM RADIUS" was given and we have a single center, use it.
+      if (!radiusNM && coords.length === 1 && qInfo && qInfo.radiusNM) {
+        radiusNM = qInfo.radiusNM;
+      }
 
       if (!coords.length) {
         const refs = extractAirspaceRefs(flat);
