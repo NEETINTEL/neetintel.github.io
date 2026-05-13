@@ -699,8 +699,13 @@ function parseDegOnly(str) {
 
 function parseCoords(str) {
   const dms = parseDMS(str);
+  const deg = parseDegOnly(str);
+  // If DMS only picked up a single point (typically the Q-line center) but
+  // degree-only coords form a polygon, prefer the polygon — the E-field
+  // geometry takes precedence over the Q-line summary point.
+  if (deg.length >= 3 && dms.length <= 1) return deg;
   if (dms.length > 0) return dms;
-  return parseDegOnly(str);
+  return deg;
 }
 
 // ICAO Q-line trailer: ".../<lat><N|S><lng><E|W><RRR>" where RRR is radius in NM.
