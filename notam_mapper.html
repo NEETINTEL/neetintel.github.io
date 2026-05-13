@@ -850,7 +850,11 @@ function splitIntoAreas(text) {
       while ((cm = cb.exec(preceding)) !== null) last = cm[1];
       label = last ? last.replace(/\s+/g, ' ').trim() : String(idx);
     }
-    areas.push({ label, text: m[2] });
+    // The altitude band (e.g. "SFC-FL210") trails POINT OF ORIGIN rather than
+    // sitting inside the polygon body — look just past the closer.
+    const trail = text.slice(re.lastIndex, re.lastIndex + 80);
+    const altM = /(SFC|GND|FL\d+|\d+FT)\s*-\s*(FL\d+|\d+FT|UNL)/i.exec(trail);
+    areas.push({ label, text: m[2], trailingAlt: altM ? altM[0] : null });
   }
   return areas;
 }
@@ -1463,11 +1467,9 @@ async function addNOTAMs() {
         for (const area of areas) {
           const areaCoords = parseCoords(area.text);
           if (areaCoords.length < 3) continue;
-          // Per-area altitude tag (e.g. "SFC-FL210" or "SFC-FL200") trails each
-          // polygon body — parse it so adjacent areas with different ceilings
-          // render with their own bounds. Fall back to the NOTAM-level alt.
-          const areaAltM = /(SFC|GND|FL\d+|\d+FT)\s*-\s*(FL\d+|\d+FT|UNL)/i.exec(area.text);
-          const areaAlt = areaAltM ? areaAltM[0] : alt;
+          // Per-area altitude tag (e.g. "SFC-FL210" or "SFC-FL200") — splitIntoAreas
+          // captures it from the text following each POINT OF ORIGIN closer.
+          const areaAlt = area.trailingAlt || alt;
           const safeLabel = String(area.label || '').replace(/\s+/g, '_').toUpperCase();
           const areaId = `${id} AREA ${area.label}`;
           if (existingIds.has(areaId)) { skipped++; continue; }
