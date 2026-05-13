@@ -722,10 +722,26 @@ const KNOWN_WAYPOINTS = {
 // waypoint resolvable via KNOWN_WAYPOINTS. Returns the vertices in the order
 // they appear PLUS any waypoint names we couldn't resolve so the UI can flag
 // them.
+// 5-letter all-caps words that commonly appear in NOTAM prose but are not
+// ICAO fixes. Used to suppress false "unresolved fix" warnings.
+const NON_WAYPOINT_5LETTER = new Set([
+  'POINT','ABOVE','BELOW','UPPER','LOWER','INNER','OUTER','NORTH','SOUTH',
+  'AREAS','LIMIT','BOUND','FIRST','THIRD','TOTAL','RANGE','UNTIL','ROUTE',
+  'COAST','ALONG','RADII','BLOCK','STAGE','TOWER','ALERT','FINAL','GRAND',
+  'CIRCL','POSIT','VICIN','AFTER','WHILE','EVERY','OTHER','STILL','DAILY',
+  'BTWEN','APRX','APRCH','RWAYS','FIELD','NAVAL','RANGE','UNDER'
+]);
+
 function parseEFieldVertices(text) {
   const m = /\b(?:WITHIN|BOUNDED\s+BY|DEFINED\s+AS)\b\s*([^.]+)/i.exec(text);
   if (!m) return null;
-  const tokens = m[1].split(/[\s,]+/).filter(Boolean);
+  // Stop at the canonical polygon closer so "POINT OF ORIGIN" isn't tokenized
+  // as a vertex (a single-area NOTAM with a closer would otherwise produce a
+  // spurious "UNRESOLVED FIX: POINT").
+  let segment = m[1];
+  const closerIdx = segment.search(/\bPOINT\s+OF\s+ORIGIN\b/i);
+  if (closerIdx > -1) segment = segment.slice(0, closerIdx);
+  const tokens = segment.split(/[\s,]+/).filter(Boolean);
   const vertices = [];
   const unresolved = [];
   for (const t of tokens) {
@@ -749,8 +765,8 @@ function parseEFieldVertices(text) {
         continue;
       }
     }
-    // Named waypoint — 5-letter all-caps ICAO fix.
-    if (/^[A-Z]{5}$/.test(t)) {
+    // Named waypoint — 5-letter all-caps ICAO fix. Skip common prose words.
+    if (/^[A-Z]{5}$/.test(t) && !NON_WAYPOINT_5LETTER.has(t)) {
       const known = KNOWN_WAYPOINTS[t];
       if (known) {
         vertices.push({ lat: known.lat, lng: known.lng, raw: t, isWaypoint: true });
@@ -812,13 +828,29 @@ function parseComplexActivations(text, baseDate) {
   return byDesignator.size > 0 ? Array.from(byDesignator.values()) : null;
 }
 
-// Split a NOTAM body into distinct polygon areas if it defines several
-// (e.g. "AREA D DEFINED AS ... POINT OF ORIGIN. AREA E DEFINED AS ...")
+// Split a NOTAM body into distinct polygon areas if it defines several.
+// Two common formats:
+//   1. Explicit label: "AREA D DEFINED AS ... POINT OF ORIGIN AREA E DEFINED AS ..."
+//   2. Unlabeled (FAA CARF reservations): "WI AN AREA DEFINED AS ... POINT OF ORIGIN
+//      AND (IBEX) WI AN AREA DEFINED AS ... POINT OF ORIGIN."
+// The label slot is constrained to 1–4 chars to avoid greedily swallowing
+// "DEFINED" when no label is present; the negative lookahead is belt-and-
+// suspenders. Unlabeled blocks borrow a label from the nearest preceding
+// (CALLSIGN) token in parens (e.g. "(OAK ALPHA)", "(IBEX)").
 function splitIntoAreas(text) {
-  const re = /AREA\s+([A-Z0-9]+)\s+DEFINED\s+AS\s+([\s\S]*?)(?:POINT\s+OF\s+ORIGIN|(?=AREA\s+[A-Z0-9]+\s+DEFINED\s+AS)|$)/gi;
-  const areas = []; let m;
+  const re = /AREA(?:\s+(?!DEFINED\b)([A-Z0-9]{1,4}))?\s+DEFINED\s+AS\s+([\s\S]*?)(?:POINT\s+OF\s+ORIGIN|(?=AREA(?:\s+(?!DEFINED\b)[A-Z0-9]{1,4})?\s+DEFINED\s+AS)|$)/gi;
+  const areas = []; let m; let idx = 0;
   while ((m = re.exec(text)) !== null) {
-    areas.push({ label: m[1], text: m[2] });
+    idx++;
+    let label = m[1];
+    if (!label) {
+      const preceding = text.slice(0, m.index);
+      const cb = /\(([A-Z][A-Z0-9 ]+?)\)/g;
+      let last = null, cm;
+      while ((cm = cb.exec(preceding)) !== null) last = cm[1];
+      label = last ? last.replace(/\s+/g, ' ').trim() : String(idx);
+    }
+    areas.push({ label, text: m[2] });
   }
   return areas;
 }
@@ -1431,13 +1463,19 @@ async function addNOTAMs() {
         for (const area of areas) {
           const areaCoords = parseCoords(area.text);
           if (areaCoords.length < 3) continue;
+          // Per-area altitude tag (e.g. "SFC-FL210" or "SFC-FL200") trails each
+          // polygon body — parse it so adjacent areas with different ceilings
+          // render with their own bounds. Fall back to the NOTAM-level alt.
+          const areaAltM = /(SFC|GND|FL\d+|\d+FT)\s*-\s*(FL\d+|\d+FT|UNL)/i.exec(area.text);
+          const areaAlt = areaAltM ? areaAltM[0] : alt;
+          const safeLabel = String(area.label || '').replace(/\s+/g, '_').toUpperCase();
           const areaId = `${id} AREA ${area.label}`;
           if (existingIds.has(areaId)) { skipped++; continue; }
           existingIds.add(areaId);
-          const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '_' + area.label;
+          const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '_' + safeLabel;
           parsed.push({
             id: areaId, uid, color: '#FFFFFF',
-            coords: areaCoords, radiusNM: null, alt, time,
+            coords: areaCoords, radiusNM: null, alt: areaAlt, time,
             isTrack: false, suaFeature: null, text: flat, layers: []
           });
         }
