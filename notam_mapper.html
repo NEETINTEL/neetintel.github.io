@@ -708,6 +708,60 @@ function parseCoords(str) {
   return deg;
 }
 
+// Built-in known waypoint dictionary. NOTAM E-fields often reference named
+// ICAO fixes by 5-letter identifier (e.g. RATSU on the Reykjavik/Shanwick
+// FIR boundary). Add entries here as you encounter new fixes; entries are
+// stored as decimal degrees (S/W negative).
+const KNOWN_WAYPOINTS = {
+  RATSU: { lat: 61.0,    lng: -10.0   }   // Reykjavik / Shanwick boundary
+};
+
+// Walk the geometry segment of an E-field (text after WITHIN / BOUNDED BY /
+// DEFINED AS, up to the next period) in reading order. Each whitespace- or
+// comma-separated token is either a coordinate (DegOnly / DMS) or a named
+// waypoint resolvable via KNOWN_WAYPOINTS. Returns the vertices in the order
+// they appear PLUS any waypoint names we couldn't resolve so the UI can flag
+// them.
+function parseEFieldVertices(text) {
+  const m = /\b(?:WITHIN|BOUNDED\s+BY|DEFINED\s+AS)\b\s*([^.]+)/i.exec(text);
+  if (!m) return null;
+  const tokens = m[1].split(/[\s,]+/).filter(Boolean);
+  const vertices = [];
+  const unresolved = [];
+  for (const t of tokens) {
+    // DegOnly: 63N015W, 6N15W, etc.
+    const dg = /^(\d{1,3})([NS])(\d{1,3})([EW])$/.exec(t);
+    if (dg) {
+      let lat = parseInt(dg[1], 10);
+      let lng = parseInt(dg[3], 10);
+      if (dg[2] === 'S') lat = -lat;
+      if (dg[4] === 'W') lng = -lng;
+      vertices.push({ lat, lng, raw: t });
+      continue;
+    }
+    // DMS: 6300N01500W, 600000N0150000W, etc.
+    const ds = /^([\d\-\.]{4,9})([NS])([\d\-\.]{4,10})([EW])$/.exec(t);
+    if (ds) {
+      const lat = dmsTokenToDecimal(ds[1], ds[2]);
+      const lng = dmsTokenToDecimal(ds[3], ds[4]);
+      if (lat !== null && lng !== null) {
+        vertices.push({ lat, lng, raw: t });
+        continue;
+      }
+    }
+    // Named waypoint — 5-letter all-caps ICAO fix.
+    if (/^[A-Z]{5}$/.test(t)) {
+      const known = KNOWN_WAYPOINTS[t];
+      if (known) {
+        vertices.push({ lat: known.lat, lng: known.lng, raw: t, isWaypoint: true });
+      } else {
+        unresolved.push(t);
+      }
+    }
+  }
+  return { vertices, unresolved };
+}
+
 // ICAO Q-line trailer: ".../<lat><N|S><lng><E|W><RRR>" where RRR is radius in NM.
 // e.g. "Q) EGXX/QRDCA/IV/BO /W /050/660/5453N00036E062" → center 54°53'N 0°36'E, 62 NM.
 // Anchored to the Q) field so random digit runs elsewhere don't get misread as radius.
@@ -1431,6 +1485,18 @@ async function addNOTAMs() {
 
       let coords = parseCoords(flat);
       let suaFeature = null;
+      let unresolvedWaypoints = [];
+
+      // Ordered E-field polygon walk — preserves vertex order and resolves
+      // named ICAO fixes (e.g. RATSU). Use whenever it yields more vertices
+      // than parseCoords (which silently drops named waypoints).
+      const eGeom = parseEFieldVertices(flat);
+      if (eGeom && eGeom.vertices.length >= 3 && eGeom.vertices.length > coords.length) {
+        coords = eGeom.vertices;
+      }
+      if (eGeom && eGeom.unresolved.length) {
+        unresolvedWaypoints = eGeom.unresolved;
+      }
 
       // ICAO Q-line radius fallback: standard NOTAMs encode the affected area
       // as a circle in the Q-line trailer (e.g. ".../5914N02556E013" → 13 NM).
@@ -1452,7 +1518,7 @@ async function addNOTAMs() {
       existingIds.add(id);
       const isTrack = !radiusNM && !suaFeature && coords.length >= 2 && (/\bTDM\s+TRK\b/i.test(flat) || /\bTRK\s+[A-Z]\b/i.test(flat));
       const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8);
-      parsed.push({ id, uid, color: '#FFFFFF', coords, radiusNM, alt, time, isTrack, suaFeature, text: flat, layers: [] });
+      parsed.push({ id, uid, color: '#FFFFFF', coords, radiusNM, alt, time, isTrack, suaFeature, text: flat, layers: [], unresolvedWaypoints });
     } catch(err) { console.error('Parse error:', err, nt.slice(0,60)); }
   }
 
@@ -1674,6 +1740,7 @@ function updateList() {
       <div class="notam-card-details">
         ${e.coords.map(c=>c.raw).join(', ')}${e.radiusNM ? ` / ${e.radiusNM}NM` : ''}${e.alt ? ` / ${esc(e.alt)}` : ''}
         ${e.time ? `<br>${e.time.from} — ${e.time.to}` : ''}
+        ${e.unresolvedWaypoints && e.unresolvedWaypoints.length ? `<br><span style="color:var(--nerv-red)">UNRESOLVED FIX: ${esc(e.unresolvedWaypoints.join(', '))}</span>` : ''}
       </div>
       <div class="notam-card-text" onclick="copyNotamText(this, event)" title="Click to copy">${esc(e.text)}</div>
     </div>
