@@ -252,6 +252,80 @@
         [data-theme="light"] .cf-lbl { color: #777; }
         [data-theme="light"] .cf-lbl.cf-zero { color: #bbb; }
 
+        /* EAM Groups stacked bar */
+        .grpbar-wrap { overflow-x: auto; margin: 18px 0 6px; }
+        .grpbar { width: 100%; max-width: 720px; height: auto; display: block; }
+        .grpbar-seg.g1 { fill: #06b050; }
+        .grpbar-seg.g2 { fill: #ed7d32; }
+        .grpbar-seg.g3 { fill: #ffcc00; }
+        .grpbar-seg.g4 { fill: #ff0467; }
+        .grpbar-name {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            fill: #fff;
+            letter-spacing: 0.04em;
+            font-weight: 500;
+        }
+        .grpbar-pct {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            fill: rgba(255,255,255,0.92);
+        }
+        .grpbar-tick {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            fill: #8a8a90;
+            letter-spacing: 0.04em;
+        }
+        .grpbar-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 18px;
+            margin-top: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72rem;
+            color: #8a8a90;
+        }
+        .grpbar-legend span::before {
+            content: '';
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            margin-right: 7px;
+            vertical-align: 0;
+            border-radius: 1px;
+        }
+        .grpbar-legend .g3::before { background: #ffcc00; }
+        .grpbar-legend .g4::before { background: #ff0467; }
+        [data-theme="light"] .grpbar-tick { color: #777; fill: #777; }
+        [data-theme="light"] .grpbar-legend { color: #777; }
+
+        /* 8888 message anatomy */
+        .anatomy-wrap { overflow-x: auto; margin: 18px 0 6px; }
+        .anatomy { width: 100%; max-width: 720px; height: auto; display: block; }
+        .anatomy-seg rect { fill: rgba(74,158,255,0.13); stroke: rgba(74,158,255,0.55); stroke-width: 1; }
+        .anatomy-chars {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 17px;
+            fill: #d4d4d6;
+            letter-spacing: 0.08em;
+        }
+        .anatomy-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            fill: #b0b0b6;
+            letter-spacing: 0.04em;
+        }
+        .anatomy-sub {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 9px;
+            fill: #7a7a82;
+        }
+        [data-theme="light"] .anatomy-seg rect { fill: rgba(74,158,255,0.10); stroke: rgba(74,158,255,0.5); }
+        [data-theme="light"] .anatomy-chars { fill: #222; }
+        [data-theme="light"] .anatomy-label { fill: #555; }
+        [data-theme="light"] .anatomy-sub { fill: #888; }
+
         .intro {
             margin-bottom: 30px;
             color: #aaa;
@@ -633,6 +707,7 @@
             </div>
             <ul>
                 <li><a href="#faq-hfgcs">What is the HFGCS?</a></li>
+                <li><a href="#faq-frequencies">What are the HFGCS frequencies?</a></li>
                 <li><a href="#faq-count">How many stations are there?</a></li>
                 <li><a href="#faq-eam">What is an EAM?</a></li>
                 <li><a href="#faq-otp">Are EAMs encrypted with one-time pads?</a></li>
@@ -644,15 +719,18 @@
                 <li><a href="#faq-volume">How many EAMs per day?</a></li>
                 <li><a href="#faq-eam-freq">When do EAMs broadcast?</a></li>
                 <li><a href="#faq-correlate">Do EAMs correlate with world events?</a></li>
+                <li><a href="#faq-midnight-hammer">Did the HFGCS play a role in OPERATION MIDNIGHT HAMMER?</a></li>
                 <li><a href="#faq-longmsg">Are long EAMs cause for concern?</a></li>
                 <li><a href="#faq-tone">What does an operator&rsquo;s tone of voice mean?</a></li>
                 <li><a href="#faq-skyking">What is a SKYKING?</a></li>
                 <li><a href="#faq-mainsail">Who is MAINSAIL?</a></li>
                 <li><a href="#faq-callsign">What is a rotating daily callsign?</a></li>
                 <li><a href="#faq-e6b">What is an E-6B Mercury?</a></li>
+                <li><a href="#faq-e6b-relay">What is the E-6B rebroadcast timetable?</a></li>
                 <li><a href="#faq-verdin">What is VERDIN?</a></li>
                 <li><a href="#faq-8888">What is an &ldquo;8888 message&rdquo;?</a></li>
                 <li><a href="#faq-skymaster">What is a SKYMASTER event?</a></li>
+                <li><a href="#faq-fakemaster">What is a FAKEMASTER event?</a></li>
                 <li><a href="#faq-skymaster-often">How often do SKYMASTER events happen?</a></li>
                 <li><a href="#faq-skymaster-real">How do you know it isn&rsquo;t real nuclear activity?</a></li>
                 <li><a href="#faq-globalstorm">What is GLOBAL STORM?</a></li>
@@ -662,6 +740,7 @@
                 <li><a href="#faq-ce">What are the CHARLIE WINDOWS?</a></li>
                 <li><a href="#faq-z170">What are the ZULU frequencies?</a></li>
                 <li><a href="#faq-esteem">What is ESTEEM HIGHLY ALPHA?</a></li>
+                <li><a href="#faq-eamwatch">Is eam.watch a reliable source?</a></li>
                 <li><a href="#faq-follow">How can I follow this work?</a></li>
             </ul>
         </nav>
@@ -676,8 +755,8 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>If you go looking for an explanation of the U.S. military&rsquo;s <strong>High Frequency Global Communications System</strong> (HFGCS), what you will mostly find is the same explanation, recycled, that has been sitting around for fifteen or twenty years<a href="#fn-1" class="fn-ref">1</a><a href="#fn-2" class="fn-ref">,2</a>. Some of that is just the way these things go, but there is an underlying dynamic that precipitated the current situation. Once upon a time, the military used to be reasonably candid about the HFGCS. In fact, at one point the system  evenhad its own public website, hostedby McClellan AFB<a href="#fn-3" class="fn-ref">3</a>. However, after 9/11, the information portals stopped being publicly accessible. The system itself was never fully classified, and still isn&rsquo;t; it still turns up in news stories, in non-classified documentation, in Air Force public affairs material. However, primary sources are no longer making friendly overviews accessible to the public, and they certainly aren&rsquo;t going to provide any deeper dives along the lines of what the NEET INTEL project was able to cobble together.</p>
-                    <p>The most current authoritative description of the HFGCS from official resources are those found buried in Department of Defense budget justification documents. The FY27 procurement document in particular has a genuinely detailed account of the HFGCS;</p>
+                    <p>If you go looking for an explanation of the U.S. military&rsquo;s <strong>High Frequency Global Communications System</strong> (HFGCS), what you will mostly find is the same explanation, recycled, that has been sitting around for fifteen or twenty years<a href="#fn-1" class="fn-ref">1</a><a href="#fn-2" class="fn-ref">,2</a>. Some of that is just the way these things go, but there is an underlying dynamic that precipitated the current situation. Once upon a time, the military used to be reasonably candid about the HFGCS. In fact, at one point the system even had its own public website, hosted by McClellan AFB<a href="#fn-3" class="fn-ref">3</a>. However, after 9/11, the information portals stopped being publicly accessible. The system itself was never fully classified, and still isn&rsquo;t; it still turns up in news stories, in non-classified documentation, in Air Force public affairs material. However, primary sources are no longer making friendly overviews accessible to the public, and they certainly aren&rsquo;t going to provide any deeper dives along the lines of what the NEET INTEL project was able to cobble together.</p>
+                    <p>The most current authoritative descriptions of the HFGCS from official resources are those found buried in Department of Defense budget justification documents. The FY27 procurement document in particular has a genuinely detailed account of the HFGCS;</p>
                     <blockquote>
                         <p>The High Frequency Global Communications System (HFGCS) program provides the Department of War (DoW) with a critical unique strategic asset: a global, high-power, high-frequency (HF) network. This network ensures resilient communication for both nuclear and non-nuclear command and control (NC3/C2), serving a wide range of users, including US Strategic Command (USSTRATCOM), Air Mobility Command, the White House Communications Agency, Navy submariner forces, and other government agencies like the Department of Homeland Security and the Federal Emergency Management Agency (FEMA).</p>
                         <p>HFGCS is essential for disseminating critical information to global strategic forces, especially in contested environments where satellite communications might be compromised. The program leverages a network of 13 strategically located ground stations and two network control stations equipped with modern, commercially based, HF radio technology, ensuring beyond-line-of-sight communication with aircraft, ships, and land-based platforms.</p>
@@ -685,8 +764,8 @@
                     </blockquote>
                     <p>When people say &lsquo;HFGCS&rsquo; colloquially, what they usually mean is the worldwide network of high-power ground stations that simulcast Emergency Action Message broadcasts, run phone patches, and handle a fairly wide range of other beyond-line-of-sight traffic. There are around 13 active stations at the moment.</p>
                     <div id="hfgcs-station-map" class="hfgcs-map"></div>
-                    <p class="map-caption">The HFGCS ground stations &mdash; markers are clickable.<a href="#fn-5" class="fn-ref">5</a></p>
-                    <p>For a long time the whole network was run from a single Centralized Network Control Station (CNCS) at Joint Base Andrews. But a post-9/11 review identified this situation as exactly the sort of problem you could expect it to: a single CNCS was a single point of failure. The original plan was for Offutt AFB<a href="#fn-6" class="fn-ref">6</a> to become the second CNCS, but a 2019 flood<a href="#fn-8" class="fn-ref">7</a> that tore through parts of the base may have interrupted those plans. Whatever the case, it was ultimately Grand Forks AFB which became the secondary NCS<a href="#fn-7" class="fn-ref">8</a>.</p>
+                    <p class="map-caption">The HFGCS ground stations &mdash; markers are clickable.<a href="#fn-5" class="fn-ref">5</a> A standalone writeup on the Yokota station is at <a href="hfgcs_station_yokota.html">hfgcs_station_yokota.html</a>.</p>
+                    <p>For a long time the whole network was run from a single Centralized Network Control Station (CNCS) at Joint Base Andrews. But a post-9/11 review identified this situation as exactly the sort of problem you could expect it to: a single CNCS was a single point of failure. The original plan was for Offutt AFB<a href="#fn-6" class="fn-ref">6</a> to become the second CNCS, but a 2019 flood<a href="#fn-7" class="fn-ref">7</a> that tore through parts of the base may have interrupted those plans. Whatever the case, it was ultimately Grand Forks AFB which became the secondary NCS<a href="#fn-8" class="fn-ref">8</a>.</p>
                     <p>The hfgcs-msl GitHub repository<a href="#fn-9" class="fn-ref">9</a> assigns each of the 13 stations to one of two network control stations, labeled &lsquo;ANCS&rsquo; and &lsquo;GFNCS&rsquo;, which it is reasonable enough to speculate are Andrews and Grand Forks.</p>
                     <table class="freq-table">
                         <thead><tr><th>ANCS</th><th>GFNCS</th></tr></thead>
@@ -700,9 +779,21 @@
                             <tr><td>WEST COAST</td><td></td></tr>
                         </tbody>
                     </table>
-                    <p>It should be noted that nobody seems to have undertaken any effort to align HFGCS traffic with these assignments, and at least incidentally, these designations are either incorrect or each NCS can remotely control any station anyways, regardless of designation.</p>
+                    <p>It should be noted that nobody seems to have undertaken any effort to align HFGCS traffic with these assignments. The designations may also simply not matter much in practice, as each NCS appears able to remotely control any station, regardless of label.</p>
                     <p>In addition to the known HFGCS stations, there are also entities which behave as if they are additional HFGCS stations, though not quite. <code>RED RIVER</code> and <code>WOLFHOUND</code>, respectively the 608th Air Operations Center at Barksdale AFB and the USAFE Joint Personnel Recovery Center at Ramstein<a href="#fn-10" class="fn-ref">10</a> can be heard on the HFGCS coordinating activity and communications between ground stations and air assets. However, they are not known to simulcast or rebroadcast EAMs.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What are the HFGCS frequencies? -->
+            <div class="faq-item" id="faq-frequencies">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What are the HFGCS frequencies?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
                     <p>As of 2025 the primary HFGCS frequencies are <code>4724</code>, <code>8992</code>, <code>11175</code>, and <code>15016</code> kHz. The ground stations will usually simulcast a message across all four, but not always, and this is where listeners tie themselves in knots, because a broadcast can be exclusive to one frequency, or to some of them, and someone who couldn&rsquo;t pick it up on 8992 will report, with great confidence, that it &lsquo;wasn&rsquo;t broadcast on 8992&rsquo; when it simply was and they missed it. The network as a whole runs 24/7 and does not switch on and off, but individual stations have historically kept per-frequency schedules<a href="#fn-11" class="fn-ref">11</a>, and very likely still do, even if the current scheduling isn&rsquo;t anything I&rsquo;ve seen documented publicly, or, for that matter, been able to work out for myself.</p>
+                    <p>These four are only the primary frequencies. CHARLIE WINDOWS, ZULU designators, VERDIN, and various UHF channels each get their own entry below. Information on many HFGCS related frequencies can be found on HFGCS Wiki<a href="#fn-12" class="fn-ref">12</a>, and a NEET INTEL video provides information on many of them<a href="#fn-13" class="fn-ref">13</a>.</p>
                 </div>
             </div>
 
@@ -730,10 +821,10 @@
                     <p><strong>Emergency Action Messages</strong> (EAMs) are, in the words of the Department of Defense&rsquo;s own budget documents, <em>&ldquo;highly structured, authenticated messages primarily used in the command and control of nuclear forces. They are disseminated over numerous survivable and non-survivable communication systems including terrestrial and space systems.&rdquo;</em><a href="#fn-4" class="fn-ref">4</a> That covers the basics well enough. Most of what you&rsquo;ll read online gets these basics right (most EAMs are 30 characters, and so on), but the basics are also where these writeups often stop. There is quite a lot more to say.</p>
 
                     <h3>Structure</h3>
-                    <p>The longer EAMs, the ones past 100 characters, are highly structured, and you don&rsquo;t need to do anything clever to start seeing it. Earlier work of mine pointed at repeating tetragrams turning up in similar positions across messages of the same length<a href="#fn-12" class="fn-ref">12</a>. More recent analysis<a href="#fn-13" class="fn-ref">13</a> goes a good deal further: <em>some</em> long EAMs (not all of them, and the picture varies a great deal from one length to the next) appear to be assembled out of a vocabulary of discrete 44 character blocks. Not a periodic 44 character cipher, but actual, reused blocks of content: two messages that share a prefix can turn out to share whole blocks, weeks or months apart. Where that happens, it is not something strict OTP encryption can do, and it is exactly what a fielded message format would do. The per-length <a href="about_structure_heatmaps.html">structure heatmaps</a> give a much better feel for how much of this varies.</p>
+                    <p>The longer EAMs, the ones past 100 characters, are highly structured, and you don&rsquo;t need to do anything clever to start seeing it. Earlier work of mine pointed at repeating tetragrams turning up in similar positions across messages of the same length<a href="#fn-14" class="fn-ref">14</a>. More recent analysis<a href="#fn-15" class="fn-ref">15</a> goes a good deal further: <em>some</em> long EAMs (not all of them, and the picture varies a great deal from one length to the next) appear to be assembled out of a vocabulary of discrete 44 character blocks. Not a periodic 44 character cipher, but actual, reused blocks of content: two messages that share a prefix can turn out to share whole blocks, weeks or months apart. Where that happens, it is not something strict OTP encryption can do, and it is exactly what a fielded message format would do. The per-length <a href="about_structure_heatmaps.html">structure heatmaps</a> give a much better feel for how much of this varies.</p>
 
                     <h3>A couple of odds and ends</h3>
-                    <p>At one point EAMs were generated by a program called <strong>EAMGEN</strong><a href="#fn-14" class="fn-ref">14</a>. The current-day system context, named throughout the FY27 budget documents, is the <strong>Strategic Automated Command and Control System</strong> (SACCS), the NC3 system through which the National Command Authority disseminates EAMs (along with Force Direction Messages and automated ICBM re-targeting data) to the bomber and ICBM legs of the triad.</p>
+                    <p>At one point EAMs were generated by a program called <strong>EAMGEN</strong><a href="#fn-16" class="fn-ref">16</a>. The current-day system context, named throughout the FY27 budget documents, is the <strong>Strategic Automated Command and Control System</strong> (SACCS), the NC3 system through which the National Command Authority disseminates EAMs (along with Force Direction Messages and automated ICBM re-targeting data) to the bomber and ICBM legs of the triad.</p>
 
                 </div>
             </div>
@@ -748,9 +839,9 @@
                 <div class="faq-answer">
                     <p>The single most-repeated claim about EAMs is that they&rsquo;re encrypted with one-time pads. This claim is regularly asserted with enormous confidence. It is probably wrong.</p>
                     <p>When we consider EAMs logistically, it actually makes more sense for them to <strong>not</strong> be encrypted with one time pads. EAMs are received simultaneously by assets all over the world, the volume going out on any given day isn&rsquo;t fixed in advance, and the actual operational requirement doesn&rsquo;t really demand OTP-grade secrecy in the first place! These are time-sensitive messages that, even fully decrypted, would still be codewords and abbreviations and authentication elements that anyone other than an intended recipient would struggle to understand. Encryption strong enough to resist real-time cryptanalysis is enough. OTPs would probably be over-engineering it.</p>
-                    <p>The statistical case against all this is newer, and might be the most compelling. A 2026 ciphertext-only analysis of 5,377 unique 30 character payloads<a href="#fn-15" class="fn-ref">15</a> found a distribution that simply isn&rsquo;t consistent with the uniform output a standard authenticated cipher produces. The letter <strong>M</strong> and the digit <strong>5</strong> come up roughly 35 to 40% short of where they &lsquo;should&rsquo; be, across nearly every position in the body &mdash; a deficit plainly visible in the character-frequency chart in the <a href="#faq-eam-chars">EAM characters entry</a>. The trailing six characters are near-deterministically distinct from one another &mdash; repeated characters there are suppressed about fifteenfold, which no uniform random source would ever do. Whatever is generating EAM ciphertext, it is not one uniform encryption block.</p>
+                    <p>The statistical case against all this is newer, and might be the most compelling. A 2026 ciphertext-only analysis of 5,377 unique 30 character payloads<a href="#fn-17" class="fn-ref">17</a> found a distribution that simply isn&rsquo;t consistent with the uniform output a standard authenticated cipher produces. Character frequencies are visibly skewed &mdash; the letter <strong>M</strong> and the digit <strong>5</strong> in particular run roughly a third low &mdash; and certain positions show structural suppressions a random source could never produce. Identical content blocks also turn up across different messages weeks or months apart. The details are laid out in the <a href="#faq-eam-chars">EAM characters entry</a>; the punchline is straightforward &mdash; a one-time pad, by definition, cannot produce identical ciphertext for two different messages.</p>
                     <p>We can also argue against the idea based on official documentation. The FY27 budget documents put a name to the cryptographic hardware that handles EAMs: the <b>KG-3XA program</b> &mdash; an embeddable module, the KGV-363, and its host, the KG-333M &mdash; described as a &lsquo;form, fit, function modernization&rsquo; of the crypto required by the Minimum Essential Emergency Communications Network and the Fixed Submarine Broadcast System, &lsquo;employed in various airborne and ground equipment for processing of Emergency Action Messages in the nuclear triad.&rsquo;<a href="#fn-4" class="fn-ref">4</a> That is not proof of anything on its own, since key management for a pad would need hardware too, but it seems odd to write a procurement line to &lsquo;form, fit, function modernize&rsquo; a one-time pad, because a pad is not a device. EAMs are run through a cipher unit, and a cipher unit is a far more comfortable fit with everything above than a stack of pads is.</p>
-                    <p>My best guess as to where the OTP idea even came from: the shortwave-listening community largely arrived at HFGCS by way of numbers stations, most of which probably did use OTPs, and brought the assumption along with them. They told anyone they could that their asserted expertise meant they knew EAMs were encrypted with OTPs, but never had the real expertise to think they might stop and check if what they were saying made sense before they said it, a million times and never with any qualification or caveat, to anyone that ever asked.</p>
+                    <p>My best guess as to where the OTP idea even came from: the shortwave-listening community largely arrived at the HFGCS by way of numbers stations, most of which probably did use OTPs, and brought the assumption along with them. They told anyone they could that their asserted expertise meant they knew EAMs were encrypted with OTPs, but never had the real expertise to think they might stop and check if what they were saying made sense before they said it, a million times and never with any qualification or caveat, to anyone that ever asked.</p>
                 </div>
             </div>
 
@@ -762,13 +853,38 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>You can sort EAMs into four behavioral categories, and the thing on the basis of how their two character prefixes behave over time. Designated them as <strong>Groups 1 through 4</strong>, I made a video discussing such a categorization system on Youtube in November 2023<a href="#fn-16" class="fn-ref">16</a>. It has held up well enough across everything I&rsquo;ve monitored since that I&rsquo;m fairly comfortable with it.</p>
+                    <p>You can sort EAMs into four behavioral categories, on the basis of how their two character prefixes behave over time. I designated them as <strong>Groups 1 through 4</strong>, and made a video discussing such a categorization system on Youtube in November 2023<a href="#fn-18" class="fn-ref">18</a>. It has held up well enough across everything I&rsquo;ve monitored since that I&rsquo;m fairly comfortable with it.</p>
+
+                    <div class="grpbar-wrap">
+                        <svg class="grpbar" viewBox="0 0 720 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EAM Groups by share of traffic">
+                            <!-- Stacked bar: total width 700 (x=10 to x=710), height 56, y=18 to y=74 -->
+                            <rect class="grpbar-seg g1" x="10"  y="18" width="462" height="56" />
+                            <rect class="grpbar-seg g2" x="475" y="18" width="182" height="56" />
+                            <rect class="grpbar-seg g3" x="660" y="18" width="21"  height="56" />
+                            <rect class="grpbar-seg g4" x="684" y="18" width="21"  height="56" />
+
+                            <!-- Inline labels for the two big segments -->
+                            <text x="241" y="44" text-anchor="middle" class="grpbar-name">Group 1</text>
+                            <text x="241" y="62" text-anchor="middle" class="grpbar-pct">66% &middot; 30 chars</text>
+
+                            <text x="566" y="44" text-anchor="middle" class="grpbar-name">Group 2</text>
+                            <text x="566" y="62" text-anchor="middle" class="grpbar-pct">26% &middot; 30&ndash;163 chars</text>
+
+                            <!-- Tick marks under the small segments to draw the eye -->
+                            <text x="670" y="92" text-anchor="middle" class="grpbar-tick">G3</text>
+                            <text x="694" y="92" text-anchor="middle" class="grpbar-tick">G4</text>
+                        </svg>
+                        <div class="grpbar-legend">
+                            <span class="g3">Group 3 &middot; 3% &middot; clustered lengths, sporadic</span>
+                            <span class="g4">Group 4 &middot; 3% &middot; 36&ndash;292 chars, most structurally elaborate</span>
+                        </div>
+                    </div>
                     <p><strong>Group 1</strong> is the bulk of it &mdash; roughly 66% of all EAM traffic is comprised of Group 1 messages, and every single Group 1 message that has been documented is exactly 30 characters. Only one Group 1 prefix is active across the whole network at any given time, and it rotates every three to eight weeks. These are also the messages E-6B aircraft rebroadcast most often.</p>
                     <p><strong>Group 2</strong> is about 26%. Group 2 messages run anywhere from 30 to 163 characters, and a little under half of them, about 47%, carry an explicit <code>FOR [CALLSIGN]</code> addressee, which is its own subject entirely (see the <a href="#faq-directed">Directed EAMs entry</a>).</p>
                     <p><strong>Group 3</strong> is small, around 3%. Its messages cluster at particular lengths, and they frequently carry embedded runs of three or more repeated characters. Group 3 prefixes are the sporadic ones: they&rsquo;ll surface for a few days, vanish for weeks or months, occasionally settle into a stretch of sustained activity, and then go quiet again.</p>
-                    <p><strong>Group 4</strong> is the other 3% or so, and it produces the longest and most structurally elaborate EAMs there are. Known lengths run from 36 all the way to 292 characters. About 60% of Group 4 messages contain a run of four or more identical characters (<code>FFFF</code>, <code>XXXX</code>, <code>ZZZZ</code>, that sort of thing), and about 38% contain repeated multi character sequences. Group 4 also, predictably, generates the highest operator-error rate, which is simply what length and structural complexity will do to a person reading aloud.</p>
+                    <p><strong>Group 4</strong> is the other 3% or so, and it produces the longest and most structurally elaborate EAMs there are. Known lengths run from 36 all the way to 292 characters<a href="#fn-19" class="fn-ref">19</a>. About 60% of Group 4 messages contain a run of four or more identical characters (<code>FFFF</code>, <code>XXXX</code>, <code>ZZZZ</code>, that sort of thing), and about 38% contain repeated multi character sequences. Group 4 also, predictably, generates the highest operator-error rate, which is simply what length and structural complexity will do to a person reading aloud.</p>
                     <p>The naming and the categorization are mine, though they echo categorizations and namings that a handful other monitors had already been piecing together. The scheme is built on, and only sets out to name, readily observable prefix behavior.</p>
-                    <p>Interestingly, the FY27 budget documents name four separate message classes: <strong>EAMs</strong>, <strong>Force Direction Messages</strong> (FDMs), <strong>Force Management Messages</strong> (FMMs), and <strong>Higher Authority Command Messages</strong> (HACMs)<a href="#fn-4" class="fn-ref">4</a>. The idea of the four EAM groups aligining with these four official message classes can&rsquo;t be confirmed, but it&rsquo;s a genuine possibility worth keeping in mind.</p>
+                    <p>Interestingly, the FY27 budget documents name four separate message classes: <strong>EAMs</strong>, <strong>Force Direction Messages</strong> (FDMs), <strong>Force Management Messages</strong> (FMMs), and <strong>Higher Authority Command Messages</strong> (HACMs)<a href="#fn-4" class="fn-ref">4</a>. The idea of the four EAM groups aligning with these four official message classes can&rsquo;t be confirmed, but it&rsquo;s a genuine possibility worth keeping in mind.</p>
                 </div>
             </div>
 
@@ -783,11 +899,11 @@
                     <p>About 47% of Group 2 messages do something the rest of the dataset doesn&rsquo;t: before reading the message, the operator names a recipient &mdash; <code>FOR [CALLSIGN]</code>. I call these <strong>Directed EAMs</strong>. Other people call them FOR messages, addressee messages, specifically addressed messages; none of those names are official either, but the format itself is real enough.</p>
                     <p>These messages fall into four subcategories.</p>
                     <p><strong>ALPHABET FORCE</strong> messages are directed to a FORCE designated by a NATO phonetic letter. ALPHABET FORCES I&rsquo;ve documented include ALPHA, BRAVO, CHARLIE, FOXTROT, GOLF, KILO, ROMEO, SIERRA, TANGO, UNIFORM, and VICTOR. They recur across years, and across notable activity periods (GLOBAL THUNDER exercises among them), which makes them feel like standing organizational entities rather than anything tactical or one-off.</p>
-                    <p><strong>ALPHABET REGION</strong> messages work the same way but for a REGION. Messages for REGIONS ALPHA, BRAVO, and CHARLIE have been documented, and messages for ALL REGIONS have been broadcast as well.</p>
-                    <p>Messages for <strong>numbered callsigns</strong> (the <code>[WORD][NUMBER]</code> format), are very strongly tied to E-6B Mercury aircraft. You can usually take a numbered callsign you heard over the HFGCS the air and match it to a specific E-6B on ADS-B flight trackers. <code>TAMPA52</code>, <code>WILE70</code>, <code>PRONG67</code>, <code>BETEL01</code>, <code>WAHOO73</code>, etc. are all callsigns heard on the HFGCS, and all ended up documented as callsigns used by E-6Bs used over ATC, ACARS, and so forth.</p>
-                    <p>The fourth subcategory is the largest by a wide margin.  Several hundred messages for <strong>unnumbered callsigns</strong> have been across the monitoring periods, with some only appearing in a tight burst over a few hours, while others trickle out sporadically over days.</p>
+                    <p><strong>ALPHABET REGION</strong> messages work the same way but for a REGION. Messages for REGIONS ALPHA, BRAVO, and CHARLIE<a href="#fn-20" class="fn-ref">20</a> have been documented, and messages for ALL REGIONS<a href="#fn-21" class="fn-ref">21</a> have been broadcast as well.</p>
+                    <p>Messages for <strong>numbered callsigns</strong> (the <code>[WORD][NUMBER]</code> format), are very strongly tied to E-6B Mercury aircraft. You can usually take a numbered callsign you heard over the HFGCS and match it to a specific E-6B on ADS-B flight trackers. <code>TAMPA52</code>, <code>WILE70</code>, <code>PRONG67</code>, <code>BETEL01</code>, <code>WAHOO73</code>, etc. are all callsigns heard on the HFGCS, and all ended up documented as callsigns used by E-6Bs used over ATC, ACARS, and so forth.</p>
+                    <p>The fourth subcategory is the largest by a wide margin.  Several hundred messages for <strong>unnumbered callsigns</strong> have been documented across the monitoring periods, with some only appearing in a tight burst over a few hours, while others trickle out sporadically over days.</p>
                     <p>Around 8% of Directed EAMs name more than one recipient. Those can combine callsigns from the same category (FORCE + FORCE, REGION + REGION) or mix categories (FORCE + word-only). What I have never once seen is a FORCE paired with a numbered callsign, or a REGION paired with anything that isn&rsquo;t another REGION. The largest multi-addressee message I&rsquo;ve documented went out to ten callsigns at once, on October 24, 2024.</p>
-                    <p>Every Directed EAM documented uses a Group 2 prefix. No Group 1, Group 3, or Group 4 message has ever carried an addressee, and that holds even at the extremes. Even the surprisingly long 285 character message of October 28, 2025, addressed <code>FOR EXERCISE GT 26 CPX AC ST</code>, still carried a Group 2 prefix<a href="#fn-17" class="fn-ref">17</a>.</p>
+                    <p>Every Directed EAM documented uses a Group 2 prefix. No Group 1, Group 3, or Group 4 message has ever carried an addressee, and that holds even at the extremes. Even the surprisingly long 285 character message of October 28, 2025, addressed <code>FOR EXERCISE GT 26 CPX AC ST</code>, still carried a Group 2 prefix<a href="#fn-22" class="fn-ref">22</a>.</p>
                 </div>
             </div>
 
@@ -800,8 +916,8 @@
                 </div>
                 <div class="faq-answer">
                     <p>There are a handful of patterns in EAM characters. Some of them you would start to notice yourself, just by transcribing enough messages; others only surface once you run some higher-order analysis across the whole dataset, and would never jump out at you one message at a time. Here are a few of the more notable ones I&rsquo;ve called attention to over the years.</p>
-                    <p><strong>M and 5 are under-represented</strong>. Across more than 6,000 unique EAMs, the letter M and the digit 5 turn up only about 60 to 65% as often as the other characters &mdash; call it a 35 to 40% deficit against what a uniform distribution would give you<a href="#fn-15" class="fn-ref">15</a>. It holds across every prefix group I&rsquo;ve checked, and I have no good explanation for it in terms of any standard encryption scheme. It is just there.</p>
-                    <p><strong>0, 1, 8, and 9 don&rsquo;t appear in standard EAMs at all</strong>. 8888 messages are the exception, and they get their <a href="#faq-8888">own entry</a>. The 0 and the 1 are obvious enough: written out by hand, they&rsquo;re too easy to confuse with O and I<a href="#fn-18" class="fn-ref">18</a>. The 8 and the 9 are less obvious, until you count what is left. A through Z, plus 2 through 7, is exactly 32 characters: a base-32 alphabet.</p>
+                    <p><strong>M and 5 are under-represented</strong>. Across more than 6,000 unique EAMs, the letter M and the digit 5 turn up only about 60 to 65% as often as the other characters &mdash; call it a 35 to 40% deficit against what a uniform distribution would give you<a href="#fn-17" class="fn-ref">17</a>. It holds across every prefix group I&rsquo;ve checked, and I have no good explanation for it in terms of any standard encryption scheme. It is just there.</p>
+                    <p><strong>0, 1, 8, and 9 don&rsquo;t appear in standard EAMs at all</strong>. 8888 messages are the exception, and they get their <a href="#faq-8888">own entry</a>. The 0 and the 1 are obvious enough: written out by hand, they&rsquo;re too easy to confuse with O and I<a href="#fn-23" class="fn-ref">23</a>. The 8 and the 9 are less obvious, until you count what is left. A through Z, plus 2 through 7, is exactly 32 characters: a base-32 alphabet.</p>
                     <p>Those first two patterns (the M and 5 deficit, and the four characters that never appear) are the kind of thing best put in a single picture. Here is every character&rsquo;s share of the payload across the Group 1 dataset:</p>
                     <div class="charfreq-wrap">
                         <div class="charfreq">
@@ -883,8 +999,8 @@
                         </div>
                     </div>
                     <p class="map-caption">Character frequency across 3,584 unique 30 character Group 1 EAMs; hover any bar for its exact share. The dashed line marks the 3.1% an even distribution would hand each character. Thirty of the thirty-two land close to it; M and 5 are the conspicuous misses, each running about a third low, while 0, 1, 8 and 9 don&rsquo;t appear at all.</p>
-                    <p><strong>In a 30 character Group 1 EAM, the last six characters are almost always all distinct from one another</strong>. Across the 30 character Group 1 dataset, any pair of positions inside that trailing window coming up equal is suppressed by something like a factor of fifteen<a href="#fn-15" class="fn-ref">15</a>; it is &lsquo;almost&rsquo; rather than &lsquo;always&rsquo; because there is an interesting set of exceptions. That is a good deal stronger than a simple &lsquo;no doubled letters&rsquo; rule: it isn&rsquo;t about adjacent characters, it is every pair of positions in the window.</p>
-                    <p><strong>Identical strings of characters show up across different messages that share a prefix</strong>, sometimes weeks or months apart<a href="#fn-19" class="fn-ref">19</a>. This is one of the things that quietly demolishes the OTP hypothesis &mdash; a one-time pad, by definition, cannot produce identical ciphertext for two different messages.</p>
+                    <p><strong>In a 30 character Group 1 EAM, the last six characters are almost always all distinct from one another</strong>. Across the 30 character Group 1 dataset, any pair of positions inside that trailing window coming up equal is suppressed by something like a factor of fifteen<a href="#fn-17" class="fn-ref">17</a>; it is &lsquo;almost&rsquo; rather than &lsquo;always&rsquo; because there is an interesting set of exceptions. That is a good deal stronger than a simple &lsquo;no doubled letters&rsquo; rule: it isn&rsquo;t about adjacent characters, it is every pair of positions in the window.</p>
+                    <p><strong>Identical strings of characters show up across different messages that share a prefix</strong>, sometimes weeks or months apart<a href="#fn-24" class="fn-ref">24</a>. This is one of the things that quietly demolishes the OTP hypothesis &mdash; a one-time pad, by definition, cannot produce identical ciphertext for two different messages.</p>
                 </div>
             </div>
 
@@ -896,7 +1012,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>On September 11, 2001, an EAM was used to change the DEFCON level, and the phone-conversation transcript that records it happening is sitting, declassified, in the DoD archive<a href="#fn-20" class="fn-ref">20</a>. It is worth reading. A DEFCON change is squarely the kind of nuclear command-and-control traffic an EAM exists to carry, so the answer is plainly yes.<a href="#fn-21" class="fn-ref">21</a></p>
+                    <p>On September 11, 2001, an EAM was used to change the DEFCON level, and the phone-conversation transcript that records it happening is sitting, declassified, in the DoD archive<a href="#fn-25" class="fn-ref">25</a><a href="#fn-26" class="fn-ref">,26</a>. It is worth reading. A DEFCON change is squarely the kind of nuclear command-and-control traffic an EAM exists to carry, so the answer is plainly yes.<a href="#fn-27" class="fn-ref">27</a></p>
                 </div>
             </div>
 
@@ -908,8 +1024,8 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>People almost never ask about FDMs, but they probably should! <strong>Force Direction Messages</strong> have been named alongside EAMs in DoD documentation for decades (a 1999 description of the Single Channel Transponder System states outright that SCTS <em>&ldquo;provides Emergency Action Message (EAM) and Force Direction Message (FDM) dissemination capability&rdquo;</em><a href="#fn-22" class="fn-ref">22</a>), and I used to write that whether they still existed as a distinct class was an open question. However, even the FY27 budget documents name Force Direction Messages repeatedly, and plainly as a current, fielded category: the Strategic Automated Command and Control System (SACCS), which disseminates EAMs for the National Command Authority, is described as handling &lsquo;Higher Authority Command Messages, Force Direction Messages, EAMs, and automated ICBM re-targeting data&rsquo;, and the Global ASNT terminal program lists &lsquo;Emergency Action Messages (EAMs), Force Management messages, and Force Direction messages&rsquo; among what it receives and relays to bomber and tanker aircrews<a href="#fn-4" class="fn-ref">4</a>. All this to say that FDMs are not a lapsed historical curiosity, but an ongoing message type.</p>
-                    <p>However, at least from the outside, an FDM may well still be indistinguishable from an EAM, though it&rsquo;s possible prefixes set FDMs apart, in which case it isn&rsquo;t. A budget document naming the category does not tell you how to pick one out on the air. So the shortwave-listening habit of calling everything an &lsquo;EAM&rsquo; sits exactly where it always did: unavoidably imprecise, because FDMs are real and, as far as audible structure goes, a lookalike. The four-Group taxonomy (see the <a href="#faq-groups">EAM Groups entry</a>) might still map onto an EAM-versus-FDM split. Now that the budget documents confirm at least four separately-named message classes, that is a good deal less of a long shot than it used to sound. But it still isn&rsquo;t something I can settle from monitoring alone.</p>
+                    <p>People almost never ask about FDMs, but they probably should! <strong>Force Direction Messages</strong> have been named alongside EAMs in DoD documentation for decades (a 1999 description of the Single Channel Transponder System states outright that SCTS <em>&ldquo;provides Emergency Action Message (EAM) and Force Direction Message (FDM) dissemination capability&rdquo;</em><a href="#fn-28" class="fn-ref">28</a>), and I used to write that whether they still existed as a distinct class was an open question. However, even the FY27 budget documents name Force Direction Messages repeatedly, and plainly as a current, fielded category: the Strategic Automated Command and Control System (SACCS), which disseminates EAMs for the National Command Authority, is described as handling &lsquo;Higher Authority Command Messages, Force Direction Messages, EAMs, and automated ICBM re-targeting data&rsquo;, and the Global ASNT terminal program lists &lsquo;Emergency Action Messages (EAMs), Force Management messages, and Force Direction messages&rsquo; among what it receives and relays to bomber and tanker aircrews<a href="#fn-4" class="fn-ref">4</a>. All this to say that FDMs are not a lapsed historical curiosity, but an ongoing message type.</p>
+                    <p>However, at least from the outside, an FDM may well still be indistinguishable from an EAM, though it&rsquo;s possible prefixes set FDMs apart, in which case it isn&rsquo;t. A budget document naming the category does not tell you how to pick one out on the air. So the shortwave-listening habit of calling everything an &lsquo;EAM&rsquo; sits exactly where it always did: unavoidably imprecise, because FDMs are real and, as far as audible structure goes, a lookalike. The four-Group taxonomy might still map onto an EAM-versus-FDM split, or onto the broader four-class breakdown &mdash; either way, not something I can settle from monitoring alone.</p>
                     <p>Nonetheless, &lsquo;EAM&rsquo; is the colloquial term everyone uses to talk about and understand these messages, and I reluctantly concede that insisting on &lsquo;EAMs and/or FDMs&rsquo; everywhere would probably be more pedantic than it is useful.</p>
                 </div>
             </div>
@@ -922,8 +1038,8 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Routine daily EAM counts vary, but they are not random. Across the 224-day stretch from June 23, 2023 to February 1, 2024, the average came out at 14 to 15 messages a day, with a median of 14. Later windows I&rsquo;ve sampled &mdash; ran a little higher, averaging 18 or 19 with medians of 16 to 17. Though I haven&rsquo;t tried to fit a proper trend to it, there does appear to have been a gradual uptick in message volume over the years.</p>
-                    <p>Days with very a low volume of EAMs (zero to three messages) are rare, and when they do happen they tend to land on federal holidays.</p>
+                    <p>Routine daily EAM counts vary, but they are not random. Across the 224-day stretch from June 23, 2023 to February 1, 2024, the average came out at 14 to 15 messages a day, with a median of 14. Later windows I&rsquo;ve sampled ran a little higher, averaging 18 or 19 with medians of 16 to 17. Though I haven&rsquo;t tried to fit a proper trend to it, there does appear to have been a gradual uptick in message volume over the years.</p>
+                    <p>Days with a very low volume of EAMs (zero to three messages) are rare, and when they do happen they tend to land on federal holidays.</p>
                 </div>
             </div>
 
@@ -935,7 +1051,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>The HFGCS is a 24/7 network. I theory, an EAM can broadcast at any time of day, and on any day of the year. However, general trends in the time of day an EAM is more likely to broadcast and even what day it is more likely to broadcast can be observed when the entire NEET INTEL project dataset is charted out:</p>
+                    <p>The HFGCS is a 24/7 network. In theory, an EAM can broadcast at any time of day, and on any day of the year. However, general trends in the time of day an EAM is more likely to broadcast and even what day it is more likely to broadcast can be observed when the entire NEET INTEL project dataset is charted out:</p>
                     <div class="heatmap-wrap">
                         <table class="heatmap">
                             <thead><tr><th></th><th>00</th><th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th><th>21</th><th>22</th><th>23</th></tr></thead>
@@ -970,8 +1086,19 @@
                     <p><strong>STEADFAST NOON 2023.</strong> NATO&rsquo;s annual nuclear exercise ran October 16 to 26, 2023. Overall message counts and structure across that window looked entirely normal: no surge, no lull. But the <code>YI</code> prefix showed up carrying a distinctive internal repetition pattern on October 11, just before the exercise; again on the 16th, the start; and again on the 26th, the end, and then it was gone. The pre-exercise appearance was probably pre-deployment or keying of some kind; the bracketing of the exact start and end dates is the conspicuous part. A distinctive prefix family landing precisely on the boundaries of a known exercise might, of course, be coincidence, but it is conspicuous enough to be worth flagging and watching for.</p>
                     <p><strong>Minuteman III ICBM test launches.</strong> Vandenberg SFB runs unarmed Minuteman III test launches on publicly announced schedules. Across 11 launches I had monitoring coverage for, <strong>Group 4 EAMs show up at roughly 3.6&times; their baseline rate in the D-1 to D-3 window ahead of the launch</strong>; 8 of those 11 launches showed elevated Group 4 activity. For comparison, on an ordinary non-launch day a Group 4 prefix appears only about 22% of the time (an average of 0.29 long messages a day, across 807 baseline days). A write-up is available for review at <a href="minuteman_icbm_x_hfgcs_eams.html">minuteman_icbm_x_hfgcs_eams.html</a>.</p>
                     <p>This evidence is not in tension at all. Random news cycles do not correlate with EAM volume or content, but specific pre-scheduled operational activity sometimes might, at rates you could actually quantify. They&rsquo;re two different things people are both calling &lsquo;correlation&rsquo;, and the second one is what serious monitoring is actually for.</p>
-                    <p>There is a harder kind of case, too. On June 21, 2025, the United States struck Iran&rsquo;s nuclear facilities in <stron>OPERATION MIDNIGHT HAMMER</strong>. Unusually, a fairly precise public timeline of the operation was publicly released. Thanks to this data, I was able to take a look to see if any correlation or alignment could be observed between EAM broadcast times and operation stages. There did appear to be non-trivial alignment suggesting the HFGCS did play a role in the operation<a href="#fn-23" class="fn-ref">23</a>.</p>
 
+                </div>
+            </div>
+
+            <!-- ◆ Did the HFGCS play a role in OPERATION MIDNIGHT HAMMER? -->
+            <div class="faq-item" id="faq-midnight-hammer">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">Did the HFGCS play a role in OPERATION MIDNIGHT HAMMER?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>On June 21, 2025, the United States struck Iran&rsquo;s nuclear facilities in <strong>OPERATION MIDNIGHT HAMMER</strong>. Unusually, a fairly precise public timeline of the operation was publicly released. Thanks to this data, I was able to take a look to see if any correlation or alignment could be observed between EAM broadcast times and operation stages. There did appear to be non-trivial alignment suggesting the HFGCS did play a role in the operation<a href="#fn-29" class="fn-ref">29</a>.</p>
                 </div>
             </div>
 
@@ -985,7 +1112,7 @@
                 <div class="faq-answer">
                     <p>For the most part, no, long EAMs are not the cause for concern the internet has made them out to be. Long EAMs are the ones most likely to go viral, but a good number of them could be identified as running on a preset schedule. Once you have identified the schedule, it becomes easier to stop reading too much into them.</p>
                     <p>Three times across 2023 and 2024, on a roughly quarterly cadence, the same thing happened: a 194 character EAM went out on a Saturday evening UTC, and a 216 character EAM followed it the next afternoon, Sunday, at around 16:45 UTC. It happened on 19&ndash;20 August 2023, again on 18&ndash;19 November 2023, and again on 10&ndash;11 February 2024 &mdash; the same two lengths, the same Saturday-into-Sunday structure, near-identical UTC slots each time. </p>
-                    <p>On Saturday, May 18, 2024, a 210 character EAM went out at 21:16 UTC, and within hours it was being passed around online as evidence of something, and a self-appointed HFGCS expert, @redanblacattack (now @Rick_Fenlon) made a tweet implying his &lsquo;expertise&rsquo; meant he could credibly suspect the EAM was associated with concurrent breaking news of a drone attack in Russia. But if he was actually as diligent of a monitor as he implied he was, he would&rsquo;ve recognized the 210 character Saturday-evening EAM as entirely routine and predictable. I made a short video walking through the whole pattern<a href="#fn-24" class="fn-ref">24</a>, and was blocked for my troubles<a href="#fn-25" class="fn-ref">25</a>.</p>
+                    <p>On Saturday, May 18, 2024, a 210 character EAM went out at 21:16 UTC, and within hours it was being passed around online as evidence of something, and a self-appointed HFGCS expert, @redanblacattack (now @Rick_Fenlon) made a tweet implying his &lsquo;expertise&rsquo; meant he could credibly suspect the EAM was associated with concurrent breaking news of a drone attack in Russia. But if he was actually as diligent of a monitor as he implied he was, he would&rsquo;ve recognized the 210 character Saturday-evening EAM as entirely routine and predictable. I made a short video walking through the whole pattern<a href="#fn-30" class="fn-ref">30</a>, and was blocked for my troubles.</p>
                     <p>This isn&rsquo;t to say we know that every long EAM is scheduled, but enough of them visibly are that we can begin to suspect even more are (just on less obvious schedules). Separately, we know that geopolitical events do not run on a timetable, so when someone points at a long message they happened to notice and declares it must be about whatever is at the top of their news feed, they are anchoring a random point inside a pattern that was already there.</p>
                     <p>If you want to go looking yourself, the <a href="messages_calendar_2022_2026.html">2022&ndash;2026 message calendar</a> lays out all long EAMs in the entire NEET INTEL dataset. Diligent investigation is likely to continue to turn up some schedules or patterns that &lsquo;experts&rsquo; like Rick Fenlon never put together.</p>
                 </div>
@@ -999,7 +1126,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>The claim that you can read significance into an HFGCS operator&rsquo;s tone of voice is unfounded. It quietly assumes the operator either understands the message or has some context for how much it matters, and neither of those is well-established<a href="#fn-26" class="fn-ref">26</a>. More to the point, the people who make this claim have a bad track record. I’ve seen people claim an HFGCS operator was crying because the EAM they were reading meant that WW3 was about to begin. Not only did WW3 obviously not begin, the operator wasn’t crying, they were laughing. Consider that an operator could read a practice message with strong enunciation and a little nervous tremble in their voice not because nukes are about to fly, but because they know a superior who will pass/fail them is listening. Just like anyone else at any job, the mood of an HFGCS operator could be affected by any number of things, such as personal troubles in or out of work, a funny joke someone just told them, workplace pressure, etc. The idea someone listening to them with a shortwave radio could accurately identify and differentiate their tone of voice as a &lsquo;giveaway&rsquo;, while completely separate from important context, is simply bizarre.</p>
+                    <p>The claim that you can read significance into an HFGCS operator&rsquo;s tone of voice is unfounded. It quietly assumes the operator either understands the message or has some context for how much it matters, and neither of those is well-established<a href="#fn-31" class="fn-ref">31</a>. More to the point, the people who make this claim have a bad track record. I’ve seen people claim an HFGCS operator was crying because the EAM they were reading meant that WW3 was about to begin. Not only did WW3 obviously not begin, the operator wasn’t crying, they were laughing. Consider that an operator could read a practice message with strong enunciation and a little nervous tremble in their voice not because nukes are about to fly, but because they know a superior who will pass/fail them is listening. Just like anyone else at any job, the mood of an HFGCS operator could be affected by any number of things, such as personal troubles in or out of work, a funny joke someone just told them, workplace pressure, etc. The idea someone listening to them with a shortwave radio could accurately identify and differentiate their tone of voice as a &lsquo;giveaway&rsquo;, while completely separate from important context, is simply bizarre.</p>
                 </div>
             </div>
 
@@ -1011,10 +1138,10 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>SKYKING messages get discussed every single time HFGCS comes up, and they are, at this point, rarely broadcast on HFGCS at all. People keep talking about them for the same reason a lot of HFGCS information is the way it is: it&rsquo;s recycled from a period when SKYKINGs genuinely were common.</p>
+                    <p>SKYKING messages get discussed every single time the HFGCS comes up, and they are, at this point, rarely broadcast on the HFGCS at all. People keep talking about them for the same reason a lot of HFGCS information is the way it is: it&rsquo;s recycled from a period when SKYKINGs genuinely were common.</p>
                     <p>I can&rsquo;t say the SKYKING side of things has ever much bothered me. To me, their whole foreboding reputation looks fairly undeserved. Larry Van Horn&rsquo;s 2006 documentation defined SKYKING as <em>&ldquo;The collective call sign for all Single Integrated Operational Plan (SIOP) committed aircraft and missile crews. Its meaning is &lsquo;all SIOP committed aircraft and missile crews copy the following message.&rsquo;&rdquo;</em>, and my read, for whatever it is worth, is that SKYKING messages functioned as either <strong>mission abort or return-to-base messages</strong>. If I&rsquo;m right, that would mean they were never the &lsquo;it&rsquo;s about to pop off&rsquo; signal anyone imagines. In fact, sometimes they might&rsquo;ve been much closer to signals that could&rsquo;ve been read as &lsquo;whatever that was, it just ended.&rsquo;</p>
                     <p>For the recent record: there is an April 12, 2024 broadcast that went out from SKYKING to SKYMASTER on 11175 kHz (<a href="https://www.youtube.com/watch?v=WdmS7r9TdzE" target="_blank">recording</a>), though some might hesitate to call it a SKYKING message at all: structurally it follows the SKYMASTER format rather than the classic SKYKING one, and several of its three-letter groups turned up in other traffic to SKYKING that same day. The case is less that &lsquo;SKYKINGs have stopped&rsquo; than &lsquo;the classic SKYKING message has gone quiet on HF, and the callsign surfaces in new and unfamiliar contexts that older monitors are uninterested in&rsquo;.</p>
-                    <p>Whatever the case, if you come across someone presenting themselves as an HFGCS expert but they still discuss SKYKING as if it&rsquo;s the end-all-be-all of HFGCS traffic, that&rsquo;s probably a tell that you&rsquo;re talking to someone that&rsquo;s out of the loop<a href="#fn-27" class="fn-ref">27</a>.</p>
+                    <p>Whatever the case, if you come across someone presenting themselves as an HFGCS expert but they still discuss SKYKING as if it&rsquo;s the end-all-be-all of HFGCS traffic, that&rsquo;s probably a tell that you&rsquo;re talking to someone that&rsquo;s out of the loop<a href="#fn-32" class="fn-ref">32</a>.</p>
                 </div>
             </div>
 
@@ -1026,7 +1153,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>When someone keys up and asks for MAINSAIL, they are making a deliberately open-ended request &mdash; to any global ground station, whoever can hear them, whether that&rsquo;s Andrews or Offutt or Sigonella or anyone else. That has been the case for a while, with things still more or less in agreement with Larry Van Horn&rsquo;s write-up from over a decade ago<a href="#fn-28" class="fn-ref">28</a>.</p>
+                    <p>When someone keys up and asks for MAINSAIL, they are making a deliberately open-ended request &mdash; to any global ground station, whoever can hear them, whether that&rsquo;s Andrews or Offutt or Sigonella or anyone else. That has been the case for a while, with things still more or less in agreement with Larry Van Horn&rsquo;s write-up from over a decade ago<a href="#fn-33" class="fn-ref">33</a>.</p>
                     <p>What has changed is when the name is used. Stations broadcasting EAMs used to identify by their own station callsign &mdash; Andrews would say ANDREWS, Offutt would say OFFUTT, and so on. But around 2014 they all shifted to identifying as MAINSAIL during EAM broadcasts, and then around 2015 they shifted again to rotating daily callsigns. So today a ground station answering a MAINSAIL request might identify as MAINSAIL, or as the station it is actually transmitting from, or as the daily HFGCS callsign.</p>
                 </div>
             </div>
@@ -1042,9 +1169,9 @@
                     <p>Around 2015, the callsigns used for EAM broadcasts moved off station names and MAINSAIL and onto a rotating pool of unique daily callsigns. They almost always change at <strong>00:00 UTC</strong>.</p>
                     <p>I have spent a genuinely non-trivial amount of time cataloging these, and with only a couple of ambiguous exceptions I am fairly sure of this: virtually every HFGCS callsign observes a <strong>9 character limit, spaces included</strong> (some callsigns are two words). The apparent exceptions are things like <code>CUTTY SARK</code> and <code>LIGHT BUOY</code> (10 characters once you count the space), and my suspicion is that internally they are treated as 9, with the space simply dropped: <code>CUTTYSARK</code>, <code>LIGHTBUOY</code>.</p>
                     <p>The limit seems to reach almost everything else on the network, too. <code>SKYMASTER</code> fits inside 9 characters, so does <code>MAINSAIL</code>, and so do the station names: <code>ANDREWS</code>, <code>OFFUTT</code>, <code>SIGONELLA</code>. The one that genuinely doesn&rsquo;t is <code>PUERTO RICO</code>, which is 11 characters, or 10 without the space.</p>
-                    <p>What is interesting is that the limit might effectively be a kind of <strong>platform-type signature</strong>. HFGCS NCSes and E-6B callsigns stay inside 9 characters, but the 10 character tactical callsigns read as a different class of platform entirely. <code>FILIBUSTER</code> was heard during what looked like an attempt to contact an E-4 &lsquo;doomsday&rsquo; platform on HF<a href="#fn-29" class="fn-ref">29</a>, and <code>SPELLCASTER</code> and <code>BELLPEPPER</code><a href="#fn-30" class="fn-ref">30</a> were both heard running radio checks ahead of a SKYMASTER exercise period in April 2026. Callsigns like these stick out in a pool of callsigns adhering to a shorter character limit.</p>
-                    <p>The numbered callsigns (the <code>[WORD][NUMBER]</code> format) are very strongly tied to specific E-6B aircraft, and one appearing on HFGCS can usually be matched to a specific airframe on ADS-B trackers; that is covered more in the <a href="#faq-directed">Directed EAMs</a> and <a href="#faq-e6b">E-6B</a> entries.</p>
-                    <p>So why did nobody notice the 9 character limit earlier? Probably just poor documentation. For years, an admin of eam.watch (someone who falsely claimed inside knowledge of HFGCS<a href="#fn-31" class="fn-ref">31</a>) logged, and kept logging, test counts from Diego Garcia under the callsign <code>DIEGO GARCIA</code>, when the recording plainly only says <code>DIEGO</code><a href="#fn-32" class="fn-ref">32</a>. Other listeners mishear callsigns and log ones that break the limit. Meanwhile, Air Force Instruction 33-217<a href="#fn-33" class="fn-ref">33</a> might&rsquo;ve been dangling a definitive source just out of reach: <em>&ldquo;The VCSLI contains detailed procedures for requesting, assigning, and using voice call signs, and is available on the VCS SIPRNet web site&rdquo;</em>.</p>
+                    <p>What is interesting is that the limit might effectively be a kind of <strong>platform-type signature</strong>. HFGCS NCSes and E-6B callsigns stay inside 9 characters, but the 10 character tactical callsigns read as a different class of platform entirely. <code>FILIBUSTER</code> was heard during what looked like an attempt to contact an E-4 &lsquo;doomsday&rsquo; platform on HF<a href="#fn-34" class="fn-ref">34</a>, and <code>SPELLCASTER</code> and <code>BELLPEPPER</code><a href="#fn-35" class="fn-ref">35</a> were both heard running radio checks ahead of a SKYMASTER exercise period in April 2026. Callsigns like these stick out in a pool of callsigns adhering to a shorter character limit.</p>
+                    <p>The numbered callsigns (the <code>[WORD][NUMBER]</code> format) are very strongly tied to specific E-6B aircraft, and one appearing on the HFGCS can usually be matched to a specific airframe on ADS-B trackers; that is covered more in the <a href="#faq-directed">Directed EAMs</a> and <a href="#faq-e6b">E-6B</a> entries.</p>
+                    <p>So why did nobody notice the 9 character limit earlier? Probably just poor documentation. For years, an admin of eam.watch (someone who falsely claimed inside knowledge of the HFGCS<a href="#fn-36" class="fn-ref">36</a>) logged, and kept logging, test counts from Diego Garcia under the callsign <code>DIEGO GARCIA</code>, when the recording plainly only says <code>DIEGO</code><a href="#fn-37" class="fn-ref">37</a>. Other listeners mishear callsigns and log ones that break the limit. Meanwhile, Air Force Instruction 33-217<a href="#fn-38" class="fn-ref">38</a> might&rsquo;ve been dangling a definitive source just out of reach: <em>&ldquo;The VCSLI contains detailed procedures for requesting, assigning, and using voice call signs, and is available on the VCS SIPRNet web site&rdquo;</em>.</p>
                 </div>
             </div>
 
@@ -1056,22 +1183,34 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>The <strong>E-6B Mercury</strong> is a U.S. Navy aircraft, flown by Strategic Communications Wing 1<a href="#fn-34" class="fn-ref">34</a>. In the Navy&rsquo;s own words, its primary job is to &ldquo;receive, verify and retransmit Emergency Action Messages (EAMs) to US strategic forces.&rdquo; For monitoring purposes the E-6B is the airborne half of the whole system: the ground stations broadcast EAMs on HF, and E-6B aircraft rebroadcast them on both HF and VLF (the latter via a trailing wire antenna), which is how the coverage reaches the submerged ballistic missile submarines that can&rsquo;t pick up HF at all.</p>
+                    <p>The <strong>E-6B Mercury</strong> is a U.S. Navy aircraft, flown by Strategic Communications Wing 1<a href="#fn-39" class="fn-ref">39</a>. In the Navy&rsquo;s own words, its primary job is to &ldquo;receive, verify and retransmit Emergency Action Messages (EAMs) to US strategic forces.&rdquo; For monitoring purposes the E-6B is the airborne half of the whole system: the ground stations broadcast EAMs on HF, and E-6B aircraft rebroadcast them on both HF and VLF (the latter via a trailing wire antenna), which is how the coverage reaches the submerged ballistic missile submarines that can&rsquo;t pick up HF at all.</p>
                     <p>There is a fuller picture of what an E-6B crew actually does, and it turns up in an unexpected place: the same FOIA-released aircrew training plan that pins down NEREP and AKAC-274 (c.f. the <a href="#faq-274">274-message entry</a>) is an E-6B program syllabus. The aircraft&rsquo;s wartime role is the Airborne Command Post (ABNCP), and crew train on things like Emergency Conferencing, handling Nuclear Execution Reports, the Nuclear Planning and Execution System.</p>
                     <p>E-6Bs show a strong preference for Group 1 messages when they rebroadcast EAMs, and they also work the CHARLIE WINDOWS and other discrete frequencies for E-6B-to-E-6B traffic. As mentioned earlier, the recipients of Directed EAMs with numbered callsigns can usually be matched to a specific E-6B on the public trackers (ADSBExchange, Flightradar24).</p>
-                    <p>However, that that last part has gotten harder in recent years. From late 2024 and on through 2025 and into 2026, E-6B visibility on the public flight trackers has been dropping: the aircraft turn up under false hex codes more often, fall off the trackers entirely more often, and there have been both large-scale exercises and apparently routine days of the week where radio traffic implied more aircraft airborne than would appear on flight radars. Attributing a callsign to a specific airframe is still useful, but it&rsquo;s a lot harder to do now than it was in 2022 or 2023. (A plausible explanation for all this could be that it&rsquo;s part of a broader post-New START effort to obscure U.S. strategic force activities.)</p>
-                    <p>One relay pattern is worth knowing, because you will hear it: a ground station broadcasts an EAM &lsquo;for&rsquo; a specific aircraft, then follows it with a second message addressed &lsquo;to no one in particular&rsquo; &mdash; and a while later another, different transmitter, under its own callsign and very probably that same aircraft, rebroadcasts the second message on a half-hour schedule, presumably toward submarines.</p>
+                    <p>However, that last part has gotten harder in recent years. From late 2024 and on through 2025 and into 2026, E-6B visibility on the public flight trackers has been dropping: the aircraft turn up under false hex codes more often, fall off the trackers entirely more often, and there have been both large-scale exercises and apparently routine days of the week where radio traffic implied more aircraft airborne than would appear on flight radars. Attributing a callsign to a specific airframe is still useful, but it&rsquo;s a lot harder to do now than it was in 2022 or 2023.<a href="#fn-40" class="fn-ref">40</a></p>
+                </div>
+            </div>
+
+            <!-- ◆ What is the E-6B rebroadcast timetable? -->
+            <div class="faq-item" id="faq-e6b-relay">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is the E-6B rebroadcast timetable?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>The E-6B rebroadcast relay pattern is worth identifying because it&rsquo;s a regular feature on the HFGCS: a ground station broadcasts an EAM &lsquo;for&rsquo; a specific aircraft, then follows it with a second message addressed &lsquo;to no one in particular&rsquo; &mdash; and a while later another, different transmitter, under its own callsign and very probably that same aircraft, rebroadcasts the second message on a half-hour schedule, presumably toward submarines.</p>
                     <p>The exact minute past the hour it keys up on isn&rsquo;t arbitrary, either &mdash; the slot tracks, roughly, which body of water the aircraft is covering:</p>
                     <table>
                         <thead>
-                            <tr><th>Relay slot</th><th>Coverage</th></tr>
+                            <tr><th>Time slot</th><th>Coverage</th></tr>
                         </thead>
                         <tbody>
                             <tr><td><code>:00</code> and <code>:30</code></td><td>Gulf of America (and, rarely, Lake Michigan)</td></tr>
                             <tr><td><code>:10</code> and <code>:40</code></td><td>Atlantic</td></tr>
                             <tr><td><code>:20</code> and <code>:50</code></td><td>Pacific</td></tr>
                         </tbody>
-                    </table>                </div>
+                    </table>
+                </div>
             </div>
 
             <!-- ◆ What is VERDIN? -->
@@ -1082,7 +1221,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>The VLF Digital Information Network (<strong>VERDIN</strong>) is the very-low-frequency counterpart to the HFGCS, and carries much of the same traffic. E-6B aircraft broadcast digital EAMs on VLF through their trailing wire antenna, mainly to the submerged submarines that HF can&rsquo;t reach. (A KiwiSDR with the right antenna can be configured to decode these transmissions into text.)</p>
+                    <p>The VLF Digital Information Network (<strong>VERDIN</strong>) is the very-low-frequency counterpart to the HFGCS, and carries much of the same traffic. E-6B aircraft broadcast digital EAMs on VLF through their trailing wire antenna, mainly to the submerged submarines that HF can&rsquo;t reach.<a href="#fn-41" class="fn-ref">41</a></p>
                     <p>VERDIN runs on a small set of VLF frequencies:</p>
                     <table class="freq-table">
                         <thead>
@@ -1096,9 +1235,9 @@
                             <tr><td><code>30</code>&nbsp;kHz</td><td>VERDIN PENINSULA OF UPPER MICHIGAN</td></tr>
                         </tbody>
                     </table>
-                    <p>SPORTS is the most amusing VLF frequency. 26.35 kHz was documented in use to broadcast information covering sports scores, closing stock prices and naval-history trivia<a href="#fn-35" class="fn-ref">35</a>. 23 kHz<a href="#fn-36" class="fn-ref">36</a> might also be a VERDIN frequency.</p>
+                    <p>SPORTS is the most amusing VLF frequency. 26.35 kHz was documented in use to broadcast information covering sports scores, closing stock prices and naval-history trivia<a href="#fn-42" class="fn-ref">42</a>. 23 kHz<a href="#fn-43" class="fn-ref">43</a> might also be a VERDIN frequency.</p>
                     <p>The FY27 budget documents contain some information regarding VERDIN as well. The KG-3XA cryptographic program (the same one discussed in the <a href="#faq-otp">one-time-pad entry</a>) includes an embeddable module, the KGV-363, described as supporting &lsquo;Very Low Frequency (VLF) receivers and transmitters&rsquo; and tied to the Fixed Submarine Broadcast System.<a href="#fn-4" class="fn-ref">4</a></p>
-                    <p>If you want to take a look at some VERDIN captures, null has a dedicated YouTube playlist<a href="#fn-37" class="fn-ref">37</a>.</p>
+                    <p>If you want to take a look at some VERDIN captures, null has a dedicated YouTube playlist<a href="#fn-44" class="fn-ref">44</a>.</p>
                 </div>
             </div>
 
@@ -1110,9 +1249,54 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Standard EAMs never use the characters 0, 1, 8, or 9. The exception (a strange one) is what I&rsquo;ve named <strong>8888 messages</strong> (other people say Quad 8s; I&rsquo;d rather call them <em>octopus messages</em><a href="#fn-38" class="fn-ref">38</a>, because it is easier to say). They can contain those characters, and most conspicuously they open with <code>888800</code> and close on <code>8888</code>. They are almost certainly not standard EAMs, and arguably should not be going out on HFGCS at all.</p>
-                    <p>As part of research for a video I made in 2023<a href="#fn-39" class="fn-ref">39</a> I could only catalog 11 documented 8888 messages across nearly twenty years of records. The count now is over 38, HF and VLF combined, with the documented record running from a 1999 UDXF log all the way through broadcasts still happening in 2026. A writeup that supercedes the one in the video is available at <a href="octopus_8888.html">octopus_8888.html</a>.</p>
-                    <p>What the expanded dataset shows is that the structure is consistent. An 8888 message opens with the <code>888800</code> header, then a two-digit day that matches the calendar date, then a four-digit time at or near the time of transmission, then a middle block of paired characters (most often <code>AAEEGGKKNNXXZZ</code>), and closes on a trailing <code>8888</code>. The HF instances are mostly disregarded (since 2018, most are followed by an explicit disregard call from the operator), while the VLF instances typically are not. And the VLF ones correlate with specific aircraft hex codes: E-4 airframes (<code>ADFEB3</code>, <code>ADFEB4</code>, <code>ADFEB6</code>) and E-6 airframes (<code>AE0412</code>, <code>AE0414</code>, <code>AE040E</code>) have all been associated with VLF 8888 broadcasts more than once.</p>
+                    <p>Standard EAMs never use the characters 0, 1, 8, or 9. <strong>8888 messages</strong> (commonly called <strong>Quad 8s</strong>) are the exception, containing those characters and, most conspicuously, opening with <code>888800</code> and closing on <code>8888</code>. They are almost certainly not standard EAMs, and it&rsquo;s entirely possible they shouldn&rsquo;t be broadcast on the HFGCS at all.</p>
+                    <p>As part of research for a video I made in 2023<a href="#fn-45" class="fn-ref">45</a> I could only catalog 11 documented 8888 messages across nearly twenty years of records. The count now is over 38, HF and VLF combined, with the documented record running from a 1999 UDXF log all the way through broadcasts still happening in 2026. A writeup that supercedes the one in the video is available at <a href="octopus_8888.html">octopus_8888.html</a>.</p>
+                    <p>What the expanded dataset shows is that the structure is consistent. An 8888 message opens with the <code>888800</code> header, then a two-digit day that matches the calendar date, then a four-digit time at or near the time of transmission, then a middle block of paired characters (most often <code>AAEEGGKKNNXXZZ</code>), and closes on a trailing <code>8888</code>.</p>
+
+                    <div class="anatomy-wrap">
+                        <svg class="anatomy" viewBox="0 0 720 145" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anatomy of an 8888 message">
+                            <!-- Boxes (segments) at y=22 to y=62 -->
+                            <g class="anatomy-seg">
+                                <rect x="60"  y="22" width="120" height="40" rx="3" />
+                                <text x="120" y="48" text-anchor="middle" class="anatomy-chars">888800</text>
+                            </g>
+                            <g class="anatomy-seg">
+                                <rect x="184" y="22" width="40"  height="40" rx="3" />
+                                <text x="204" y="48" text-anchor="middle" class="anatomy-chars">19</text>
+                            </g>
+                            <g class="anatomy-seg">
+                                <rect x="228" y="22" width="80"  height="40" rx="3" />
+                                <text x="268" y="48" text-anchor="middle" class="anatomy-chars">1437</text>
+                            </g>
+                            <g class="anatomy-seg">
+                                <rect x="312" y="22" width="280" height="40" rx="3" />
+                                <text x="452" y="48" text-anchor="middle" class="anatomy-chars">AAEEGGKKNNXXZZ</text>
+                            </g>
+                            <g class="anatomy-seg">
+                                <rect x="596" y="22" width="80"  height="40" rx="3" />
+                                <text x="636" y="48" text-anchor="middle" class="anatomy-chars">8888</text>
+                            </g>
+
+                            <!-- Labels directly under each segment -->
+                            <text x="120" y="82" text-anchor="middle" class="anatomy-label">header</text>
+                            <text x="120" y="96" text-anchor="middle" class="anatomy-sub">fixed</text>
+
+                            <text x="204" y="82" text-anchor="middle" class="anatomy-label">day</text>
+                            <text x="204" y="96" text-anchor="middle" class="anatomy-sub">DD</text>
+
+                            <text x="268" y="82" text-anchor="middle" class="anatomy-label">time</text>
+                            <text x="268" y="96" text-anchor="middle" class="anatomy-sub">HHMM UTC</text>
+
+                            <text x="452" y="82" text-anchor="middle" class="anatomy-label">paired middle block</text>
+                            <text x="452" y="96" text-anchor="middle" class="anatomy-sub">most often AAEEGGKKNNXXZZ</text>
+                            <text x="452" y="108" text-anchor="middle" class="anatomy-sub">length varies</text>
+
+                            <text x="636" y="82" text-anchor="middle" class="anatomy-label">trailing sentinel</text>
+                            <text x="636" y="96" text-anchor="middle" class="anatomy-sub">fixed</text>
+                        </svg>
+                        <p class="map-caption">Anatomy of an 8888 message. Example is illustrative; the bookend fields are fixed, the middle block varies in length but tends toward paired-character runs.</p>
+                    </div>
+                    <p>The HF instances are mostly disregarded (since 2018, most are followed by an explicit disregard call from the operator), while the VLF instances typically are not. And the VLF ones correlate with specific aircraft hex codes: E-4 airframes (<code>ADFEB3</code>, <code>ADFEB4</code>, <code>ADFEB6</code>) and E-6 airframes (<code>AE0412</code>, <code>AE0414</code>, <code>AE040E</code>) have all been associated with VLF 8888 broadcasts more than once.</p>
                     <p>There are two leads on 8888 messages. The first: the veteran HF monitor Larry Van Horn relayed an anonymous source saying that, historically, 8888-formatted messages appeared on the ISST (ICBM Strategic Satellite Test) system as test messages, which would make them test-format traffic rather than live launch orders. The second came out of a Titan II missile museum tour I included in that 2023 video, where a former crewman walks through the actual launch-authorization procedure: a two character envelope selector followed by a five character code, sealed in a &lsquo;cookie&rsquo;, that has to match for an event to be real. That <strong>2+5 structure maps cleanly onto the inner fields of an 8888 message</strong> as observed on both HF and VLF, which strongly suggests these are either a direct descendant or a very close cousin of those nuclear command formats.</p>
                     <p>None of that confirms 8888 messages are ICBM-related. But the format, the documented adjacency to ICBM systems, and the simply tiny broadcast rate all point the same direction: toward high-significance test or control traffic somewhere inside the nuclear command-and-control world.</p>
                 </div>
@@ -1128,8 +1312,21 @@
                 <div class="faq-answer">
                     <p>The phrase <strong>SKYMASTER event</strong> has drifted into meaning two slightly different things at once: the radio callsign SKYMASTER, which sometimes appears on the HFGCS during certain large broadcasts, and the underlying STRATCOM exercise that produces it. They are not the same thing. A SKYMASTER event is, properly, a large STRATCOM-driven exercise; the radio callsign SKYMASTER is one optional surface symptom of that exercise, and when it does appear, it tends to appear near the end, not the start.</p>
                     <p>For what it is worth, SKYMASTER is a genuine procedural term and not a piece of listener folklore: &lsquo;SKYMASTER procedures&rsquo; turns up as a named training subject in a FOIA-released E-6B aircrew training plan, and, tellingly, it sits in the same lesson as NEREP communication procedures (that document is discussed in the <a href="#faq-274">274-message entry</a>).</p>
-                    <p>On the HFGCS, a SKYMASTER-scale exercise looks like this: hundreds of messages over many hours, several distinct formats running at once (ordinary EAMs, SKYMASTER-prefixed messages, 274 messages, RECOVERY REPORTS), and heavy use of additional HF and UHF frequencies well beyond the usual four, a UHF channel around 340 MHz among them (<a href="https://www.youtube.com/watch?v=brouAp0pqRw" target="_blank">recording</a>). In SKYMASTER mode each primary frequency starts behaving like its own network rather than a mirror of the others, which quietly breaks the usual assumption that HFGCS simply simulcasts everything across <code>4724</code>/<code>8992</code>/<code>11175</code>/<code>15016</code>.</p>
-                    <p>I used to call all of these &lsquo;SKYMASTER events&rsquo; and nothing else. They are better thought of as STRATCOM exercises that may or may not throw a SKYMASTER callsign onto HF. To handle the cases where the indicators are all present but the callsign isn&rsquo;t, the <strong>FAKEMASTER</strong> categorize was added. A FAKEMASTER is an event with every hallmark I&rsquo;d expect of a SKYMASTER (E-6B forward deployment, conspicuous airspace reservations, heavy EAM traffic, unusual callsigns, all the formats above) but with no documented SKYMASTER call; either it is a similar-scale exercise that is genuinely different in some operational way, or the call happened and I missed it. The cleanest example is June 23, 2024 (an E-6 forward-deployed to Norway, special airspace reservations, an unusual EAM read by the numeric callsign <code>LOOKOUT44</code>), which I flagged at the time as anomalous. The DoD afterward implied it had been little more than a photo opportunity of some kind, but HFGCS audio recordings clearly prove a real exercise took place concurrent with the DVIDS photo op.</p>
+                    <p>On the HFGCS, a SKYMASTER-scale exercise looks like this: hundreds of messages over many hours, several distinct formats running at once (ordinary EAMs, SKYMASTER-prefixed messages, 274 messages, RECOVERY REPORTS), and heavy use of additional HF and UHF frequencies well beyond the usual four<a href="#fn-46" class="fn-ref">46</a>. In SKYMASTER mode each primary frequency starts behaving like its own network rather than a mirror of the others, which quietly breaks the usual assumption that the HFGCS simply simulcasts everything across <code>4724</code>/<code>8992</code>/<code>11175</code>/<code>15016</code>.</p>
+                    <p>I used to call all of these &lsquo;SKYMASTER events&rsquo; and nothing else. They are better thought of as STRATCOM exercises that may or may not throw a SKYMASTER callsign onto HF. To handle the cases where the indicators are all present but the callsign isn&rsquo;t, I added the <strong>FAKEMASTER</strong> category &mdash; see the <a href="#faq-fakemaster">next entry</a>.</p>
+                </div>
+            </div>
+
+            <!-- ◆ What is a FAKEMASTER event? -->
+            <div class="faq-item" id="faq-fakemaster">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">What is a FAKEMASTER event?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>A FAKEMASTER is an event with every hallmark I&rsquo;d expect of a SKYMASTER (E-6B forward deployment, conspicuous airspace reservations, heavy EAM traffic, unusual callsigns, all the formats discussed in the <a href="#faq-skymaster">SKYMASTER entry</a>) but with no documented SKYMASTER call. Either it is a similar-scale exercise that is genuinely different in some operational way, or the call happened and I missed it.</p>
+                    <p>The cleanest example is June 23, 2024 (an E-6 forward-deployed to Norway, special airspace reservations, an unusual EAM read by the numeric callsign <code>LOOKOUT44</code>), which I flagged at the time as anomalous. The DoD afterward implied it had been little more than a photo opportunity of some kind, but HFGCS audio recordings clearly prove a real exercise took place concurrent with the DVIDS photo op. The case for that day being <strong>GLOBAL STORM 24</strong> rather than a mere photo op is laid out in the <a href="#faq-globalstorm">GLOBAL STORM entry</a>.</p>
                 </div>
             </div>
 
@@ -1141,7 +1338,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Fairly often<a href="#fn-40" class="fn-ref">40</a>.</p>
+                    <p>Fairly often<a href="#fn-47" class="fn-ref">47</a>.</p>
                 </div>
             </div>
 
@@ -1154,7 +1351,7 @@
                 </div>
                 <div class="faq-answer">
                     <p>This is the question that comes up most when one of these broadcasts goes viral.</p>
-                    <p>First: I was able to forecast the dates of many major SKYMASTER events I documented well in advance. I would post these forecasts in public and with verifiable receipts, sometimes weeks or months out, and the events have landed on or near those dates. The forecasts and their paper trails (Internet Archive snapshots, GitHub version history, archive.is captures, hfunderground.com forum posts) would be published online ahead of time. Anyone insisting SKYMASTER traffic is real nuclear activity is, by implication, insisting that I am leaking sensitive US military information ahead of time, which would make me either a serious U.S. military security problem or a serious foreign-intelligence opportunity. I have not been arrested or kidnapped on either count.</p>
+                    <p>First: I was able to forecast the dates of many major SKYMASTER events I documented well in advance. I would post these forecasts in public and with verifiable receipts, sometimes weeks or months out, and the events have landed on or near those dates. The forecasts and their paper trails<a href="#fn-48" class="fn-ref">48</a> would be published online ahead of time. Anyone insisting SKYMASTER traffic is real nuclear activity is, by implication, insisting that I am leaking sensitive US military information ahead of time, which would make me either a serious U.S. military security problem or a serious foreign-intelligence opportunity. I have not been arrested or kidnapped on either count.</p>
                     <p>Second: STRATCOM publicly announces its large exercises. Offutt AFB&rsquo;s social media announced its April 2026 exercise window six days ahead of time. Whiteman AFB and DVIDS pages routinely publish dates. This activity is rehearsed in the open, and it is a genuinely routine part of how U.S. strategic forces operate. Some SKYMASTER events can be cleanly associated with these publicly identified exercises.</p>
                     <p>Third: a &lsquo;real&rsquo; EAM would probably look and sound very much like an exercise message. The difference would be context, not content. In an actual crisis, every major news outlet on earth would be covering a nuclear emergency in plain language. You would not be finding out from the HFGCS.</p>
                 </div>
@@ -1168,9 +1365,9 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p><strong>GLOBAL STORM</strong> is one of the recurring U.S. STRATCOM exercises with a known name, and is part of the same broad family as GLOBAL THUNDER and GLOBAL LIGHTNING, the kind of large strategic-deterrence drill that throws the activity discussed in the <a href="#faq-skymaster">SKYMASTER entry</a> onto HFGCS.</p>
-                    <p>Although OSINT missed it and audio proof sat unnoticed and undiscussed for several years, <strong>GLOBAL STORM 23</strong> ran on July 11, 2023. A recording I made that day has a participant clearly identify the exercise by name over the HFGCS<a href="#fn-41" class="fn-ref">41</a>.</p>
-                    <p>Evidence points towards <strong>GLOBAL STORM 24</strong> taking place on June 23, 2024. This happens to be same date as the USS Tennessee activity flagged in the <a href="#faq-skymaster">SKYMASTER entry</a>. At the time, the NEET INTEL project logged that day as a <strong>FAKEMASTER</strong> (the term is defined in the <a href="#faq-skymaster">SKYMASTER entry</a>, and it is one people routinely misread), while a good deal of the wider commentary settled on calling the day a photo opportunity, or a show of force. My read is that it was something a great deal bigger: a major, &lsquo;Tier One&rsquo; STRATCOM exercise that simply went unrecognized as one, for the unglamorous reason that DVIDS never labeled it as such. The circumstantial case for the GLOBAL STORM 24 identification is laid out in that same recording<a href="#fn-41" class="fn-ref">41</a>; two further HFGCS timecard recordings back it up<a href="#fn-42" class="fn-ref">42</a><a href="#fn-43" class="fn-ref">,43</a>, and the documentary background (GLOBAL STORM, the broader STRATCOM exercise calendar, and the USS Tennessee deployment) is set out across the sources<a href="#fn-44" class="fn-ref">44</a><a href="#fn-45" class="fn-ref">,45</a><a href="#fn-46" class="fn-ref">,46</a><a href="#fn-47" class="fn-ref">,47</a><a href="#fn-48" class="fn-ref">,48</a><a href="#fn-49" class="fn-ref">,49</a><a href="#fn-50" class="fn-ref">,50</a><a href="#fn-51" class="fn-ref">,51</a><a href="#fn-52" class="fn-ref">,52</a><a href="#fn-53" class="fn-ref">,53</a><a href="#fn-54" class="fn-ref">,54</a><a href="#fn-55" class="fn-ref">,55</a>.</p>
+                    <p><strong>GLOBAL STORM</strong> is one of the recurring U.S. STRATCOM exercises with a known name, and is part of the same broad family as GLOBAL THUNDER and GLOBAL LIGHTNING, the kind of large strategic-deterrence drill that throws the activity discussed in the <a href="#faq-skymaster">SKYMASTER entry</a> onto the HFGCS.</p>
+                    <p>Although OSINT missed it and audio proof sat unnoticed and undiscussed for several years, <strong>GLOBAL STORM 23</strong> ran on July 11, 2023. A recording I made that day has a participant clearly identify the exercise by name over the HFGCS<a href="#fn-49" class="fn-ref">49</a>.</p>
+                    <p>Evidence points towards <strong>GLOBAL STORM 24</strong> taking place on June 23, 2024. This happens to be same date as the USS Tennessee activity flagged in the <a href="#faq-skymaster">SKYMASTER entry</a>. At the time, the NEET INTEL project logged that day as a <strong>FAKEMASTER</strong> (the term is defined in the <a href="#faq-fakemaster">FAKEMASTER entry</a>, and it is one people routinely misread), while a good deal of the wider commentary settled on calling the day a photo opportunity, or a show of force. My read is that it was something a great deal bigger: a major, &lsquo;Tier One&rsquo; STRATCOM exercise that simply went unrecognized as one, for the unglamorous reason that DVIDS never labeled it as such. The circumstantial case for the GLOBAL STORM 24 identification is laid out in that same recording<a href="#fn-49" class="fn-ref">49</a>; two further HFGCS timecard recordings back it up<a href="#fn-50" class="fn-ref">50</a><a href="#fn-51" class="fn-ref">,51</a>, and the documentary background (GLOBAL STORM, the broader STRATCOM exercise calendar, and the USS Tennessee deployment) is set out across the sources<a href="#fn-52" class="fn-ref">52</a><a href="#fn-53" class="fn-ref">,53</a><a href="#fn-54" class="fn-ref">,54</a><a href="#fn-55" class="fn-ref">,55</a><a href="#fn-56" class="fn-ref">,56</a><a href="#fn-57" class="fn-ref">,57</a><a href="#fn-58" class="fn-ref">,58</a><a href="#fn-59" class="fn-ref">,59</a><a href="#fn-60" class="fn-ref">,60</a><a href="#fn-61" class="fn-ref">,61</a><a href="#fn-62" class="fn-ref">,62</a><a href="#fn-63" class="fn-ref">,63</a>.</p>
                 </div>
             </div>
 
@@ -1182,7 +1379,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>A 274 message is a format that, for a long time, turned up almost exclusively during STRATCOM exercises. That is no longer quite true, as it has started to appear outside that context too. Either way it remains poorly documented, and were rarely logged online until recently<a href="#fn-56" class="fn-ref">56</a>. Despite the name, these messages are not 274 characters long; the &lsquo;274&rsquo; points instead to <strong>AKAC-274</strong>, a real operational publication named outright in a FOIA-released E-6B aircrew training plan<a href="#fn-57" class="fn-ref">57</a>, where &lsquo;the use of the AKAC 274/AKAL 1553&rsquo; is listed as one of the things a Force Status controller is trained on.</p>
+                    <p>A 274 message is a format that, for a long time, turned up almost exclusively during STRATCOM exercises. That is no longer quite true, as it has started to appear outside that context too. Either way it remains poorly documented, and was rarely logged online until recently<a href="#fn-64" class="fn-ref">64</a>. Despite the name, these messages are not 274 characters long; the &lsquo;274&rsquo; points instead to <strong>AKAC-274</strong>, a real operational publication named outright in a FOIA-released E-6B aircrew training plan<a href="#fn-65" class="fn-ref">65</a>, where &lsquo;the use of the AKAC 274/AKAL 1553&rsquo; is listed as one of the things a Force Status controller is trained on.</p>
                     <p>That same training plan also settles what NEREP means. NEREPs are <strong>Nuclear Execution Reports</strong>; the plan lists them explicitly, in at least three types designated LA, GA, and SA, with their own message precedence and their own communication procedures.</p>
                 </div>
             </div>
@@ -1195,7 +1392,7 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <strong>CLARINET MERLIN</strong> appears by name in the FOIA-released E-6B training plan discussed in the <a href="#faq-274">274-message entry</a><a href="#fn-57" class="fn-ref">57</a> &mdash; the syllabus carries a lesson on the process of sending, relaying, and receiving &lsquo;CLARINET MERLIN messages&rsquo;. From this, it would appear to be a category of traffic that E-6B crew handles, but I never heard anything I was thought might be a CLARINET MERLIN message.</p>
+                    <strong>CLARINET MERLIN</strong> appears by name in the FOIA-released E-6B training plan discussed in the <a href="#faq-274">274-message entry</a><a href="#fn-65" class="fn-ref">65</a> &mdash; the syllabus carries a lesson on the process of sending, relaying, and receiving &lsquo;CLARINET MERLIN messages&rsquo;. From this, it would appear to be a category of traffic that E-6B crew handles, but I never heard anything I thought might be a CLARINET MERLIN message.</p>
                 </div>
             </div>
 
@@ -1220,7 +1417,7 @@
                 </div>
                 <div class="faq-answer">
                     <p>On top of the four primary HFGCS frequencies, and the discrete frequencies nobody outside knows, STRATCOM uses <code>9031</code> kHz, which, on the primary frequencies, I&rsquo;ve heard referred to not as &lsquo;9031&rsquo; but as the <strong>&lsquo;CHARLIE ECHO WINDOW&rsquo;</strong>, presumably to keep the handling of it a little low-key.</p>
-                    <p>CE is one of a series of &lsquo;CHARLIE WINDOWS&rsquo; (CA through CI) that the shortwave-listening community documented some time ago. The mildly surprising part is that the frequencies documented back in the mid-to-late 2000s are still the same ones in use today<a href="#fn-58" class="fn-ref">58</a>:</p>
+                    <p>CE is one of a series of &lsquo;CHARLIE WINDOWS&rsquo; (CA through CI) that the shortwave-listening community documented some time ago. The mildly surprising part is that the frequencies documented back in the mid-to-late 2000s are still the same ones in use today<a href="#fn-66" class="fn-ref">66</a>:</p>
                     <table class="freq-table">
                         <thead>
                             <tr><th>Window</th><th>Frequency</th></tr>
@@ -1275,7 +1472,7 @@
                         </tbody>
                     </table>
                     <p>Separately, there is a longer list of frequencies I&rsquo;ve come across that may be ZULU frequencies, but I never heard any relevant traffic on them myself:</p>
-                    <pre style="white-space:pre-wrap;">3068, 3116, 3134, 3143, 3295, 4472, 4495, 4745, 5026, 5705, 5875, 6715, 7831, 9809, 11104, 11229, 13242, 15046, 15094, 15097, 15962, 18024, 18027, 18046, 19665, 19755, 20167, 23337, 23872, 24828, 24978, 26532</pre>
+                    <pre style="white-space:pre-wrap;">3068, 3116, 3134, 3143, 3295, 4472, 4495, 4745, 5026, 5705, 5875, 6715, 7831, 9809, 11104, 11229, 13242, 15094, 15097, 18024, 18027, 18046, 19665, 19755, 20167, 23337, 23872, 24828, 24978, 26532</pre>
                 </div>
             </div>
 
@@ -1287,9 +1484,24 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Most of what crosses the HFGCS is EAMs and routine station business, but every so often you catch something else entirely: a <strong>phone patch</strong>, where a unit asks a ground station to bridge it, by actual telephone, through to some particular number. In March 2024 I caught one between two units signing <code>4HA</code> and <code>1YG</code>, and the audible half of it ran: &lsquo;<em>4HA, this is 1YG. Roger. Esteem Highly Alpha. [My cell?] 2051, over.</em>&rsquo;<a href="#fn-59" class="fn-ref">59</a>.</p>
-                    <p>I was initially perplexed, with none of the self-appointed experts appearing to be familiar with the term ESTEEM HIGHLY ALPHA at all. However, answers could be found on Russian-language monitoring forums, and in old issues of <em>Monitoring Times</em><a href="#fn-60" class="fn-ref">60</a>. The trail runs a long way back: there is a 1992 recording (a shore control point and a submarine working HF authentication off password tables, then a time-of-receipt readback) archived with a full transcript on cubanos.ru<a href="#fn-61" class="fn-ref">61</a>. English-speaking monitors were logging it in <em>Monitoring Times</em> in the 1990s, and on the forums the English-language trail runs at least to 2016. The Russian record reaches at least as deep, between that 1992 recording and forum logs running from 2013 on. The 2013 Russian log is the tidy one, with ANDREWS phone-patching a unit signing <code>8LX</code> through to <code>5JE</code>, the whole exchange explicitly &lsquo;EXERCISE ESTEEM HIGHLY ALPHA&rsquo;, and that log notes, almost in passing, that <code>8LX</code> was a submarine.<a href="#fn-62" class="fn-ref">62</a></p>
-                    <p>The number on the other end is worth a look too, though I will point rather than print. It is an ordinary commercial line, and a strikingly persistent one: the same number gets dialed in the 2024 patches and in monitoring logs going back well over a decade. Those logs are public, and the number sits in them in full, there for anyone curious enough to go and read it<a href="#fn-63" class="fn-ref">63</a>. Run it through a search and it lands squarely on U.S. Navy directories around Norfolk, Virginia: Fleet Forces Command, Naval Support Activity Hampton Roads. So what you are actually hearing, when ESTEEM HIGHLY ALPHA goes by, is a Navy unit (often, on this evidence, a submarine that has surfaced to do it) using HFGCS as a switchboard to telephone a shore command and report in on an exercise.<a href="#fn-62" class="fn-ref">62</a> It&rsquo;s a decent reminder that the system more than just EAMs.</p>
+                    <p>Most of what crosses the HFGCS is EAMs and routine station business, but every so often you catch something else entirely: a <strong>phone patch</strong>, where a unit asks a ground station to bridge it, by actual telephone, through to some particular number. In March 2024 I caught one between two units signing <code>4HA</code> and <code>1YG</code>, and the audible half of it ran: &lsquo;<em>4HA, this is 1YG. Roger. Esteem Highly Alpha. [My cell?] 2051, over.</em>&rsquo;<a href="#fn-67" class="fn-ref">67</a>.</p>
+                    <p>I was initially perplexed, with none of the self-appointed experts appearing to be familiar with the term ESTEEM HIGHLY ALPHA at all. However, answers could be found on Russian-language monitoring forums, and in old issues of <em>Monitoring Times</em><a href="#fn-68" class="fn-ref">68</a>. The trail runs a long way back: there is a 1992 recording (a shore control point and a submarine working HF authentication off password tables, then a time-of-receipt readback) archived with a full transcript on cubanos.ru<a href="#fn-69" class="fn-ref">69</a>. English-speaking monitors were logging it in <em>Monitoring Times</em> in the 1990s, and on the forums the English-language trail runs at least to 2016. The Russian record reaches at least as deep, between that 1992 recording and forum logs running from 2013 on. The 2013 Russian log is the tidy one, with ANDREWS phone-patching a unit signing <code>8LX</code> through to <code>5JE</code>, the whole exchange explicitly &lsquo;EXERCISE ESTEEM HIGHLY ALPHA&rsquo;, and that log notes, almost in passing, that <code>8LX</code> was a submarine.<a href="#fn-70" class="fn-ref">70</a></p>
+                    <p>The number on the other end is worth a look too, though I will point rather than print. It is an ordinary commercial line, and a strikingly persistent one: the same number gets dialed in the 2024 patches and in monitoring logs going back well over a decade. Those logs are public, and the number sits in them in full, there for anyone curious enough to go and read it<a href="#fn-71" class="fn-ref">71</a>. Run it through a search and it lands squarely on U.S. Navy directories around Norfolk, Virginia: Fleet Forces Command, Naval Support Activity Hampton Roads. So what you are actually hearing, when ESTEEM HIGHLY ALPHA goes by, is a Navy unit (often, on this evidence, a submarine that has surfaced to do it) using the HFGCS as a switchboard to telephone a shore command and report in on an exercise.<a href="#fn-70" class="fn-ref">70</a> It&rsquo;s a decent reminder that the system is more than just EAMs.</p>
+                </div>
+            </div>
+
+            <!-- ◆ Is eam.watch a reliable source? -->
+            <div class="faq-item" id="faq-eamwatch">
+                <div class="faq-question">
+                    <span class="q-marker">Q</span>
+                    <span class="q-text">Is eam.watch a reliable source?</span>
+                    <span class="q-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Not really, and the more weight you put on it the worse the data gets. eam.watch is a community-driven log of HFGCS traffic, and like any crowd-sourced archive it inherits the strengths and weaknesses of whoever happens to be paying attention on any given day. The most obvious failure mode: a blank day on eam.watch does not mean no EAMs were broadcast that day, it usually just means nobody logged them. There are a great many such days in the record.</p>
+                    <p>Transcription quality is the more serious problem. The site has no working quality-control process, and the miscounts can be substantial &mdash; I have seen a 75 character EAM logged as a 51 character EAM, off by 24 characters on a message where the operator stated the length out loud<a href="#fn-72" class="fn-ref">72</a>. The smaller, more familiar case from the <a href="#faq-callsign">callsign entry</a> &mdash; Diego Garcia test counts logged as <code>DIEGO GARCIA</code> when the recording plainly only says <code>DIEGO</code> &mdash; sits inside the same pattern.</p>
+                    <p>I would have liked to use the eam.watch database. It is large, and a large database is genuinely useful for the kind of structural analysis I have spent years doing. But the data isn&rsquo;t clean enough to use without auditing every individual submitter, and the most prolific submitters tend to be the ones who never audited their own entries. When I suggested, years ago, that structure-based quality control could flag plainly impossible message lengths and similar errors, I was accused of trying to violate the U.S. Espionage Act and told this was unacceptable conversation. The institutional memory is correspondingly thin: when I posted 8888 message recordings in November 2022, the admins reacted as if no similar traffic had ever been documented, even though earlier contributors had already logged 8888 messages on the site itself.</p>
+                    <p>The broader lesson applies to any HFGCS source, not just this one. Insider claims by site admins and self-styled experts should be checked, not trusted &mdash; a point worked through at greater length in a dedicated video<a href="#fn-36" class="fn-ref">36</a>.</p>
                 </div>
             </div>
 
@@ -1302,7 +1514,7 @@
                 </div>
                 <div class="faq-answer">
                     <p>A surplus of information, including EAM structural analysis, is published to <a href="https://neetintel.github.io" target="_blank">neetintel.github.io</a>. Longer-form articles are at <a href="https://neetintel.substack.com" target="_blank">neetintel.substack.com</a>. As well, videos with commentary, explanations, and analysis are accompanied by hundreds of hours of actual HFGCS recordings over on <a href="https://www.youtube.com/@neetintel" target="_blank">the NEET INTEL YouTube channel</a>.</p>
-                    <p>If you want to monitor any of this yourself, 11175 kHz tends to reward attention from North America, because it carries the most additional aircraft and ad-hoc voice traffic on top of the simulcast EAMs. The UTwente SDR is convenient, and a lot of people default to it &mdash; but it is largely deaf to North American and a lot of E-6B traffic, which is a good part of why so much of the genuinely interesting activity goes undocumented in the wider listening community.</p>
+                    <p>If you want to monitor any of this yourself, 11175 kHz tends to reward attention from North America, because it carries the most additional aircraft and ad-hoc voice traffic on top of the simulcast EAMs. The UTwente SDR is convenient, and a lot of people default to it &mdash; but it is largely deaf to North American and E-6B traffic, which is a good part of why so much of the genuinely interesting activity goes undocumented in the wider listening community.</p>
                 </div>
             </div>
 
@@ -1326,63 +1538,72 @@
                 <li id="fn-4"><a href="https://www.af.mil/Portals/1/documents/Secretariat%20of%20the%20AF/SAF-FM/Budget%20-%202027/Budget%20docs/FY27%20Air%20Force%20Other%20Procurement.pdf?ver=95WvyshEQ9Q2x1fr0OSbkA%3d%3d" target="_blank">FY27 Air Force Other Procurement</a>. U.S. Department of the Air Force, 2026.</li>
                 <li id="fn-5"><a href="https://www.dvidshub.net/image/7030484/673d-cs-airmen-integral-global-communications-system" target="_blank">673d CS Airmen integral to Global Communications System</a>. DVIDS, January 2022.</li>
                 <li id="fn-6"><a href="https://www.af.mil/News/Article-Display/Article/131131/andrews-radio-operators-assist-crewmembers-worldwide/" target="_blank">Andrews radio operators assist crewmembers worldwide</a>. Joint Base Andrews, 2006.</li>
-                <li id="fn-7"><a href="https://www.16af.af.mil/Newsroom/Article/3423282/offutt-rebuilds-command-center/" target="_blank">Offutt rebuilds command center</a>. 55th Wing Public Affairs, 2023.</li>
-                <li id="fn-8"><a href="https://facebook.com/watch/?v=3804525316238941" target="_blank">Video of an HFGCS operator at Grand Forks AFB</a>. Facebook.</li>
+                <li id="fn-7"><a href="https://facebook.com/watch/?v=3804525316238941" target="_blank">Video of an HFGCS operator at Grand Forks AFB</a>. Facebook.</li>
+                <li id="fn-8"><a href="https://www.16af.af.mil/Newsroom/Article/3423282/offutt-rebuilds-command-center/" target="_blank">Offutt rebuilds command center</a>. 55th Wing Public Affairs, 2023.</li>
                 <li id="fn-9"><a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js" target="_blank">hfgcs-msl</a>. Station metadata (getStations.js) from the hfgcs-msl repository, GitHub.</li>
                 <li id="fn-10"><a href="https://www.udxf.nl/MCL.pdf" target="_blank">UDXF Master Callsign List</a>. udxf.nl.</li>
-                <li id="fn-11">This schedule appears to be outdated &mdash; most of the frequencies listed aren&rsquo;t in use anymore &mdash; but it&rsquo;s still a good reference for the idea of stations operating to per-frequency schedules. See page 2: <a href="https://udxf.nl/USAF-HFGCS.pdf" target="_blank">udxf.nl &mdash; USAF-HFGCS</a></li>
-                <li id="fn-12"><a href="https://x.com/neetintel/status/1703141877627691399" target="_blank">x.com/neetintel/status/1703141877627691399</a>; EAM structure (100+ characters).</li>
-                <li id="fn-13"><a href="block_structure.html">44 character block structure</a> and its <a href="block_structure_explainer.html">explainer</a>. Block analysis across 21 prefix groups and 1,512 pairwise comparisons.</li>
-                <li id="fn-14"><em>The Post Cold War SIOP and Nuclear Warfare Planning: A Glossary</em>, William M. Arkin and Hans Kristensen. Natural Resources Defense Council, 1999.</li>
-                <li id="fn-15"><a href="eam_30char_format_analysis.html">EAM 30 character format analysis</a>. Statistical analysis of 5,377 unique 30 character payloads, 2026.</li>
-                <li id="fn-16"><a href="https://web.archive.org/web/20251216192330/https://wiki.hfgcs.com/wiki/Emergency_Action_Message#Message_Categories" target="_blank">Emergency Action Message: Message Categories</a>. wiki.hfgcs.com; archived December 2025.</li>
-                <li id="fn-17"><a href="https://www.youtube.com/live/nc8Zopxh5pM?t=5128" target="_blank">HFGCS LIVESTREAM 251028A</a>. NEET INTEL, YouTube; the 285 character message appears at 01:25 UTC, in a broadcast covering a 12-hour block.</li>
-                <li id="fn-18"><a href="https://x.com/neetintel/status/1736431126208512360" target="_blank">x.com/neetintel/status/1736431126208512360</a>; HFGCS operators complaining about message handwriting.</li>
-                <li id="fn-19"><a href="https://x.com/neetintel/status/1683976792703467520" target="_blank">x.com/neetintel/status/1683976792703467520</a>; identical character strings across EAMs.</li>
-                <li id="fn-20"><a href="https://x.com/ReidDA/status/1713272506394513818" target="_blank">x.com/ReidDA/status/1713272506394513818</a>; the 9/11 DEFCON-change EAM. Underlying transcript: <a href="https://archives.gov/files/declassification/iscap/pdf/2012-076-doc1.pdf" target="_blank">declassification document 2012-076</a>, U.S. National Archives.</li>
-                <li id="fn-21">A Wikipedia editor has <a href="https://en.wikipedia.org/w/index.php?title=Talk%3AEmergency_Action_Message&diff=1227941334&oldid=1227939357" target="_blank">argued on the talk page</a> that &lsquo;EAMs do not change DEFCON&rsquo; and are &lsquo;just a message format&rsquo;. The first part is true enough. But communicating a DEFCON change is exactly the job a message format is there to do.</li>
-                <li id="fn-22"><a href="https://www.globalsecurity.org/space/library/report/1999/nssrm/initiatives/scts.htm" target="_blank">Single Channel Transponder System (SCTS)</a>. GlobalSecurity.org, 1999.</li>
-                <li id="fn-23"><a href="https://x.com/neetintel/status/1936815771973242927" target="_blank">x.com/neetintel/status/1936815771973242927</a>; whether EAMs related to the June 21, 2025 strike.</li>
-                <li id="fn-24"><a href="https://www.youtube.com/watch?v=Bpsn1Z1BD9g" target="_blank">A Short Video About Long EAMs</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-25"><a href="https://x.com/neetintel/status/1843843659579707488" target="_blank">x.com/neetintel/status/1843843659579707488</a>; evidence of being blocked by Rick Fenlon.</li>
-                <li id="fn-26">Whether operators know the meaning of the EAMs they read is unresolved &mdash; online there&rsquo;s a mix of anecdotal claims either way. I&rsquo;m agnostic on it, and not much bothered by claims in either direction.</li>
-                <li id="fn-27">&lsquo;Outdated&rsquo; here is about the prominence the old writeups give SKYKING, not a claim it never happens now &mdash; as the recent record above shows, it still surfaces, just rarely, and nowhere near the central present-day signal those writeups imply.</li>
-                <li id="fn-28"><a href="https://mt-milcom.blogspot.com/2013/09/who-or-what-is-mainsail.html" target="_blank">Who or what is MAINSAIL?</a> Larry Van Horn, mt-milcom.blogspot.com, 2013.</li>
-                <li id="fn-29"><code>STREAMER</code> and <code>RICOCHET</code> incident, January 2 2025, attempting to raise <code>FILIBUSTER</code> (10 characters) on <code>11175</code>; discussed in <a href="https://www.youtube.com/watch?v=9nmKZZwnPCs" target="_blank">分析: 250102 &ndash; Are E6s flying dark?</a> (NEET INTEL, YouTube).</li>
-                <li id="fn-30"><a href="https://www.youtube.com/watch?v=tr0t7tpOC4s" target="_blank">HFGCS COMMUNICATIONS 260408 18:02-18:09 UTC &ndash; MAINSAIL attempts to contact BELLPEPPER</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-31"><a href="https://www.youtube.com/watch?v=VMLC9urD3Q0" target="_blank">解説: What is eam.watch? &ndash; False &ldquo;HFGCS experts&rdquo;</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-32">An eam.watch admin has repeatedly logged Diego Garcia test counts as <code>DIEGO GARCIA</code> despite the recordings clearly only saying <code>DIEGO</code>. Example from November 2023: <a href="https://eam.watch/view/7c0f720d-9424-4d8e-ac3c-9a7724680a76" target="_blank">eam.watch</a></li>
-                <li id="fn-33">Though from 2014 and rescinded, this is a good lead: <a href="https://docplayer.net/20810022-Compliance-with-this-publication-is-mandatory.html" target="_blank">AFI 33-217</a></li>
-                <li id="fn-34"><a href="https://www.airpac.navy.mil/Organization/Strategic-Communications-Wing-1/" target="_blank">Strategic Communications Wing 1</a>. U.S. Navy.</li>
-                <li id="fn-35"><a href="https://www.youtube.com/watch?v=yapX6BSJC3Q" target="_blank">241207 2102Z - USN VLF - SPORT SCORES, FINANCE AND NAVAL HISTORY</a>. null, YouTube.</li>
-                <li id="fn-36"><a href="https://www.youtube.com/watch?v=DVYS_udmpGs" target="_blank">HFGCS LIVESTREAM 241220T</a>. YouTube &mdash; suspected VERDIN traffic on <code>23</code>&nbsp;kHz.</li>
-                <li id="fn-37">null&rsquo;s dedicated VERDIN playlist: <a href="https://www.youtube.com/playlist?list=PLxHKen3TkX6Btnnmikld5h-O2CD93vT3l" target="_blank">YouTube</a>.</li>
-                <li id="fn-38">I would prefer to call them Octopus Messages because that is easier to say. Do you think it would catch on?</li>
-                <li id="fn-39"><a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank">8888 Messages</a>. NEET INTEL, YouTube, 2023.</li>
-                <li id="fn-40"><a href="index.html?skymasters&amp;compare">SKYMASTER window comparison</a>. Month-by-month view of the documented windows.</li>
-                <li id="fn-41"><a href="https://youtu.be/TvExA0NF9tM" target="_blank">HFGCS COMMUNICATIONS 230711 ※ GLOBAL STORM 23</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-42"><a href="https://www.youtube.com/watch?v=ffj3neip-tI" target="_blank">HFGCS TIMECARD 230711</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-43"><a href="https://www.youtube.com/watch?v=jWZebjUz_KY" target="_blank">HFGCS TIMECARD 240623</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-44"><a href="https://www.afgsc.af.mil/News/Photos/igphoto/2002842555/" target="_blank">Air Force Global Strike Command photo 2002842555</a>. afgsc.af.mil.</li>
-                <li id="fn-45">Global Lightning 05. The original, at <a href="https://www.nukestrat.com/us/stratcom/GlobalLightning-05.pdf" target="_blank">nukestrat.com</a>, has stopped resolving &mdash; a curious thing for a document to do after standing untouched for years, and going dead only once it turned up in the NEET INTEL GLOBAL STORM video; make of that what you will. No harm done, in any case: the <a href="https://web.archive.org/web/20221007013827/https://www.nukestrat.com/us/stratcom/GlobalLightning-05.pdf" target="_blank">Internet Archive copy</a> is intact.</li>
-                <li id="fn-46"><a href="https://ipdefenseforum.com/2021/09/global-storm-highlights-interoperability-of-u-s-strategic-deterrence/" target="_blank">Global Storm highlights interoperability of U.S. strategic deterrence</a>. IPDefenseForum, 2021.</li>
-                <li id="fn-47"><a href="https://www.youtube.com/watch?v=Lwpq4hoYcHI" target="_blank">youtube.com/watch?v=Lwpq4hoYcHI</a>.</li>
-                <li id="fn-48"><a href="https://www.csp.navy.mil/Media/News-Admin/Article/4170851/rear-adm-christopher-nash-assumes-command-of-submarine-group-nine/" target="_blank">Rear Adm. Christopher Nash assumes command of Submarine Group Nine</a>. csp.navy.mil.</li>
-                <li id="fn-49"><a href="https://www.gao.gov/assets/gao-06-847.pdf" target="_blank">GAO-06-847</a>. U.S. Government Accountability Office.</li>
-                <li id="fn-50"><a href="https://www.esd.whs.mil/Portals/54/Documents/FOID/Reading%20Room/Joint_Staff/17-F-1192_Joint_Exercises_11-SEP-01-to-Present.pdf" target="_blank">Joint Exercises, 11 September 2001 to Present</a>. Joint Staff, FOIA case 17-F-1192.</li>
-                <li id="fn-51"><a href="https://tmd.texas.gov/Data/Sites/1/media/jom/2018/April/23april/af_joint-officer-management-hand-book.pdf" target="_blank">Air Force Joint Officer Management Handbook</a>. tmd.texas.gov.</li>
-                <li id="fn-52"><a href="https://www.nuclearinfo.org/wp-content/uploads/2023/03/US_Stratcom_Exercises_2005_2006_2006.pdf" target="_blank">U.S. STRATCOM Exercises, 2005&ndash;2006</a>. nuclearinfo.org.</li>
-                <li id="fn-53"><a href="https://www.congress.gov/116/chrg/CHRG-116shrg56187/CHRG-116shrg56187.pdf" target="_blank">U.S. Senate hearing 116&ndash;56187</a>. congress.gov.</li>
-                <li id="fn-54"><a href="https://comptroller.war.gov/Portals/45/Documents/defbudget/FY2026/budget_justification/pdfs/03_RDT_and_E/RDTE_Vol2_MDA_RDTE_PB26_Justification_Book.pdf" target="_blank">Missile Defense Agency RDT&amp;E, FY2026 budget justification</a>. comptroller.war.gov.</li>
-                <li id="fn-55"><a href="https://www.dvidshub.net/image/8496509/uss-normandy-cg-60-uss-tennessee-ssbn-734-norwegian-sea" target="_blank">USS Normandy and USS Tennessee, Norwegian Sea</a>. DVIDS.</li>
-                <li id="fn-56"><a href="https://www.youtube.com/watch?v=rZlSzNNrnVI" target="_blank">HFGCS 274 MESSAGE 240111 05:15 UTC</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-57"><a href="https://documents.theblackvault.com/documents/defenseissues/FOIA15-055InterimRelease.pdf" target="_blank">J3NT Initial Training Plan</a>. FOIA-released E-6B aircrew training material, FOIA case 15-055; via The Black Vault.</li>
-                <li id="fn-58"><a href="https://youtube.com/watch?v=F_v0zaNlLhw" target="_blank">HFGCS STRATCOM CE WINDOW 231223</a>. NEET INTEL, YouTube.</li>
-                <li id="fn-59"><a href="https://x.com/neetintel/status/1768027160072106478" target="_blank">x.com/neetintel/status/1768039935603261872</a>; the March 2024 <code>4HA</code>/<code>1YG</code> phone patch and the &lsquo;Esteem Highly Alpha&rsquo; transmission.</li>
-                <li id="fn-60"><a href="https://www.worldradiohistory.com/Archive-Monitoring-TImes/1990s/Monitoring-Times-1996-09.pdf" target="_blank">Monitoring Times, September 1996</a> (Vol. 15, No. 9). Larry Van Horn&rsquo;s &lsquo;Utility World&rsquo; column reports Exercise Esteem Highly Alpha as a GHFS connectivity check for U.S. Navy assets assigned to the Commander, Submarine Atlantic Command. Via worldradiohistory.com.</li>
-                <li id="fn-61"><a href="https://cubanos.ru/songs/03_22" target="_blank">Exercise &lsquo;Esteem highly alpha&rsquo;</a>. cubanos.ru &mdash; archived recording and transcript of a 1992 U.S. Navy HF exercise exchange.</li>
-                <li id="fn-62"><a href="https://x.com/neetintel/status/1769387549519130930" target="_blank">x.com/neetintel/status/1769387549519130930</a>; a second, failed patch to the same number, with monitoring logs of this traffic going back to 2013. Transcription: <a href="https://hfunderground.com/board/index.php/topic,108654.msg392519.html#msg392519" target="_blank">hfunderground.com</a>; recording: <a href="https://youtube.com/watch?v=qijx1iKJ7Gc" target="_blank">youtube.com</a>.</li>
-                <li id="fn-63">Monitoring logs in which the called number is recorded in full &mdash; English: <a href="https://forums.radioreference.com/threads/sticky-thread-for-milair-2016.326347/page-9#post-2534734" target="_blank">radioreference.com</a>; Russian: <a href="https://www.radioscanner.ru/forum/topic45923-18.html#msg988434" target="_blank">radioscanner.ru</a>, <a href="https://www.radioscanner.ru/forum/topic45923-35.html#msg1018808" target="_blank">radioscanner.ru</a>.</li>
+                <li id="fn-11">This schedule appears to be outdated, but it&rsquo;s still a good reference for the idea of stations operating to per-frequency schedules. See page 2 of <a href="https://udxf.nl/USAF-HFGCS.pdf" target="_blank">https://udxf.nl/USAF-HFGCS.pdf</a>.</li>
+                <li id="fn-12"><a href="https://web.archive.org/web/20251215122754/https://wiki.hfgcs.com/wiki/List_of_Radio_Frequencies" target="_blank">List of Radio Frequencies</a>. HFGCS Wiki; archived 15 December 2025.</li>
+                <li id="fn-13"><a href="https://www.youtube.com/watch?v=Ms3hVQiljqs" target="_blank">HFGCS and other US military radio frequencies</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-14"><a href="https://x.com/neetintel/status/1703141877627691399" target="_blank">x.com/neetintel/status/1703141877627691399</a>; EAM structure (100+ characters).</li>
+                <li id="fn-15"><a href="block_structure.html">44 character block structure</a> and its <a href="block_structure_explainer.html">explainer</a>. Block analysis across 21 prefix groups and 1,512 pairwise comparisons.</li>
+                <li id="fn-16"><em>The Post Cold War SIOP and Nuclear Warfare Planning: A Glossary</em>, William M. Arkin and Hans Kristensen. Natural Resources Defense Council, 1999.</li>
+                <li id="fn-17"><a href="eam_30char_format_analysis.html">EAM 30 character format analysis</a>. Statistical analysis of 5,377 unique 30 character payloads, 2026.</li>
+                <li id="fn-18"><a href="https://web.archive.org/web/20251216192330/https://wiki.hfgcs.com/wiki/Emergency_Action_Message#Message_Categories" target="_blank">Emergency Action Message: Message Categories</a>. wiki.hfgcs.com; archived December 2025.</li>
+                <li id="fn-19"><a href="https://www.youtube.com/watch?v=cwS84q6rlB4" target="_blank">HFGCS EAM 250501 06:25 UTC [292 CHARACTER MESSAGE]</a>. NEET INTEL, YouTube; broadcast by callsign INFATUATE on May 1, 2025, the longest EAM captured under the project.</li>
+                <li id="fn-20"><a href="https://www.youtube.com/watch?v=EVXGTZTyitE" target="_blank">HFGCS EAM 231207 17:19 UTC [FOR REGION CHARLIE]</a>. NEET INTEL, YouTube; a 30 character message addressed to REGION CHARLIE.</li>
+                <li id="fn-21"><a href="https://www.youtube.com/watch?v=mkU-ZL8usCM" target="_blank">HFGCS EAM 230417 17:43 UTC [FOR ALL REGIONS]</a>. NEET INTEL, YouTube; a 30 character message addressed to ALL REGIONS.</li>
+                <li id="fn-22"><a href="https://www.youtube.com/live/nc8Zopxh5pM?t=5128" target="_blank">HFGCS LIVESTREAM 251028A</a>. NEET INTEL, YouTube; the 285 character message appears at 01:25 UTC, in a broadcast covering a 12-hour block.</li>
+                <li id="fn-23"><a href="https://x.com/neetintel/status/1736431126208512360" target="_blank">x.com/neetintel/status/1736431126208512360</a>; HFGCS operators complaining about message handwriting.</li>
+                <li id="fn-24"><a href="https://x.com/neetintel/status/1683976792703467520" target="_blank">x.com/neetintel/status/1683976792703467520</a>; identical character strings across EAMs.</li>
+                <li id="fn-25"><a href="https://x.com/ReidDA/status/1713272506394513818" target="_blank">x.com/ReidDA/status/1713272506394513818</a>; the 9/11 DEFCON-change EAM.</li>
+                <li id="fn-26"><a href="https://archives.gov/files/declassification/iscap/pdf/2012-076-doc1.pdf" target="_blank">9-11 AIR THREAT CONFERENCE CALL TRANSCRIPTION</a>. U.S. National Archives.</li>
+                <li id="fn-27">Wikipedia editors have <a href="https://en.wikipedia.org/w/index.php?title=Talk%3AEmergency_Action_Message&diff=1227941334&oldid=1227939357" target="_blank">argued</a> that &lsquo;EAMs do not change DEFCON&rsquo; and are &lsquo;just a message format&rsquo;, as if those are competing claims. Delivering messages is what a message format does, and the declassified transcript shows one delivering this one.</li>
+                <li id="fn-28"><a href="https://www.globalsecurity.org/space/library/report/1999/nssrm/initiatives/scts.htm" target="_blank">Single Channel Transponder System (SCTS)</a>. GlobalSecurity.org, 1999.</li>
+                <li id="fn-29"><a href="https://x.com/neetintel/status/1936815771973242927" target="_blank">x.com/neetintel/status/1936815771973242927</a>; whether EAMs related to the June 21, 2025 strike.</li>
+                <li id="fn-30"><a href="https://www.youtube.com/watch?v=Bpsn1Z1BD9g" target="_blank">A Short Video About Long EAMs</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-31">Whether operators know the meaning of the EAMs they read is unresolved. There&rsquo;s a mix of anecdotal claims either way. I&rsquo;m agnostic on it, and neither invested in or much bothered by claims in either direction.</li>
+                <li id="fn-32">&lsquo;Outdated&rsquo; here is about the prominence the old writeups give SKYKING, not a claim it never happens now. As the recent record above shows, it still surfaces, but it's not common, and doesn't have the continued relevance as a signal that those out-of-date writeups imply.</li>
+                <li id="fn-33"><a href="https://mt-milcom.blogspot.com/2013/09/who-or-what-is-mainsail.html" target="_blank">Who or what is MAINSAIL?</a> Larry Van Horn, mt-milcom.blogspot.com, 2013.</li>
+                <li id="fn-34"><code>STREAMER</code> and <code>RICOCHET</code> incident, January 2 2025, attempting to raise <code>FILIBUSTER</code> (10 characters) on <code>11175</code>; discussed in <a href="https://www.youtube.com/watch?v=9nmKZZwnPCs" target="_blank">分析: 250102 &ndash; Are E6s flying dark?</a> (NEET INTEL, YouTube).</li>
+                <li id="fn-35"><a href="https://www.youtube.com/watch?v=tr0t7tpOC4s" target="_blank">HFGCS COMMUNICATIONS 260408 18:02-18:09 UTC &ndash; MAINSAIL attempts to contact BELLPEPPER</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-36"><a href="https://www.youtube.com/watch?v=VMLC9urD3Q0" target="_blank">解説: What is eam.watch? &ndash; False &ldquo;HFGCS experts&rdquo;</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-37">An eam.watch admin has repeatedly logged Diego Garcia test counts as <code>DIEGO GARCIA</code> despite the recordings clearly only saying <code>DIEGO</code>. Example from November 2023: <a href="https://eam.watch/view/7c0f720d-9424-4d8e-ac3c-9a7724680a76" target="_blank">eam.watch</a></li>
+                <li id="fn-38">Though from 2014 and rescinded, this is a good lead: <a href="https://docplayer.net/20810022-Compliance-with-this-publication-is-mandatory.html" target="_blank">AFI 33-217</a></li>
+                <li id="fn-39"><a href="https://www.airpac.navy.mil/Organization/Strategic-Communications-Wing-1/" target="_blank">Strategic Communications Wing 1</a>. U.S. Navy.</li>
+                <li id="fn-40">A plausible explanation for all this could be that it&rsquo;s part of a broader post-New START effort to obscure U.S. strategic force activities.</li>
+                <li id="fn-41">A KiwiSDR with the right antenna can be configured to decode these transmissions into text.</li>
+                <li id="fn-42"><a href="https://www.youtube.com/watch?v=yapX6BSJC3Q" target="_blank">241207 2102Z - USN VLF - SPORT SCORES, FINANCE AND NAVAL HISTORY</a>. null, YouTube.</li>
+                <li id="fn-43"><a href="https://www.youtube.com/watch?v=DVYS_udmpGs" target="_blank">HFGCS LIVESTREAM 241220T</a>. YouTube &mdash; suspected VERDIN traffic on 23 kHz.</li>
+                <li id="fn-44">null&rsquo;s dedicated VERDIN playlist can be found on <a href="https://www.youtube.com/playlist?list=PLxHKen3TkX6Btnnmikld5h-O2CD93vT3l" target="_blank">YouTube</a>.</li>
+                <li id="fn-45"><a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank">8888 Messages</a>. NEET INTEL, YouTube, 2023.</li>
+                <li id="fn-46"><a href="https://www.youtube.com/watch?v=lM1R4YD0NwQ" target="_blank">Non-HFGCS EAM 250820 20:05 UTC [9RX on 13450 kHz; 202 character message]</a>. NEET INTEL, YouTube; a non-HFGCS station rebroadcasting an HFGCS-originated EAM during the August 2025 SKYMASTER window. Audio courtesy of <a href="https://www.youtube.com/@P7P7P7P7P7P" target="_blank">@P7P7P7P7P7P</a>.</li>
+                <li id="fn-47"><a href="index.html?skymasters&amp;compare">SKYMASTER window comparison</a>. Month-by-month view of the documented windows.</li>
+                <li id="fn-48">Internet Archive snapshots, GitHub version history, archive.is captures, hfunderground.com forum posts.</li>
+                <li id="fn-49"><a href="https://youtu.be/TvExA0NF9tM" target="_blank">HFGCS COMMUNICATIONS 230711 ※ GLOBAL STORM 23</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-50"><a href="https://www.youtube.com/watch?v=ffj3neip-tI" target="_blank">HFGCS TIMECARD 230711</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-51"><a href="https://www.youtube.com/watch?v=jWZebjUz_KY" target="_blank">HFGCS TIMECARD 240623</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-52"><a href="https://www.afgsc.af.mil/News/Photos/igphoto/2002842555/" target="_blank">210818-F-LK801-1047</a>, Air Force Global Strike Command photo.</li>
+                <li id="fn-53">Global Lightning 05. The original, at <a href="https://www.nukestrat.com/us/stratcom/GlobalLightning-05.pdf" target="_blank">nukestrat.com</a>, has stopped resolving &mdash; a curious thing for a document to do after standing untouched for years, and going dead only once it turned up in the NEET INTEL GLOBAL STORM video. Make of that what you will, but in any case the file can still be found using <a href="https://web.archive.org/web/20221007013827/https://www.nukestrat.com/us/stratcom/GlobalLightning-05.pdf" target="_blank">archive.org</a>.</li>
+                <li id="fn-54"><a href="https://ipdefenseforum.com/2021/09/global-storm-highlights-interoperability-of-u-s-strategic-deterrence/" target="_blank">Global Storm highlights interoperability of U.S. strategic deterrence</a>. IPDefenseForum, 2021.</li>
+                <li id="fn-55"><a href="https://www.youtube.com/watch?v=Lwpq4hoYcHI" target="_blank">ODD EYE CIRCLE &lsquo;Air Force One&rsquo; Official Dance Ver.</a>. Official ARTMS, YouTube.</li>
+                <li id="fn-56"><a href="https://www.csp.navy.mil/Media/News-Admin/Article/4170851/rear-adm-christopher-nash-assumes-command-of-submarine-group-nine/" target="_blank">Rear Adm. Christopher Nash assumes command of Submarine Group Nine</a>. csp.navy.mil.</li>
+                <li id="fn-57"><a href="https://www.gao.gov/assets/gao-06-847.pdf" target="_blank">GAO-06-847</a>. U.S. Government Accountability Office.</li>
+                <li id="fn-58"><a href="https://www.esd.whs.mil/Portals/54/Documents/FOID/Reading%20Room/Joint_Staff/17-F-1192_Joint_Exercises_11-SEP-01-to-Present.pdf" target="_blank">Joint Exercises, 11 September 2001 to Present</a>. Joint Staff, FOIA case 17-F-1192.</li>
+                <li id="fn-59"><a href="https://tmd.texas.gov/Data/Sites/1/media/jom/2018/April/23april/af_joint-officer-management-hand-book.pdf" target="_blank">Air Force Joint Officer Management Handbook</a>. tmd.texas.gov.</li>
+                <li id="fn-60"><a href="https://www.nuclearinfo.org/wp-content/uploads/2023/03/US_Stratcom_Exercises_2005_2006_2006.pdf" target="_blank">U.S. STRATCOM Exercises, 2005&ndash;2006</a>. nuclearinfo.org.</li>
+                <li id="fn-61"><a href="https://www.congress.gov/116/chrg/CHRG-116shrg56187/CHRG-116shrg56187.pdf" target="_blank">U.S. Senate hearing 116&ndash;56187</a>. congress.gov.</li>
+                <li id="fn-62"><a href="https://comptroller.war.gov/Portals/45/Documents/defbudget/FY2026/budget_justification/pdfs/03_RDT_and_E/RDTE_Vol2_MDA_RDTE_PB26_Justification_Book.pdf" target="_blank">Missile Defense Agency RDT&amp;E, FY2026 budget justification</a>. comptroller.war.gov.</li>
+                <li id="fn-63"><a href="https://www.dvidshub.net/image/8496509/uss-normandy-cg-60-uss-tennessee-ssbn-734-norwegian-sea" target="_blank">USS Normandy and USS Tennessee, Norwegian Sea</a>. DVIDS.</li>
+                <li id="fn-64"><a href="https://www.youtube.com/watch?v=rZlSzNNrnVI" target="_blank">HFGCS 274 MESSAGE 240111 05:15 UTC</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-65"><a href="https://documents.theblackvault.com/documents/defenseissues/FOIA15-055InterimRelease.pdf" target="_blank">J3NT Initial Training Plan</a>. FOIA-released E-6B aircrew training material, FOIA case 15-055; via The Black Vault.</li>
+                <li id="fn-66"><a href="https://youtube.com/watch?v=F_v0zaNlLhw" target="_blank">HFGCS STRATCOM CE WINDOW 231223</a>. NEET INTEL, YouTube.</li>
+                <li id="fn-67"><a href="https://x.com/neetintel/status/1768027160072106478" target="_blank">x.com/neetintel/status/1768039935603261872</a>; the March 2024 <code>4HA</code>/<code>1YG</code> phone patch and the &lsquo;Esteem Highly Alpha&rsquo; transmission.</li>
+                <li id="fn-68"><a href="https://www.worldradiohistory.com/Archive-Monitoring-TImes/1990s/Monitoring-Times-1996-09.pdf" target="_blank">Monitoring Times, September 1996</a> (Vol. 15, No. 9). Larry Van Horn&rsquo;s &lsquo;Utility World&rsquo; column reports Exercise Esteem Highly Alpha as a GHFS connectivity check for U.S. Navy assets assigned to the Commander, Submarine Atlantic Command. Via worldradiohistory.com.</li>
+                <li id="fn-69"><a href="https://cubanos.ru/songs/03_22" target="_blank">Exercise &lsquo;Esteem highly alpha&rsquo;</a>. cubanos.ru &mdash; archived recording and transcript of a 1992 U.S. Navy HF exercise exchange.</li>
+                <li id="fn-70"><a href="https://x.com/neetintel/status/1769387549519130930" target="_blank">x.com/neetintel/status/1769387549519130930</a>; a second, failed patch to the same number, with monitoring logs of this traffic going back to 2013. Transcription: <a href="https://hfunderground.com/board/index.php/topic,108654.msg392519.html#msg392519" target="_blank">hfunderground.com</a>; recording: <a href="https://youtube.com/watch?v=qijx1iKJ7Gc" target="_blank">youtube.com</a>.</li>
+                <li id="fn-71">Monitoring logs in which the called number is recorded in full &mdash; English: <a href="https://forums.radioreference.com/threads/sticky-thread-for-milair-2016.326347/page-9#post-2534734" target="_blank">radioreference.com</a>; Russian: <a href="https://www.radioscanner.ru/forum/topic45923-18.html#msg988434" target="_blank">radioscanner.ru</a>, <a href="https://www.radioscanner.ru/forum/topic45923-35.html#msg1018808" target="_blank">radioscanner.ru</a>.</li>
+                <li id="fn-72">The 75-as-51 mis-log was discussed publicly at <a href="https://x.com/neetintel/status/2051754076103421997" target="_blank">x.com/neetintel/status/2051754076103421997</a>; the 75 character structure heatmap referenced there is at <a href="https://neetintel.github.io/structure_heatmap_75char.html" target="_blank">neetintel.github.io/structure_heatmap_75char.html</a>.</li>
             </ol>
         </div>
 
@@ -1441,7 +1662,7 @@
             }
 
             if (item.id && history.replaceState) {
-                history.replaceState(null, '', '#' + item.id);
+                try { history.replaceState(null, '', '#' + item.id); } catch (err) { /* sandboxed (e.g. about:srcdoc) */ }
             }
         });
 
