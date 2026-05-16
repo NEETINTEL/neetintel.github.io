@@ -176,8 +176,8 @@
         .freq-table th:last-child, .freq-table td:last-child { padding-right: 0; }
 
         /* Day-of-week × hour heatmap */
-        .heatmap-wrap { overflow-x: auto; margin: 16px 0 6px; }
-        .heatmap { border-collapse: collapse; margin: 0; width: max-content; }
+        .heatmap-wrap { overflow-x: auto; margin: 18px 0 6px; }
+        .heatmap { border-collapse: collapse; margin: 0 auto; width: max-content; }
         .heatmap th {
             border: none;
             font-family: 'IBM Plex Mono', monospace;
@@ -337,7 +337,7 @@
             width: 100%;
             border: 1px solid #2b2b30;
             border-radius: 6px;
-            margin: 16px 0 5px;
+            margin: 18px 0 6px;
         }
         .map-label {
             background: rgba(13,13,13,0.9) !important;
@@ -698,7 +698,7 @@
 
         <div class="intro">
             <p>This page works through the usual questions about the HFGCS, but even if you have read this kind of thing before, or watched a video about it, I think you will still get something out of it because a good deal of what follows I have not seen adequately discussed anywhere else. A lot of people have been content to recycle the same old information about the HFGCS over and over for years at a time, and for lack of independent research or even verification, ended up oblivious to the fact much of the information they were recycling was out of date. This FAQ includes observations resulting from my own original findings and research, and also works as a running set of corrections against a general body of knowledge floating around out there that isn&rsquo;t quite right.</p>
-            <p>I monitored the HFGCS from early 2022 into 2026. Two core projects came out of my efforts &mdash; the <a href="https://www.youtube.com/watch?v=KTeRgMKqOh0&amp;list=PLVmgc_OQTMfxRGl6j5st045iCS9h6eu6J" target="_blank">DAILY COMPILATION RECORDING PROJECT</a> and later the <a href="https://www.youtube.com/watch?v=Y8Few3efbwM&amp;list=PLVmgc_OQTMfyCzSISp7owyHF6ZDEWLKLk" target="_blank">DAILY TIMECARD PROJECT</a>. Between them, and supplemented by additional posts and videos across Twitter and YouTube, the overall NEET INTEL project amounted to a multi-year, often day-by-day record of EAM traffic. This FAQ is built on top of that record &mdash; thousands of transcribed messages, hundreds of structured timecards, and an untold number of hours of HFGCS broadcasts captured in continuous, 24/7 livestreams. Much of the information in this FAQ comes from original observations made during this effectively unprecedented endeavor.</p>        </div>
+            <p>I monitored the HFGCS from early 2022 into 2026. Two core projects came out of my efforts &mdash; the <a href="https://www.youtube.com/playlist?list=PLVmgc_OQTMfxRGl6j5st045iCS9h6eu6J" target="_blank">DAILY COMPILATION RECORDING PROJECT</a> and later the <a href="https://www.youtube.com/playlist?list=PLVmgc_OQTMfyCzSISp7owyHF6ZDEWLKLk" target="_blank">DAILY TIMECARD PROJECT</a>. Between them, and supplemented by additional posts and videos across Twitter and YouTube, the overall NEET INTEL project amounted to a multi-year, often day-by-day record of EAM traffic. This FAQ is built on top of that record &mdash; thousands of transcribed messages, hundreds of structured timecards, and an untold number of hours of HFGCS broadcasts captured in continuous, 24/7 livestreams. Much of the information in this FAQ comes from original observations made during this effectively unprecedented endeavor.</p>        </div>
 
         <nav class="toc">
             <div class="toc-header">
@@ -1249,8 +1249,8 @@
                     <span class="q-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>Standard EAMs never use the characters 0, 1, 8, or 9. <strong>8888 messages</strong> (commonly called <strong>Quad 8s</strong>) are the exception, containing those characters and, most conspicuously, opening with <code>888800</code> and closing on <code>8888</code>. They are almost certainly not standard EAMs, and it&rsquo;s entirely possible they shouldn&rsquo;t be broadcast on the HFGCS at all.</p>
-                    <p>As part of research for a video I made in 2023<a href="#fn-45" class="fn-ref">45</a> I could only catalog 11 documented 8888 messages across nearly twenty years of records. The count now is over 38, HF and VLF combined, with the documented record running from a 1999 UDXF log all the way through broadcasts still happening in 2026. A writeup that supercedes the one in the video is available at <a href="octopus_8888.html">octopus_8888.html</a>.</p>
+                    <p>Standard EAMs never use the characters 0, 1, 8, or 9. <strong>8888 messages</strong> (formally, <strong>Quad 8s</strong> or alternatively, <strong>Octopus messages</strong>) are the exception, containing those characters and, most conspicuously, opening with <code>888800</code> and closing on <code>8888</code>. They are almost certainly not standard EAMs, and it&rsquo;s entirely possible they shouldn&rsquo;t be broadcast on the HFGCS at all.</p>
+                    <p>As part of research for a video I made in 2023<a href="#fn-45" class="fn-ref">45</a> I could only find evidence of 11 documented 8888 messages across nearly twenty years of records. The count now is over 38, HF and VLF combined, with the documented record running from a 1999 UDXF log all the way through broadcasts still happening in 2026. A writeup that supercedes the one in the video is available at <a href="octopus_8888.html">octopus_8888.html</a>.</p>
                     <p>What the expanded dataset shows is that the structure is consistent. An 8888 message opens with the <code>888800</code> header, then a two-digit day that matches the calendar date, then a four-digit time at or near the time of transmission, then a middle block of paired characters (most often <code>AAEEGGKKNNXXZZ</code>), and closes on a trailing <code>8888</code>.</p>
 
                     <div class="anatomy-wrap">
@@ -1262,11 +1262,11 @@
                             </g>
                             <g class="anatomy-seg">
                                 <rect x="184" y="22" width="40"  height="40" rx="3" />
-                                <text x="204" y="48" text-anchor="middle" class="anatomy-chars">19</text>
+                                <text x="204" y="48" text-anchor="middle" class="anatomy-chars">15</text>
                             </g>
                             <g class="anatomy-seg">
                                 <rect x="228" y="22" width="80"  height="40" rx="3" />
-                                <text x="268" y="48" text-anchor="middle" class="anatomy-chars">1437</text>
+                                <text x="268" y="48" text-anchor="middle" class="anatomy-chars">1623</text>
                             </g>
                             <g class="anatomy-seg">
                                 <rect x="312" y="22" width="280" height="40" rx="3" />
@@ -1294,8 +1294,8 @@
                             <text x="636" y="82" text-anchor="middle" class="anatomy-label">trailing sentinel</text>
                             <text x="636" y="96" text-anchor="middle" class="anatomy-sub">fixed</text>
                         </svg>
-                        <p class="map-caption">Anatomy of an 8888 message. Example is illustrative; the bookend fields are fixed, the middle block varies in length but tends toward paired-character runs.</p>
                     </div>
+                    <p class="map-caption">Anatomy of an 8888 message. Example is illustrative; the bookend fields are fixed, the middle block varies in length but tends toward paired-character runs.</p>
                     <p>The HF instances are mostly disregarded (since 2018, most are followed by an explicit disregard call from the operator), while the VLF instances typically are not. And the VLF ones correlate with specific aircraft hex codes: E-4 airframes (<code>ADFEB3</code>, <code>ADFEB4</code>, <code>ADFEB6</code>) and E-6 airframes (<code>AE0412</code>, <code>AE0414</code>, <code>AE040E</code>) have all been associated with VLF 8888 broadcasts more than once.</p>
                     <p>There are two leads on 8888 messages. The first: the veteran HF monitor Larry Van Horn relayed an anonymous source saying that, historically, 8888-formatted messages appeared on the ISST (ICBM Strategic Satellite Test) system as test messages, which would make them test-format traffic rather than live launch orders. The second came out of a Titan II missile museum tour I included in that 2023 video, where a former crewman walks through the actual launch-authorization procedure: a two character envelope selector followed by a five character code, sealed in a &lsquo;cookie&rsquo;, that has to match for an event to be real. That <strong>2+5 structure maps cleanly onto the inner fields of an 8888 message</strong> as observed on both HF and VLF, which strongly suggests these are either a direct descendant or a very close cousin of those nuclear command formats.</p>
                     <p>None of that confirms 8888 messages are ICBM-related. But the format, the documented adjacency to ICBM systems, and the simply tiny broadcast rate all point the same direction: toward high-significance test or control traffic somewhere inside the nuclear command-and-control world.</p>
