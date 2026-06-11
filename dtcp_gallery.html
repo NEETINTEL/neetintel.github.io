@@ -442,7 +442,7 @@
       position: absolute;
       top: calc(100% + 8px);
       right: 0;
-      width: 250px;
+      width: 300px;
       background: #141728;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -466,6 +466,7 @@
       height: 9px;
     }
     .search-info code {
+      white-space: nowrap;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       color: var(--fg);
     }
@@ -554,7 +555,7 @@
 
   <div class="page-intro">
     <p>The <strong>NEET INTEL DAILY TIMECARD PROJECT</strong> is a set of daily timecards of transcribed Emergency Action Messages (EAMs) and/or Force Direction Messages (FDMs) broadcast by the US military over the High Frequency Global Communications System (HFGCS). The timecards are combined with the musical output of overseas (Korean, Japanese, and Chinese) entertainment industries for significant trends in military and musical activity.</p>
-    <p>A backup of the project is maintained on the <a href="https://archive.org/details/hfgcs-daily-timecard-project" target="_blank" rel="noopener">Internet Archive</a>.</p>
+    <p>A mirror of the project is maintained on the <a href="https://archive.org/details/hfgcs-daily-timecard-project" target="_blank" rel="noopener">Internet Archive</a>.</p>
   </div>
 
   <div class="calendar-wrap">
@@ -6765,8 +6766,11 @@
   <input id="search-input" type="text" placeholder="YYMMDD / C###" autocomplete="off" spellcheck="false">
   <button class="search-help" id="search-help" title="Search help">?</button>
   <div class="search-info" id="search-info">
-    <p><code>YYMMDD</code> — jump to a date. Partial works: <code>2501</code> steps through January 2025.</p>
-    <p><code>C###</code> — filter the calendar to days with an EAM of that character count, e.g. <code>C120</code>. <code>C32,C27</code> = either (both → bright outline). <code>C32+27</code> = only days with both.</p>
+    <p><code>YYMMDD</code> — filter to a date. Partials work: <code>2501</code> lights up all of January 2025, a full date singles out that day.</p>
+    <p><code>C###</code> — filter to days that broadcast an EAM of that character count, e.g. <code>C120</code> (suggestions list the counts that exist). Combine any number: <code>C39,52,47</code> = days with any of them — days with all stay brightest. Double the comma for only-days-with-all: <code>C32,,27</code>.</p>
+    <p>Brightness = relevance: full = matches everything, dimmed = partial match, near-dark = unrelated.</p>
+    <p>Append <code>x</code> to collapse unrelated weeks instead of fading them: <code>2501x</code>, <code>C32,27x</code>. Vanished runs are marked with a week count.</p>
+    <p>Searches work as URL parameters too: <code>?250111</code>, <code>?c32,,27x</code>.</p>
     <p>Just start typing — no click needed. <code>Enter</code> opens the first match, <code>Esc</code> clears.</p>
   </div>
   <div class="search-suggest" id="search-suggest"></div>
@@ -6966,10 +6970,16 @@
     _searchInput.classList.remove('no-hit');
   }
 
-  // Collapse weeks (rows of 7 day-slots) with no hit; dim non-hit days in the
-  // rest; mark each run of vanished weeks with a "N weeks" divider.
-  function _filterCalendar() {
+  // Dim every non-hit day. With condense=true, additionally collapse weeks
+  // (rows of 7 day-slots) with no hit and mark each vanished run with a
+  // "N weeks" divider.
+  function _filterCalendar(condense) {
     const hitSet = new Set(_hits);
+    if (!condense) {
+      document.querySelectorAll('.dtcp-card')
+        .forEach(c => c.classList.toggle('search-dim', !hitSet.has(c)));
+      return;
+    }
     const grid = document.getElementById('dtcp-grid');
     const slots = Array.from(grid.children).filter(s => !s.classList.contains('week-gap'));
     let hiddenRun = 0;
@@ -7037,7 +7047,7 @@
   // Replace only the segment being typed (text after the last , or +).
   function _applySuggestion(len) {
     const raw = _searchInput.value;
-    const i = Math.max(raw.lastIndexOf(','), raw.lastIndexOf('+'));
+    const i = raw.lastIndexOf(',');
     _searchInput.value = (i >= 0 ? raw.slice(0, i + 1) : '') + 'c' + len;
     _runSearch();
   }
@@ -7059,13 +7069,16 @@
     _clearSearch();
     const raw = _searchInput.value.trim();
     _syncURL(raw);
-    const q = raw.toUpperCase();
+    let q = raw.toUpperCase();
+    // Trailing "x" opts into collapsing unrelated weeks (default: fade only).
+    const condense = q.endsWith('X');
+    if (condense) q = q.slice(0, -1);
     if (!q) { _hideSuggest(); return; }
-    // Length query. Comma = OR: "c32,c27" matches days with a 32-char OR a
-    // 27-char EAM (days with both get the bright outline). Plus = AND:
-    // "c32+27" matches ONLY days with both. Segments validate independently.
-    const andMode = q.includes('+');
-    const parts = q.split(andMode ? '+' : ',').map(p => p.replace(/^C/, ''));
+    // Length query. Single comma = OR: "c32,27" matches days with a 32-char
+    // OR a 27-char EAM (any number of segments). Double comma = AND:
+    // "c32,,27" matches ONLY days with all. Segments validate independently.
+    const andMode = q.includes(',,');
+    const parts = q.split(andMode ? ',,' : ',').map(p => p.replace(/^C/, ''));
     const isLenQuery = q.startsWith('C') && parts.every(p => /^\d*$/.test(p));
     const cards = Array.from(document.querySelectorAll('.dtcp-card'));
     if (isLenQuery) {
@@ -7103,7 +7116,7 @@
         }
         if (_hits.length) {
           _lenMode = true;
-          _filterCalendar();
+          _filterCalendar(condense);
           _hitIdx = 0;
         }
       }
@@ -7135,9 +7148,9 @@
     if (exacts && exacts < _hits.length) {
       document.getElementById('dtcp-grid').classList.add('tiered');
     }
-    // Collapse unrelated weeks and dim non-hit days, same as length queries.
+    // Dim non-hit days (and collapse unrelated weeks with a trailing "x").
     _lenMode = true;
-    _filterCalendar();
+    _filterCalendar(condense);
     _gotoHit(0);
   }
 
@@ -7195,7 +7208,7 @@
 
   // Seed the search from the URL: dtcp_gallery.html?c32,c27 or ?250111
   const _initQ = decodeURIComponent(location.search.replace(/^\?/, ''));
-  if (_initQ && /^[A-Za-z0-9,+]+$/.test(_initQ)) {
+  if (_initQ && /^[A-Za-z0-9,]+$/.test(_initQ)) {
     _searchInput.value = _initQ;
     _runSearch();
     _hideSuggest();  // no dropdown on load
