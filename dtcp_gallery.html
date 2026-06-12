@@ -7071,8 +7071,8 @@
   //   match — predicate(card), or null while the clause is still incomplete
   //   full  — predicate for the clause's "matches everything" tier, or null
   //   dead  — true when the clause can never match (turns the input red)
-  // Suggestions are only rendered for the clause being typed (showSug).
-  function _evalClause(cl, cards, showSug) {
+  // Suggestions are rendered separately (see _suggestForClause).
+  function _evalClause(cl, cards) {
     const lensOf = c => (c.dataset.lens || '').split(',');
     const dayOf = c => c.querySelector('.card-date').textContent.toUpperCase();
     if (cl.startsWith('C')) {
@@ -7093,9 +7093,8 @@
           L.forEach(n => { if (n) pool.set(n, (pool.get(n) || 0) + 1); });
         });
       }
-      const hasOptions = showSug
-        ? _showSuggest(last, valid, pool)
-        : [...(pool || _lenIndex).keys()].some(n => n.startsWith(last) && !valid.has(n));
+      const hasOptions =
+        [...(pool || _lenIndex).keys()].some(n => n.startsWith(last) && !valid.has(n));
       if (_lenIndex.has(last)) valid.add(last);
       const dead = complete.some(d => !_lenIndex.has(d)) ||
                    (last && !hasOptions && !_lenIndex.has(last));
@@ -7109,7 +7108,6 @@
     }
     // Date clause. "-" = any digit, anchored to the start of YYMMDD:
     // --06 = every June, ----01 = every 1st. Without -, substring match.
-    if (showSug) _hideSuggest();
     if (!cl) return { match: null, full: null, dead: false };
     if (cl.includes('-')) {
       if (!/^[0-9-]+$/.test(cl) || cl.length > 6) return { match: null, full: null, dead: true };
@@ -7124,6 +7122,28 @@
     };
   }
 
+  // Suggest completions for the length clause being typed, restricted to the
+  // days matching the other clauses — "24&c" only lists lengths that actually
+  // occur on 2024 days. Returns false when the typed digits lead nowhere
+  // within that scope.
+  function _suggestForClause(cl, scope) {
+    const lensOf = c => (c.dataset.lens || '').split(',');
+    const andMode = cl.includes(',,');
+    const parts = cl.split(andMode ? ',,' : ',').map(p => p.replace(/^C/, ''));
+    if (!parts.every(p => /^\d*$/.test(p))) { _hideSuggest(); return true; }
+    _buildLenIndex();
+    const last = parts[parts.length - 1];
+    const valid = new Set(parts.slice(0, -1).filter(Boolean).filter(d => _lenIndex.has(d)));
+    const pool = new Map();
+    scope.forEach(c => {
+      const L = lensOf(c);
+      if (andMode && valid.size && ![...valid].every(d => L.includes(d))) return;
+      L.forEach(n => { if (n) pool.set(n, (pool.get(n) || 0) + 1); });
+    });
+    const hasOptions = _showSuggest(last, valid, pool);
+    return hasOptions || pool.has(last);
+  }
+
   function _runSearch() {
     _clearSearch();
     const raw = _searchInput.value.trim();
@@ -7136,8 +7156,18 @@
     const cards = Array.from(document.querySelectorAll('.dtcp-card'));
     // "&" intersects clauses: 2506&c30 = June 2025 days with a 30-char EAM.
     const clauses = q.split('&');
-    const evals = clauses.map((cl, i) => _evalClause(cl, cards, i === clauses.length - 1));
+    const evals = clauses.map(cl => _evalClause(cl, cards));
     const matchers = evals.map(e => e.match).filter(Boolean);
+    // Dropdown for the clause being typed, scoped to the other clauses' days.
+    let scopedOk = true;
+    const lastCl = clauses[clauses.length - 1];
+    if (lastCl.startsWith('C')) {
+      const others = evals.slice(0, -1).map(e => e.match).filter(Boolean);
+      const scope = others.length ? cards.filter(c => others.every(m => m(c))) : cards;
+      scopedOk = _suggestForClause(lastCl, scope);
+    } else {
+      _hideSuggest();
+    }
     if (matchers.length) {
       _hits = cards.filter(c => matchers.every(m => m(c)));
       _hits.forEach(c => c.classList.add('search-hit'));
@@ -7158,7 +7188,8 @@
         if (clauses.some(cl => cl && !cl.startsWith('C'))) _gotoHit(0);
       }
     }
-    if (evals.some(e => e.dead) || (matchers.length && !_hits.length)) {
+    if (evals.some(e => e.dead) || (matchers.length && !_hits.length) ||
+        (!scopedOk && /\d/.test(lastCl))) {
       _searchInput.classList.add('no-hit');
     }
   }
