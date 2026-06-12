@@ -6929,7 +6929,16 @@
 
   document.addEventListener('keydown', e => {
     const modalOpen = document.getElementById('modal').classList.contains('open');
-    if (e.key === 'Escape') { closeModal(); return; }
+    if (e.key === 'Escape') {
+      // Modal first; otherwise clear the search from anywhere on the page.
+      if (modalOpen) { closeModal(); return; }
+      _searchInput.value = '';
+      _clearSearch();
+      _hideSuggest();
+      _syncURL('');
+      _searchInfo.classList.remove('open');
+      return;
+    }
     if (!modalOpen) return;
     const map = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
     if (map[e.key]) { e.preventDefault(); navigateModal(map[e.key]); }
