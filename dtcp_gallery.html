@@ -6766,9 +6766,10 @@
   <input id="search-input" type="text" placeholder="YYMMDD / C###" autocomplete="off" spellcheck="false">
   <button class="search-help" id="search-help" title="Search help">?</button>
   <div class="search-info" id="search-info">
-    <p><code>YYMMDD</code> — filter to a date. Partials work: <code>2501</code> lights up all of January 2025, a full date singles out that day.</p>
-    <p><code>C###</code> — filter to days that broadcast an EAM of that character count, e.g. <code>C120</code> (suggestions list the counts that exist). Combine any number: <code>C39,52,47</code> = days with any of them — days with all stay brightest. Double the comma for only-days-with-all: <code>C32,,27</code>.</p>
-    <p>Append <code>x</code> to collapse unrelated weeks instead of fading them: <code>2501x</code>, <code>C32,27x</code>. Vanished runs are marked with a week count.</p>
+    <p><code>YYMMDD</code> — filter to a date. Partials work: <code>2501</code> lights up all of January 2025, a full date singles out that day. <code>-</code> matches any digit: <code>--06</code> = every June, <code>----01</code> = every 1st of the month.</p>
+    <p><code>C###</code> — filter to days that broadcast an EAM of that character count, e.g. <code>C120</code> (suggestions list the counts that exist). Combine any number: <code>C39,52,47</code> = days with any of them — days with all stay brightest. Double the comma for only days with all: <code>C32,,27</code>.</p>
+    <p><code>&amp;</code> — combines filters. e.g. <code>25&amp;C292</code> filters for days in 2025 with a 292 char EAM.</p>
+    <p>Append <code>x</code> to collapse unrelated weeks instead of fading them: <code>2501x</code>, <code>C32,27x</code>.</p>
     <p>Searches work as URL parameters too: <code>?250111</code>, <code>?c32,,27x</code>.</p>
     <p>Just start typing — no click needed. <code>Enter</code> opens the first match, <code>Esc</code> clears.</p>
   </div>
@@ -7043,10 +7044,10 @@
     return true;
   }
 
-  // Replace only the segment being typed (text after the last , or +).
+  // Replace only the segment being typed (text after the last , or &).
   function _applySuggestion(len) {
     const raw = _searchInput.value;
-    const i = raw.lastIndexOf(',');
+    const i = Math.max(raw.lastIndexOf(','), raw.lastIndexOf('&'));
     _searchInput.value = (i >= 0 ? raw.slice(0, i + 1) : '') + 'c' + len;
     _runSearch();
   }
@@ -7064,25 +7065,21 @@
     history.replaceState(null, '', raw ? '?' + raw : location.pathname);
   }
 
-  function _runSearch() {
-    _clearSearch();
-    const raw = _searchInput.value.trim();
-    _syncURL(raw);
-    let q = raw.toUpperCase();
-    // Trailing "x" opts into collapsing unrelated weeks (default: fade only).
-    const condense = q.endsWith('X');
-    if (condense) q = q.slice(0, -1);
-    if (!q) { _hideSuggest(); return; }
-    // Length query. Single comma = OR: "c32,27" matches days with a 32-char
-    // OR a 27-char EAM (any number of segments). Double comma = AND:
-    // "c32,,27" matches ONLY days with all. Segments validate independently.
-    const andMode = q.includes(',,');
-    const parts = q.split(andMode ? ',,' : ',').map(p => p.replace(/^C/, ''));
-    const isLenQuery = q.startsWith('C') && parts.every(p => /^\d*$/.test(p));
-    const cards = Array.from(document.querySelectorAll('.dtcp-card'));
-    if (isLenQuery) {
+  // Evaluate one clause of the query. A clause is either a length query
+  // ("C30", "C32,27", "C32,,27") or a date pattern ("2501", "250111",
+  // "--06"). Returns { match, full, dead }:
+  //   match — predicate(card), or null while the clause is still incomplete
+  //   full  — predicate for the clause's "matches everything" tier, or null
+  //   dead  — true when the clause can never match (turns the input red)
+  // Suggestions are only rendered for the clause being typed (showSug).
+  function _evalClause(cl, cards, showSug) {
+    const lensOf = c => (c.dataset.lens || '').split(',');
+    const dayOf = c => c.querySelector('.card-date').textContent.toUpperCase();
+    if (cl.startsWith('C')) {
+      const andMode = cl.includes(',,');
+      const parts = cl.split(andMode ? ',,' : ',').map(p => p.replace(/^C/, ''));
+      if (!parts.every(p => /^\d*$/.test(p))) return { match: null, full: null, dead: true };
       _buildLenIndex();
-      const lensOf = c => (c.dataset.lens || '').split(',');
       const last = parts[parts.length - 1];
       const complete = parts.slice(0, -1).filter(Boolean);
       const valid = new Set(complete.filter(d => _lenIndex.has(d)));
@@ -7096,61 +7093,74 @@
           L.forEach(n => { if (n) pool.set(n, (pool.get(n) || 0) + 1); });
         });
       }
-      const hasOptions = _showSuggest(last, valid, pool);
+      const hasOptions = showSug
+        ? _showSuggest(last, valid, pool)
+        : [...(pool || _lenIndex).keys()].some(n => n.startsWith(last) && !valid.has(n));
       if (_lenIndex.has(last)) valid.add(last);
-      if (valid.size) {
-        const hasAll = c => { const L = lensOf(c); return [...valid].every(d => L.includes(d)); };
-        _hits = andMode
-          ? cards.filter(hasAll)
-          : cards.filter(c => lensOf(c).some(n => valid.has(n)));
-        _hits.forEach(c => c.classList.add('search-hit'));
-        if (valid.size >= 2) {
-          const allCards = andMode ? _hits : _hits.filter(hasAll);
-          allCards.forEach(c => c.classList.add('search-hit-all'));
-          // Tier the display only when the distinction exists (OR mode with
-          // a genuine mix of full and partial matches).
-          if (allCards.length && allCards.length < _hits.length) {
-            document.getElementById('dtcp-grid').classList.add('tiered');
-          }
-        }
-        if (_hits.length) {
-          _lenMode = true;
-          _filterCalendar(condense);
-          _hitIdx = 0;
-        }
-      }
-      // Red on dead ends: an invalid completed segment, a last segment no
-      // length starts with, or an AND combination that never co-occurs.
-      if (complete.some(d => !_lenIndex.has(d)) ||
-          (last && !hasOptions && !_lenIndex.has(last)) ||
-          (valid.size && !_hits.length)) {
-        _searchInput.classList.add('no-hit');
-      }
-      return;
+      const dead = complete.some(d => !_lenIndex.has(d)) ||
+                   (last && !hasOptions && !_lenIndex.has(last));
+      if (!valid.size) return { match: null, full: null, dead };
+      const hasAll = c => [...valid].every(d => lensOf(c).includes(d));
+      return {
+        match: andMode ? hasAll : (c => lensOf(c).some(n => valid.has(n))),
+        full: (!andMode && valid.size >= 2) ? hasAll : null,
+        dead,
+      };
     }
-    _hideSuggest();
-    _hits = cards.filter(c => {
-      const d = c.querySelector('.card-date');
-      return d && d.textContent.toUpperCase().includes(q);
-    });
-    if (!_hits.length) {
+    // Date clause. "-" = any digit, anchored to the start of YYMMDD:
+    // --06 = every June, ----01 = every 1st. Without -, substring match.
+    if (showSug) _hideSuggest();
+    if (!cl) return { match: null, full: null, dead: false };
+    if (cl.includes('-')) {
+      if (!/^[0-9-]+$/.test(cl) || cl.length > 6) return { match: null, full: null, dead: true };
+      const re = new RegExp('^' + cl.replaceAll('-', '\\d'));
+      return { match: c => re.test(dayOf(c)), full: null, dead: false };
+    }
+    return {
+      match: c => dayOf(c).includes(cl),
+      // A full 6-digit date is the clause's exact tier.
+      full: cl.length === 6 ? (c => dayOf(c).replace(/[A-Z]+$/, '') === cl) : null,
+      dead: false,
+    };
+  }
+
+  function _runSearch() {
+    _clearSearch();
+    const raw = _searchInput.value.trim();
+    _syncURL(raw);
+    let q = raw.toUpperCase();
+    // Trailing "x" opts into collapsing unrelated weeks (default: fade only).
+    const condense = q.endsWith('X');
+    if (condense) q = q.slice(0, -1);
+    if (!q) { _hideSuggest(); return; }
+    const cards = Array.from(document.querySelectorAll('.dtcp-card'));
+    // "&" intersects clauses: 2506&c30 = June 2025 days with a 30-char EAM.
+    const clauses = q.split('&');
+    const evals = clauses.map((cl, i) => _evalClause(cl, cards, i === clauses.length - 1));
+    const matchers = evals.map(e => e.match).filter(Boolean);
+    if (matchers.length) {
+      _hits = cards.filter(c => matchers.every(m => m(c)));
+      _hits.forEach(c => c.classList.add('search-hit'));
+      // Full tier: hits satisfying every clause's "full" criterion.
+      const fulls = evals.map(e => e.full).filter(Boolean);
+      if (fulls.length) {
+        const allCards = _hits.filter(c => fulls.every(f => f(c)));
+        allCards.forEach(c => c.classList.add('search-hit-all'));
+        if (allCards.length && allCards.length < _hits.length) {
+          document.getElementById('dtcp-grid').classList.add('tiered');
+        }
+      }
+      if (_hits.length) {
+        _lenMode = true;
+        _filterCalendar(condense);
+        _hitIdx = 0;
+        // Scroll to the first hit when a date clause anchors the query.
+        if (clauses.some(cl => cl && !cl.startsWith('C'))) _gotoHit(0);
+      }
+    }
+    if (evals.some(e => e.dead) || (matchers.length && !_hits.length)) {
       _searchInput.classList.add('no-hit');
-      return;
     }
-    _hits.forEach(c => {
-      c.classList.add('search-hit');
-      // Exact day match → full presence; other hits tier down.
-      const day = c.querySelector('.card-date').textContent.toUpperCase().replace(/[A-Z]+$/, '');
-      if (day === q) c.classList.add('search-hit-all');
-    });
-    const exacts = document.querySelectorAll('.dtcp-card.search-hit-all').length;
-    if (exacts && exacts < _hits.length) {
-      document.getElementById('dtcp-grid').classList.add('tiered');
-    }
-    // Dim non-hit days (and collapse unrelated weeks with a trailing "x").
-    _lenMode = true;
-    _filterCalendar(condense);
-    _gotoHit(0);
   }
 
   function _gotoHit(idx) {
@@ -7207,7 +7217,7 @@
 
   // Seed the search from the URL: dtcp_gallery.html?c32,c27 or ?250111
   const _initQ = decodeURIComponent(location.search.replace(/^\?/, ''));
-  if (_initQ && /^[A-Za-z0-9,]+$/.test(_initQ)) {
+  if (_initQ && /^[A-Za-z0-9,&-]+$/.test(_initQ)) {
     _searchInput.value = _initQ;
     _runSearch();
     _hideSuggest();  // no dropdown on load
