@@ -6769,6 +6769,7 @@
     <p><code>YYMMDD</code> — filter to a date. Partials work: <code>2501</code> lights up all of January 2025, a full date singles out that day. <code>-</code> matches any digit: <code>--06</code> = every June, <code>----01</code> = every 1st of the month.</p>
     <p><code>C###</code> — filter to days that broadcast an EAM of that character count, e.g. <code>C120</code> (suggestions list the counts that exist). Combine any number: <code>C39,52,47</code> = days with any of them — days with all stay brightest. Double the comma for only days with all: <code>C32,,27</code>.</p>
     <p><code>G#</code> — filter by active groups: <code>G2</code> = days with Group 2, <code>G23</code> = days with both 2 and 3. Days with exactly that set stay brightest.</p>
+    <p><code>.YYMMDD</code> — jump without filtering: <code>.2501</code> scrolls to January 2025 in place.</p>
     <p><code>&amp;</code> — combines filters. e.g. <code>25&amp;C292</code> filters for days in 2025 with a 292 char EAM.</p>
     <p>Append <code>x</code> to collapse unrelated weeks instead of fading them: <code>2501x</code>, <code>C32,27x</code>.</p>
     <p>Searches work as URL parameters too: <code>?250111</code>, <code>?c32,,27x</code>.</p>
@@ -7182,6 +7183,18 @@
     if (condense) q = q.slice(0, -1);
     if (!q) { _hideSuggest(); return; }
     const cards = Array.from(document.querySelectorAll('.dtcp-card'));
+    // Leading "." jumps to that area without filtering: .2501 scrolls the
+    // calendar to January 2025 and leaves everything visible.
+    if (q.startsWith('.')) {
+      _hideSuggest();
+      const target = q.slice(1);
+      if (!target) return;
+      const hit = cards.find(c =>
+        c.querySelector('.card-date').textContent.toUpperCase().startsWith(target));
+      if (hit) hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      else _searchInput.classList.add('no-hit');
+      return;
+    }
     // "&" intersects clauses: 2506&c30 = June 2025 days with a 30-char EAM.
     const clauses = q.split('&');
     const evals = clauses.map(cl => _evalClause(cl, cards));
@@ -7276,7 +7289,7 @@
 
   // Seed the search from the URL: dtcp_gallery.html?c32,c27 or ?250111
   const _initQ = decodeURIComponent(location.search.replace(/^\?/, ''));
-  if (_initQ && /^[A-Za-z0-9,&-]+$/.test(_initQ)) {
+  if (_initQ && /^[A-Za-z0-9,.&-]+$/.test(_initQ)) {
     _searchInput.value = _initQ;
     _runSearch();
     _hideSuggest();  // no dropdown on load
