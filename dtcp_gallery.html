@@ -410,7 +410,7 @@
       color: var(--fg);
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.85rem;
-      width: 13.5ch;
+      width: 17.5ch;
     }
 
     .search-bar input::placeholder { color: var(--muted); opacity: 0.7; }
@@ -6763,11 +6763,12 @@
 <!-- Floating search bar -->
 <div class="search-bar" id="search-bar">
   <span aria-hidden="true" style="color:var(--muted);font-size:0.8rem;">⌕</span>
-  <input id="search-input" type="text" placeholder="YYMMDD / C###" autocomplete="off" spellcheck="false">
+  <input id="search-input" type="text" placeholder="YYMMDD / C## / G#" autocomplete="off" spellcheck="false">
   <button class="search-help" id="search-help" title="Search help">?</button>
   <div class="search-info" id="search-info">
     <p><code>YYMMDD</code> — filter to a date. Partials work: <code>2501</code> lights up all of January 2025, a full date singles out that day. <code>-</code> matches any digit: <code>--06</code> = every June, <code>----01</code> = every 1st of the month.</p>
     <p><code>C###</code> — filter to days that broadcast an EAM of that character count, e.g. <code>C120</code> (suggestions list the counts that exist). Combine any number: <code>C39,52,47</code> = days with any of them — days with all stay brightest. Double the comma for only days with all: <code>C32,,27</code>.</p>
+    <p><code>G#</code> — filter by active groups: <code>G2</code> = days with Group 2, <code>G23</code> = days with both 2 and 3. Days with exactly that set stay brightest.</p>
     <p><code>&amp;</code> — combines filters. e.g. <code>25&amp;C292</code> filters for days in 2025 with a 292 char EAM.</p>
     <p>Append <code>x</code> to collapse unrelated weeks instead of fading them: <code>2501x</code>, <code>C32,27x</code>.</p>
     <p>Searches work as URL parameters too: <code>?250111</code>, <code>?c32,,27x</code>.</p>
@@ -7075,6 +7076,24 @@
   function _evalClause(cl, cards) {
     const lensOf = c => (c.dataset.lens || '').split(',');
     const dayOf = c => c.querySelector('.card-date').textContent.toUpperCase();
+    // Group clause: G2 = days with Group 2 active, G23 = days with both
+    // 2 AND 3, G1234 = all of 1-4. Full tier = days with exactly that set.
+    if (cl.startsWith('G')) {
+      const digits = cl.slice(1);
+      if (!/^[1-5]*$/.test(digits)) return { match: null, full: null, dead: true };
+      if (!digits) return { match: null, full: null, dead: false };  // still typing
+      const want = [...new Set(digits)];
+      const groupsOf = c =>
+        (c.dataset.groups || '').split(',').filter(g => g && g !== 'unclassified');
+      return {
+        match: c => want.every(g => groupsOf(c).includes(g)),
+        full: c => {
+          const G = groupsOf(c);
+          return G.length === want.length && want.every(g => G.includes(g));
+        },
+        dead: false,
+      };
+    }
     if (cl.startsWith('C')) {
       const andMode = cl.includes(',,');
       const parts = cl.split(andMode ? ',,' : ',').map(p => p.replace(/^C/, ''));
