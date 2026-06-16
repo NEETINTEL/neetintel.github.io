@@ -1029,16 +1029,35 @@ function fmtTimeline(d) {
 }
 
 // Simple on-map ID label — just the NOTAM ID, placed at center
-function makeLabel(centerLL, e) {
-  const ll = Array.isArray(centerLL) ? centerLL : [centerLL.lat, centerLL.lng];
+function labelIcon(e) {
   const html = `<div class="notam-map-label" style="border-color:${e.color};">
     <div class="label-id" style="color:${e.color};">${esc(e.id)}</div>
   </div>`;
+  return L.divIcon({ html, className: 'notam-tooltip', iconSize: [0, 0], iconAnchor: [0, 10] });
+}
+function makeLabel(centerLL, e) {
+  const ll = Array.isArray(centerLL) ? centerLL : [centerLL.lat, centerLL.lng];
+  const m = L.marker(ll, { icon: labelIcon(e), interactive: false }).addTo(map);
+  e._labelMarker = m;
+  return m;
+}
 
-  return L.marker(ll, {
-    icon: L.divIcon({ html, className: 'notam-tooltip', iconSize: [0, 0], iconAnchor: [0, 10] }),
-    interactive: false
-  }).addTo(map);
+// Recompute duration colors across the ENTIRE plotted set and repaint every
+// layer/label in place. Colors are relative (shortest→longest), so they must be
+// derived globally — otherwise the same NOTAM gets a different color depending on
+// which batch it was added in, and a shared link (one big batch) won't match a
+// session built up over several "+ ADD" steps. Call after any add/remove.
+function recolorAll() {
+  if (!allNotams.length) return;
+  allNotams.forEach(entry => { entry.color = getDurationColor(entry, allNotams); });
+  allNotams.forEach(entry => {
+    const color = entry.color;
+    entry.layers.forEach(l => {
+      if (l === entry._labelMarker) return;
+      if (l.setStyle) l.setStyle({ color, fillColor: color });
+    });
+    if (entry._labelMarker) entry._labelMarker.setIcon(labelIcon(entry));
+  });
 }
 
 // Color by duration: red=longest, orange=mid, yellow=shortest
@@ -1458,6 +1477,7 @@ async function addNOTAMs() {
     document.getElementById('notamInput').value = '';
   }
   if (added) {
+    recolorAll();
     updateList();
     rebuildTimeline();
     fitAll();
@@ -1666,6 +1686,7 @@ function removeNotam(uid) {
   if (i===-1) return;
   allNotams[i].layers.forEach(l=>map.removeLayer(l));
   allNotams.splice(i,1);
+  recolorAll();
   updateList();
   rebuildTimeline();
   syncShareHash();
@@ -1966,6 +1987,7 @@ async function loadShareFromHash() {
     if (!Array.isArray(texts) || !texts.length) return;
     const { added } = await ingestNotams(texts);
     if (added) {
+      recolorAll();
       updateList();
       rebuildTimeline();
       fitAll();
