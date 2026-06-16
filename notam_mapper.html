@@ -6,6 +6,7 @@
 <title>NOTAM Mapper</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap');
 
@@ -133,6 +134,9 @@
   .btn-kml { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); flex: 1; }
   .btn-kml:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
   .btn-kml:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-share { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); flex: 1; }
+  .btn-share:hover { background: rgba(255,255,255,0.06); color: #FFFFFF; }
+  .btn-share.copied { border-color: var(--nerv-green); color: var(--nerv-green); }
 
   .notam-list-footer {
     padding: 6px; flex-shrink: 0;
@@ -557,6 +561,7 @@
     <div class="notam-list-footer">
       <button class="btn btn-fit" onclick="fitAll()">FIT</button>
       <button class="btn btn-kml" onclick="exportKml()" title="Download plotted NOTAMs as KML">KML</button>
+      <button class="btn btn-share" onclick="shareNotams()" title="Copy a shareable link containing all entered NOTAMs">SHARE</button>
       <button class="btn btn-clear" onclick="clearAll()">CLEAR</button>
     </div>
   </div>
@@ -1447,6 +1452,22 @@ async function addNOTAMs() {
   if (!raw.trim()) return;
 
   const notams = raw.replace(/\r\n/g,'\n').split(/(?=![A-Z]{3,4}\s+\d{2}\/\d{1,4})|(?=^[A-Z]\d{3,5}\/\d{2}\s+NOTAM)/m).filter(s=>s.trim());
+  const { added, skipped } = await ingestNotams(notams);
+
+  if (added || skipped) {
+    document.getElementById('notamInput').value = '';
+  }
+  if (added) {
+    updateList();
+    rebuildTimeline();
+    fitAll();
+    syncShareHash();
+  }
+}
+
+// Core ingest: parse an array of raw NOTAM strings, plot them, push to allNotams.
+// Shared by manual entry (addNOTAMs) and shared-link restore (loadShareFromHash).
+async function ingestNotams(notams) {
   let added = 0;
   let skipped = 0;
   const existingIds = new Set(allNotams.map(n => n.id));
@@ -1637,14 +1658,7 @@ async function addNOTAMs() {
     } catch(err) { console.error('Plot error:', err, entry.id); }
   });
 
-  if (added || skipped) {
-    document.getElementById('notamInput').value = '';
-  }
-  if (added) {
-    updateList();
-    rebuildTimeline();
-    fitAll();
-  }
+  return { added, skipped };
 }
 
 function removeNotam(uid) {
@@ -1654,6 +1668,7 @@ function removeNotam(uid) {
   allNotams.splice(i,1);
   updateList();
   rebuildTimeline();
+  syncShareHash();
 }
 
 // Compute padding so map content sits in the left ~80% of the viewport
@@ -1807,6 +1822,7 @@ function clearAll() {
   allNotams.length = 0;
   document.getElementById('notamInput').value = '';
   updateList(); rebuildTimeline();
+  syncShareHash();
 }
 
 // Append first point to close an open polygon ring
@@ -1887,6 +1903,79 @@ function togglePanel() {
   p.classList.toggle('collapsed');
   document.querySelector('.collapse-toggle').textContent = p.classList.contains('collapsed') ? '+' : '_';
 }
+
+// === SHARE ===
+// State travels entirely in the URL hash — no backend. We store the unique raw
+// NOTAM texts (the same strings the parser ingests), LZ-compressed into a
+// URL-safe token, so the link reconstructs the exact same map on any machine.
+function encodeShareToken() {
+  const texts = [...new Set(allNotams.map(n => n.text))].filter(Boolean);
+  if (!texts.length) return '';
+  return LZString.compressToEncodedURIComponent(JSON.stringify(texts));
+}
+
+function buildShareUrl() {
+  const token = encodeShareToken();
+  const base = location.origin + location.pathname + location.search;
+  return token ? base + '#n=' + token : base;
+}
+
+// Keep the address-bar URL current so the user can just copy it any time.
+// replaceState avoids spamming browser history on every add/remove.
+function syncShareHash() {
+  const token = encodeShareToken();
+  const base = location.pathname + location.search;
+  try {
+    history.replaceState(null, '', token ? base + '#n=' + token : base);
+  } catch (e) { /* file:// or sandbox — address bar just won't update */ }
+}
+
+function shareNotams() {
+  const btn = document.querySelector('.btn-share');
+  if (!allNotams.length) {
+    if (btn) { const t = btn.textContent; btn.textContent = 'NOTHING'; setTimeout(() => btn.textContent = t, 900); }
+    return;
+  }
+  syncShareHash();
+  const url = buildShareUrl();
+  const flash = (label) => {
+    if (!btn) return;
+    btn.classList.add('copied');
+    btn.textContent = label;
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'SHARE'; }, 1100);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => flash('COPIED')).catch(() => flash('IN URL'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); flash('COPIED'); } catch (e) { flash('IN URL'); }
+    ta.remove();
+  }
+}
+
+// Restore NOTAMs from a shared link on page load.
+async function loadShareFromHash() {
+  const m = /[#&]n=([^&]+)/.exec(location.hash || '');
+  if (!m) return;
+  try {
+    const json = LZString.decompressFromEncodedURIComponent(m[1]);
+    if (!json) return;
+    const texts = JSON.parse(json);
+    if (!Array.isArray(texts) || !texts.length) return;
+    const { added } = await ingestNotams(texts);
+    if (added) {
+      updateList();
+      rebuildTimeline();
+      fitAll();
+    }
+  } catch (e) {
+    console.error('Failed to load shared NOTAMs from URL:', e);
+  }
+}
+
+loadShareFromHash();
 </script>
 </body>
 </html>
