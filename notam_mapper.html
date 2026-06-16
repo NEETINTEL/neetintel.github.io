@@ -1470,7 +1470,7 @@ async function addNOTAMs() {
   const raw = document.getElementById('notamInput').value;
   if (!raw.trim()) return;
 
-  const notams = raw.replace(/\r\n/g,'\n').split(/(?=![A-Z]{3,4}\s+\d{2}\/\d{1,4})|(?=^[A-Z]\d{3,5}\/\d{2}\s+NOTAM)/m).filter(s=>s.trim());
+  const notams = raw.replace(/\r\n/g,'\n').split(/(?=![A-Z]{3,4}\s+\d{1,2}\/\d{1,4})|(?=^[A-Z]\d{3,5}\/\d{2}\s+NOTAM)/m).filter(s=>s.trim());
   const { added, skipped } = await ingestNotams(notams);
 
   if (added || skipped) {
