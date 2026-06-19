@@ -1,8 +1,8 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HFGCS rebroadcast timelines</title>
+<title>HFGCS rebroadcast timeline</title>
 <style>
-:root{--bg:#0d1117;--panel:#161b22;--fg:#c9d1d9;--muted:#7d8590;--grid:#222a35;--div:#3a4452;--accent:#ed7d32;}
+:root{--bg:#01060b;--panel:#161b22;--fg:#c9d1d9;--muted:#7d8590;--grid:#222a35;--div:#3a4452;--accent:#ed7d32;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 .jp{display:none}
@@ -17,7 +17,7 @@ body.show-jp .jp{display:inline}
 .lang-btn.active{color:#fff;border-color:#dcdcdc}
 header{padding:10px 22px 4px}
 h1{font-size:18px;font-weight:500;margin:0 0 4px;color:#f0f6fc}
-p.sub{margin:0;color:var(--muted);font-size:13px;max-width:900px;display:grid}
+p.sub{margin:0;color:var(--muted);font-size:13px;display:grid}
 p.sub>span{grid-area:1/1;display:block}
 p.sub .en,p.sub .jp{display:block}
 p.sub .jp{visibility:hidden}
@@ -67,7 +67,7 @@ p.sub{font-size:12px}
   </span>
 </div>
 <header>
-<h1><span class="en">HFGCS rebroadcast timelines</span><span class="jp">HFGCS 再放送タイムライン</span></h1>
+<h1><span class="en">HFGCS rebroadcast timeline</span><span class="jp">HFGCS 再放送タイムライン</span></h1>
 <p class="sub">
 <span class="en">About 1 in 3 EAMs broadcast on the HFGCS are rebroadcast. Whether by the ground station through an E6B message relay, there appear to be rules governing how often or within what time limit these broadcasts may take place, and most messages are not rebroadcast after about 2 hours. Special attention should be paid to those rebroadcasts that take place outside the typical constraints. For the below log-scale chart, each horizontal track is one message that was rebroadcast, aligned to its own first airing (t&nbsp;=&nbsp;0); dots to the right mark each rebroadcast at its elapsed time.</span>
 <span class="jp">HFGCSで放送されるEAMのおよそ3つに1つは再放送されます。地上局によるものであれ、E-6Bを介したメッセージ中継によるものであれ、再放送の頻度や時間的な制限には一定の規則があるようで、ほとんどのメッセージはおよそ2時間を過ぎると再放送されません。通常の制約から外れて行われる再放送には特に注意が必要です。以下の対数軸のチャートでは、各横ラインは再放送された1つのメッセージを表し、最初の放送（t&nbsp;=&nbsp;0）を基準に揃えてあります。右側の点は各再放送の経過時間を示します。</span>
@@ -96,7 +96,7 @@ const RAW=[{"g":1,"d":"2022-01-25 04:00","n":2,"s":1.07,"p":"ZM2VX3","e":[[0.0,0
 const DATA=RAW;
 let MODE='chrono';
 const COL={1:'#06b050',2:'#ed7d32',3:'#ffcc00',4:'#ff0467',5:'#9063cd',0:'#6e7681'};
-const BG='#0d1117',GRID='#222a35',FG='#c9d1d9',MUT='#7d8590',DIV='#3a4452';
+const BG='#01060b',GRID='#222a35',FG='#c9d1d9',MUT='#7d8590',DIV='#3a4452';
 let ML=70, MR=24; const MT=12, MB=12, ROWH=2.6;
 const GUT=0.008, XMIN=0.005, XMAX=230;
 const TICKS=[[1/60,'1m'],[5/60,'5m'],[15/60,'15m'],[30/60,'30m'],[1,'1h'],[2,'2h'],[6,'6h'],[12,'12h'],[24,'1d'],[72,'3d'],[168,'7d']];
