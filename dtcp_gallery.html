@@ -7332,7 +7332,10 @@
     const lensOf = c => (c.dataset.lens || '').split(',');
     const dayOf = c => c.querySelector('.card-date').textContent.toUpperCase();
     // Group clause: G2 = days with Group 2 active, G23 = days with both
-    // 2 AND 3, G1234 = all of 1-4. Full tier = days with exactly that set.
+    // 2 AND 3, G1234 = all of 1-4. For multi-group queries the full tier is
+    // days with exactly that set; a single-group query has no full tier
+    // (the "only this group active" case is too rare to be a useful contrast
+    // and just fades every match — see G3, a near-daily fixture).
     if (cl.startsWith('G')) {
       const digits = cl.slice(1);
       if (!/^[1-5]*$/.test(digits)) return { match: null, full: null, dead: true };
@@ -7342,7 +7345,7 @@
         (c.dataset.groups || '').split(',').filter(g => g && g !== 'unclassified');
       return {
         match: c => want.every(g => groupsOf(c).includes(g)),
-        full: c => {
+        full: want.length < 2 ? null : c => {
           const G = groupsOf(c);
           return G.length === want.length && want.every(g => G.includes(g));
         },
