@@ -1042,21 +1042,126 @@ function makeLabel(centerLL, e) {
   return m;
 }
 
-// Recompute duration colors across the ENTIRE plotted set and repaint every
-// layer/label in place. Colors are relative (shortest→longest), so they must be
-// derived globally — otherwise the same NOTAM gets a different color depending on
-// which batch it was added in, and a shared link (one big batch) won't match a
-// session built up over several "+ ADD" steps. Call after any add/remove.
-function recolorAll() {
-  if (!allNotams.length) return;
-  allNotams.forEach(entry => { entry.color = getDurationColor(entry, allNotams); });
-  allNotams.forEach(entry => {
-    const color = entry.color;
-    entry.layers.forEach(l => {
-      if (l === entry._labelMarker) return;
-      if (l.setStyle) l.setStyle({ color, fillColor: color });
+// === ANTIMERIDIAN-AWARE LONGITUDE FRAME ===
+// Map longitudes can be drawn in any 360° window. For sets that straddle the
+// dateline (e.g. central-Pacific NOTAMs at 171E and 164W), the default −180…180
+// window tears the cluster to opposite map edges. We pick the window whose empty
+// side falls on the LARGEST longitude gap, so the populated arc stays contiguous.
+// For ordinary US/Europe data the largest gap is already over the Pacific, so the
+// window stays ≈ −180…180 and nothing moves.
+let LNG_BASE = -180;
+function normLng(lng) { return ((lng + 180) % 360 + 360) % 360 - 180; }
+function computeLngBase() {
+  const lngs = [];
+  allNotams.forEach(e => (e.coords || []).forEach(c => {
+    if (Number.isFinite(c.lng)) lngs.push(normLng(c.lng));
+  }));
+  if (lngs.length < 2) { LNG_BASE = -180; return; }
+  lngs.sort((a, b) => a - b);
+  let maxGap = -1, base = -180;
+  for (let i = 0; i < lngs.length; i++) {
+    const cur = lngs[i];
+    const nextVal = i + 1 < lngs.length ? lngs[i + 1] : lngs[0] + 360;
+    const gap = nextVal - cur;
+    if (gap > maxGap) { maxGap = gap; base = i + 1 < lngs.length ? lngs[i + 1] : lngs[0]; }
+  }
+  LNG_BASE = base;
+}
+// Unwrap a real longitude into the current display window [LNG_BASE, LNG_BASE+360)
+function dl(lng) {
+  let u = normLng(lng);
+  while (u < LNG_BASE) u += 360;
+  while (u >= LNG_BASE + 360) u -= 360;
+  return u;
+}
+
+// Remove an entry's drawn layers from the map (keeps the entry + its real coords).
+function unplotEntry(entry) {
+  (entry.layers || []).forEach(l => map.removeLayer(l));
+  entry.layers = [];
+  entry._labelMarker = null;
+}
+
+// Draw one entry using its assigned color and the current longitude frame.
+function plotEntry(entry) {
+  const color = entry.color;
+  let labelLL;
+
+  if (entry.suaFeature) {
+    const gj = L.geoJSON(entry.suaFeature, {
+      style: { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }
+    }).addTo(map);
+    gj.bindPopup(makePopup(entry));
+    entry.layers.push(gj);
+    const ctr = gj.getBounds().getCenter();
+    labelLL = [ctr.lat, ctr.lng];
+    entry.type = 'airspace';
+
+  } else if (entry.isTrack && entry.coords.length >= 2) {
+    const norm = normalizeTrackLngs(entry.coords);
+    const delta = dl(norm[0].lng) - norm[0].lng;
+    const ll = norm.map(c => [c.lat, c.lng + delta]);
+    const line = L.polyline(ll, { color, weight: 2, opacity: 0.9, dashArray: '6 3' }).addTo(map);
+    line.bindPopup(makePopup(entry));
+    entry.layers.push(line);
+    ll.forEach(p => {
+      const mk = L.circleMarker(p, { radius: 2.5, color, fillColor: color, fillOpacity: 0.9, weight: 1 }).addTo(map);
+      entry.layers.push(mk);
     });
-    if (entry._labelMarker) entry._labelMarker.setIcon(labelIcon(entry));
+    labelLL = ll[Math.floor(ll.length / 2)];
+    entry.type = 'track';
+
+  } else if (entry.radiusNM && entry.coords.length >= 1) {
+    const c = [entry.coords[0].lat, dl(entry.coords[0].lng)];
+    labelLL = c;
+    const circle = L.circle(c, {
+      radius: nmToM(entry.radiusNM), color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3'
+    }).addTo(map);
+    const dot = L.circleMarker(c, { radius: 4, color, fillColor: color, fillOpacity: 1, weight: 2 }).addTo(map);
+    const popup = makePopup(entry);
+    circle.bindPopup(popup); dot.bindPopup(popup);
+    entry.layers.push(circle, dot);
+    entry.type = 'circle';
+
+  } else if (entry.coords.length >= 3) {
+    const ll = entry.coords.map(c => [c.lat, dl(c.lng)]);
+    const poly = L.polygon(ll, { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }).addTo(map);
+    const ctr = poly.getBounds().getCenter();
+    labelLL = [ctr.lat, ctr.lng];
+    poly.bindPopup(makePopup(entry));
+    entry.layers.push(poly);
+    entry.type = 'polygon';
+    ll.forEach(p => {
+      const mk = L.circleMarker(p, { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+      entry.layers.push(mk);
+    });
+
+  } else {
+    labelLL = [entry.coords[0].lat, dl(entry.coords[0].lng)];
+    entry.coords.forEach(c => {
+      const mk = L.circleMarker([c.lat, dl(c.lng)], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
+      mk.bindPopup(makePopup(entry));
+      entry.layers.push(mk);
+    });
+    entry.type = 'point';
+  }
+
+  if (!entry._skipLabel) entry.layers.push(makeLabel(labelLL, entry));
+}
+
+// Full repaint: recompute global duration colors + the longitude frame, then
+// redraw every entry. Colors are relative (shortest→longest) and the frame is
+// set-wide, so both must be derived globally — otherwise the same NOTAM looks
+// different depending on which batch it arrived in, and a shared link (one big
+// batch) won't match a session built up over several "+ ADD" steps. Call after
+// any add/remove.
+function rerenderAll() {
+  allNotams.forEach(unplotEntry);
+  if (!allNotams.length) { LNG_BASE = -180; return; }
+  allNotams.forEach(entry => { entry.color = getDurationColor(entry, allNotams); });
+  computeLngBase();
+  allNotams.forEach(entry => {
+    try { plotEntry(entry); } catch (err) { console.error('Plot error:', err, entry.id); }
   });
 }
 
@@ -1477,7 +1582,7 @@ async function addNOTAMs() {
     document.getElementById('notamInput').value = '';
   }
   if (added) {
-    recolorAll();
+    rerenderAll();
     updateList();
     rebuildTimeline();
     fitAll();
@@ -1603,80 +1708,9 @@ async function ingestNotams(notams) {
     } catch(err) { console.error('Parse error:', err, nt.slice(0,60)); }
   }
 
-  // Assign colors by duration
-  parsed.forEach(entry => { entry.color = getDurationColor(entry, parsed); });
-
-  // Second pass: plot on map
-  parsed.forEach(entry => {
-    try {
-    const color = entry.color;
-    let labelLL;
-
-    if (entry.suaFeature) {
-      const gj = L.geoJSON(entry.suaFeature, {
-        style: { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }
-      }).addTo(map);
-      gj.bindPopup(makePopup(entry));
-      entry.layers.push(gj);
-      const b = gj.getBounds();
-      const ctr = b.getCenter();
-      labelLL = [ctr.lat, ctr.lng];
-      entry.type = 'airspace';
-
-    } else if (entry.isTrack && entry.coords.length >= 2) {
-      const norm = normalizeTrackLngs(entry.coords);
-      const ll = norm.map(c => [c.lat, c.lng]);
-      const line = L.polyline(ll, { color, weight: 2, opacity: 0.9, dashArray: '6 3' }).addTo(map);
-      line.bindPopup(makePopup(entry));
-      entry.layers.push(line);
-      norm.forEach(c => {
-        const mk = L.circleMarker([c.lat, c.lng], { radius: 2.5, color, fillColor: color, fillOpacity: 0.9, weight: 1 }).addTo(map);
-        entry.layers.push(mk);
-      });
-      const midIdx = Math.floor(norm.length / 2);
-      labelLL = [norm[midIdx].lat, norm[midIdx].lng];
-      entry.type = 'track';
-
-    } else if (entry.radiusNM && entry.coords.length >= 1) {
-      const c = [entry.coords[0].lat, entry.coords[0].lng];
-      labelLL = c;
-      const circle = L.circle(c, {
-        radius: nmToM(entry.radiusNM), color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3'
-      }).addTo(map);
-      const dot = L.circleMarker(c, { radius: 4, color, fillColor: color, fillOpacity: 1, weight: 2 }).addTo(map);
-      const popup = makePopup(entry);
-      circle.bindPopup(popup); dot.bindPopup(popup);
-      entry.layers.push(circle, dot);
-      entry.type = 'circle';
-
-    } else if (entry.coords.length >= 3) {
-      const ll = entry.coords.map(c => [c.lat, c.lng]);
-      const poly = L.polygon(ll, { color, fillColor: color, fillOpacity: 0.12, weight: 2, dashArray: '6 3' }).addTo(map);
-      const ctr = poly.getBounds().getCenter();
-      labelLL = [ctr.lat, ctr.lng];
-      poly.bindPopup(makePopup(entry));
-      entry.layers.push(poly);
-      entry.type = 'polygon';
-      entry.coords.forEach(c => {
-        const mk = L.circleMarker([c.lat, c.lng], { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
-        entry.layers.push(mk);
-      });
-
-    } else {
-      labelLL = [entry.coords[0].lat, entry.coords[0].lng];
-      entry.coords.forEach(c => {
-        const mk = L.circleMarker([c.lat, c.lng], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
-        mk.bindPopup(makePopup(entry));
-        entry.layers.push(mk);
-      });
-      entry.type = 'point';
-    }
-
-    if (!entry._skipLabel) entry.layers.push(makeLabel(labelLL, entry));
-    allNotams.push(entry);
-    added++;
-    } catch(err) { console.error('Plot error:', err, entry.id); }
-  });
+  // Store entries; actual drawing (colors + antimeridian longitude frame) is done
+  // globally by rerenderAll() so the whole set stays mutually consistent.
+  parsed.forEach(entry => { allNotams.push(entry); added++; });
 
   return { added, skipped };
 }
@@ -1686,7 +1720,7 @@ function removeNotam(uid) {
   if (i===-1) return;
   allNotams[i].layers.forEach(l=>map.removeLayer(l));
   allNotams.splice(i,1);
-  recolorAll();
+  rerenderAll();
   updateList();
   rebuildTimeline();
   syncShareHash();
@@ -1987,7 +2021,7 @@ async function loadShareFromHash() {
     if (!Array.isArray(texts) || !texts.length) return;
     const { added } = await ingestNotams(texts);
     if (added) {
-      recolorAll();
+      rerenderAll();
       updateList();
       rebuildTimeline();
       fitAll();
@@ -1998,6 +2032,22 @@ async function loadShareFromHash() {
 }
 
 loadShareFromHash();
+
+// Re-load when the URL fragment changes on an ALREADY-OPEN page — e.g. pasting a
+// shared link into the address bar, or browser back/forward. loadShareFromHash()
+// otherwise only runs once at initial load. Our syncShareHash() uses
+// history.replaceState (which does NOT fire hashchange), so add/remove won't loop
+// back through here.
+window.addEventListener('hashchange', () => {
+  // Wipe the current plot WITHOUT rewriting the hash (clearAll would via
+  // syncShareHash), then load whatever the new fragment holds.
+  allNotams.forEach(n => n.layers.forEach(l => map.removeLayer(l)));
+  allNotams.length = 0;
+  document.getElementById('notamInput').value = '';
+  updateList();
+  rebuildTimeline();
+  loadShareFromHash();
+});
 </script>
 </body>
 </html>
