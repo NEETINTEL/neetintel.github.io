@@ -360,6 +360,23 @@
             opacity: 1.0 !important;
         }
 
+        /* Pattern Lens: opacity tiers (members bright, context faded), hollow
+           deviation markers, a soft glow on lit letters so the selection reads
+           clearly, and wordless cycle dots inside the anchored letter */
+        body.lens-on .message-block.lens-dim { opacity: 0.15; }
+        body.lens-on .message-block.lens-far { opacity: 0.10; }
+        body.lens-on .message-block.lens-member .message-display .char { opacity: 0.4; }
+        body.lens-on .message-block.lens-member .message-display .char.lens-hit { opacity: 1; }
+        body.lens-on .message-block.lens-member .message-display .char.lens-hollow {
+            opacity: 0.9; outline: 1px dashed #999; outline-offset: -1px;
+        }
+        .char.lens-anchor { position: relative; }
+        .lens-dots {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            font-size: 6px; line-height: 1; letter-spacing: 1px; color: #ccc;
+            pointer-events: none; z-index: 6; text-shadow: 0 0 2px #000;
+        }
+
         /* Timeline view - hidden by default, shown by JS if chars too wide */
         .message-timeline {
             display: none;
@@ -936,7 +953,7 @@
     <div id="messages-container">
         <div class="message-block" data-group="4" data-timestamp="2024-05-03T19:53:00" data-patterns="[{&quot;positions&quot;: [19, 20, 21, 155, 156, 157], &quot;weight&quot;: 0.24152077397459207}, {&quot;positions&quot;: [51, 52, 14, 15], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [140, 141, 30, 31], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [75, 34, 35, 76], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [106, 107, 44, 45], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [49, 50, 155, 154], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [143, 144, 54, 55], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [64, 85, 86, 63], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [84, 85, 78, 79], &quot;weight&quot;: 0.010787347424460164}, {&quot;positions&quot;: [112, 147, 148, 111], &quot;weight&quot;: 0.010787347424460164}]">
             <div class="message-meta"><span class="dot group-4-dot" data-message="BHE5VNYGMB37BENSLAPJMOYM2G44IV5GYY4JFGAASSPF77VG3XJNSQ5DLHV76I36RKFFVSI4LLR4JQ66NEBG66RCF2IJGHMUN5NOVAKVYX77IBKDCCK4WINVLOP6JJLN3DTQT3WFLXQH5GU5D3ODCWBN4UXJMOBQFUPCI6FMWZJ52TOR" title="BH (Group 4)">●</span><span>20240503 19:53 CRESSLEAF</span></div>
-            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">B</span><span class="char" data-position="1" data-highlight-sig="">H</span><span class="char" data-position="2" data-highlight-sig="">E</span><span class="char" data-position="3" data-highlight-sig="">5</span><span class="char" data-position="4" data-highlight-sig="">V</span><span class="char" data-position="5" data-highlight-sig="">N</span><span class="char" data-position="6" data-highlight-sig="">Y</span><span class="char" data-position="7" data-highlight-sig="">G</span><span class="char" data-position="8" data-highlight-sig="">M</span><span class="char" data-position="9" data-highlight-sig="">B</span><span class="char" data-position="10" data-highlight-sig="">3</span><span class="char" data-position="11" data-highlight-sig="">7</span><span class="char" data-position="12" data-highlight-sig="">B</span><span class="char" data-position="13" data-highlight-sig="">E</span><span class="char char-exact" data-patterns="2" data-position="14" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">N</span><span class="char char-exact" data-patterns="2" data-position="15" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">S</span><span class="char" data-position="16" data-highlight-sig="">L</span><span class="char" data-position="17" data-highlight-sig="">A</span><span class="char" data-position="18" data-highlight-sig="">P</span><span class="char char-exact" data-patterns="1" data-position="19" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">J</span><span class="char char-exact" data-patterns="1" data-position="20" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">M</span><span class="char char-exact" data-patterns="1" data-position="21" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">O</span><span class="char" data-position="22" data-highlight-sig="">Y</span><span class="char" data-position="23" data-highlight-sig="">M</span><span class="char" data-position="24" data-highlight-sig="">2</span><span class="char" data-position="25" data-highlight-sig="">G</span><span class="char" data-position="26" data-highlight-sig="">4</span><span class="char" data-position="27" data-highlight-sig="">4</span><span class="char" data-position="28" data-highlight-sig="">I</span><span class="char" data-position="29" data-highlight-sig="">V</span><span class="char char-exact" data-patterns="3" data-position="30" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="3" data-position="31" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">G</span><span class="char" data-position="32" data-highlight-sig="">Y</span><span class="char" data-position="33" data-highlight-sig="">Y</span><span class="char char-exact" data-patterns="4" data-position="34" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">4</span><span class="char char-exact" data-patterns="4" data-position="35" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">J</span><span class="char" data-position="36" data-highlight-sig="">F</span><span class="char" data-position="37" data-highlight-sig="">G</span><span class="char" data-position="38" data-highlight-sig="">A</span><span class="char" data-position="39" data-highlight-sig="">A</span><span class="char" data-position="40" data-highlight-sig="">S</span><span class="char" data-position="41" data-highlight-sig="">S</span><span class="char" data-position="42" data-highlight-sig="">P</span><span class="char" data-position="43" data-highlight-sig="">F</span><span class="char char-exact" data-patterns="5" data-position="44" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char char-exact" data-patterns="5" data-position="45" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char" data-position="46" data-highlight-sig="">V</span><span class="char" data-position="47" data-highlight-sig="">G</span><span class="char" data-position="48" data-highlight-sig="">3</span><span class="char char-exact" data-patterns="6" data-position="49" data-highlight-sig="49,50,154,155" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">X</span><span class="char char-exact" data-patterns="6" data-position="50" data-highlight-sig="49,50,154,155" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">J</span><span class="char char-exact" data-patterns="2" data-position="51" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">N</span><span class="char char-exact" data-patterns="2" data-position="52" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">S</span><span class="char" data-position="53" data-highlight-sig="">Q</span><span class="char char-exact" data-patterns="7" data-position="54" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="7" data-position="55" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char" data-position="56" data-highlight-sig="">L</span><span class="char" data-position="57" data-highlight-sig="">H</span><span class="char" data-position="58" data-highlight-sig="">V</span><span class="char" data-position="59" data-highlight-sig="">7</span><span class="char" data-position="60" data-highlight-sig="">6</span><span class="char" data-position="61" data-highlight-sig="">I</span><span class="char" data-position="62" data-highlight-sig="">3</span><span class="char char-exact" data-patterns="8" data-position="63" data-highlight-sig="63,64,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="8" data-position="64" data-highlight-sig="63,64,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">R</span><span class="char" data-position="65" data-highlight-sig="">K</span><span class="char" data-position="66" data-highlight-sig="">F</span><span class="char" data-position="67" data-highlight-sig="">F</span><span class="char" data-position="68" data-highlight-sig="">V</span><span class="char" data-position="69" data-highlight-sig="">S</span><span class="char" data-position="70" data-highlight-sig="">I</span><span class="char" data-position="71" data-highlight-sig="">4</span><span class="char" data-position="72" data-highlight-sig="">L</span><span class="char" data-position="73" data-highlight-sig="">L</span><span class="char" data-position="74" data-highlight-sig="">R</span><span class="char char-exact" data-patterns="4" data-position="75" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">4</span><span class="char char-exact" data-patterns="4" data-position="76" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">J</span><span class="char" data-position="77" data-highlight-sig="">Q</span><span class="char char-exact" data-patterns="9" data-position="78" data-highlight-sig="78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="9" data-position="79" data-highlight-sig="78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char" data-position="80" data-highlight-sig="">N</span><span class="char" data-position="81" data-highlight-sig="">E</span><span class="char" data-position="82" data-highlight-sig="">B</span><span class="char" data-position="83" data-highlight-sig="">G</span><span class="char char-exact" data-patterns="9" data-position="84" data-highlight-sig="78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="8,9" data-position="85" data-highlight-sig="63,64,78,79,84,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="8" data-position="86" data-highlight-sig="63,64,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">R</span><span class="char" data-position="87" data-highlight-sig="">C</span><span class="char" data-position="88" data-highlight-sig="">F</span><span class="char" data-position="89" data-highlight-sig="">2</span><span class="char" data-position="90" data-highlight-sig="">I</span><span class="char" data-position="91" data-highlight-sig="">J</span><span class="char" data-position="92" data-highlight-sig="">G</span><span class="char" data-position="93" data-highlight-sig="">H</span><span class="char" data-position="94" data-highlight-sig="">M</span><span class="char" data-position="95" data-highlight-sig="">U</span><span class="char" data-position="96" data-highlight-sig="">N</span><span class="char" data-position="97" data-highlight-sig="">5</span><span class="char" data-position="98" data-highlight-sig="">N</span><span class="char" data-position="99" data-highlight-sig="">O</span><span class="char" data-position="100" data-highlight-sig="">V</span><span class="char" data-position="101" data-highlight-sig="">A</span><span class="char" data-position="102" data-highlight-sig="">K</span><span class="char" data-position="103" data-highlight-sig="">V</span><span class="char" data-position="104" data-highlight-sig="">Y</span><span class="char" data-position="105" data-highlight-sig="">X</span><span class="char char-exact" data-patterns="5" data-position="106" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char char-exact" data-patterns="5" data-position="107" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char" data-position="108" data-highlight-sig="">I</span><span class="char" data-position="109" data-highlight-sig="">B</span><span class="char" data-position="110" data-highlight-sig="">K</span><span class="char char-exact" data-patterns="10" data-position="111" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char char-exact" data-patterns="10" data-position="112" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">C</span><span class="char" data-position="113" data-highlight-sig="">C</span><span class="char" data-position="114" data-highlight-sig="">K</span><span class="char" data-position="115" data-highlight-sig="">4</span><span class="char" data-position="116" data-highlight-sig="">W</span><span class="char" data-position="117" data-highlight-sig="">I</span><span class="char" data-position="118" data-highlight-sig="">N</span><span class="char" data-position="119" data-highlight-sig="">V</span><span class="char" data-position="120" data-highlight-sig="">L</span><span class="char" data-position="121" data-highlight-sig="">O</span><span class="char" data-position="122" data-highlight-sig="">P</span><span class="char" data-position="123" data-highlight-sig="">6</span><span class="char" data-position="124" data-highlight-sig="">J</span><span class="char" data-position="125" data-highlight-sig="">J</span><span class="char" data-position="126" data-highlight-sig="">L</span><span class="char" data-position="127" data-highlight-sig="">N</span><span class="char" data-position="128" data-highlight-sig="">3</span><span class="char" data-position="129" data-highlight-sig="">D</span><span class="char" data-position="130" data-highlight-sig="">T</span><span class="char" data-position="131" data-highlight-sig="">Q</span><span class="char" data-position="132" data-highlight-sig="">T</span><span class="char" data-position="133" data-highlight-sig="">3</span><span class="char" data-position="134" data-highlight-sig="">W</span><span class="char" data-position="135" data-highlight-sig="">F</span><span class="char" data-position="136" data-highlight-sig="">L</span><span class="char" data-position="137" data-highlight-sig="">X</span><span class="char" data-position="138" data-highlight-sig="">Q</span><span class="char" data-position="139" data-highlight-sig="">H</span><span class="char char-exact" data-patterns="3" data-position="140" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="3" data-position="141" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">G</span><span class="char" data-position="142" data-highlight-sig="">U</span><span class="char char-exact" data-patterns="7" data-position="143" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="7" data-position="144" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char" data-position="145" data-highlight-sig="">3</span><span class="char" data-position="146" data-highlight-sig="">O</span><span class="char char-exact" data-patterns="10" data-position="147" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char char-exact" data-patterns="10" data-position="148" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">C</span><span class="char" data-position="149" data-highlight-sig="">W</span><span class="char" data-position="150" data-highlight-sig="">B</span><span class="char" data-position="151" data-highlight-sig="">N</span><span class="char" data-position="152" data-highlight-sig="">4</span><span class="char" data-position="153" data-highlight-sig="">U</span><span class="char char-exact" data-patterns="6" data-position="154" data-highlight-sig="49,50,154,155" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">X</span><span class="char char-exact" data-patterns="1,6" data-position="155" data-highlight-sig="19,20,21,49,50,154,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">J</span><span class="char char-exact" data-patterns="1" data-position="156" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">M</span><span class="char char-exact" data-patterns="1" data-position="157" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">O</span><span class="char" data-position="158" data-highlight-sig="">B</span><span class="char" data-position="159" data-highlight-sig="">Q</span><span class="char" data-position="160" data-highlight-sig="">F</span><span class="char" data-position="161" data-highlight-sig="">U</span><span class="char" data-position="162" data-highlight-sig="">P</span><span class="char" data-position="163" data-highlight-sig="">C</span><span class="char" data-position="164" data-highlight-sig="">I</span><span class="char" data-position="165" data-highlight-sig="">6</span><span class="char" data-position="166" data-highlight-sig="">F</span><span class="char" data-position="167" data-highlight-sig="">M</span><span class="char" data-position="168" data-highlight-sig="">W</span><span class="char" data-position="169" data-highlight-sig="">Z</span><span class="char" data-position="170" data-highlight-sig="">J</span><span class="char" data-position="171" data-highlight-sig="">5</span><span class="char" data-position="172" data-highlight-sig="">2</span><span class="char" data-position="173" data-highlight-sig="">T</span><span class="char" data-position="174" data-highlight-sig="">O</span><span class="char" data-position="175" data-highlight-sig="">R</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">B</span><span class="char" data-position="1" data-highlight-sig="">H</span><span class="char" data-position="2" data-highlight-sig="">E</span><span class="char" data-position="3" data-highlight-sig="">5</span><span class="char" data-position="4" data-highlight-sig="">V</span><span class="char" data-position="5" data-highlight-sig="">N</span><span class="char" data-position="6" data-highlight-sig="">Y</span><span class="char" data-position="7" data-highlight-sig="">G</span><span class="char" data-position="8" data-highlight-sig="">M</span><span class="char" data-position="9" data-highlight-sig="">B</span><span class="char" data-position="10" data-highlight-sig="">3</span><span class="char" data-position="11" data-highlight-sig="">7</span><span class="char" data-position="12" data-highlight-sig="">B</span><span class="char" data-position="13" data-highlight-sig="">E</span><span class="char char-exact" data-patterns="2" data-position="14" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">N</span><span class="char char-exact" data-patterns="2" data-position="15" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">S</span><span class="char" data-position="16" data-highlight-sig="">L</span><span class="char" data-position="17" data-highlight-sig="">A</span><span class="char" data-position="18" data-highlight-sig="">P</span><span class="char char-exact" data-patterns="1" data-position="19" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">J</span><span class="char char-exact" data-patterns="1" data-position="20" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">M</span><span class="char char-exact" data-patterns="1" data-position="21" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">O</span><span class="char" data-position="22" data-highlight-sig="">Y</span><span class="char" data-position="23" data-highlight-sig="">M</span><span class="char" data-position="24" data-highlight-sig="">2</span><span class="char" data-position="25" data-highlight-sig="">G</span><span class="char" data-position="26" data-highlight-sig="">4</span><span class="char" data-position="27" data-highlight-sig="">4</span><span class="char" data-position="28" data-highlight-sig="">I</span><span class="char" data-position="29" data-highlight-sig="">V</span><span class="char char-exact" data-patterns="3" data-position="30" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="3" data-position="31" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">G</span><span class="char" data-position="32" data-highlight-sig="">Y</span><span class="char" data-position="33" data-highlight-sig="">Y</span><span class="char char-exact" data-patterns="4" data-position="34" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">4</span><span class="char char-exact" data-patterns="4" data-position="35" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">J</span><span class="char" data-position="36" data-highlight-sig="">F</span><span class="char" data-position="37" data-highlight-sig="">G</span><span class="char" data-position="38" data-highlight-sig="">A</span><span class="char" data-position="39" data-highlight-sig="">A</span><span class="char" data-position="40" data-highlight-sig="">S</span><span class="char" data-position="41" data-highlight-sig="">S</span><span class="char" data-position="42" data-highlight-sig="">P</span><span class="char" data-position="43" data-highlight-sig="">F</span><span class="char char-exact" data-patterns="5" data-position="44" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char char-exact" data-patterns="5" data-position="45" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char" data-position="46" data-highlight-sig="">V</span><span class="char" data-position="47" data-highlight-sig="">G</span><span class="char" data-position="48" data-highlight-sig="">3</span><span class="char char-exact" data-patterns="6" data-position="49" data-highlight-sig="49,50,154,155" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">X</span><span class="char char-exact" data-patterns="6" data-position="50" data-highlight-sig="49,50,154,155" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">J</span><span class="char char-exact" data-patterns="2" data-position="51" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">N</span><span class="char char-exact" data-patterns="2" data-position="52" data-highlight-sig="14,15,51,52" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">S</span><span class="char" data-position="53" data-highlight-sig="">Q</span><span class="char char-exact" data-patterns="7" data-position="54" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="7" data-position="55" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char" data-position="56" data-highlight-sig="">L</span><span class="char" data-position="57" data-highlight-sig="">H</span><span class="char" data-position="58" data-highlight-sig="">V</span><span class="char" data-position="59" data-highlight-sig="">7</span><span class="char" data-position="60" data-highlight-sig="">6</span><span class="char" data-position="61" data-highlight-sig="">I</span><span class="char" data-position="62" data-highlight-sig="">3</span><span class="char char-exact" data-patterns="8" data-position="63" data-highlight-sig="63,64,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="8" data-position="64" data-highlight-sig="63,64,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">R</span><span class="char" data-position="65" data-highlight-sig="">K</span><span class="char" data-position="66" data-highlight-sig="">F</span><span class="char" data-position="67" data-highlight-sig="">F</span><span class="char" data-position="68" data-highlight-sig="">V</span><span class="char" data-position="69" data-highlight-sig="">S</span><span class="char" data-position="70" data-highlight-sig="">I</span><span class="char" data-position="71" data-highlight-sig="">4</span><span class="char" data-position="72" data-highlight-sig="">L</span><span class="char" data-position="73" data-highlight-sig="">L</span><span class="char" data-position="74" data-highlight-sig="">R</span><span class="char char-exact" data-patterns="4" data-position="75" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">4</span><span class="char char-exact" data-patterns="4" data-position="76" data-highlight-sig="34,35,75,76" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">J</span><span class="char" data-position="77" data-highlight-sig="">Q</span><span class="char char-exact" data-patterns="9" data-position="78" data-highlight-sig="78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="9" data-position="79" data-highlight-sig="78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char" data-position="80" data-highlight-sig="">N</span><span class="char" data-position="81" data-highlight-sig="">E</span><span class="char" data-position="82" data-highlight-sig="">B</span><span class="char" data-position="83" data-highlight-sig="">G</span><span class="char char-exact" data-patterns="9" data-position="84" data-highlight-sig="78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="8,9" data-position="85" data-highlight-sig="63,64,85,86;78,79,84,85" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">6</span><span class="char char-exact" data-patterns="8" data-position="86" data-highlight-sig="63,64,85,86" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">R</span><span class="char" data-position="87" data-highlight-sig="">C</span><span class="char" data-position="88" data-highlight-sig="">F</span><span class="char" data-position="89" data-highlight-sig="">2</span><span class="char" data-position="90" data-highlight-sig="">I</span><span class="char" data-position="91" data-highlight-sig="">J</span><span class="char" data-position="92" data-highlight-sig="">G</span><span class="char" data-position="93" data-highlight-sig="">H</span><span class="char" data-position="94" data-highlight-sig="">M</span><span class="char" data-position="95" data-highlight-sig="">U</span><span class="char" data-position="96" data-highlight-sig="">N</span><span class="char" data-position="97" data-highlight-sig="">5</span><span class="char" data-position="98" data-highlight-sig="">N</span><span class="char" data-position="99" data-highlight-sig="">O</span><span class="char" data-position="100" data-highlight-sig="">V</span><span class="char" data-position="101" data-highlight-sig="">A</span><span class="char" data-position="102" data-highlight-sig="">K</span><span class="char" data-position="103" data-highlight-sig="">V</span><span class="char" data-position="104" data-highlight-sig="">Y</span><span class="char" data-position="105" data-highlight-sig="">X</span><span class="char char-exact" data-patterns="5" data-position="106" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char char-exact" data-patterns="5" data-position="107" data-highlight-sig="44,45,106,107" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">7</span><span class="char" data-position="108" data-highlight-sig="">I</span><span class="char" data-position="109" data-highlight-sig="">B</span><span class="char" data-position="110" data-highlight-sig="">K</span><span class="char char-exact" data-patterns="10" data-position="111" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char char-exact" data-patterns="10" data-position="112" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">C</span><span class="char" data-position="113" data-highlight-sig="">C</span><span class="char" data-position="114" data-highlight-sig="">K</span><span class="char" data-position="115" data-highlight-sig="">4</span><span class="char" data-position="116" data-highlight-sig="">W</span><span class="char" data-position="117" data-highlight-sig="">I</span><span class="char" data-position="118" data-highlight-sig="">N</span><span class="char" data-position="119" data-highlight-sig="">V</span><span class="char" data-position="120" data-highlight-sig="">L</span><span class="char" data-position="121" data-highlight-sig="">O</span><span class="char" data-position="122" data-highlight-sig="">P</span><span class="char" data-position="123" data-highlight-sig="">6</span><span class="char" data-position="124" data-highlight-sig="">J</span><span class="char" data-position="125" data-highlight-sig="">J</span><span class="char" data-position="126" data-highlight-sig="">L</span><span class="char" data-position="127" data-highlight-sig="">N</span><span class="char" data-position="128" data-highlight-sig="">3</span><span class="char" data-position="129" data-highlight-sig="">D</span><span class="char" data-position="130" data-highlight-sig="">T</span><span class="char" data-position="131" data-highlight-sig="">Q</span><span class="char" data-position="132" data-highlight-sig="">T</span><span class="char" data-position="133" data-highlight-sig="">3</span><span class="char" data-position="134" data-highlight-sig="">W</span><span class="char" data-position="135" data-highlight-sig="">F</span><span class="char" data-position="136" data-highlight-sig="">L</span><span class="char" data-position="137" data-highlight-sig="">X</span><span class="char" data-position="138" data-highlight-sig="">Q</span><span class="char" data-position="139" data-highlight-sig="">H</span><span class="char char-exact" data-patterns="3" data-position="140" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="3" data-position="141" data-highlight-sig="30,31,140,141" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">G</span><span class="char" data-position="142" data-highlight-sig="">U</span><span class="char char-exact" data-patterns="7" data-position="143" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">5</span><span class="char char-exact" data-patterns="7" data-position="144" data-highlight-sig="54,55,143,144" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char" data-position="145" data-highlight-sig="">3</span><span class="char" data-position="146" data-highlight-sig="">O</span><span class="char char-exact" data-patterns="10" data-position="147" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">D</span><span class="char char-exact" data-patterns="10" data-position="148" data-highlight-sig="111,112,147,148" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">C</span><span class="char" data-position="149" data-highlight-sig="">W</span><span class="char" data-position="150" data-highlight-sig="">B</span><span class="char" data-position="151" data-highlight-sig="">N</span><span class="char" data-position="152" data-highlight-sig="">4</span><span class="char" data-position="153" data-highlight-sig="">U</span><span class="char char-exact" data-patterns="6" data-position="154" data-highlight-sig="49,50,154,155" style="background-color:rgba(74,158,255,0.15);color:#e0e0e0;" title="exact">X</span><span class="char char-exact" data-patterns="1,6" data-position="155" data-highlight-sig="19,20,21,155,156,157;49,50,154,155" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">J</span><span class="char char-exact" data-patterns="1" data-position="156" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">M</span><span class="char char-exact" data-patterns="1" data-position="157" data-highlight-sig="19,20,21,155,156,157" style="background-color:rgba(74,158,255,0.24);color:#e0e0e0;" title="exact">O</span><span class="char" data-position="158" data-highlight-sig="">B</span><span class="char" data-position="159" data-highlight-sig="">Q</span><span class="char" data-position="160" data-highlight-sig="">F</span><span class="char" data-position="161" data-highlight-sig="">U</span><span class="char" data-position="162" data-highlight-sig="">P</span><span class="char" data-position="163" data-highlight-sig="">C</span><span class="char" data-position="164" data-highlight-sig="">I</span><span class="char" data-position="165" data-highlight-sig="">6</span><span class="char" data-position="166" data-highlight-sig="">F</span><span class="char" data-position="167" data-highlight-sig="">M</span><span class="char" data-position="168" data-highlight-sig="">W</span><span class="char" data-position="169" data-highlight-sig="">Z</span><span class="char" data-position="170" data-highlight-sig="">J</span><span class="char" data-position="171" data-highlight-sig="">5</span><span class="char" data-position="172" data-highlight-sig="">2</span><span class="char" data-position="173" data-highlight-sig="">T</span><span class="char" data-position="174" data-highlight-sig="">O</span><span class="char" data-position="175" data-highlight-sig="">R</span></div>
             <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
         </div>
     </div>
@@ -1027,67 +1044,234 @@
             }
         });
 
-        // Pattern highlighting
-        let selectedPosition = null;
-        let selectedSignature = null;
+        // Pattern Lens: click a colored letter to spotlight ONE
+        // pattern; sharers stay bright, everything else fades; a caption names
+        // it and counts messages; click again cycles patterns; Esc clears.
+        let lensCell = null, lensIndex = -1, lensActive = null, lensSets = [];
 
-        document.querySelectorAll('.char[data-position]').forEach(char => {
-            char.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const position = this.getAttribute('data-position');
-                const signature = this.getAttribute('data-highlight-sig');
+        function cellSets(el) {
+            const seen = new Set(), out = [];
+            (el.getAttribute('data-family-sig') || '').split(';').forEach(s => {
+                if (s && !seen.has(s)) { seen.add(s); out.push({s: s, fam: true}); }
+            });
+            (el.getAttribute('data-highlight-sig') || '').split(';').forEach(s => {
+                if (s && !seen.has(s)) { seen.add(s); out.push({s: s, fam: false}); }
+            });
+            // a contiguous set of >=3 positions is a run unit — on a run cell
+            // the run IS the thing the user clicked, so it cycles first
+            const isRun = o => {
+                const ps = o.s.split(',').map(Number).sort((x, y) => x - y);
+                return ps.length >= 3 && ps[ps.length - 1] - ps[0] === ps.length - 1;
+            };
+            out.sort((a, b) => (isRun(b) - isRun(a))
+                || a.s.split(',').length - b.s.split(',').length
+                || (a.fam === b.fam ? 0 : (a.fam ? -1 : 1)));
+            return out;
+        }
 
-                if (signature === null) return;
+        function blockSets(b) {
+            if (!b._lensSets) {
+                const acc = new Set();
+                b.querySelectorAll('.char').forEach(c => {
+                    (c.getAttribute('data-highlight-sig') || '').split(';').forEach(x => { if (x) acc.add(x); });
+                    (c.getAttribute('data-family-sig') || '').split(';').forEach(x => { if (x) acc.add(x); });
+                });
+                b._lensSets = acc;
+            }
+            return b._lensSets;
+        }
 
-                if (selectedPosition === position && selectedSignature === signature) {
-                    deselectAll();
-                    selectedPosition = null;
-                    selectedSignature = null;
-                    return;
-                }
+        function lensBare(t) {
+            // robust against our own transient classes
+            return t.className.replace(/\blens-(hit|hollow|anchor)\b/g, '').trim() === 'char'
+                && !t.getAttribute('style');
+        }
 
-                selectedPosition = position;
-                selectedSignature = signature;
-                deselectAll();
+        function lensMembersOf(setObj, group) {
+            const out = [];
+            document.querySelectorAll('.message-block').forEach(function(b, bi) {
+                if (b.getAttribute('data-group') !== group) return;
+                if (!blockSets(b).has(setObj.s)) return;
+                out.push([bi, b]);
+            });
+            return out;
+        }
 
-                if (signature === '') return;
-
-                const positionsToHighlight = signature.split(',').map(p => p.trim()).filter(p => p !== '');
-
-                document.querySelectorAll('.message-block').forEach(messageBlock => {
-                    const chars = messageBlock.querySelectorAll('.char');
-                    const posInt = parseInt(position);
-
-                    if (posInt < chars.length) {
-                        const charAtPosition = chars[posInt];
-                        const charSignature = charAtPosition.getAttribute('data-highlight-sig');
-
-                        if (charSignature === signature && charSignature !== '') {
-                            positionsToHighlight.forEach(pos => {
-                                const posToHighlight = parseInt(pos);
-                                if (posToHighlight < chars.length) {
-                                    chars[posToHighlight].classList.add('char-selected');
-                                }
-                            });
-                        }
-                    }
+        function lensPaintCount(memberBlocks, positions) {
+            const pc = {};
+            memberBlocks.forEach(function(pair) {
+                const chars = pair[1].querySelectorAll('.char');
+                positions.forEach(function(p) {
+                    const t = chars[p];
+                    if (t && !lensBare(t)) pc[p] = (pc[p] || 0) + 1;
                 });
             });
-        });
+            return pc;
+        }
 
-        function deselectAll() {
-            document.querySelectorAll('.char-selected').forEach(char => {
-                char.classList.remove('char-selected');
+        // hollow rule: family objects mark every missing piece; on region stops
+        // a bare cell is marked only where MOST members are painted — a genuine
+        // deviation — never on columns bare in everyone (union footprint)
+        function lensHollowHere(setObj, p, pc, nMembers) {
+            return setObj.fam || (pc[p] || 0) * 2 > nMembers;
+        }
+
+        function lensEffectKey(setObj, group) {
+            // what this set would actually paint — two sets with identical
+            // effect are ONE pattern to the user and must be one cycle stop
+            const positions = setObj.s.split(',').map(Number);
+            const mem = lensMembersOf(setObj, group);
+            const pc = lensPaintCount(mem, positions);
+            const parts = [];
+            mem.forEach(function(pair) {
+                const chars = pair[1].querySelectorAll('.char');
+                const lit = [], hol = [];
+                positions.forEach(function(p) {
+                    const t = chars[p];
+                    if (!t) return;
+                    if (!lensBare(t)) lit.push(p);
+                    else if (lensHollowHere(setObj, p, pc, mem.length)) hol.push(p);
+                });
+                parts.push(pair[0] + ':' + lit.join('.') + (hol.length ? '~' + hol.join('.') : ''));
+            });
+            return parts.join('|');
+        }
+
+        function lensStrip() {
+            document.querySelectorAll('.lens-member,.lens-dim,.lens-far').forEach(b =>
+                b.classList.remove('lens-member', 'lens-dim', 'lens-far'));
+            document.querySelectorAll('.lens-hit,.lens-hollow').forEach(c =>
+                c.classList.remove('lens-hit', 'lens-hollow'));
+        }
+
+        function lensDots(cell, idx, n) {
+            document.querySelectorAll('.lens-dots').forEach(d => d.remove());
+            document.querySelectorAll('.lens-anchor').forEach(c => c.classList.remove('lens-anchor'));
+            if (!cell) return;
+            cell.classList.add('lens-anchor');
+            if (n > 1) {
+                const d = document.createElement('span');
+                d.className = 'lens-dots';
+                let t = '';
+                for (let k = 0; k < n; k++) t += (k === idx ? '●' : '○');
+                d.textContent = t;
+                cell.appendChild(d);
+            }
+        }
+
+        // While a selection is active the browser tooltips fire right where the
+        // user is clicking (the cursor dwells on the anchored letter between
+        // cycle clicks) — suppress ALL letter titles during the lens, restore
+        // on clear. Idle hover-inspection is unchanged.
+        let lensTitlesOff = false;
+        function lensTitles(off) {
+            if (off === lensTitlesOff) return;
+            lensTitlesOff = off;
+            document.querySelectorAll('.char[data-position]').forEach(c => {
+                if (off) {
+                    const t = c.getAttribute('title');
+                    if (t !== null) { c.dataset.lensTitle = t; c.removeAttribute('title'); }
+                } else if (c.dataset.lensTitle !== undefined) {
+                    c.setAttribute('title', c.dataset.lensTitle);
+                    delete c.dataset.lensTitle;
+                }
             });
         }
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.classList.contains('char') && !e.target.classList.contains('dot')) {
-                deselectAll();
-                selectedPosition = null;
-                selectedSignature = null;
-            }
+        function lensClear() {
+            lensStrip();
+            lensDots(null, 0, 0);
+            lensTitles(false);
+            document.body.classList.remove('lens-on');
+            lensCell = null; lensIndex = -1; lensActive = null;
+        }
+
+        function lensApply(setObj, clickedBlock, clickedCell) {
+            lensStrip();
+            const group = clickedBlock.getAttribute('data-group');
+            const positions = setObj.s.split(',').map(Number);
+            let hidden = 0, total = 0;
+            const memberBlocks = [];
+            document.querySelectorAll('.message-block').forEach(b => {
+                if (b.getAttribute('data-group') !== group) { b.classList.add('lens-far'); return; }
+                total++;
+                if (!blockSets(b).has(setObj.s)) { b.classList.add('lens-dim'); return; }
+                if (b.classList.contains('hidden')) { hidden++; b.classList.add('lens-dim'); return; }
+                memberBlocks.push([0, b]);
+            });
+            const pc = lensPaintCount(memberBlocks, positions);
+            memberBlocks.forEach(pair => {
+                const b = pair[1];
+                b.classList.add('lens-member');
+                const chars = b.querySelectorAll('.char');
+                positions.forEach(p => {
+                    const t = chars[p];
+                    if (!t) return;
+                    if (!lensBare(t)) t.classList.add('lens-hit');
+                    else if (lensHollowHere(setObj, p, pc, memberBlocks.length))
+                        t.classList.add('lens-hollow');
+                });
+            });
+            document.body.classList.add('lens-on');
+            lensTitles(true);
+            lensDots(clickedCell, lensIndex, lensSets.length);
+        }
+
+        document.querySelectorAll('.char[data-position]').forEach(ch => {
+            ch.addEventListener('click', function(e) {
+                e.stopPropagation();
+                let sets = cellSets(this);
+                if (!sets.length) return;                     // bare cells are inert
+                const block = this.closest('.message-block');
+                if (!block) return;
+                // collapse cycle stops with identical visual effect (e.g. two
+                // region envelopes differing only in a column bare everywhere)
+                const grp = block.getAttribute('data-group');
+                const seenFx = new Set();
+                sets = sets.filter(o => {
+                    const k = lensEffectKey(o, grp);
+                    if (seenFx.has(k)) return false;
+                    seenFx.add(k);
+                    return true;
+                });
+                if (this === lensCell) {
+                    lensIndex += 1;
+                    if (lensIndex >= sets.length) { lensClear(); return; }
+                } else if (lensActive && sets.some(o => o.s === lensActive)) {
+                    lensCell = this;                          // lit partner: re-anchor, same set
+                    lensIndex = sets.findIndex(o => o.s === lensActive);
+                } else {
+                    lensCell = this; lensIndex = 0;
+                }
+                lensSets = sets;
+                lensActive = sets[lensIndex].s;
+                lensApply(sets[lensIndex], block, this);
+            });
         });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') lensClear();
+        });
+
+        document.addEventListener('click', function(e) {
+            const t = e.target;
+            if (t.closest && (t.closest('.char') || t.closest('.dot')
+                || t.closest('.filter-checkbox') || t.closest('.sort-controls')
+                || t.closest('.controls-section') || t.closest('input')
+                || t.closest('button') || t.closest('select') || t.closest('label'))) return;
+            lensClear();
+        });
+
+        document.querySelectorAll('.filter-checkbox input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (lensActive && lensCell) {
+                    const b = lensCell.closest('.message-block');
+                    const o = lensSets.find(x => x.s === lensActive);
+                    if (b && o) lensApply(o, b, lensCell);
+                }
+            });
+        });
+
 
         // Dot copy functionality
         document.querySelectorAll('.dot').forEach(dot => {
@@ -1332,6 +1516,39 @@
                 });
             }
         }
+    </script>
+    <script>
+        // Up/Down flips to the other rendering (production <-> next-gen)
+        // of this same length, preserving scroll and filter state.
+        // Injected by eam_heatmap_nextgen_test_ver_.
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT'
+                || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                var st = { y: window.scrollY, f: {} };
+                document.querySelectorAll('input[type="checkbox"][id^="filter-group-"]')
+                    .forEach(function(c) { st.f[c.id] = c.checked; });
+                try { sessionStorage.setItem('hmFlipState', JSON.stringify(st)); } catch (_) {}
+                window.location.replace('test/structure_heatmap_176char.html');
+            }
+        });
+        window.addEventListener('load', function() {
+            var raw = null;
+            try { raw = sessionStorage.getItem('hmFlipState'); } catch (_) {}
+            if (!raw) return;
+            try { sessionStorage.removeItem('hmFlipState'); } catch (_) {}
+            try {
+                var st = JSON.parse(raw), touched = false;
+                Object.keys(st.f || {}).forEach(function(id) {
+                    var c = document.getElementById(id);
+                    if (c && c.checked !== st.f[id]) { c.checked = st.f[id]; touched = true; }
+                });
+                if (touched && typeof updateHeatmapAndVisibility === 'function')
+                    updateHeatmapAndVisibility();
+                window.scrollTo(0, st.y || 0);
+            } catch (_) {}
+        });
     </script>
 </body>
 </html>
