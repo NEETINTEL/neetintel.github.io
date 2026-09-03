@@ -465,7 +465,7 @@
 </head>
 <body>
     <div class="nav-box">
-        <a href="structure_heatmap_176char.html" class="nav-link">← 176</a>
+        <a href="structure_heatmap_180char.html" class="nav-link">← 180</a>
         <div class="nav-center">
             <a href="index.html">Index</a>
             <span>|</span>
@@ -553,6 +553,7 @@
                     <option value="166">166</option>
                     <option value="172">172</option>
                     <option value="176">176</option>
+                    <option value="180">180</option>
                     <option value="182" selected>182</option>
                     <option value="186">186</option>
                     <option value="188">188</option>
@@ -1410,25 +1411,89 @@
             checkbox.addEventListener('change', updateHeatmapAndVisibility);
         });
 
-        // URL-parameter-driven group pre-filter.
-        // Supports ?g=N (single) or ?g=N,M,unclassified (comma-separated).
-        // If present, unchecks all group checkboxes, then re-checks only those named,
-        // and re-runs updateHeatmapAndVisibility() so the filter takes effect on load.
+        // URL-parameter-driven group filter, TWO-WAY.
+        // ?g= lists the visible groups: lower-case, comma-separated, meant to
+        // be typed by hand — ?g=3, ?g=2,3, ?g=2a,2b, ?g=none. No param =
+        // everything visible. Applied on load; any checkbox change rewrites
+        // the param in place (replaceState, no reload) so the URL is always a
+        // shareable snapshot of the current filter state. Epoch pages
+        // (next-gen 2A/2B splits) ride the same code:
+        //  - a checked base whose kids carry the selection stays implicit
+        //    (?g=2a,2b, never ?g=2,2a,2b); the reader re-checks a base
+        //    whenever one of its kids is requested (parent/kid invariant);
+        //  - a kid absent from the list follows its base group, unless a
+        //    sibling kid IS listed (then absence means unchecked);
+        //  - on a page without the split, a kid key falls back to its base
+        //    (?g=2a pasted onto the production page shows group 2).
+        window.hmSyncUrl = function() {
+            try {
+                const entries = [];
+                filterCheckboxes.forEach(cb => {
+                    const id = cb.id || '';
+                    if (!id.startsWith('filter-group-')) return;
+                    entries.push([id.slice('filter-group-'.length), cb.checked]);
+                });
+                const u = new URL(window.location);
+                const on = entries.filter(e => e[1]).map(e => e[0]);
+                if (on.length === entries.length) {
+                    u.searchParams.delete('g');
+                } else if (on.length === 0) {
+                    u.searchParams.set('g', 'none');
+                } else {
+                    const kidBases = new Set(on.filter(k => /[A-Z]$/.test(k))
+                        .map(k => k.replace(/[A-Z]+$/, '')));
+                    u.searchParams.set('g', on.filter(k => !kidBases.has(k))
+                        .map(k => k.toLowerCase()).join(','));
+                }
+                // searchParams percent-encodes the commas; put them back —
+                // these URLs get hand-edited, and ?g=2a,2b beats ?g=2a%2C2b
+                history.replaceState(null, '', u.toString().replace(/%2C/g, ','));
+            } catch (_) {}
+        };
+        document.addEventListener('change', e => {
+            // delegated, so it runs after any direct listeners (the epoch
+            // parent/kid sync on next-gen pages) have settled the final state
+            if (e.target && (e.target.id || '').startsWith('filter-group-')) window.hmSyncUrl();
+        });
         (function() {
             const params = new URLSearchParams(window.location.search);
             const raw = params.get('g');
             if (!raw) return;
-            const requested = new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
-            let anyMatched = false;
+            const boxes = [];
             filterCheckboxes.forEach(cb => {
                 const id = cb.id || '';
-                if (!id.startsWith('filter-group-')) return;
-                const key = id.slice('filter-group-'.length);
-                const shouldCheck = requested.has(key);
-                cb.checked = shouldCheck;
-                if (shouldCheck) anyMatched = true;
+                if (id.startsWith('filter-group-')) boxes.push([cb, id.slice('filter-group-'.length)]);
             });
-            if (anyMatched) updateHeatmapAndVisibility();
+            const lcToKey = new Map(boxes.map(b => [b[1].toLowerCase(), b[1]]));
+            const tokens = raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+            const noneReq = tokens.length === 1 && tokens[0] === 'none';
+            const requested = new Set();
+            tokens.forEach(t => {
+                if (lcToKey.has(t)) { requested.add(lcToKey.get(t)); return; }
+                const tb = t.replace(/[a-z]+$/, '');       // kid key on a page
+                if (lcToKey.has(tb)) requested.add(lcToKey.get(tb));  // without the split
+            });
+            const want = boxes.map(([cb, key]) => {
+                if (requested.has(key)) return true;
+                const base = key.replace(/[A-Z]+$/, '');
+                if (base === key || !requested.has(base)) return false;
+                // inherit the base unless a sibling kid is explicitly listed
+                return ![...requested].some(k => k !== key && k !== base
+                    && k.replace(/[A-Z]+$/, '') === base);
+            });
+            // an all-garbage param (nothing matches this page) is ignored rather
+            // than silently unchecking every box like the old pre-filter did
+            if (!noneReq && !want.some(Boolean)) return;
+            boxes.forEach(([cb], i) => { cb.checked = want[i]; });
+            boxes.forEach(([cb, key]) => {
+                if (!cb.checked) return;
+                const base = key.replace(/[A-Z]+$/, '');
+                if (base === key) return;
+                const parent = boxes.find(b => b[1] === base);
+                if (parent) parent[0].checked = true;
+            });
+            updateHeatmapAndVisibility();
+            window.hmSyncUrl();   // normalize hand-typed forms (?g=2A -> ?g=2a)
         })();
 
         // Sorting functionality
@@ -1537,7 +1602,7 @@
     <script>
         // Up/Down flips to the other rendering (production <-> next-gen)
         // of this same length, preserving scroll and filter state.
-        // Injected by eam_heatmap_nextgen_test_ver_.
+        // Injected by eam_heatmap_.
         document.addEventListener('keydown', function(e) {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT'
                 || e.target.tagName === 'TEXTAREA') return;
@@ -1546,6 +1611,13 @@
                 var st = { y: window.scrollY, f: {} };
                 document.querySelectorAll('input[type="checkbox"][id^="filter-group-"]')
                     .forEach(function(c) { st.f[c.id] = c.checked; });
+                // Epoch sub-state (e.g. -2A/-2B) that this page has no box for
+                // rides through unchanged — unless its base box was toggled here,
+                // in which case the kids must follow the base instead.
+                Object.keys(window._hmFlipCarry || {}).forEach(function(id) {
+                    var k = window._hmFlipCarry[id], b = document.getElementById(k.base);
+                    if (b && b.checked === k.baseV) st.f[id] = k.v;
+                });
                 try { sessionStorage.setItem('hmFlipState', JSON.stringify(st)); } catch (_) {}
                 window.location.replace('test/structure_heatmap_182char.html');
             }
@@ -1556,15 +1628,33 @@
             if (!raw) return;
             try { sessionStorage.removeItem('hmFlipState'); } catch (_) {}
             try {
-                var st = JSON.parse(raw), touched = false;
-                Object.keys(st.f || {}).forEach(function(id) {
-                    var c = document.getElementById(id);
-                    if (c && c.checked !== st.f[id]) { c.checked = st.f[id]; touched = true; }
+                var st = JSON.parse(raw), f = st.f || {}, touched = false;
+                document.querySelectorAll('input[type="checkbox"][id^="filter-group-"]')
+                    .forEach(function(c) {
+                        // A box with no saved value (epoch kid arriving from the
+                        // production page) inherits its base group's state — the
+                        // parent/kid sync only runs on user change events, so a
+                        // programmatic parent restore alone never cascades.
+                        var want = (c.id in f) ? f[c.id]
+                                              : f[c.id.replace(/[A-Z]+$/, '')];
+                        if (want !== undefined && c.checked !== want) { c.checked = want; touched = true; }
+                    });
+                // Saved epoch-kid keys with no box here (production page): keep
+                // them for the flip back, tied to their base's restored value.
+                window._hmFlipCarry = {};
+                Object.keys(f).forEach(function(id) {
+                    if (document.getElementById(id)) return;
+                    var base = id.replace(/[A-Z]+$/, '');
+                    if (base === id || !document.getElementById(base)) return;
+                    window._hmFlipCarry[id] = { v: f[id], base: base, baseV: f[base] };
                 });
                 if (touched && typeof updateHeatmapAndVisibility === 'function')
                     updateHeatmapAndVisibility();
                 window.scrollTo(0, st.y || 0);
             } catch (_) {}
+            // a programmatic restore fires no change events, so re-sync
+            // the ?g= param to the state the flip just landed with
+            if (typeof window.hmSyncUrl === 'function') window.hmSyncUrl();
         });
     </script>
 </body>
