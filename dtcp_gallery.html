@@ -113,6 +113,7 @@
     /* ── Card ── */
     .dtcp-card {
       background: rgba(122, 162, 255, 0.04);
+      scroll-margin-top: 4rem;
       border: 1px solid var(--border);
       border-radius: 5px;
       overflow: hidden;
@@ -8136,7 +8137,7 @@
       if (!target) return;
       const hit = cards.find(c =>
         c.querySelector('.card-date').textContent.toUpperCase().startsWith(target));
-      if (hit) hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (hit) hit.scrollIntoView({ behavior: 'smooth', block: 'start' });
       else _searchInput.classList.add('no-hit');
       return;
     }
@@ -8183,7 +8184,7 @@
   function _gotoHit(idx) {
     if (!_hits.length) return;
     _hitIdx = ((idx % _hits.length) + _hits.length) % _hits.length;
-    _hits[_hitIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    _hits[_hitIdx].scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   _searchInput.addEventListener('input', _runSearch);
