@@ -11,6 +11,7 @@
         * { box-sizing: border-box; }
 
         body {
+            overscroll-behavior-y: contain;   /* a pull past the top is the flip gesture, not a reload */
             font-family: 'Roboto', sans-serif;
             background-color: #0d0d0d;
             color: #e0e0e0;
@@ -553,6 +554,7 @@
                     <option value="166">166</option>
                     <option value="172">172</option>
                     <option value="176">176</option>
+                    <option value="180">180</option>
                     <option value="182">182</option>
                     <option value="186">186</option>
                     <option value="188">188</option>
@@ -588,7 +590,7 @@
         <div class="sort-controls">
             <strong>Display Mode:</strong>
             <div class="sort-buttons">
-                <button class="sort-btn active" id="sort-grouped">Group by Classification</button>
+                <button class="sort-btn active" id="sort-grouped">Group</button>
                 <button class="sort-btn" id="sort-chronological">Chronological</button>
             </div>
         </div>
@@ -608,52 +610,52 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">Messages</div>
-            <div class="stat-value" id="stat-message-count">21</div>
-            <div class="stat-sub" id="stat-message-sub">of 21 total</div>
+            <div class="stat-value" id="stat-message-count">24</div>
+            <div class="stat-sub" id="stat-message-sub">of 24 total</div>
         </div>
     </div>
     <div class="heatmap-container">
         <div class="heatmap-bar">
-            <div class="heatmap-cell" style="background-color: rgb(26, 13, 0);" title="Position 1: 3.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(24, 12, 0);" title="Position 1: 3.0 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 2: 0.39853132951466436 messages"></div>
             <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 3: 0.0 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 4: 0.39853132951466436 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(2, 1, 0);" title="Position 5: 0.7970626590293287 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(1, 0, 0);" title="Position 5: 0.7970626590293287 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 6: 0.39853132951466436 messages"></div>
             <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 7: 0.0 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 8: 0.39853132951466436 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 9: 0.39853132951466436 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(41, 20, 0);" title="Position 10: 4.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(37, 18, 0);" title="Position 10: 4.0 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 11: 0.39853132951466436 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 12: 0.39853132951466436 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(2, 1, 0);" title="Position 13: 0.7970626590293287 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(10, 5, 0);" title="Position 14: 1.7970626590293288 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(4, 2, 0);" title="Position 13: 1.195593988543993 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 14: 2.195593988543993 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(3, 1, 0);" title="Position 15: 1.0 messages"></div>
             <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 16: 0.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(204, 102, 0);" title="Position 17: 14.398531329514665 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(10, 5, 0);" title="Position 18: 1.7970626590293288 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(218, 109, 0);" title="Position 19: 15.398531329514665 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(210, 105, 0);" title="Position 17: 16.398531329514665 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(9, 4, 0);" title="Position 18: 1.7970626590293288 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(223, 111, 0);" title="Position 19: 17.398531329514665 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(6, 3, 0);" title="Position 20: 1.3985313295146644 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(6, 3, 0);" title="Position 21: 1.3985313295146644 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(89, 44, 0);" title="Position 22: 7.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(81, 40, 0);" title="Position 22: 7.0 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(6, 3, 0);" title="Position 23: 1.3985313295146644 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(6, 3, 0);" title="Position 24: 1.3985313295146644 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(3, 1, 0);" title="Position 25: 1.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(2, 1, 0);" title="Position 26: 0.7970626590293287 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(212, 106, 0);" title="Position 27: 15.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(10, 5, 0);" title="Position 28: 1.7970626590293288 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(168, 84, 0);" title="Position 29: 12.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(44, 22, 0);" title="Position 30: 4.195593988543993 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(38, 19, 0);" title="Position 31: 3.7970626590293284 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(128, 64, 0);" title="Position 32: 9.398531329514665 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(241, 120, 0);" title="Position 33: 17.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(168, 84, 0);" title="Position 34: 12.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(15, 7, 0);" title="Position 35: 2.195593988543993 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 36: 18.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(96, 48, 0);" title="Position 37: 7.398531329514665 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(23, 11, 0);" title="Position 38: 2.797062659029329 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(183, 91, 0);" title="Position 39: 13.0 messages"></div>
-            <div class="heatmap-cell" style="background-color: rgb(60, 30, 0);" title="Position 40: 5.195593988543994 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(1, 0, 0);" title="Position 26: 0.7970626590293287 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(218, 109, 0);" title="Position 27: 17.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(9, 4, 0);" title="Position 28: 1.7970626590293288 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(179, 89, 0);" title="Position 29: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(40, 20, 0);" title="Position 30: 4.195593988543993 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(34, 17, 0);" title="Position 31: 3.7970626590293284 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(116, 58, 0);" title="Position 32: 9.398531329514665 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(242, 121, 0);" title="Position 33: 19.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(179, 89, 0);" title="Position 34: 14.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(14, 7, 0);" title="Position 35: 2.195593988543993 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(255, 127, 0);" title="Position 36: 20.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(92, 46, 0);" title="Position 37: 7.797062659029329 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(26, 13, 0);" title="Position 38: 3.195593988543993 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(192, 96, 0);" title="Position 39: 15.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: rgb(54, 27, 0);" title="Position 40: 5.195593988543994 messages"></div>
             <div class="heatmap-cell" style="background-color: rgb(0, 0, 0);" title="Position 41: 0.39853132951466436 messages"></div>
         </div>
         <div class="position-ruler">
@@ -806,6 +808,21 @@
             <div class="message-meta"><span class="dot group-3-dot" data-message="EENHBKC2HRLA4SZGVA3ZANQ7KRVN3NIWKKUDHVDNO" title="EE (Group 3)">●</span><span>20260620 05:11 RUBDOWN</span></div>
             <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">E</span><span class="char" data-position="1" data-highlight-sig="">E</span><span class="char" data-position="2" data-highlight-sig="">N</span><span class="char" data-position="3" data-highlight-sig="">H</span><span class="char" data-position="4" data-highlight-sig="">B</span><span class="char" data-position="5" data-highlight-sig="">K</span><span class="char" data-position="6" data-highlight-sig="">C</span><span class="char" data-position="7" data-highlight-sig="">2</span><span class="char" data-position="8" data-highlight-sig="">H</span><span class="char" data-position="9" data-highlight-sig="">R</span><span class="char" data-position="10" data-highlight-sig="">L</span><span class="char" data-position="11" data-highlight-sig="">A</span><span class="char" data-position="12" data-highlight-sig="">4</span><span class="char" data-position="13" data-highlight-sig="">S</span><span class="char" data-position="14" data-highlight-sig="">Z</span><span class="char" data-position="15" data-highlight-sig="">G</span><span class="char char-hot_k1" data-patterns="92" data-position="16" data-highlight-sig="16,26" data-family-sig="16,26" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">V</span><span class="char" data-position="17" data-highlight-sig="">A</span><span class="char char-hot_k1" data-patterns="93" data-position="18" data-highlight-sig="18,28" data-family-sig="18,28" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">3</span><span class="char" data-position="19" data-highlight-sig="">Z</span><span class="char" data-position="20" data-highlight-sig="">A</span><span class="char" data-position="21" data-highlight-sig="">N</span><span class="char" data-position="22" data-highlight-sig="">Q</span><span class="char" data-position="23" data-highlight-sig="">7</span><span class="char" data-position="24" data-highlight-sig="">K</span><span class="char" data-position="25" data-highlight-sig="">R</span><span class="char char-hot_k1" data-patterns="92" data-position="26" data-highlight-sig="16,26" data-family-sig="16,26" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">V</span><span class="char" data-position="27" data-highlight-sig="">N</span><span class="char char-hot_k1" data-patterns="93" data-position="28" data-highlight-sig="18,28" data-family-sig="18,28" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">3</span><span class="char" data-position="29" data-highlight-sig="">N</span><span class="char" data-position="30" data-highlight-sig="">I</span><span class="char" data-position="31" data-highlight-sig="">W</span><span class="char char-hot_k1" data-patterns="94" data-position="32" data-highlight-sig="32,33" data-family-sig="32,33" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">K</span><span class="char char-hot_k1" data-patterns="94" data-position="33" data-highlight-sig="32,33" data-family-sig="32,33" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">K</span><span class="char" data-position="34" data-highlight-sig="">U</span><span class="char char-hot_k1" data-patterns="95" data-position="35" data-highlight-sig="35,38" data-family-sig="35,38" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">D</span><span class="char" data-position="36" data-highlight-sig="">H</span><span class="char" data-position="37" data-highlight-sig="">V</span><span class="char char-hot_k1" data-patterns="95" data-position="38" data-highlight-sig="35,38" data-family-sig="35,38" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">D</span><span class="char" data-position="39" data-highlight-sig="">N</span><span class="char" data-position="40" data-highlight-sig="">O</span></div>
             <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
+        </div>
+        <div class="message-block" data-group="3" data-timestamp="2026-07-27T03:21:00" data-patterns="[{&quot;positions&quot;: [16, 26], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [18, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 33], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [35, 38], &quot;weight&quot;: 1.0}]">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="QLSQGJJSVGAX2UZJPJHE6JBI7SPGHIIV22G6AW6D2" title="QL (Group 3)">●</span><span>20260727 03:21 SANDSTONE</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">Q</span><span class="char" data-position="1" data-highlight-sig="">L</span><span class="char" data-position="2" data-highlight-sig="">S</span><span class="char" data-position="3" data-highlight-sig="">Q</span><span class="char" data-position="4" data-highlight-sig="">G</span><span class="char" data-position="5" data-highlight-sig="">J</span><span class="char" data-position="6" data-highlight-sig="">J</span><span class="char" data-position="7" data-highlight-sig="">S</span><span class="char" data-position="8" data-highlight-sig="">V</span><span class="char" data-position="9" data-highlight-sig="">G</span><span class="char" data-position="10" data-highlight-sig="">A</span><span class="char" data-position="11" data-highlight-sig="">X</span><span class="char" data-position="12" data-highlight-sig="">2</span><span class="char" data-position="13" data-highlight-sig="">U</span><span class="char" data-position="14" data-highlight-sig="">Z</span><span class="char" data-position="15" data-highlight-sig="">J</span><span class="char char-hot_k1" data-patterns="96" data-position="16" data-highlight-sig="16,26" data-family-sig="16,26" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">P</span><span class="char" data-position="17" data-highlight-sig="">J</span><span class="char char-hot_k1" data-patterns="97" data-position="18" data-highlight-sig="18,28" data-family-sig="18,28" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">H</span><span class="char" data-position="19" data-highlight-sig="">E</span><span class="char" data-position="20" data-highlight-sig="">6</span><span class="char" data-position="21" data-highlight-sig="">J</span><span class="char" data-position="22" data-highlight-sig="">B</span><span class="char" data-position="23" data-highlight-sig="">I</span><span class="char" data-position="24" data-highlight-sig="">7</span><span class="char" data-position="25" data-highlight-sig="">S</span><span class="char char-hot_k1" data-patterns="96" data-position="26" data-highlight-sig="16,26" data-family-sig="16,26" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">P</span><span class="char" data-position="27" data-highlight-sig="">G</span><span class="char char-hot_k1" data-patterns="97" data-position="28" data-highlight-sig="18,28" data-family-sig="18,28" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">H</span><span class="char" data-position="29" data-highlight-sig="">I</span><span class="char" data-position="30" data-highlight-sig="">I</span><span class="char" data-position="31" data-highlight-sig="">V</span><span class="char char-hot_k1" data-patterns="98" data-position="32" data-highlight-sig="32,33" data-family-sig="32,33" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">2</span><span class="char char-hot_k1" data-patterns="98" data-position="33" data-highlight-sig="32,33" data-family-sig="32,33" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">2</span><span class="char" data-position="34" data-highlight-sig="">G</span><span class="char char-hot_k1" data-patterns="99" data-position="35" data-highlight-sig="35,38" data-family-sig="35,38" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">6</span><span class="char" data-position="36" data-highlight-sig="">A</span><span class="char" data-position="37" data-highlight-sig="">W</span><span class="char char-hot_k1" data-patterns="99" data-position="38" data-highlight-sig="35,38" data-family-sig="35,38" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">6</span><span class="char" data-position="39" data-highlight-sig="">D</span><span class="char" data-position="40" data-highlight-sig="">2</span></div>
+            <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
+        </div>
+        <div class="message-block" data-group="3" data-timestamp="2026-08-16T14:20:00" data-patterns="[]">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="NBJEPZ2VD7XY7ZGLO5VRUPOOIA3PAZODVOY5SU2J4" title="NB (Group 3)">●</span><span>20260816 14:20 BANKROLL</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">N</span><span class="char" data-position="1" data-highlight-sig="">B</span><span class="char" data-position="2" data-highlight-sig="">J</span><span class="char" data-position="3" data-highlight-sig="">E</span><span class="char" data-position="4" data-highlight-sig="">P</span><span class="char" data-position="5" data-highlight-sig="">Z</span><span class="char" data-position="6" data-highlight-sig="">2</span><span class="char" data-position="7" data-highlight-sig="">V</span><span class="char" data-position="8" data-highlight-sig="">D</span><span class="char" data-position="9" data-highlight-sig="">7</span><span class="char" data-position="10" data-highlight-sig="">X</span><span class="char" data-position="11" data-highlight-sig="">Y</span><span class="char" data-position="12" data-highlight-sig="">7</span><span class="char" data-position="13" data-highlight-sig="">Z</span><span class="char" data-position="14" data-highlight-sig="">G</span><span class="char" data-position="15" data-highlight-sig="">L</span><span class="char" data-position="16" data-highlight-sig="">O</span><span class="char" data-position="17" data-highlight-sig="">5</span><span class="char" data-position="18" data-highlight-sig="">V</span><span class="char" data-position="19" data-highlight-sig="">R</span><span class="char" data-position="20" data-highlight-sig="">U</span><span class="char" data-position="21" data-highlight-sig="">P</span><span class="char" data-position="22" data-highlight-sig="">O</span><span class="char" data-position="23" data-highlight-sig="">O</span><span class="char" data-position="24" data-highlight-sig="">I</span><span class="char" data-position="25" data-highlight-sig="">A</span><span class="char" data-position="26" data-highlight-sig="">3</span><span class="char" data-position="27" data-highlight-sig="">P</span><span class="char" data-position="28" data-highlight-sig="">A</span><span class="char" data-position="29" data-highlight-sig="">Z</span><span class="char" data-position="30" data-highlight-sig="">O</span><span class="char" data-position="31" data-highlight-sig="">D</span><span class="char" data-position="32" data-highlight-sig="">V</span><span class="char" data-position="33" data-highlight-sig="">O</span><span class="char" data-position="34" data-highlight-sig="">Y</span><span class="char" data-position="35" data-highlight-sig="">5</span><span class="char" data-position="36" data-highlight-sig="">S</span><span class="char" data-position="37" data-highlight-sig="">U</span><span class="char" data-position="38" data-highlight-sig="">2</span><span class="char" data-position="39" data-highlight-sig="">J</span><span class="char" data-position="40" data-highlight-sig="">4</span></div>
+            <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
+        </div>
+        <div class="message-block" data-group="3" data-timestamp="2026-09-07T20:13:00" data-patterns="[{&quot;positions&quot;: [37, 12, 13, 36], &quot;weight&quot;: 0.39853132951466436}, {&quot;positions&quot;: [16, 26], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [18, 28], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [32, 33], &quot;weight&quot;: 1.0}, {&quot;positions&quot;: [35, 38], &quot;weight&quot;: 1.0}]">
+            <div class="message-meta"><span class="dot group-3-dot" data-message="NBI2ZWAGUUWDHOZUJLJW7CCLGRJZJ2D2WWR7HO7E2" title="NB (Group 3)">●</span><span>20260907 20:13 DIVISION</span></div>
+            <div class="message-display"><span class="char" data-position="0" data-highlight-sig="">N</span><span class="char" data-position="1" data-highlight-sig="">B</span><span class="char" data-position="2" data-highlight-sig="">I</span><span class="char" data-position="3" data-highlight-sig="">2</span><span class="char" data-position="4" data-highlight-sig="">Z</span><span class="char" data-position="5" data-highlight-sig="">W</span><span class="char" data-position="6" data-highlight-sig="">A</span><span class="char" data-position="7" data-highlight-sig="">G</span><span class="char" data-position="8" data-highlight-sig="">U</span><span class="char" data-position="9" data-highlight-sig="">U</span><span class="char" data-position="10" data-highlight-sig="">W</span><span class="char" data-position="11" data-highlight-sig="">D</span><span class="char char-exact" data-patterns="100" data-position="12" data-highlight-sig="12,13,36,37" style="background-color:rgba(74,158,255,0.16);color:#e0e0e0;" title="exact">H</span><span class="char char-exact" data-patterns="100" data-position="13" data-highlight-sig="12,13,36,37" style="background-color:rgba(74,158,255,0.16);color:#e0e0e0;" title="exact">O</span><span class="char" data-position="14" data-highlight-sig="">Z</span><span class="char" data-position="15" data-highlight-sig="">U</span><span class="char char-hot_k1" data-patterns="101" data-position="16" data-highlight-sig="16,26" data-family-sig="16,26" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">J</span><span class="char" data-position="17" data-highlight-sig="">L</span><span class="char char-hot_k1" data-patterns="102" data-position="18" data-highlight-sig="18,28" data-family-sig="18,28" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">J</span><span class="char" data-position="19" data-highlight-sig="">W</span><span class="char" data-position="20" data-highlight-sig="">7</span><span class="char" data-position="21" data-highlight-sig="">C</span><span class="char" data-position="22" data-highlight-sig="">C</span><span class="char" data-position="23" data-highlight-sig="">L</span><span class="char" data-position="24" data-highlight-sig="">G</span><span class="char" data-position="25" data-highlight-sig="">R</span><span class="char char-hot_k1" data-patterns="101" data-position="26" data-highlight-sig="16,26" data-family-sig="16,26" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">J</span><span class="char" data-position="27" data-highlight-sig="">Z</span><span class="char char-hot_k1" data-patterns="102" data-position="28" data-highlight-sig="18,28" data-family-sig="18,28" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">J</span><span class="char" data-position="29" data-highlight-sig="">2</span><span class="char" data-position="30" data-highlight-sig="">D</span><span class="char" data-position="31" data-highlight-sig="">2</span><span class="char char-hot_k1" data-patterns="103" data-position="32" data-highlight-sig="32,33" data-family-sig="32,33" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">W</span><span class="char char-hot_k1" data-patterns="103" data-position="33" data-highlight-sig="32,33" data-family-sig="32,33" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">W</span><span class="char" data-position="34" data-highlight-sig="">R</span><span class="char char-hot_k1" data-patterns="104" data-position="35" data-highlight-sig="35,38" data-family-sig="35,38" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">7</span><span class="char char-exact" data-patterns="100" data-position="36" data-highlight-sig="12,13,36,37" style="background-color:rgba(74,158,255,0.16);color:#e0e0e0;" title="exact">H</span><span class="char char-exact" data-patterns="100" data-position="37" data-highlight-sig="12,13,36,37" style="background-color:rgba(74,158,255,0.16);color:#e0e0e0;" title="exact">O</span><span class="char char-hot_k1" data-patterns="104" data-position="38" data-highlight-sig="35,38" data-family-sig="35,38" style="background-color:rgba(204,93,232,1.00);color:#000000;" title="hot_k1">7</span><span class="char" data-position="39" data-highlight-sig="">E</span><span class="char" data-position="40" data-highlight-sig="">2</span></div>
+            <div class="message-timeline"><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-exact"></div><div class="timeline-segment timeline-hot_k1"></div><div class="timeline-segment"></div><div class="timeline-segment"></div></div>
         </div>
     </div>
     <script>
@@ -1124,6 +1141,41 @@
         });
 
 
+        // Swipe: the same moves as the arrow keys, sent as key events so the
+        // handlers above — and the up/down page flip, where injected — do the
+        // work. Left/right = previous/next length. Up/down flips renderings;
+        // but a vertical drag is how the page scrolls, so it only counts when
+        // the page could not have scrolled: it did not move during the
+        // gesture, and it is a pull past the top or past the bottom.
+        (function() {
+            var MIN_PX = 45, MAX_MS = 800, origin = null;
+            function press(key) {
+                document.body.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true, cancelable: true }));
+            }
+            document.addEventListener('touchstart', function(e) {
+                if (e.touches.length !== 1 ||
+                    (e.target.closest && e.target.closest('input, select, textarea, button, label'))) { origin = null; return; }
+                var t = e.touches[0];
+                origin = { x: t.clientX, y: t.clientY, at: Date.now(), scrollY: window.scrollY };
+            }, { passive: true });
+            document.addEventListener('touchend', function(e) {
+                var o = origin; origin = null;
+                if (!o || e.changedTouches.length !== 1) return;
+                if (Date.now() - o.at > MAX_MS) return;
+                var t = e.changedTouches[0], dx = t.clientX - o.x, dy = t.clientY - o.y;
+                if (Math.abs(dx) >= MIN_PX && Math.abs(dx) >= Math.abs(dy) * 1.5) {
+                    press(dx < 0 ? 'ArrowRight' : 'ArrowLeft');   // drag left = next length
+                    return;
+                }
+                if (Math.abs(dy) < MIN_PX || Math.abs(dy) < Math.abs(dx) * 1.5) return;
+                if (window.scrollY !== o.scrollY) return;          // that was a scroll
+                var atTop = window.scrollY <= 0;
+                var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1;
+                if ((dy > 0 && atTop) || (dy < 0 && atBottom)) press('ArrowDown');
+            }, { passive: true });
+            document.addEventListener('touchcancel', function() { origin = null; }, { passive: true });
+        })();
+
         // Dot copy functionality
         document.querySelectorAll('.dot').forEach(dot => {
             dot.addEventListener('click', function(e) {
@@ -1244,25 +1296,89 @@
             checkbox.addEventListener('change', updateHeatmapAndVisibility);
         });
 
-        // URL-parameter-driven group pre-filter.
-        // Supports ?g=N (single) or ?g=N,M,unclassified (comma-separated).
-        // If present, unchecks all group checkboxes, then re-checks only those named,
-        // and re-runs updateHeatmapAndVisibility() so the filter takes effect on load.
+        // URL-parameter-driven group filter, TWO-WAY.
+        // ?g= lists the visible groups: lower-case, comma-separated, meant to
+        // be typed by hand — ?g=3, ?g=2,3, ?g=2a,2b, ?g=none. No param =
+        // everything visible. Applied on load; any checkbox change rewrites
+        // the param in place (replaceState, no reload) so the URL is always a
+        // shareable snapshot of the current filter state. Epoch pages
+        // (next-gen 2A/2B splits) ride the same code:
+        //  - a checked base whose kids carry the selection stays implicit
+        //    (?g=2a,2b, never ?g=2,2a,2b); the reader re-checks a base
+        //    whenever one of its kids is requested (parent/kid invariant);
+        //  - a kid absent from the list follows its base group, unless a
+        //    sibling kid IS listed (then absence means unchecked);
+        //  - on a page without the split, a kid key falls back to its base
+        //    (?g=2a pasted onto the production page shows group 2).
+        window.hmSyncUrl = function() {
+            try {
+                const entries = [];
+                filterCheckboxes.forEach(cb => {
+                    const id = cb.id || '';
+                    if (!id.startsWith('filter-group-')) return;
+                    entries.push([id.slice('filter-group-'.length), cb.checked]);
+                });
+                const u = new URL(window.location);
+                const on = entries.filter(e => e[1]).map(e => e[0]);
+                if (on.length === entries.length) {
+                    u.searchParams.delete('g');
+                } else if (on.length === 0) {
+                    u.searchParams.set('g', 'none');
+                } else {
+                    const kidBases = new Set(on.filter(k => /[A-Z]$/.test(k))
+                        .map(k => k.replace(/[A-Z]+$/, '')));
+                    u.searchParams.set('g', on.filter(k => !kidBases.has(k))
+                        .map(k => k.toLowerCase()).join(','));
+                }
+                // searchParams percent-encodes the commas; put them back —
+                // these URLs get hand-edited, and ?g=2a,2b beats ?g=2a%2C2b
+                history.replaceState(null, '', u.toString().replace(/%2C/g, ','));
+            } catch (_) {}
+        };
+        document.addEventListener('change', e => {
+            // delegated, so it runs after any direct listeners (the epoch
+            // parent/kid sync on next-gen pages) have settled the final state
+            if (e.target && (e.target.id || '').startsWith('filter-group-')) window.hmSyncUrl();
+        });
         (function() {
             const params = new URLSearchParams(window.location.search);
             const raw = params.get('g');
             if (!raw) return;
-            const requested = new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
-            let anyMatched = false;
+            const boxes = [];
             filterCheckboxes.forEach(cb => {
                 const id = cb.id || '';
-                if (!id.startsWith('filter-group-')) return;
-                const key = id.slice('filter-group-'.length);
-                const shouldCheck = requested.has(key);
-                cb.checked = shouldCheck;
-                if (shouldCheck) anyMatched = true;
+                if (id.startsWith('filter-group-')) boxes.push([cb, id.slice('filter-group-'.length)]);
             });
-            if (anyMatched) updateHeatmapAndVisibility();
+            const lcToKey = new Map(boxes.map(b => [b[1].toLowerCase(), b[1]]));
+            const tokens = raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+            const noneReq = tokens.length === 1 && tokens[0] === 'none';
+            const requested = new Set();
+            tokens.forEach(t => {
+                if (lcToKey.has(t)) { requested.add(lcToKey.get(t)); return; }
+                const tb = t.replace(/[a-z]+$/, '');       // kid key on a page
+                if (lcToKey.has(tb)) requested.add(lcToKey.get(tb));  // without the split
+            });
+            const want = boxes.map(([cb, key]) => {
+                if (requested.has(key)) return true;
+                const base = key.replace(/[A-Z]+$/, '');
+                if (base === key || !requested.has(base)) return false;
+                // inherit the base unless a sibling kid is explicitly listed
+                return ![...requested].some(k => k !== key && k !== base
+                    && k.replace(/[A-Z]+$/, '') === base);
+            });
+            // an all-garbage param (nothing matches this page) is ignored rather
+            // than silently unchecking every box like the old pre-filter did
+            if (!noneReq && !want.some(Boolean)) return;
+            boxes.forEach(([cb], i) => { cb.checked = want[i]; });
+            boxes.forEach(([cb, key]) => {
+                if (!cb.checked) return;
+                const base = key.replace(/[A-Z]+$/, '');
+                if (base === key) return;
+                const parent = boxes.find(b => b[1] === base);
+                if (parent) parent[0].checked = true;
+            });
+            updateHeatmapAndVisibility();
+            window.hmSyncUrl();   // normalize hand-typed forms (?g=2A -> ?g=2a)
         })();
 
         // Sorting functionality
@@ -1371,7 +1487,7 @@
     <script>
         // Up/Down flips to the other rendering (production <-> next-gen)
         // of this same length, preserving scroll and filter state.
-        // Injected by eam_heatmap_nextgen_test_ver_.
+        // Injected by eam_heatmap_.
         document.addEventListener('keydown', function(e) {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT'
                 || e.target.tagName === 'TEXTAREA') return;
@@ -1380,6 +1496,13 @@
                 var st = { y: window.scrollY, f: {} };
                 document.querySelectorAll('input[type="checkbox"][id^="filter-group-"]')
                     .forEach(function(c) { st.f[c.id] = c.checked; });
+                // Epoch sub-state (e.g. -2A/-2B) that this page has no box for
+                // rides through unchanged — unless its base box was toggled here,
+                // in which case the kids must follow the base instead.
+                Object.keys(window._hmFlipCarry || {}).forEach(function(id) {
+                    var k = window._hmFlipCarry[id], b = document.getElementById(k.base);
+                    if (b && b.checked === k.baseV) st.f[id] = k.v;
+                });
                 try { sessionStorage.setItem('hmFlipState', JSON.stringify(st)); } catch (_) {}
                 window.location.replace('test/structure_heatmap_41char.html');
             }
@@ -1390,15 +1513,33 @@
             if (!raw) return;
             try { sessionStorage.removeItem('hmFlipState'); } catch (_) {}
             try {
-                var st = JSON.parse(raw), touched = false;
-                Object.keys(st.f || {}).forEach(function(id) {
-                    var c = document.getElementById(id);
-                    if (c && c.checked !== st.f[id]) { c.checked = st.f[id]; touched = true; }
+                var st = JSON.parse(raw), f = st.f || {}, touched = false;
+                document.querySelectorAll('input[type="checkbox"][id^="filter-group-"]')
+                    .forEach(function(c) {
+                        // A box with no saved value (epoch kid arriving from the
+                        // production page) inherits its base group's state — the
+                        // parent/kid sync only runs on user change events, so a
+                        // programmatic parent restore alone never cascades.
+                        var want = (c.id in f) ? f[c.id]
+                                              : f[c.id.replace(/[A-Z]+$/, '')];
+                        if (want !== undefined && c.checked !== want) { c.checked = want; touched = true; }
+                    });
+                // Saved epoch-kid keys with no box here (production page): keep
+                // them for the flip back, tied to their base's restored value.
+                window._hmFlipCarry = {};
+                Object.keys(f).forEach(function(id) {
+                    if (document.getElementById(id)) return;
+                    var base = id.replace(/[A-Z]+$/, '');
+                    if (base === id || !document.getElementById(base)) return;
+                    window._hmFlipCarry[id] = { v: f[id], base: base, baseV: f[base] };
                 });
                 if (touched && typeof updateHeatmapAndVisibility === 'function')
                     updateHeatmapAndVisibility();
                 window.scrollTo(0, st.y || 0);
             } catch (_) {}
+            // a programmatic restore fires no change events, so re-sync
+            // the ?g= param to the state the flip just landed with
+            if (typeof window.hmSyncUrl === 'function') window.hmSyncUrl();
         });
     </script>
 </body>

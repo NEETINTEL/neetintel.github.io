@@ -11,6 +11,7 @@
         * { box-sizing: border-box; }
 
         body {
+            overscroll-behavior-y: contain;   /* a pull past the top is the flip gesture, not a reload */
             font-family: 'Roboto', sans-serif;
             background-color: #0d0d0d;
             color: #e0e0e0;
@@ -553,6 +554,7 @@
                     <option value="166">166</option>
                     <option value="172">172</option>
                     <option value="176" selected>176</option>
+                    <option value="180">180</option>
                     <option value="182">182</option>
                     <option value="186">186</option>
                     <option value="188">188</option>
@@ -577,7 +579,7 @@
                 </select>
             </div>
         </div>
-        <a href="structure_heatmap_182char.html" class="nav-link">182 →</a>
+        <a href="structure_heatmap_180char.html" class="nav-link">180 →</a>
     </div>
     <h1>Structural Heatmap for 176 Character EAMs</h1>
     <div class="stats-section">
@@ -1272,6 +1274,41 @@
             });
         });
 
+
+        // Swipe: the same moves as the arrow keys, sent as key events so the
+        // handlers above — and the up/down page flip, where injected — do the
+        // work. Left/right = previous/next length. Up/down flips renderings;
+        // but a vertical drag is how the page scrolls, so it only counts when
+        // the page could not have scrolled: it did not move during the
+        // gesture, and it is a pull past the top or past the bottom.
+        (function() {
+            var MIN_PX = 45, MAX_MS = 800, origin = null;
+            function press(key) {
+                document.body.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true, cancelable: true }));
+            }
+            document.addEventListener('touchstart', function(e) {
+                if (e.touches.length !== 1 ||
+                    (e.target.closest && e.target.closest('input, select, textarea, button, label'))) { origin = null; return; }
+                var t = e.touches[0];
+                origin = { x: t.clientX, y: t.clientY, at: Date.now(), scrollY: window.scrollY };
+            }, { passive: true });
+            document.addEventListener('touchend', function(e) {
+                var o = origin; origin = null;
+                if (!o || e.changedTouches.length !== 1) return;
+                if (Date.now() - o.at > MAX_MS) return;
+                var t = e.changedTouches[0], dx = t.clientX - o.x, dy = t.clientY - o.y;
+                if (Math.abs(dx) >= MIN_PX && Math.abs(dx) >= Math.abs(dy) * 1.5) {
+                    press(dx < 0 ? 'ArrowRight' : 'ArrowLeft');   // drag left = next length
+                    return;
+                }
+                if (Math.abs(dy) < MIN_PX || Math.abs(dy) < Math.abs(dx) * 1.5) return;
+                if (window.scrollY !== o.scrollY) return;          // that was a scroll
+                var atTop = window.scrollY <= 0;
+                var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1;
+                if ((dy > 0 && atTop) || (dy < 0 && atBottom)) press('ArrowDown');
+            }, { passive: true });
+            document.addEventListener('touchcancel', function() { origin = null; }, { passive: true });
+        })();
 
         // Dot copy functionality
         document.querySelectorAll('.dot').forEach(dot => {
