@@ -1116,5 +1116,45 @@
     });
     
   </script>
+
+<script>
+// ← / → and a horizontal swipe flip EN/JP, by pressing the page's own
+// language button — so it does exactly what a click does. Added 2026-09-10.
+(function () {
+  var flip = function () { var b = document.querySelector('.lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label';
+  // A drag inside something that scrolls sideways is that thing's, not ours.
+  function inHorizontalScroller(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 1) return true;
+    }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    e.preventDefault();
+    flip();
+  });
+  var MIN_PX = 45, MAX_MS = 800, origin = null;
+  document.addEventListener('touchstart', function (e) {
+    var t = e.target;
+    if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
+    var p = e.touches[0];
+    origin = { x: p.clientX, y: p.clientY, at: Date.now() };
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    var o = origin; origin = null;
+    if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
+    var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
+    if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    flip();
+  }, { passive: true });
+  document.addEventListener('touchcancel', function () { origin = null; }, { passive: true });
+})();
+</script>
 </body>
 </html>
