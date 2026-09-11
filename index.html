@@ -388,6 +388,80 @@
       background: var(--active);
     }
 
+    /* ── Start tab: the site map ── */
+    #start .st-map {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: 2rem;
+      row-gap: 0.7rem;
+      align-items: baseline;
+      margin: 0;
+    }
+    #start a.st-dest {
+      text-align: right;
+      color: var(--bright);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.5;
+      text-decoration: none;
+      padding-block: 0.4rem;
+      margin-block: -0.4rem;
+    }
+    #start .st-note {
+      margin: 0;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+    #start .st-note p {
+      margin: 0;
+    }
+    #start .st-note p + p {
+      margin-top: 0.35rem;
+    }
+    #start .st-note a {
+      color: var(--link);
+      text-decoration: none;
+      padding-block: 0.25rem;
+      margin-block: -0.25rem;
+    }
+    #start .st-note a.st-sub {
+      color: var(--bright);
+      font-weight: 500;
+    }
+    #start .st-note .st-em {
+      color: var(--bright);
+    }
+    #start a.st-dest:focus-visible,
+    #start .st-note a:focus-visible {
+      text-decoration: underline;
+    }
+    @media (hover: hover) {
+      #start a.st-dest:hover,
+      #start .st-note a:hover {
+        text-decoration: underline;
+      }
+    }
+    @media (max-width: 640px) {
+      #start .st-map {
+        column-gap: 1rem;
+        row-gap: 0.6rem;
+      }
+      #start .st-note {
+        font-size: 0.85rem;
+      }
+    }
+    @media (max-width: 400px) {
+      #start .st-map {
+        column-gap: 0.75rem;
+      }
+      #start a.st-dest {
+        font-size: 0.95rem;
+      }
+    }
+
     /* Word labels read oddly in mono; years and acronyms elsewhere keep it. */
     #misc .subtab { font-family: inherit; }
 
@@ -688,39 +762,35 @@
     </div>
 
     <div id="start" class="tab-content active">
-      <p class="start-intro">NEET INTEL is a research project documenting the High Frequency Global Communications System (HFGCS) and the Emergency Action Messages (EAMs) broadcast on it. The HFGCS is a US Air Force shortwave network used to relay short, encoded messages to military forces. The transmissions are public — anyone with a shortwave receiver can hear them — but the messages themselves are deliberately opaque, and little has been published about how they are structured or how their patterns shift over time. This site collects the project's analyses, recordings, and reference material in one place.</p>
+      <p class="start-intro">NEET INTEL is a research project documenting the High Frequency Global Communications System (HFGCS) — a US Air Force shortwave network relaying short, encoded messages to military forces — and the Emergency Action Messages (EAMs) broadcast on it. Anyone with a shortwave receiver can hear them, but the messages are deliberately opaque, and little has been published about how they are structured or how their patterns shift over time. This site collects the project's analyses, recordings, and reference material in one place.</p>
 
-      <div class="start-section">
-        <h2>If you are new to the HFGCS</h2>
-        <p>Start with the <a href="hfgcs_faq.html" target="_blank">HFGCS FAQ</a> for a plain-language overview, then browse the <a class="tab-jump" href="#" onclick="showTab('wiki'); return false;">HFGCS Wiki</a> tab for additional information.</p>
-      </div>
+      <div class="st-map">
+        <a class="st-dest" href="hfgcs_faq.html" target="_blank">HFGCS FAQ</a>
+        <p class="st-note">Plain-language overview of the network and the messages.</p>
 
-      <div class="start-section">
-        <h2>If you came for the EAM dataset</h2>
-        <p>The <a href="dtcp_gallery.html" target="_blank">DTCP Gallery</a> is a catalog of every entry in the DAILY TIMECARD PROJECT, which represents comprehensive HFGCS monitoring efforts. The <a class="tab-jump" href="#" onclick="showTab('youtube'); return false;">NEET INTEL YouTube</a> tab indexes its predecessor, the DAILY COMPILATION RECORDINGS PROJECT.</p>
-      </div>
+        <a class="st-dest tab-jump" href="#" onclick="showTab('heatmaps'); return false;">Structures</a>
+        <p class="st-note">Heatmaps of EAMs grouped by character length, with repeating segments highlighted across messages.</p>
 
-      <div class="start-section">
-        <h2>If you came for EAM structure analysis</h2>
-        <p>The <a class="tab-jump" href="#" onclick="showTab('heatmaps'); return false;">EAM Structure Analysis</a> tab groups EAMs by character length and highlights repeating segments across messages. The <a href="about_structure_heatmaps.html" target="_blank">"How to read these heatmaps"</a> page explains the visualization.</p>
-      </div>
+        <a class="st-dest tab-jump" href="#" onclick="showTab('skymasters'); return false;">SKYMASTERs</a>
+        <p class="st-note">SKYMASTER and FAKEMASTER events from 2023 onward, with 2026 forecasts and a year-over-year comparison.</p>
 
-      <div class="start-section">
-        <h2>If you are tracking SKYMASTERs</h2>
-        <p>The <a class="tab-jump" href="#" onclick="showTab('skymasters'); return false;">SKYMASTER</a> tab catalogs SKYMASTER and FAKEMASTER events from 2023 onward, with 2026 forecasts and a year-over-year comparison.</p>
-      </div>
+        <a class="st-dest tab-jump" href="#" onclick="showTab('youtube'); return false;">DTCP</a>
+        <p class="st-note">Recordings from the <span class="st-em">DAILY TIMECARD PROJECT (DTCP)</span>, successor to the earlier DAILY COMPILATION RECORDINGS PROJECT (DCRP).</p>
 
-      <div class="start-section">
-        <h2>Everything else</h2>
-        <p>The <a class="tab-jump" href="#" onclick="showTab('misc'); return false;">Miscellaneous</a> tab links to additional pages that do not fit cleanly under the categories above.</p>
-      </div>
+        <a class="st-dest tab-jump" href="#" onclick="showTab('misc'); return false;">Extra</a>
+        <div class="st-note">
+          <p><a class="st-sub tab-jump" href="#" onclick="showTab('misc'); document.querySelector('#misc .subtab[onclick*=extra-galleries]').click(); return false;">Galleries</a> — <a href="dcrp_gallery.html" target="_blank">DCRP Gallery</a>, <a href="dtcp_gallery.html" target="_blank">DTCP Gallery</a>, <a href="livestream_gallery.html" target="_blank">HFGCS Livestream Gallery</a>.</p>
+          <p><a class="st-sub tab-jump" href="#" onclick="showTab('misc'); document.querySelector('#misc .subtab[onclick*=extra-analyses]').click(); return false;">Analyses</a> — message formats by length, block structure and grammar, rebroadcast timeline, E6B flight history, ICBM test launches, NOTAMs.</p>
+          <p><a class="st-sub tab-jump" href="#" onclick="showTab('misc'); document.querySelector('#misc .subtab[onclick*=extra-references]').click(); return false;">References and resources</a> — <a href="about_structure_heatmaps.html" target="_blank">About These Heatmaps</a> and <a href="notam_mapper.html" target="_blank">NOTAM Mapper</a>.</p>
+        </div>
 
-      <div class="start-section">
-        <h2>Contact</h2>
-        <p>The <a class="tab-jump" href="#" onclick="showTab('support'); return false;">Contact and Support</a> tab lists ways to reach NEET INTEL and to support the project. Tip: ← / → switches tabs from the keyboard.</p>
+        <a class="st-dest tab-jump" href="#" onclick="showTab('wiki'); return false;">Wiki</a>
+        <p class="st-note">Pages of the pilot HFGCS Wiki, as saved by archive.org.</p>
+
+        <a class="st-dest tab-jump" href="#" onclick="showTab('support'); return false;">Contact</a>
+        <p class="st-note">Ways to reach NEET INTEL and to support the project. Tip: ← / → switch tabs, ↑ / ↓ switch subtabs; on touch, a left or right swipe switches tabs.</p>
       </div>
     </div>
-
     <div id="heatmaps" class="tab-content">
       <div class="heatmap-intro">
         <p style="margin: 0 0 10px 0;">Emergency Action Messages are known to be highly structured. These pages group EAMs by character length and analyze them for repeating segments to identify candidate structural elements. Colored positions indicate possible pattern segments across messages. Click any colored position to highlight additional instances of that pattern.</p>
