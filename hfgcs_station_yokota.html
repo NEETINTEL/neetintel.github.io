@@ -1,7 +1,22 @@
 <!DOCTYPE html>
-<html data-lang="ja">
+<html data-lang="ja" data-title-en="HFGCS STATION YOKOTA" data-title-ja="HFGCS基地 横田">
 <head>
     <meta charset="UTF-8">
+    <!-- hfgcs controls -->
+<script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script>
+<!-- /hfgcs controls -->
+    <script>
+    // This page keys its heading styles to html[data-lang]; keep that in step with the shared language
+    // choice before first paint. With no saved choice the page opens in Japanese, as it always has.
+    (function () {
+        var d = document.documentElement, l = null;
+        try { l = localStorage.getItem('hfgcs-lang'); } catch (e) {}
+        if (!l) { d.classList.add('show-jp'); d.lang = 'ja'; }
+        d.setAttribute('data-lang', d.classList.contains('show-jp') ? 'ja' : 'en');
+    })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HFGCS基地 横田</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,23 +68,6 @@
         }
         .nav-bar a { color: #e53935; text-decoration: none; }
         .nav-bar a:hover { color: #ff5252; text-decoration: underline; }
-
-        .lang-toggle {
-            display: flex;
-            gap: 2px;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.85em;
-        }
-        .lang-toggle span {
-            padding: 2px 10px;
-            cursor: pointer;
-            color: #555;
-            border-radius: 3px;
-            transition: color 0.2s, background-color 0.2s;
-            user-select: none;
-        }
-        .lang-toggle span:hover { color: #ccc; }
-        .lang-toggle span.active { color: #e53935; background: rgba(229,57,53,0.08); }
 
         h1, h2, h3 {
             font-family: 'Zen Kaku Gothic New', sans-serif;
@@ -340,38 +338,139 @@
             font-size: 0.95em;
             color: #aaa;
         }
+
+        /* light mode (dark mode is the rules above, unchanged; the maps keep their dark tiles) */
+        [data-theme="light"] body {
+            background-color: #f5f6f7;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px);
+            color: #2b3036;
+        }
+        [data-theme="light"] body::before {
+            background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.05) 100%);
+        }
+        [data-theme="light"] .nav-bar,
+        [data-theme="light"] h2 { border-bottom-color: #d5d9de; }
+        [data-theme="light"] h1,
+        [data-theme="light"] h2 { color: #111; }
+        [data-theme="light"] h3 { color: #222; }
+        [data-theme="light"] :where(a),
+        [data-theme="light"] .nav-bar a { color: #c62828; }
+        [data-theme="light"] :where(a):hover,
+        [data-theme="light"] .nav-bar a:hover { color: #9f1d1d; }
+        [data-theme="light"] .momote-section a { color: #1c6bc2; }
+        [data-theme="light"] .momote-section a:hover { color: #15528f; }
+        [data-theme="light"] :where(strong) { color: #111; }
+        [data-theme="light"] :where(em) { color: #333; }
+        [data-theme="light"] code { background-color: #e9ecef; color: #1d232a; }
+        [data-theme="light"] pre {
+            background-color: rgba(0,0,0,0.035);
+            border-left-color: #c5cbd2;
+            color: #444b53;
+        }
+        [data-theme="light"] pre .key { color: #c62828; }
+        [data-theme="light"] pre .str { color: #a55a00; }
+        [data-theme="light"] pre .comment { color: #6b7280; }
+        [data-theme="light"] .station-table td:first-child { color: #5d6670; }
+        [data-theme="light"] #map,
+        [data-theme="light"] .site-map { border-color: #c9ced4 !important; }
+        [data-theme="light"] .commentary { border-left-color: #c5cbd2; color: #474e56; }
+        /* light mode: the map labels and hover tooltips are this page's own label plate (above) in its light colours: the
+           page ground at 85%, the map-frame rule, flat, Plex Mono, 3px corners; popups are its own card (above), raised
+           off the light ground as #1a1a1a is off the dark one, with Leaflet's shadow. Dark mode is the rules above. */
+        [data-theme="light"] .map-label {
+            background: rgba(245,246,247,0.85) !important;
+            border-color: #c9ced4 !important;
+            color: #222 !important;
+        }
+        [data-theme="light"] .yokota-label { color: #c62828 !important; }
+        [data-theme="light"] .leaflet-popup-content-wrapper { background: #fff; color: #2b3036; }
+        [data-theme="light"] .leaflet-popup-tip { background: #fff; }
+        [data-theme="light"] .leaflet-popup-content strong { color: #111; }
+
+        /* EN/JP pairs (.bi / .bi-i): each twin keeps its text's own minimum width (table labels and map labels size to
+           their text, as before); each language keeps its own heading letter-spacing whichever one is showing, so a
+           switch changes no size; the index link keeps its hover underline inside the pair */
+        .content .bi > *, .content .bi-i > * { min-width: auto; }
+        h1 .en, h2 .en, h3 .en { letter-spacing: 0.02em; }
+        h1 .jp, h2 .jp, h3 .jp { letter-spacing: 0.05em; }
+        .nav-bar a:hover .bi-i > * { text-decoration: underline; }
+/* hfgcs controls */
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* /hfgcs controls */
+/* floating controls: the shared segmented bar in this page's own look (flat Plex Mono, red accent) */
+html:root,html:root[data-theme="dark"]{--fab-bg:rgba(13,13,13,.92);--fab-line:#2a2a2a;--fab-ink:#bbbbbb;--fab-dim:#555555;--fab-hover:rgba(229,57,53,.08);--fab-focus:#e53935;--fab-radius:3px;--fab-shadow:none}
+html:root[data-theme="light"]{--fab-bg:rgba(245,246,247,.94);--fab-line:#d5d9de;--fab-ink:#2b3036;--fab-dim:#6b7480;--fab-hover:rgba(198,40,40,.08);--fab-focus:#c62828;--fab-radius:3px;--fab-shadow:none}
+html .fab button,html .totop{font-family:'IBM Plex Mono',monospace;font-size:12px}
+html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
+
+
     </style>
 </head>
 <body>
+<!-- hfgcs controls -->
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<!-- /hfgcs controls -->
     <div id="grad-red" style="position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%, rgba(229,57,53,0.04) 0%, transparent 60%);pointer-events:none;z-index:0;"></div>
     <div id="grad-blue" style="position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%, rgba(74,158,255,0.04) 0%, transparent 60%);pointer-events:none;z-index:0;opacity:0;"></div>
     <div class="content">
         <div class="nav-bar">
-            <a href="index.html"><span class="lang-en">&larr; Back to Index</span><span class="lang-ja">&larr; インデックスに戻る</span></a>
-            <div class="lang-toggle">
-                <span data-lang="en">EN</span>
-                <span data-lang="ja" class="active">日本語</span>
-            </div>
+            <a href="index.html"><span class="bi-i"><span class="en">&larr; Back to Index</span><span class="jp">&larr; インデックスに戻る</span></span></a>
         </div>
 
-        <h1><span class="lang-en">HFGCS STATION YOKOTA</span><span class="lang-ja">HFGCS基地 横田</span></h1>
+        <h1><span class="bi"><span class="en">HFGCS STATION YOKOTA</span><span class="jp">HFGCS基地 横田</span></span></h1>
 
-        <p><span class="lang-en">YOKOTA is a Pacific Theater station on the <strong>High Frequency Global Communications System</strong> (HFGCS), based at <strong>Yokota Air Base</strong> in Tokyo, Japan.</span><span class="lang-ja">YOKOTAは、東京都の<strong>横田基地</strong>に所在する<strong>高周波グローバル通信システム</strong>（HFGCS）の太平洋戦域局です。</span></p>
+        <p><span class="bi"><span class="en">YOKOTA is a Pacific Theater station on the <strong>High Frequency Global Communications System</strong> (HFGCS), based at <strong>Yokota Air Base</strong> in Tokyo, Japan.</span><span class="jp">YOKOTAは、東京都の<strong>横田基地</strong>に所在する<strong>高周波グローバル通信システム</strong>（HFGCS）の太平洋戦域局です。</span></span></p>
 
         <!-- Station Identity -->
-        <h2 id="identity"><span class="lang-en">Station Identity</span><span class="lang-ja">基地情報</span></h2>
+        <h2 id="identity"><span class="bi"><span class="en">Station Identity</span><span class="jp">基地情報</span></span></h2>
 
         <div class="site-layout">
             <div class="site-info">
                 <table class="station-table">
-                    <tr><td><span class="lang-en">HFGCS Callsign</span><span class="lang-ja">HFGCSコールサイン</span></td><td><strong>YOKOTA</strong></td></tr>
-                    <tr><td><span class="lang-en">ALE Callsign</span><span class="lang-ja">ALEコールサイン</span></td><td><strong>JTY</strong></td></tr>
-                    <tr><td><span class="lang-en">Theater</span><span class="lang-ja">戦域</span></td><td><span class="lang-en">Pacific Theater</span><span class="lang-ja">太平洋戦域</span></td></tr>
-                    <tr><td><span class="lang-en">NCS Role</span><span class="lang-ja">NCS役割</span></td><td><span class="lang-en">ANCS (associated with ANDREWS)</span><span class="lang-ja">ANCS（ANDREWSに関連）</span></td></tr>
-                    <tr><td><span class="lang-en">Designation</span><span class="lang-ja">施設番号</span></td><td><strong>FAC 3050</strong> <span class="lang-en">(Yokota Air Base)</span><span class="lang-ja">（横田基地）</span></td></tr>
+                    <tr><td><span class="bi"><span class="en">HFGCS Callsign</span><span class="jp">HFGCSコールサイン</span></span></td><td><strong>YOKOTA</strong></td></tr>
+                    <tr><td><span class="bi"><span class="en">ALE Callsign</span><span class="jp">ALEコールサイン</span></span></td><td><strong>JTY</strong></td></tr>
+                    <tr><td><span class="bi"><span class="en">Theater</span><span class="jp">戦域</span></span></td><td><span class="bi"><span class="en">Pacific Theater</span><span class="jp">太平洋戦域</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">NCS Role</span><span class="jp">NCS役割</span></span></td><td><span class="bi"><span class="en">ANCS (associated with ANDREWS)</span><span class="jp">ANCS（ANDREWSに関連）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Designation</span><span class="jp">施設番号</span></span></td><td><strong>FAC 3050</strong> <span class="bi-i"><span class="en">(Yokota Air Base)</span><span class="jp">（横田基地）</span></span></td></tr>
                 </table>
 
-                <p><span class="lang-en">Station data from <a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js#L160" target="_blank">hfgcs-msl</a>:</span><span class="lang-ja">基地データ出典 <a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js#L160" target="_blank">hfgcs-msl</a>:</span></p>
+                <p><span class="bi"><span class="en">Station data from <a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js#L160" target="_blank">hfgcs-msl</a>:</span><span class="jp">基地データ出典 <a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js#L160" target="_blank">hfgcs-msl</a>:</span></span></p>
 
                 <pre>  <span class="key">Id</span>: <span class="str">"10lllee2e"</span>,
   <span class="key">station</span>: <span class="str">"JTY"</span>,
@@ -384,145 +483,119 @@
         </div>
 
         <!-- Map -->
-        <h2 id="sites"><span class="lang-en">Site Locations</span><span class="lang-ja">施設配置</span></h2>
+        <h2 id="sites"><span class="bi"><span class="en">Site Locations</span><span class="jp">施設配置</span></span></h2>
 
-        <p><span class="lang-en">Like most HFGCS stations, Yokota uses separate sites for transmission and reception, located 10&ndash;20 km (6&ndash;12 mi) from the base itself. The geographic separation prevents high-power transmitters (rated up to 25 kW) from desensitizing the sensitive HF receivers. For comparison, Offutt&rsquo;s transmission and reception sites are separated by 45 km.</span><span class="lang-ja">他の多くのHFGCS基地と同様に、横田は送信と受信に別々の施設を使用しており、基地本体から10〜20 km離れた場所に位置しています。この地理的分離により、高出力送信機（最大25 kW）が高感度HF受信機に干渉することを防いでいます。参考として、オファット基地の送受信施設は45 km離れています。</span></p>
+        <p><span class="bi"><span class="en">Like most HFGCS stations, Yokota uses separate sites for transmission and reception, located 10&ndash;20 km (6&ndash;12 mi) from the base itself. The geographic separation prevents high-power transmitters (rated up to 25 kW) from desensitizing the sensitive HF receivers. For comparison, Offutt&rsquo;s transmission and reception sites are separated by 45 km.</span><span class="jp">他の多くのHFGCS基地と同様に、横田は送信と受信に別々の施設を使用しており、基地本体から10〜20 km離れた場所に位置しています。この地理的分離により、高出力送信機（最大25 kW）が高感度HF受信機に干渉することを防いでいます。参考として、オファット基地の送受信施設は45 km離れています。</span></span></p>
 
         <div id="map"></div>
 
         <!-- Tokorozawa -->
-        <h2 id="tokorozawa"><span class="lang-en">Tokorozawa Transmitter Site</span><span class="lang-ja">所沢通信基地（送信施設）</span></h2>
+        <h2 id="tokorozawa"><span class="bi"><span class="en">Tokorozawa Transmitter Site</span><span class="jp">所沢通信基地（送信施設）</span></span></h2>
 
         <div class="site-layout">
             <div class="site-info">
                 <table class="station-table">
-                    <tr><td><span class="lang-en">Designation</span><span class="lang-ja">施設番号</span></td><td><strong>FAC 3049</strong></td></tr>
-                    <tr><td><span class="lang-en">Function</span><span class="lang-ja">機能</span></td><td><span class="lang-en">HF transmission to U.S. military aircraft</span><span class="lang-ja">米軍航空機へのHF送信</span></td></tr>
-                    <tr><td><span class="lang-en">Location</span><span class="lang-ja">所在地</span></td><td><span class="lang-en">Tokorozawa City, Saitama Prefecture</span><span class="lang-ja">埼玉県所沢市</span></td></tr>
-                    <tr><td><span class="lang-en">Coordinates</span><span class="lang-ja">座標</span></td><td><a href="https://google.com/maps?q=35.808333,139.471389" target="_blank">35.808333, 139.471389</a></td></tr>
-                    <tr><td><span class="lang-en">Area</span><span class="lang-ja">面積</span></td><td><a href="https://www.city.tokorozawa.saitama.jp/kurashi/dourokoutsuu/begunkichi/kichi-gaiyou.html" target="_blank">~978,840 m&sup2;</a></td></tr>
+                    <tr><td><span class="bi"><span class="en">Designation</span><span class="jp">施設番号</span></span></td><td><strong>FAC 3049</strong></td></tr>
+                    <tr><td><span class="bi"><span class="en">Function</span><span class="jp">機能</span></span></td><td><span class="bi"><span class="en">HF transmission to U.S. military aircraft</span><span class="jp">米軍航空機へのHF送信</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Location</span><span class="jp">所在地</span></span></td><td><span class="bi"><span class="en">Tokorozawa City, Saitama Prefecture</span><span class="jp">埼玉県所沢市</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Coordinates</span><span class="jp">座標</span></span></td><td><a href="https://google.com/maps?q=35.808333,139.471389" target="_blank">35.808333, 139.471389</a></td></tr>
+                    <tr><td><span class="bi"><span class="en">Area</span><span class="jp">面積</span></span></td><td><a href="https://www.city.tokorozawa.saitama.jp/kurashi/dourokoutsuu/begunkichi/kichi-gaiyou.html" target="_blank">~978,840 m&sup2;</a></td></tr>
                     <tr><td>Wikipedia</td><td><a href="https://ja.wikipedia.org/wiki/%E6%89%80%E6%B2%A2%E9%80%9A%E4%BF%A1%E5%9F%BA%E5%9C%B0" target="_blank">所沢通信基地</a></td></tr>
                     <tr><td>Wikimapia</td><td><a href="https://wikimapia.org/5206726/374CS-Tokorozawa-Transmitter-Site-U-S-Air-Force" target="_blank">374 CS Tokorozawa Transmitter Site</a></td></tr>
                 </table>
 
-                <h3><span class="lang-en">Antennas</span><span class="lang-ja">アンテナ設備</span></h3>
-                <ul class="lang-en">
-                    <li>8 LP (log-periodic) directional antennas</li>
-                    <li>13 discone omnidirectional antennas</li>
-                    <li>2 LTO antennas (installed 2005, replacing deteriorated LP antennas)</li>
-                    <li>1 microwave tower for relay to Yokota Base and Owada (installed 1978, removed 2018)</li>
-                </ul>
-                <ul class="lang-ja">
-                    <li>対数周期型（LP）指向性アンテナ 8基</li>
-                    <li>ディスコーン無指向性アンテナ 13基</li>
-                    <li>LTOアンテナ 2基（2005年設置、劣化したLPアンテナの代替）</li>
-                    <li>マイクロ波中継塔 1基（横田基地・大和田間中継用、1978年設置、2018年撤去）</li>
+                <h3><span class="bi"><span class="en">Antennas</span><span class="jp">アンテナ設備</span></span></h3>
+                <ul>
+                    <li><span class="bi-i"><span class="en">8 LP (log-periodic) directional antennas</span><span class="jp">対数周期型（LP）指向性アンテナ 8基</span></span></li>
+                    <li><span class="bi-i"><span class="en">13 discone omnidirectional antennas</span><span class="jp">ディスコーン無指向性アンテナ 13基</span></span></li>
+                    <li><span class="bi-i"><span class="en">2 LTO antennas (installed 2005, replacing deteriorated LP antennas)</span><span class="jp">LTOアンテナ 2基（2005年設置、劣化したLPアンテナの代替）</span></span></li>
+                    <li><span class="bi-i"><span class="en">1 microwave tower for relay to Yokota Base and Owada (installed 1978, removed 2018)</span><span class="jp">マイクロ波中継塔 1基（横田基地・大和田間中継用、1978年設置、2018年撤去）</span></span></li>
                 </ul>
 
-                <p><span class="lang-en">HFGCS transmitter sites use the <strong>AS-3482/GRC</strong> rotatable log-periodic antenna (LPH-89): 2&ndash;30 MHz, up to 25 kW, 92&rsquo; tall with twin towers supporting a rotating platform. The LP antennas <a href="https://www.dxer.ws/tokorozawa_ts.htm" target="_blank">documented at Tokorozawa</a> are consistent with this type. Antenna maintenance at both Tokorozawa and Owada is covered under a Long Wave Inc. contract ($112.6M, through 2030).</span><span class="lang-ja">HFGCS送信施設では、<strong>AS-3482/GRC</strong>回転式対数周期アンテナ（LPH-89）を使用しています。周波数帯2〜30 MHz、最大出力25 kW、高さ約28 m（92フィート）のツインタワーが回転プラットフォームを支えています。所沢で<a href="https://www.dxer.ws/tokorozawa_ts.htm" target="_blank">記録されている</a>LPアンテナはこのタイプと一致しています。所沢と大和田の両施設のアンテナ保守は、Long Wave Inc.との契約（1億1260万ドル、2030年まで）でカバーされています。</span></p>
+                <p><span class="bi"><span class="en">HFGCS transmitter sites use the <strong>AS-3482/GRC</strong> rotatable log-periodic antenna (LPH-89): 2&ndash;30 MHz, up to 25 kW, 92&rsquo; tall with twin towers supporting a rotating platform. The LP antennas <a href="https://www.dxer.ws/tokorozawa_ts.htm" target="_blank">documented at Tokorozawa</a> are consistent with this type. Antenna maintenance at both Tokorozawa and Owada is covered under a Long Wave Inc. contract ($112.6M, through 2030).</span><span class="jp">HFGCS送信施設では、<strong>AS-3482/GRC</strong>回転式対数周期アンテナ（LPH-89）を使用しています。周波数帯2〜30 MHz、最大出力25 kW、高さ約28 m（92フィート）のツインタワーが回転プラットフォームを支えています。所沢で<a href="https://www.dxer.ws/tokorozawa_ts.htm" target="_blank">記録されている</a>LPアンテナはこのタイプと一致しています。所沢と大和田の両施設のアンテナ保守は、Long Wave Inc.との契約（1億1260万ドル、2030年まで）でカバーされています。</span></span></p>
 
-                <p><span class="lang-en">Tokorozawa complements the Owada receiving site. The facility is not subject to Japanese Radio Law under the Status of Forces Agreement. It also supports helicopter and V-22 Osprey VTOL operations.</span><span class="lang-ja">所沢は大和田受信施設を補完しています。日米地位協定により、この施設は日本の電波法の適用を受けません。ヘリコプターおよびV-22オスプレイのVTOL運用も支援しています。</span></p>
+                <p><span class="bi"><span class="en">Tokorozawa complements the Owada receiving site. The facility is not subject to Japanese Radio Law under the Status of Forces Agreement. It also supports helicopter and V-22 Osprey VTOL operations.</span><span class="jp">所沢は大和田受信施設を補完しています。日米地位協定により、この施設は日本の電波法の適用を受けません。ヘリコプターおよびV-22オスプレイのVTOL運用も支援しています。</span></span></p>
             </div>
             <div id="map-tokorozawa" class="site-map"></div>
         </div>
 
         <!-- Owada -->
-        <h2 id="owada"><span class="lang-en">Owada Communications Site</span><span class="lang-ja">大和田通信所（受信施設）</span></h2>
+        <h2 id="owada"><span class="bi"><span class="en">Owada Communications Site</span><span class="jp">大和田通信所（受信施設）</span></span></h2>
 
         <div class="site-layout">
             <div class="site-info">
                 <table class="station-table">
-                    <tr><td><span class="lang-en">Designation</span><span class="lang-ja">施設番号</span></td><td><strong>FAC 3056</strong></td></tr>
-                    <tr><td><span class="lang-en">Function</span><span class="lang-ja">機能</span></td><td><span class="lang-en">HF reception (paired with Tokorozawa for TX)</span><span class="lang-ja">HF受信（所沢と送信ペア）</span></td></tr>
-                    <tr><td><span class="lang-en">Location</span><span class="lang-ja">所在地</span></td><td><span class="lang-en">Niiza City, Saitama Prefecture / Kiyose City, Tokyo</span><span class="lang-ja">埼玉県新座市 / 東京都清瀬市</span></td></tr>
-                    <tr><td><span class="lang-en">Coordinates</span><span class="lang-ja">座標</span></td><td><a href="https://google.com/maps?q=35.781667,139.544722" target="_blank">35.781667, 139.544722</a></td></tr>
-                    <tr><td><span class="lang-en">Area</span><span class="lang-ja">面積</span></td><td>~1,197,700 m&sup2;</td></tr>
+                    <tr><td><span class="bi"><span class="en">Designation</span><span class="jp">施設番号</span></span></td><td><strong>FAC 3056</strong></td></tr>
+                    <tr><td><span class="bi"><span class="en">Function</span><span class="jp">機能</span></span></td><td><span class="bi"><span class="en">HF reception (paired with Tokorozawa for TX)</span><span class="jp">HF受信（所沢と送信ペア）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Location</span><span class="jp">所在地</span></span></td><td><span class="bi"><span class="en">Niiza City, Saitama Prefecture / Kiyose City, Tokyo</span><span class="jp">埼玉県新座市 / 東京都清瀬市</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Coordinates</span><span class="jp">座標</span></span></td><td><a href="https://google.com/maps?q=35.781667,139.544722" target="_blank">35.781667, 139.544722</a></td></tr>
+                    <tr><td><span class="bi"><span class="en">Area</span><span class="jp">面積</span></span></td><td>~1,197,700 m&sup2;</td></tr>
                     <tr><td>Wikipedia</td><td><a href="https://ja.wikipedia.org/wiki/%E5%A4%A7%E5%92%8C%E7%94%B0%E9%80%9A%E4%BF%A1%E6%89%80" target="_blank">大和田通信所</a></td></tr>
                     <tr><td>Wikimapia</td><td><a href="http://wikimapia.org/7913936/374-CS-Owada-Receiver-Site" target="_blank">374 CS Owada Receiver Site</a></td></tr>
                 </table>
 
-                <h3><span class="lang-en">Equipment</span><span class="lang-ja">設備</span></h3>
-                <ul class="lang-en">
-                    <li>23 large-scale and 200 small-scale radio receivers</li>
-                    <li>90 wooden main pillars (6 m tall) with horizontal wire antennas</li>
-                    <li>Heliport (established 1981)</li>
-                </ul>
-                <ul class="lang-ja">
-                    <li>大型無線受信機23台、小型無線受信機200台</li>
-                    <li>高さ6 mの木製主柱90本（水平ワイヤーアンテナ付き）</li>
-                    <li>ヘリポート（1981年設置）</li>
+                <h3><span class="bi"><span class="en">Equipment</span><span class="jp">設備</span></span></h3>
+                <ul>
+                    <li><span class="bi-i"><span class="en">23 large-scale and 200 small-scale radio receivers</span><span class="jp">大型無線受信機23台、小型無線受信機200台</span></span></li>
+                    <li><span class="bi-i"><span class="en">90 wooden main pillars (6 m tall) with horizontal wire antennas</span><span class="jp">高さ6 mの木製主柱90本（水平ワイヤーアンテナ付き）</span></span></li>
+                    <li><span class="bi-i"><span class="en">Heliport (established 1981)</span><span class="jp">ヘリポート（1981年設置）</span></span></li>
                 </ul>
 
-                <p><span class="lang-en">Located in the Musashino Plateau, the site was chosen for its stable communication conditions and freedom from radio interference. It is jointly managed with the Japanese Ministry of Defense.</span><span class="lang-ja">武蔵野台地に位置し、安定した通信環境と無線干渉のない条件から選定されました。日本の防衛省との共同管理下にあります。</span></p>
+                <p><span class="bi"><span class="en">Located in the Musashino Plateau, the site was chosen for its stable communication conditions and freedom from radio interference. It is jointly managed with the Japanese Ministry of Defense.</span><span class="jp">武蔵野台地に位置し、安定した通信環境と無線干渉のない条件から選定されました。日本の防衛省との共同管理下にあります。</span></span></p>
 
-                <p><span class="lang-en">Inter-site communications between Yokota, Tokorozawa, and Owada historically relied on microwave relay (the AIRCOM system). Following the <a href="https://www.saitama-np.co.jp/articles/4238/postDetail" target="_blank">2018 removal</a> of the Tokorozawa microwave tower, a 2025 procurement (<a href="https://sam.gov/workspace/contract/opp/1e6471d676db4f6da9a2cb5ef73f7ec8/view" target="_blank">FA520925Q014A</a>) indicates modernization to <strong>Radio Frequency over Fiber (RFoF)</strong> &mdash; a 4-channel bi-directional system on single-mode fiber covering 3 MHz to 1.215 GHz, encompassing the full HF band used by HFGCS.</span><span class="lang-ja">横田、所沢、大和田間の施設間通信は、歴史的にマイクロ波中継（AIRCOMシステム）に依存していました。所沢マイクロ波塔の<a href="https://www.saitama-np.co.jp/articles/4238/postDetail" target="_blank">2018年の撤去</a>後、2025年の調達（<a href="https://sam.gov/workspace/contract/opp/1e6471d676db4f6da9a2cb5ef73f7ec8/view" target="_blank">FA520925Q014A</a>）により、<strong>Radio Frequency over Fiber（RFoF）</strong>への近代化が示されています &mdash; シングルモードファイバー上の4チャンネル双方向システムで、3 MHzから1.215 GHzをカバーし、HFGCSが使用するHF帯域全体を包含しています。</span></p>
+                <p><span class="bi"><span class="en">Inter-site communications between Yokota, Tokorozawa, and Owada historically relied on microwave relay (the AIRCOM system). Following the <a href="https://www.saitama-np.co.jp/articles/4238/postDetail" target="_blank">2018 removal</a> of the Tokorozawa microwave tower, a 2025 procurement (<a href="https://sam.gov/workspace/contract/opp/1e6471d676db4f6da9a2cb5ef73f7ec8/view" target="_blank">FA520925Q014A</a>) indicates modernization to <strong>Radio Frequency over Fiber (RFoF)</strong> &mdash; a 4-channel bi-directional system on single-mode fiber covering 3 MHz to 1.215 GHz, encompassing the full HF band used by HFGCS.</span><span class="jp">横田、所沢、大和田間の施設間通信は、歴史的にマイクロ波中継（AIRCOMシステム）に依存していました。所沢マイクロ波塔の<a href="https://www.saitama-np.co.jp/articles/4238/postDetail" target="_blank">2018年の撤去</a>後、2025年の調達（<a href="https://sam.gov/workspace/contract/opp/1e6471d676db4f6da9a2cb5ef73f7ec8/view" target="_blank">FA520925Q014A</a>）により、<strong>Radio Frequency over Fiber（RFoF）</strong>への近代化が示されています &mdash; シングルモードファイバー上の4チャンネル双方向システムで、3 MHzから1.215 GHzをカバーし、HFGCSが使用するHF帯域全体を包含しています。</span></span></p>
             </div>
             <div id="map-owada" class="site-map"></div>
         </div>
 
         <!-- Momote -->
         <div class="momote-section">
-        <h2 id="momote"><span class="lang-en">Momote</span><span class="lang-ja">元百村</span></h2>
+        <h2 id="momote"><span class="bi"><span class="en">Momote</span><span class="jp">元百村</span></span></h2>
 
         <div class="site-layout">
             <div class="site-info">
                 <table class="station-table">
-                    <tr><td><span class="lang-en">Function</span><span class="lang-ja">機能</span></td><td><span class="lang-en">Receiver site (non-HFGCS?)</span><span class="lang-ja">受信施設（HFGCS以外？）</span></td></tr>
-                    <tr><td><span class="lang-en">Location</span><span class="lang-ja">所在地</span></td><td><span class="lang-en">Wako City, Saitama Prefecture</span><span class="lang-ja">埼玉県和光市</span></td></tr>
-                    <tr><td><span class="lang-en">Coordinates</span><span class="lang-ja">座標</span></td><td><a href="https://www.google.com/maps/@35.7770,139.6134,16z" target="_blank">35.7770, 139.6134</a></td></tr>
-                    <tr><td><span class="lang-en">Unit</span><span class="lang-ja">所属部隊</span></td><td><span class="lang-en">374th Communications Squadron (374 CS)</span><span class="lang-ja">第374通信中隊 (374 CS)</span></td></tr>
-                    <tr><td><span class="lang-en">Origin</span><span class="lang-ja">由来</span></td><td><span class="lang-en">Former Camp Drake (FAC 3048) South Camp</span><span class="lang-ja">旧キャンプ・ドレイク（FAC 3048）南キャンプ</span></td></tr>
-                    <tr><td><span class="lang-en">Area</span><span class="lang-ja">面積</span></td><td>~118,000 m&sup2;</td></tr>
+                    <tr><td><span class="bi"><span class="en">Function</span><span class="jp">機能</span></span></td><td><span class="bi"><span class="en">Receiver site (non-HFGCS?)</span><span class="jp">受信施設（HFGCS以外？）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Location</span><span class="jp">所在地</span></span></td><td><span class="bi"><span class="en">Wako City, Saitama Prefecture</span><span class="jp">埼玉県和光市</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Coordinates</span><span class="jp">座標</span></span></td><td><a href="https://www.google.com/maps/@35.7770,139.6134,16z" target="_blank">35.7770, 139.6134</a></td></tr>
+                    <tr><td><span class="bi"><span class="en">Unit</span><span class="jp">所属部隊</span></span></td><td><span class="bi"><span class="en">374th Communications Squadron (374 CS)</span><span class="jp">第374通信中隊 (374 CS)</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Origin</span><span class="jp">由来</span></span></td><td><span class="bi"><span class="en">Former Camp Drake (FAC 3048) South Camp</span><span class="jp">旧キャンプ・ドレイク（FAC 3048）南キャンプ</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Area</span><span class="jp">面積</span></span></td><td>~118,000 m&sup2;</td></tr>
                     <tr><td>Wikimapia</td><td><a href="http://wikimapia.org/17664206/374-CS-Momote-Receiver-Site" target="_blank">374 CS Momote Receiver Site</a></td></tr>
                 </table>
 
-                <p><span class="lang-en">Originally the Momote Village Housing Annex (142 acres, 167 units) at Camp Drake South Camp, most of the housing was returned under the Kanto Plain Consolidation Plan in the late 1970s. The antenna compound in Wako City Minami 2-chome, adjacent to the RIKEN campus, also hosts the <strong>AFN Tokyo AM transmitter</strong> ("Eagle 810," 810 kHz, 50 kW). Federal procurement records consistently list Momote as a Yokota GSU alongside Tokorozawa and Owada, and <a href="http://wikimapia.org/17664206/374-CS-Momote-Receiver-Site" target="_blank">Wikimapia labels the site</a> as "374 CS Momote Receiver Site."</span><span class="lang-ja">元々はキャンプ・ドレイク南キャンプの元百村住宅地区（約57ヘクタール、167戸）でしたが、1970年代後半の関東平野統合計画により大部分の住宅が返還されました。和光市南2丁目のアンテナ施設は理化学研究所（RIKEN）キャンパスに隣接し、<strong>AFN東京AMトランスミッター</strong>（「イーグル810」、810 kHz、50 kW）も設置されています。連邦調達記録では、元百村は所沢・大和田と並んで横田のGSU（地理的分離部隊）として一貫して記載されており、<a href="http://wikimapia.org/17664206/374-CS-Momote-Receiver-Site" target="_blank">Wikimapiaでは</a>「374 CS Momote Receiver Site」と表示されています。</span></p>
+                <p><span class="bi"><span class="en">Originally the Momote Village Housing Annex (142 acres, 167 units) at Camp Drake South Camp, most of the housing was returned under the Kanto Plain Consolidation Plan in the late 1970s. The antenna compound in Wako City Minami 2-chome, adjacent to the RIKEN campus, also hosts the <strong>AFN Tokyo AM transmitter</strong> ("Eagle 810," 810 kHz, 50 kW). Federal procurement records consistently list Momote as a Yokota GSU alongside Tokorozawa and Owada, and <a href="http://wikimapia.org/17664206/374-CS-Momote-Receiver-Site" target="_blank">Wikimapia labels the site</a> as "374 CS Momote Receiver Site."</span><span class="jp">元々はキャンプ・ドレイク南キャンプの元百村住宅地区（約57ヘクタール、167戸）でしたが、1970年代後半の関東平野統合計画により大部分の住宅が返還されました。和光市南2丁目のアンテナ施設は理化学研究所（RIKEN）キャンパスに隣接し、<strong>AFN東京AMトランスミッター</strong>（「イーグル810」、810 kHz、50 kW）も設置されています。連邦調達記録では、元百村は所沢・大和田と並んで横田のGSU（地理的分離部隊）として一貫して記載されており、<a href="http://wikimapia.org/17664206/374-CS-Momote-Receiver-Site" target="_blank">Wikimapiaでは</a>「374 CS Momote Receiver Site」と表示されています。</span></span></p>
             </div>
             <div id="map-momote" class="site-map"></div>
         </div>
         </div>
 
         <!-- Commentary -->
-        <h2 id="monitoring"><span class="lang-en">Monitoring Interest</span><span class="lang-ja">モニタリングの関心</span></h2>
+        <h2 id="monitoring"><span class="bi"><span class="en">Monitoring Interest</span><span class="jp">モニタリングの関心</span></span></h2>
 
         <div class="commentary">
-            <p><span class="lang-en">SKYMASTER events on the HFGCS, which are part of large U.S. nuclear exercises run by STRATCOM, have included international elements: activity in Greenland, near the Faroe Islands in the GIUK gap, Norway, and broader European/NATO involvement. However, no exercises have been confirmed to involve Japanese activity.</span><span class="lang-ja">HFGCSにおけるSKYMASTERイベントは、STRATCOMが実施する大規模な米国核演習の一環であり、国際的な要素を含んでいます。グリーンランド、GIUK海峡付近のフェロー諸島、ノルウェー、そしてより広範な欧州/NATO関与が確認されています。しかし、日本の活動が関与した演習は確認されていません。</span></p>
+            <p><span class="bi"><span class="en">SKYMASTER events on the HFGCS, which are part of large U.S. nuclear exercises run by STRATCOM, have included international elements: activity in Greenland, near the Faroe Islands in the GIUK gap, Norway, and broader European/NATO involvement. However, no exercises have been confirmed to involve Japanese activity.</span><span class="jp">HFGCSにおけるSKYMASTERイベントは、STRATCOMが実施する大規模な米国核演習の一環であり、国際的な要素を含んでいます。グリーンランド、GIUK海峡付近のフェロー諸島、ノルウェー、そしてより広範な欧州/NATO関与が確認されています。しかし、日本の活動が関与した演習は確認されていません。</span></span></p>
 
-            <p><span class="lang-en">This may reflect a gap in observation rather than a gap in participation. Four years of HFGCS monitoring have relied primarily on online radios in North America and Europe, with limited coverage of the Pacific. Since many Japanese online radios are available, it may be possible to investigate whether Yokota participates in SKYMASTER exercises.</span><span class="lang-ja">これは参加の欠如ではなく、観測の欠如を反映している可能性があります。4年間のHFGCSモニタリングは、主に北米と欧州のオンラインラジオに依存しており、太平洋地域のカバレッジは限定的でした。日本のオンラインラジオは多数利用可能であるため、横田がSKYMASTER演習に参加しているかどうかを調査できる可能性があります。</span></p>
+            <p><span class="bi"><span class="en">This may reflect a gap in observation rather than a gap in participation. Four years of HFGCS monitoring have relied primarily on online radios in North America and Europe, with limited coverage of the Pacific. Since many Japanese online radios are available, it may be possible to investigate whether Yokota participates in SKYMASTER exercises.</span><span class="jp">これは参加の欠如ではなく、観測の欠如を反映している可能性があります。4年間のHFGCSモニタリングは、主に北米と欧州のオンラインラジオに依存しており、太平洋地域のカバレッジは限定的でした。日本のオンラインラジオは多数利用可能であるため、横田がSKYMASTER演習に参加しているかどうかを調査できる可能性があります。</span></span></p>
 
-            <p><span class="lang-en">A related observation: very few Chinese online radios are available compared to neighboring countries. This raises questions about informational asymmetry in the region regarding signals intelligence matters.</span><span class="lang-ja">関連する観察として、中国のオンラインラジオは近隣諸国と比較して非常に少数しか利用できません。これは、信号情報（SIGINT）に関する地域の情報非対称性について疑問を提起します。</span></p>
-        </div>
-
-        <div style="text-align:center;margin:50px 0 20px 0;">
-            <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'IBM Plex Mono',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'"><span class="lang-en">&uarr; RETURN</span><span class="lang-ja">&uarr; 戻る</span></a>
+            <p><span class="bi"><span class="en">A related observation: very few Chinese online radios are available compared to neighboring countries. This raises questions about informational asymmetry in the region regarding signals intelligence matters.</span><span class="jp">関連する観察として、中国のオンラインラジオは近隣諸国と比較して非常に少数しか利用できません。これは、信号情報（SIGINT）に関する地域の情報非対称性について疑問を提起します。</span></span></p>
         </div>
 
     </div>
 
     <script>
         // ====== LANGUAGE TOGGLE ======
-        const allTooltipMarkers = [];
-
-        function getLang() {
-            return document.documentElement.dataset.lang || 'ja';
-        }
+        // Map labels carry both languages stacked in one cell (.bi-i); a switch only changes which one is visible, so no
+        // label changes size or position.
+        const bi = (en, ja) => '<span class="bi-i"><span class="en">' + en + '</span><span class="jp">' + ja + '</span></span>';
 
         function setLang(lang) {
             document.documentElement.dataset.lang = lang;
             document.title = lang === 'ja' ? 'HFGCS基地 横田' : 'HFGCS STATION YOKOTA';
-            document.querySelectorAll('.lang-toggle span').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-            allTooltipMarkers.forEach(item => {
-                item.marker.setTooltipContent(item[lang]);
-            });
         }
 
-        document.querySelector('.lang-toggle').addEventListener('click', function(e) {
-            if (e.target.dataset.lang) {
-                setLang(e.target.dataset.lang);
-            }
-        });
+        // The floating language button calls this after each switch ('en' | 'jp').
+        window.hfgcsSetLang = function (lang) { setLang(lang === 'jp' ? 'ja' : 'en'); };
 
         // ====== WORLD HFGCS MAP ======
         const worldMap = L.map('map-world', {
@@ -603,21 +676,18 @@
 
         var mYokota = L.marker([35.7485, 139.3485], { icon: siteIcon })
             .addTo(map)
-            .bindTooltip(getLang() === 'ja' ? '横田基地<br>FAC 3050 — HFGCS局' : 'Yokota AB<br>FAC 3050 — HFGCS Station', { permanent: true, direction: 'bottom', className: 'map-label', offset: [0, 10] })
+            .bindTooltip(bi('Yokota AB<br>FAC 3050 — HFGCS Station', '横田基地<br>FAC 3050 — HFGCS局'), { permanent: true, direction: 'bottom', className: 'map-label', offset: [0, 10] })
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.7485,139.3485', '_blank'); });
-        allTooltipMarkers.push({ marker: mYokota, en: 'Yokota AB<br>FAC 3050 — HFGCS Station', ja: '横田基地<br>FAC 3050 — HFGCS局' });
 
         var mToko = L.marker([35.808333, 139.471389], { icon: siteIcon })
             .addTo(map)
-            .bindTooltip(getLang() === 'ja' ? '所沢<br>FAC 3049 — 送信施設' : 'Tokorozawa<br>FAC 3049 — Transmitter Site', ttStyle)
+            .bindTooltip(bi('Tokorozawa<br>FAC 3049 — Transmitter Site', '所沢<br>FAC 3049 — 送信施設'), ttStyle)
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.808333,139.471389', '_blank'); });
-        allTooltipMarkers.push({ marker: mToko, en: 'Tokorozawa<br>FAC 3049 — Transmitter Site', ja: '所沢<br>FAC 3049 — 送信施設' });
 
         var mOwada = L.marker([35.781667, 139.544722], { icon: siteIcon })
             .addTo(map)
-            .bindTooltip(getLang() === 'ja' ? '大和田<br>FAC 3056 — 受信施設' : 'Owada<br>FAC 3056 — Receiver Site', { permanent: true, direction: 'bottom', className: 'map-label', offset: [0, 18] })
+            .bindTooltip(bi('Owada<br>FAC 3056 — Receiver Site', '大和田<br>FAC 3056 — 受信施設'), { permanent: true, direction: 'bottom', className: 'map-label', offset: [0, 18] })
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.781667,139.544722', '_blank'); });
-        allTooltipMarkers.push({ marker: mOwada, en: 'Owada<br>FAC 3056 — Receiver Site', ja: '大和田<br>FAC 3056 — 受信施設' });
 
         const secondaryIcon = L.divIcon({
             className: 'custom-marker secondary-marker',
@@ -628,9 +698,8 @@
 
         var mMomote = L.marker([35.7770, 139.6134], { icon: secondaryIcon })
             .addTo(map)
-            .bindTooltip(getLang() === 'ja' ? '元百村' : 'Momote', { permanent: true, direction: 'right', className: 'map-label map-label-secondary', offset: [10, 0] })
+            .bindTooltip(bi('Momote', '元百村'), { permanent: true, direction: 'right', className: 'map-label map-label-secondary', offset: [10, 0] })
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.7770,139.6134', '_blank'); });
-        allTooltipMarkers.push({ marker: mMomote, en: 'Momote', ja: '元百村' });
 
         // Connection lines with distance labels
         const yokota = [35.7485, 139.3485];
@@ -682,9 +751,8 @@
 
         var mTokoDetail = L.marker([35.808333, 139.471389], { icon: siteIcon })
             .addTo(mapToko)
-            .bindTooltip(getLang() === 'ja' ? '所沢通信基地<br>FAC 3049' : 'Tokorozawa Transmitter Site<br>FAC 3049', { direction: 'top', className: 'map-label', offset: [0, -10] })
+            .bindTooltip(bi('Tokorozawa Transmitter Site<br>FAC 3049', '所沢通信基地<br>FAC 3049'), { direction: 'top', className: 'map-label', offset: [0, -10] })
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.808333,139.471389', '_blank'); });
-        allTooltipMarkers.push({ marker: mTokoDetail, en: 'Tokorozawa Transmitter Site<br>FAC 3049', ja: '所沢通信基地<br>FAC 3049' });
 
         // Owada detail map
         const mapOwada = L.map('map-owada', {
@@ -699,9 +767,8 @@
 
         var mOwadaDetail = L.marker([35.781667, 139.544722], { icon: siteIcon })
             .addTo(mapOwada)
-            .bindTooltip(getLang() === 'ja' ? '大和田通信所<br>FAC 3056' : 'Owada Communications Site<br>FAC 3056', { direction: 'top', className: 'map-label', offset: [0, -10] })
+            .bindTooltip(bi('Owada Communications Site<br>FAC 3056', '大和田通信所<br>FAC 3056'), { direction: 'top', className: 'map-label', offset: [0, -10] })
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.781667,139.544722', '_blank'); });
-        allTooltipMarkers.push({ marker: mOwadaDetail, en: 'Owada Communications Site<br>FAC 3056', ja: '大和田通信所<br>FAC 3056' });
 
         // Momote site map
         const mapMomote = L.map('map-momote', {
@@ -723,9 +790,8 @@
 
         var mMomoteDetail = L.marker([35.7770, 139.6134], { icon: momoteIcon })
             .addTo(mapMomote)
-            .bindTooltip(getLang() === 'ja' ? '元百村受信施設<br>和光市 — 374 CS' : 'Momote Receiver Site<br>Wako City — 374 CS', { direction: 'top', className: 'map-label', offset: [0, -10] })
+            .bindTooltip(bi('Momote Receiver Site<br>Wako City — 374 CS', '元百村受信施設<br>和光市 — 374 CS'), { direction: 'top', className: 'map-label', offset: [0, -10] })
             .on('click', function() { window.open('https://www.google.com/maps/search/?api=1&query=35.7770,139.6134', '_blank'); });
-        allTooltipMarkers.push({ marker: mMomoteDetail, en: 'Momote Receiver Site<br>Wako City — 374 CS', ja: '元百村受信施設<br>和光市 — 374 CS' });
 
         // Crossfade background gradient: proportion of viewport occupied by Momote section
         (function() {
@@ -753,13 +819,112 @@
         })();
     </script>
 
+<!-- hfgcs controls -->
 <script>
-// ← / → and a horizontal swipe flip EN/JP, by pressing the page's own
-// language button — so it does exactly what a click does. Added 2026-09-10.
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
 (function () {
-  var flip = function () { var b = document.querySelector('.lang-toggle span:not(.active)'); if (b) b.click(); };
-  var SKIP = 'input, select, textarea, button, label, [id^="map"], .leaflet-container';
-  // A drag inside something that scrolls sideways is that thing's, not ours.
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
+
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
+
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
+  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j') { e.preventDefault(); lb.click(); }
+    else if (k === 'n') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
+</script>
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
   function inHorizontalScroller(el) {
     for (; el && el !== document.body; el = el.parentElement) {
       var ox = getComputedStyle(el).overflowX;
@@ -769,9 +934,10 @@
   }
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     var t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
     e.preventDefault();
     flip();
   });
@@ -780,17 +946,18 @@
     var t = e.target;
     if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
     var p = e.touches[0];
-    origin = { x: p.clientX, y: p.clientY, at: Date.now() };
-  }, { passive: true });
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
   document.addEventListener('touchend', function (e) {
     var o = origin; origin = null;
     if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
     var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
     if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
     flip();
-  }, { passive: true });
-  document.addEventListener('touchcancel', function () { origin = null; }, { passive: true });
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
 })();
 </script>
+<!-- /hfgcs controls -->
 </body>
 </html>

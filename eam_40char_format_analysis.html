@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-title-en="On the Observable Ciphertext Properties of 40-Character HFGCS Broadcasts" data-title-ja="40文字のHFGCS放送に見られる暗号文の性質について">
 <head>
 <meta charset="UTF-8">
+<!-- hfgcs controls --><script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script><!-- /hfgcs controls -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>On the Observable Ciphertext Properties of 40-Character HFGCS Broadcasts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -354,8 +357,8 @@
   .fmt-region:hover .fmt-divider { opacity: 1; }
 
 
-  @media (prefers-color-scheme: dark) {
-    :root {
+  /* night palette, chosen by the page toggle */
+  :root[data-theme="dark"] {
       --bg:       #15130f;
       --ink:      #e8e4d2;
       --muted:    #a29e8a;
@@ -365,76 +368,154 @@
       --accent-2: #e89a9a;
       --tint:     #1e1c14;
     }
-    .band { fill: #1a2431; opacity: 0.7; }
-    .band-strong { fill: #2b1818; opacity: 0.7; }
-    .line-5 { stroke: #8fbadc; fill: none; }
-    .dot-5 { stroke: #8fbadc; fill: #8fbadc; }
-    .fmt-r { fill: #4a6b82; }
-    .fmt-t { fill: #d17a7a; }
-    .fmt-divider { stroke: rgba(232, 228, 210, 0.50); }
+  :root[data-theme="dark"] .band { fill: #1a2431; opacity: 0.7; }
+  :root[data-theme="dark"] .band-strong { fill: #2b1818; opacity: 0.7; }
+  :root[data-theme="dark"] .line-5 { stroke: #8fbadc; fill: none; }
+  :root[data-theme="dark"] .dot-5 { stroke: #8fbadc; fill: #8fbadc; }
+  :root[data-theme="dark"] .fmt-r { fill: #4a6b82; }
+  :root[data-theme="dark"] .fmt-t { fill: #d17a7a; }
+  :root[data-theme="dark"] .fmt-divider { stroke: rgba(232, 228, 210, 0.50); }
+  :root[data-theme="dark"] .fmt-b { fill: #a29e8a; }
+  :root[data-theme="dark"] .fmt-p { fill: #b5ad8a; }
+  :root[data-theme="dark"] h3 { color: #cfcab8; }
+  :root[data-theme="dark"] pre, :root[data-theme="dark"] code { background: var(--tint); }
+  :root[data-theme="dark"] tr:hover td { background: var(--tint); }
+  :root[data-theme="dark"] .callout.warn { background: #2a2115; }
+  :root[data-theme="dark"] .callout.key { background: #14202a; border-left-color: #6e92ac; }
+  :root[data-theme="dark"] .callout.key strong { color: #9cc0dc; }
+  :root[data-theme="dark"] blockquote { background: #1c1a12; color: #cfcab8; }
+  :root[data-theme="dark"] tr.highlight td { background: #1a2431; border-top-color: #4a6b82; border-bottom-color: #4a6b82; }
+  :root[data-theme="dark"] tr.highlight:hover td { background: #253241; }
+  :root[data-theme="dark"] tr.highlight:first-of-type td { border-top-color: #6e92ac; }
+  :root[data-theme="dark"] tr.highlight:last-of-type td { border-bottom-color: #6e92ac; }
+  :root[data-theme="dark"] .abstract-plain { background: #1c1a12; border-top-color: #3d382b; border-bottom-color: #3d382b; }
 
-    .fmt-b { fill: #a29e8a; }
-    .fmt-p { fill: #b5ad8a; }
-    h3 { color: #cfcab8; }
-    pre, code { background: var(--tint); }
-    tr:hover td { background: var(--tint); }
-    .callout.warn { background: #2a2115; }
-    .callout.key { background: #14202a; border-left-color: #6e92ac; }
-    .callout.key strong { color: #9cc0dc; }
-    blockquote { background: #1c1a12; color: #cfcab8; }
-    tr.highlight td { background: #1a2431; border-top-color: #4a6b82; border-bottom-color: #4a6b82; }
-    tr.highlight:hover td { background: #253241; }
-    tr.highlight:first-of-type td { border-top-color: #6e92ac; }
-    tr.highlight:last-of-type td { border-bottom-color: #6e92ac; }
-    .abstract-plain { background: #1c1a12; border-top-color: #3d382b; border-bottom-color: #3d382b; }
-  }
+/* the figures' fixed colours at night */
+:root[data-theme="dark"] svg [fill="#5c1f1f"]{fill:#d17a7a}
+:root[data-theme="dark"] svg [stroke="#5c1f1f"]{stroke:#d17a7a}
+:root[data-theme="dark"] svg [style*="fill:#5c1f1f"]{fill:#d17a7a !important}
+:root[data-theme="dark"] svg [fill="#1f5c7c"]{fill:#8fbadc}
+:root[data-theme="dark"] svg [stroke="#1f5c7c"]{stroke:#8fbadc}
+:root[data-theme="dark"] svg [style*="fill:#1f5c7c"]{fill:#8fbadc !important}
+:root[data-theme="dark"] svg [fill="#88857c"]{fill:#a29e8a}
+:root[data-theme="dark"] svg [stroke="#88857c"]{stroke:#a29e8a}
+:root[data-theme="dark"] svg [style*="fill:#88857c"]{fill:#a29e8a !important}
+:root[data-theme="dark"] svg [fill="#3a5a72"]{fill:#8fbadc}
+:root[data-theme="dark"] svg [stroke="#3a5a72"]{stroke:#8fbadc}
+:root[data-theme="dark"] svg [style*="fill:#3a5a72"]{fill:#8fbadc !important}
+:root[data-theme="dark"] svg [fill="#1f737c"]{fill:#6fc0c8}
+:root[data-theme="dark"] svg [stroke="#1f737c"]{stroke:#6fc0c8}
+:root[data-theme="dark"] svg [style*="fill:#1f737c"]{fill:#6fc0c8 !important}
+:root[data-theme="dark"] svg [fill="#15130f"]{fill:#e8e4d2}
+:root[data-theme="dark"] svg [stroke="#15130f"]{stroke:#e8e4d2}
+:root[data-theme="dark"] svg [style*="fill:#15130f"]{fill:#e8e4d2 !important}
+/* hfgcs controls */
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* /hfgcs controls */
+/* EN/JP and light/dark (paper_bilingual.py) */
+[lang="ja"]{font-family:'IBM Plex Serif','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.nav-bar [lang="ja"],.toc [lang="ja"]{font-family:'IBM Plex Sans','IBM Plex Sans JP','Noto Sans JP',system-ui,sans-serif}
+.abstract .bi>.jp,.abstract-plain .bi>.jp{text-align:left}
+.nav-bar{padding-right:150px}
+/* margin notes: the Japanese twin repeats its English twin's number instead of counting again */
+.jp label.sn-num{counter-increment:none}
+/* a gap after the section number even when it outgrows its 1.8em slot ("10.1"); border-box keeps short ones aligned */
+h2 .num,h3 .num{padding-right:.4em}
+/* a section heading links to itself; the # sits in the left margin (the paper's own # after the title is off) */
+h2 > a,h3 > a{color:inherit;text-decoration:none;position:relative}
+h2 > a:hover::after,h3 > a:hover::after{content:none}
+h2 > a::before,h3 > a::before{content:"#";position:absolute;right:100%;margin-right:8px;color:var(--muted);font-weight:400;font-style:normal;opacity:0}
+h2 > a:hover::before,h3 > a:hover::before,h2 > a:focus-visible::before,h3 > a:focus-visible::before{opacity:1}
+@media (max-width:560px){h2 > a::before,h3 > a::before{margin-right:4px}}
+/* the floating controls in the paper's own look */
+html:root{--fab-bg:rgba(253,252,247,.94);--fab-line:var(--soft);--fab-ink:var(--ink);--fab-dim:var(--muted);--fab-hover:var(--tint);--fab-focus:var(--accent);--fab-shadow:none;--fab-radius:3px}
+html:root[data-theme="dark"]{--fab-bg:rgba(21,19,15,.92)}
+html .fab button,html .totop{font-family:'IBM Plex Sans',system-ui,sans-serif}
 </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;600&display=swap">
 </head>
 <body>
+<!-- hfgcs controls -->
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<!-- /hfgcs controls -->
 <div class="wrap">
-<div class="nav-bar"><a href="index.html">&larr; Index</a> &middot; <a href="eam_30char_format_analysis.html">30-char (base)</a> &middot; 40-char cohort</div>
+<div class="nav-bar"><span class="bi"><span class="en"><a href="index.html">&larr; Index</a> &middot; <a href="eam_30char_format_analysis.html">30-char (base)</a> &middot; 40-char cohort</span><span class="jp" lang="ja"><a href="index.html">&larr; 目次</a> &middot; <a href="eam_30char_format_analysis.html">30文字（基本）</a> &middot; 40文字のコホート</span></span></div>
 <div class="title-block">
-  <h1>On the Observable Ciphertext Properties of 40-Character HFGCS Broadcasts</h1>
-  <div class="subtitle">A cohort analysis of the 40-character HFGCS broadcast band; two groups (G2, G3), first-broadcast itemisation, forward-fill group resolution.</div>
-  <p class="byline">2026&middot;04&middot;17 &nbsp;|&nbsp; G2 N=39, G3 N=20, years 2024&ndash;2026</p>
+  <h1><span class="bi-i"><span class="en">On the Observable Ciphertext Properties of 40-Character HFGCS Broadcasts</span><span class="jp" lang="ja">40文字のHFGCS放送に見られる暗号文の性質について</span></span></h1>
+  <div class="subtitle"><span class="bi"><span class="en">A cohort analysis of the 40-character HFGCS broadcast band; two groups (G2, G3), first-broadcast itemisation, forward-fill group resolution.</span><span class="jp" lang="ja">40文字のHFGCS放送を対象としたコホート分析。グループは2つ（G2、G3）、初回放送での一意化、前方補完によるグループ判定。</span></span></div>
+  <p class="byline"><span class="bi"><span class="en">2026&middot;04&middot;17 &nbsp;|&nbsp; G2 N=39, G3 N=20, years 2024&ndash;2026</span><span class="jp" lang="ja">2026&middot;04&middot;17 &nbsp;|&nbsp; G2 N=39、G3 N=20、2024&ndash;2026年</span></span></p>
 </div>
 <div class="abstract">
-  <p><span class="lead-in">Abstract.</span> We apply the probe battery of the 30-character format analysis — aggregate and per-position base32 symbol marginals, consecutive-character doublet rates, inter-position single-character equalities, internal-substring repeats, and within-prefix compressibility — to the two group cohorts of 40-character HFGCS broadcasts. After first-broadcast itemisation and forward-fill group resolution, we retain <em>N<sub>G2</sub></em>&nbsp;=&nbsp;39 and <em>N<sub>G3</sub></em>&nbsp;=&nbsp;20 unique messages. Both cohorts carry distinct format-level structural signatures; neither is a uniform-random generator.</p>
-  <p><strong>Group 3 (<em>N</em>&nbsp;=&nbsp;20): fixed-offset verbatim repeat.</strong> 19 of 20 messages carry a 3-to-7 character substring that appears twice within the same message at the fixed offset pair (first occurrence starting at position 22, second starting at position 31). The inter-position equality probe confirms the same finding at the character level: 18 of 18 messages have identical characters at positions (22, 31), positions (23, 32), and positions (24, 33), each at <em>z</em>&nbsp;&gt;&nbsp;19. Compressibility corroborates: the body compresses at ratio 0.779 against a uniform null of 0.814&nbsp;&plusmn;&nbsp;0.005 (<em>z</em>&nbsp;=&nbsp;-7.10).</p>
-  <p><strong>Group 2 (<em>N</em>&nbsp;=&nbsp;39): 2-character fixed-offset repeat.</strong> The inter-position equality probe reveals that <strong>22 of 35 Group-2 messages</strong> carry identical characters at positions (16, 21) — the character at position 16 is reproduced five positions later at position 21 — <em>and</em> 22 of 35 carry identical characters at (17, 22). At <em>N</em>&nbsp;=&nbsp;35 this is <em>z</em>&nbsp;=&nbsp;+20.31 at each pair, far above the per-family Bonferroni threshold for 780 position pairs. The two pairs co-occur in approximately 22 of 35 messages: the 2-character bigram at positions 16–17 is reproduced at positions 21–22 with a fixed 5-character interval in the majority of G2 messages. Additional independent IPE signatures appear at (19, 24) at 12 matches (<em>z</em>&nbsp;=&nbsp;+10.60) and (26, 37) at 10 matches (<em>z</em>&nbsp;=&nbsp;+8.65). A narrower probe set using only consecutive doublets and length-&geq;3 internal repeats would not detect this structure, since the signal sits at a 2-character (length-below-threshold) repeat at a non-zero offset; the IPE probe of §6 is what surfaces it.</p>
-  <p>Neither 40-character cohort reproduces the 30-character Group-1 signatures (no persistent M/5 deficit, no mid-body transition, no trailing no-run constraint on the last six characters). The G2 and G3 40-character formats are distinct from each other and from the 30-character Group-1 format.</p>
+  <p><span class="bi"><span class="en"><span class="lead-in">Abstract.</span> We apply the probe battery of the 30-character format analysis — aggregate and per-position base32 symbol marginals, consecutive-character doublet rates, inter-position single-character equalities, internal-substring repeats, and within-prefix compressibility — to the two group cohorts of 40-character HFGCS broadcasts. After first-broadcast itemisation and forward-fill group resolution, we retain <em>N<sub>G2</sub></em>&nbsp;=&nbsp;39 and <em>N<sub>G3</sub></em>&nbsp;=&nbsp;20 unique messages. Both cohorts carry distinct format-level structural signatures; neither is a uniform-random generator.</span><span class="jp" lang="ja"><span class="lead-in">要旨。</span>30文字の形式分析で用いた一連の検定――base32記号の全体と位置ごとの周辺分布、連続する同一文字（ダブレット）の率、位置間の1文字の一致、内部の部分文字列の反復、プレフィックス内の圧縮率――を、40文字のHFGCS放送の2つのグループのコホートに適用する。初回放送での一意化と前方補完によるグループ判定の後、<em>N<sub>G2</sub></em>&nbsp;=&nbsp;39件と<em>N<sub>G3</sub></em>&nbsp;=&nbsp;20件の一意なメッセージが残る。どちらのコホートにも形式レベルの別々の構造的特徴があり、どちらも一様ランダムな生成ではない。</span></span></p>
+  <p><span class="bi"><span class="en"><strong>Group 3 (<em>N</em>&nbsp;=&nbsp;20): fixed-offset verbatim repeat.</strong> 19 of 20 messages carry a 3-to-7 character substring that appears twice within the same message at the fixed offset pair (first occurrence starting at position 22, second starting at position 31). The inter-position equality probe confirms the same finding at the character level: 18 of 18 messages have identical characters at positions (22, 31), positions (23, 32), and positions (24, 33), each at <em>z</em>&nbsp;&gt;&nbsp;19. Compressibility corroborates: the body compresses at ratio 0.779 against a uniform null of 0.814&nbsp;&plusmn;&nbsp;0.005 (<em>z</em>&nbsp;=&nbsp;-7.10).</span><span class="jp" lang="ja"><strong>グループ3（<em>N</em>&nbsp;=&nbsp;20）：固定オフセットでのそのままの反復。</strong>20件中19件のメッセージに、同じメッセージの中で固定のオフセットのペア（1回目は22文字目から、2回目は31文字目から）で2回現れる3〜7文字の部分文字列がある。位置間一致の検定は同じ発見を文字レベルで確かめる：18件中18件で、（22, 31）、（23, 32）、（24, 33）の位置の文字が同じであり、それぞれ<em>z</em>&nbsp;&gt;&nbsp;19である。圧縮率もこれを裏づける：本体の圧縮比は0.779で、一様帰無の0.814&nbsp;&plusmn;&nbsp;0.005に対して<em>z</em>&nbsp;=&nbsp;-7.10である。</span></span></p>
+  <p><span class="bi"><span class="en"><strong>Group 2 (<em>N</em>&nbsp;=&nbsp;39): 2-character fixed-offset repeat.</strong> The inter-position equality probe reveals that <strong>22 of 35 Group-2 messages</strong> carry identical characters at positions (16, 21) — the character at position 16 is reproduced five positions later at position 21 — <em>and</em> 22 of 35 carry identical characters at (17, 22). At <em>N</em>&nbsp;=&nbsp;35 this is <em>z</em>&nbsp;=&nbsp;+20.31 at each pair, far above the per-family Bonferroni threshold for 780 position pairs. The two pairs co-occur in approximately 22 of 35 messages: the 2-character bigram at positions 16–17 is reproduced at positions 21–22 with a fixed 5-character interval in the majority of G2 messages. Additional independent IPE signatures appear at (19, 24) at 12 matches (<em>z</em>&nbsp;=&nbsp;+10.60) and (26, 37) at 10 matches (<em>z</em>&nbsp;=&nbsp;+8.65). A narrower probe set using only consecutive doublets and length-&geq;3 internal repeats would not detect this structure, since the signal sits at a 2-character (length-below-threshold) repeat at a non-zero offset; the IPE probe of §6 is what surfaces it.</span><span class="jp" lang="ja"><strong>グループ2（<em>N</em>&nbsp;=&nbsp;39）：固定オフセットでの2文字の反復。</strong>位置間一致の検定から、<strong>グループ2の35件中22件</strong>で（16, 21）の位置の文字が同じ――16文字目の文字が5つ後の21文字目に再び現れる――<em>そして</em>35件中22件で（17, 22）の文字が同じであることが分かる。<em>N</em>&nbsp;=&nbsp;35でこれはそれぞれのペアで<em>z</em>&nbsp;=&nbsp;+20.31となり、780の位置ペアに対する族ごとのボンフェローニ閾値をはるかに上回る。2つのペアはおよそ35件中22件で同時に起こる：16–17文字目の2文字の組が、グループ2のメッセージの大半で、固定の5文字間隔で21–22文字目に再び現れる。ほかに独立したIPEの特徴が、（19, 24）で12件の一致（<em>z</em>&nbsp;=&nbsp;+10.60）、（26, 37）で10件の一致（<em>z</em>&nbsp;=&nbsp;+8.65）として現れる。ダブレットと長さ&geq;3の内部反復だけを使う狭い一連の検定では、この構造は検出できない。信号は0でないオフセットでの2文字（長さの閾値未満）の反復にあるからで、それを表に出すのが&sect;6のIPEの検定である。</span></span></p>
+  <p><span class="bi"><span class="en">Neither 40-character cohort reproduces the 30-character Group-1 signatures (no persistent M/5 deficit, no mid-body transition, no trailing no-run constraint on the last six characters). The G2 and G3 40-character formats are distinct from each other and from the 30-character Group-1 format.</span><span class="jp" lang="ja">40文字のどちらのコホートも、30文字グループ1の特徴（持続するM/5の不足、本体途中の切り替わり、最後の6文字での連続禁止の制約）を再現しない。G2とG3の40文字の形式は、互いにも、30文字グループ1の形式とも異なる。</span></span></p>
 </div>
 <div class="abstract-plain">
-  <p><span class="lead-in">In plain language.</span> 40-character HFGCS broadcasts are rarer than 30-character ones. After deduplication we have 39 Group-2 messages and 20 Group-3 messages. Both groups show format-level structure — different structures, but neither matches random.</p>
-  <p><strong>Group 3:</strong> in 19 of 20 messages, a short 3-to-7 character chunk appears twice inside the message. The first copy starts at position 22; the second at position 31 — exactly nine positions later. You can see this by eye in most Group 3 messages.</p>
-  <p><strong>Group 2:</strong> in 22 of 35 messages, the character at position 16 is reproduced at position 21 <em>and</em> the character at position 17 is reproduced at position 22. Equivalently, the two-character snippet at positions 16–17 is repeated at positions 21–22 — a shorter version of the Group 3 repeat, at a different interval. Smaller repeat, same idea.</p>
-  <p>Neither 40-character cohort shows the Group 1 signatures from the 30-character paper (no persistent shortage of M and 5, no mid-body transition, no rule against repeated letters at the tail). The 30-character Group-1, 40-character Group-2, and 40-character Group-3 formats are each distinct from each other.</p>
+  <p><span class="bi"><span class="en"><span class="lead-in">In plain language.</span> 40-character HFGCS broadcasts are rarer than 30-character ones. After deduplication we have 39 Group-2 messages and 20 Group-3 messages. Both groups show format-level structure — different structures, but neither matches random.</span><span class="jp" lang="ja"><span class="lead-in">わかりやすく言うと。</span>40文字のHFGCS放送は30文字のものより少ない。重複を除くと、グループ2のメッセージが39件、グループ3のメッセージが20件ある。どちらのグループにも形式レベルの構造がある――構造は違うが、どちらもランダムとは合わない。</span></span></p>
+  <p><span class="bi"><span class="en"><strong>Group 3:</strong> in 19 of 20 messages, a short 3-to-7 character chunk appears twice inside the message. The first copy starts at position 22; the second at position 31 — exactly nine positions later. You can see this by eye in most Group 3 messages.</span><span class="jp" lang="ja"><strong>グループ3：</strong>20件中19件のメッセージで、3〜7文字の短いかたまりがメッセージの中に2回現れる。1回目は22文字目から、2回目はちょうど9つ後の31文字目から始まる。グループ3のメッセージのほとんどで、これは目で見て分かる。</span></span></p>
+  <p><span class="bi"><span class="en"><strong>Group 2:</strong> in 22 of 35 messages, the character at position 16 is reproduced at position 21 <em>and</em> the character at position 17 is reproduced at position 22. Equivalently, the two-character snippet at positions 16–17 is repeated at positions 21–22 — a shorter version of the Group 3 repeat, at a different interval. Smaller repeat, same idea.</span><span class="jp" lang="ja"><strong>グループ2：</strong>35件中22件のメッセージで、16文字目の文字が21文字目に、<em>そして</em>17文字目の文字が22文字目に再び現れる。言い換えると、16–17文字目の2文字の断片が21–22文字目に繰り返される――グループ3の反復を短くしたもので、間隔は違う。小さな反復だが、考え方は同じである。</span></span></p>
+  <p><span class="bi"><span class="en">Neither 40-character cohort shows the Group 1 signatures from the 30-character paper (no persistent shortage of M and 5, no mid-body transition, no rule against repeated letters at the tail). The 30-character Group-1, 40-character Group-2, and 40-character Group-3 formats are each distinct from each other.</span><span class="jp" lang="ja">40文字のどちらのコホートにも、30文字の論文のグループ1の特徴（Mと5の持続する不足、本体途中の切り替わり、末尾での同じ文字の繰り返しを禁じる規則）はない。30文字グループ1、40文字グループ2、40文字グループ3の形式は、それぞれ互いに異なる。</span></span></p>
 </div>
 <nav class="toc">
-  <div class="toc-head">Contents</div>
+  <div class="toc-head"><span class="bi"><span class="en">Contents</span><span class="jp" lang="ja">目次</span></span></div>
   <ol>
-    <li><a href="#intro">Introduction</a></li>
-    <li><a href="#corpus">Observation corpus</a></li>
-    <li><a href="#marginals">First-order symbol distribution</a></li>
-    <li><a href="#profile">Position-wise bias profile</a></li>
-    <li><a href="#doublets">Doublet profile</a></li>
-    <li><a href="#ipe">Inter-position equality probe</a></li>
-    <li><a href="#repeats">Internal-repeat structure</a></li>
-    <li><a href="#within-key">Within-prefix structural probes</a></li>
-    <li><a href="#synthesis">Synthesis</a></li>
-    <li><a href="#discussion">Discussion and limits</a></li>
-    <li><a href="#conclusion">Conclusion</a></li>
-    <li><a href="#appendix">Appendix: methodology</a></li>
+    <li><span class="bi-i"><span class="en"><a href="#intro">Introduction</a></span><span class="jp" lang="ja"><a href="#intro">はじめに</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#corpus">Observation corpus</a></span><span class="jp" lang="ja"><a href="#corpus">観測データ</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#marginals">First-order symbol distribution</a></span><span class="jp" lang="ja"><a href="#marginals">記号の一次分布</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#profile">Position-wise bias profile</a></span><span class="jp" lang="ja"><a href="#profile">位置ごとの偏り</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#doublets">Doublet profile</a></span><span class="jp" lang="ja"><a href="#doublets">ダブレットのプロファイル</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#ipe">Inter-position equality probe</a></span><span class="jp" lang="ja"><a href="#ipe">位置間一致の検定</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#repeats">Internal-repeat structure</a></span><span class="jp" lang="ja"><a href="#repeats">内部反復の構造</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#within-key">Within-prefix structural probes</a></span><span class="jp" lang="ja"><a href="#within-key">プレフィックス内の構造の検定</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#synthesis">Synthesis</a></span><span class="jp" lang="ja"><a href="#synthesis">総合</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#discussion">Discussion and limits</a></span><span class="jp" lang="ja"><a href="#discussion">考察と限界</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#conclusion">Conclusion</a></span><span class="jp" lang="ja"><a href="#conclusion">結論</a></span></span></li>
+    <li><span class="bi-i"><span class="en"><a href="#appendix">Appendix: methodology</a></span><span class="jp" lang="ja"><a href="#appendix">付録：方法</a></span></span></li>
   </ol>
 </nav>
-<h2 id="intro"><span class="num">1.</span>Introduction</h2>
-<p class="lead">The 40-character HFGCS broadcast band is substantially less populated than the 30-character channel reported in the <a href="eam_30char_format_analysis.html">30-character base paper</a>, which analyses Group 1 and Group 2 payloads at <em>N</em>&nbsp;=&nbsp;5,377 unique first-broadcast messages. The 40-character cohort holds roughly one-seventh that number of observations and accordingly does not support the full probe battery at the same statistical power. We nevertheless run the same probes here, as a directional test of whether any of the 30-character findings (the M/5 marginal deficit, the mid-body transition, the trailing no-run constraint) are shared across bands, and as a survey of the Group 3 payload — a group which does not appear at 30 characters.</p>
-<p>The 40-character band is populated in calendar years 2024–2025 only, which narrows the question to a specific operational era. The cohort splits into Group 2 (<em>N</em>&nbsp;=&nbsp;39 after dedup) and Group 3 (<em>N</em>&nbsp;=&nbsp;20 after dedup). No prefix cell has more than ~15 messages, so within-prefix probes cannot be run with meaningful power; we note this and skip those probes.</p>
-<h2 id="corpus"><span class="num">2.</span>Observation corpus</h2>
-<p>Applying the standard filter pipeline — exclude rows whose quality flag <em>Q</em> contains "\" or "*", exclude messages containing placeholder characters ("?", "_", "."), retain only messages of length exactly 40, resolve group via forward-fill on PR_GROUPS — yields 76 raw broadcast-level observations. All 76 resolve under forward-fill. Splitting by group gives 52 G2 and 24 G3 broadcasts; first-broadcast itemisation on the message string retains 39 unique G2 messages and 20 unique G3 messages.</p>
-<p>The G2 cohort spans 3 calendar years (2024&ndash;2026) across 0 prefix identities in the reported per-prefix summary (though every prefix has &lt;&nbsp;30 messages; none is analysed individually). The G3 cohort spans 2024&ndash;2026 across 5 prefix identities (FJ, DX, DQ, DP, L6 at minimum). All statistical tests in this paper operate on first-broadcast itemised data.</p>
-<h2 id="marginals"><span class="num">3.</span>First-order symbol distribution</h2>
-<p>We test the null that each base32 symbol appears with uniform probability 1/32 at every body position (positions 3&ndash;40, carrying 38·log&#8322;(32)&nbsp;=&nbsp;190 bits). Aggregate body-position counts are plotted below for each cohort and reported in Tables 1 and 2.</p>
+<h2 id="intro"><a class="anc" href="#intro"><span class="bi-i"><span class="en"><span class="num">1.</span>Introduction</span><span class="jp" lang="ja"><span class="num">1.</span>はじめに</span></span></a></h2>
+<p class="lead"><span class="bi"><span class="en">The 40-character HFGCS broadcast band is substantially less populated than the 30-character channel reported in the <a href="eam_30char_format_analysis.html">30-character base paper</a>, which analyses Group 1 and Group 2 payloads at <em>N</em>&nbsp;=&nbsp;5,377 unique first-broadcast messages. The 40-character cohort holds roughly one-seventh that number of observations and accordingly does not support the full probe battery at the same statistical power. We nevertheless run the same probes here, as a directional test of whether any of the 30-character findings (the M/5 marginal deficit, the mid-body transition, the trailing no-run constraint) are shared across bands, and as a survey of the Group 3 payload — a group which does not appear at 30 characters.</span><span class="jp" lang="ja">40文字のHFGCS放送は、<a href="eam_30char_format_analysis.html">30文字の基本の論文</a>で報告した30文字のチャンネル――グループ1とグループ2のペイロードを<em>N</em>&nbsp;=&nbsp;5,377件の一意な初回放送メッセージで分析した――よりかなり少ない。40文字のコホートの観測数はそのおよそ7分の1で、一連の検定すべてを同じ統計的な検出力で行うことはできない。それでも同じ検定をここで実行するのは、30文字の発見（M/5の周辺分布の不足、本体途中の切り替わり、末尾の連続禁止の制約）のどれかが長さをまたいで共通かを方向として確かめるためと、30文字には現れないグループ3のペイロードを調べるためである。</span></span></p>
+<p><span class="bi"><span class="en">The 40-character band is populated in calendar years 2024–2025 only, which narrows the question to a specific operational era. The cohort splits into Group 2 (<em>N</em>&nbsp;=&nbsp;39 after dedup) and Group 3 (<em>N</em>&nbsp;=&nbsp;20 after dedup). No prefix cell has more than ~15 messages, so within-prefix probes cannot be run with meaningful power; we note this and skip those probes.</span><span class="jp" lang="ja">40文字の放送は2024–2025年にしかなく、問いは特定の運用時期に絞られる。コホートはグループ2（重複除去後<em>N</em>&nbsp;=&nbsp;39）とグループ3（重複除去後<em>N</em>&nbsp;=&nbsp;20）に分かれる。約15件を超えるプレフィックスのセルはなく、プレフィックス内の検定を意味のある検出力で実行できないので、それを記録して省略する。</span></span></p>
+<h2 id="corpus"><a class="anc" href="#corpus"><span class="bi-i"><span class="en"><span class="num">2.</span>Observation corpus</span><span class="jp" lang="ja"><span class="num">2.</span>観測データ</span></span></a></h2>
+<p><span class="bi"><span class="en">Applying the standard filter pipeline — exclude rows whose quality flag <em>Q</em> contains "\" or "*", exclude messages containing placeholder characters ("?", "_", "."), retain only messages of length exactly 40, resolve group via forward-fill on PR_GROUPS — yields 76 raw broadcast-level observations. All 76 resolve under forward-fill. Splitting by group gives 52 G2 and 24 G3 broadcasts; first-broadcast itemisation on the message string retains 39 unique G2 messages and 20 unique G3 messages.</span><span class="jp" lang="ja">標準の除外の手順――品質フラグ<em>Q</em>に"\"か"*"を含む行を除き、仮置き文字（"?"、"_"、"."）を含むメッセージを除き、長さがちょうど40のメッセージだけを残し、PR_GROUPSでの前方補完によりグループを判定する――を適用すると、放送単位の観測が76件得られる。76件すべてが前方補完で判定される。グループで分けるとG2が52件、G3が24件の放送で、メッセージ文字列での初回放送の一意化により、G2の一意なメッセージ39件とG3の一意なメッセージ20件が残る。</span></span></p>
+<p><span class="bi"><span class="en">The G2 cohort spans 3 calendar years (2024&ndash;2026) across 0 prefix identities in the reported per-prefix summary (though every prefix has &lt;&nbsp;30 messages; none is analysed individually). The G3 cohort spans 2024&ndash;2026 across 5 prefix identities (FJ, DX, DQ, DP, L6 at minimum). All statistical tests in this paper operate on first-broadcast itemised data.</span><span class="jp" lang="ja">G2コホートは3年（2024&ndash;2026年）にわたり、報告したプレフィックスごとの要約では0のプレフィックスにまたがる（ただしどのプレフィックスも&lt;&nbsp;30件で、個別には分析しない）。G3コホートは2024&ndash;2026年にわたり、5つのプレフィックス（少なくともFJ、DX、DQ、DP、L6）にまたがる。本稿の統計的検定はすべて、初回放送で一意化したデータに対して行う。</span></span></p>
+<h2 id="marginals"><a class="anc" href="#marginals"><span class="bi-i"><span class="en"><span class="num">3.</span>First-order symbol distribution</span><span class="jp" lang="ja"><span class="num">3.</span>記号の一次分布</span></span></a></h2>
+<p><span class="bi"><span class="en">We test the null that each base32 symbol appears with uniform probability 1/32 at every body position (positions 3&ndash;40, carrying 38·log&#8322;(32)&nbsp;=&nbsp;190 bits). Aggregate body-position counts are plotted below for each cohort and reported in Tables 1 and 2.</span><span class="jp" lang="ja">各base32記号が本体のどの位置でも一様な確率1/32で現れるという帰無仮説を検定する（3&ndash;40文字目、38·log&#8322;(32)&nbsp;=&nbsp;190ビット）。本体位置の全体の件数を、各コホートについて下に示し、表1と表2にまとめる。</span></span></p>
 
 <figure class="plot" role="img" aria-label="Base32 symbol frequency in 40-character G2 body">
 <svg viewBox="0 0 585 220" xmlns="http://www.w3.org/2000/svg">
@@ -451,7 +532,7 @@
 <line class="ax" x1="44" y1="12" x2="44" y2="180"/>
 <line class="ax" x1="44" y1="180" x2="540" y2="180"/>
 <line class="ref-line" x1="44" y1="63.33333333333334" x2="540" y2="63.33333333333334" stroke="#5c1f1f" stroke-dasharray="4,3" stroke-width="0.8" opacity="0.5"/>
-<text class="ax-label" text-anchor="start" x="542.00" y="66.33" fill="#5c1f1f">uniform</text>
+<text class="en ax-label" text-anchor="start" x="542.00" y="66.33" fill="#5c1f1f">uniform</text><text class="jp ax-label" text-anchor="start" x="542.00" y="66.33" fill="#5c1f1f" lang="ja">一様</text>
 <rect class="bar" x="45.9" y="28.85" width="11.6" height="151.15"><title>A: 4.05% (count 60; z = +2.04)</title></rect>
 <text class="ax-label" text-anchor="middle" x="51.8" y="192" style="font-size:8.5px">A</text>
 <rect class="bar" x="61.4" y="76.72" width="11.6" height="103.28"><title>B: 2.77% (count 41; z = -0.79)</title></rect>
@@ -516,10 +597,10 @@
 <text class="ax-label" text-anchor="middle" x="516.8" y="192" style="font-size:8.5px">6</text>
 <rect class="bar" x="526.4" y="59.08" width="11.6" height="120.92"><title>7: 3.24% (count 48; z = +0.25)</title></rect>
 <text class="ax-label" text-anchor="middle" x="532.2" y="192" style="font-size:8.5px">7</text>
-<text class="ax-title" text-anchor="middle" x="292.0" y="214">G2 body symbol distribution</text>
+<text class="en ax-title" text-anchor="middle" x="292.0" y="214">G2 body symbol distribution</text><text class="jp ax-title" text-anchor="middle" x="292.0" y="214" lang="ja">G2 本体の記号分布</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 1.</span> Symbol frequency in the body (positions 3&ndash;40) of 40-character Group 2 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;39). Dashed line: uniform expectation of 3.125%. The largest deviations are a G excess at <em>z</em>&nbsp;=&nbsp;+3.06 and an M deficit at <em>z</em>&nbsp;=&nbsp;-3.03; no other symbol exceeds |<em>z</em>|&nbsp;=&nbsp;2.5. At <em>N</em>&nbsp;=&nbsp;39 the per-symbol Bonferroni threshold across 32 symbols (&alpha;&nbsp;=&nbsp;0.05) is |<em>z</em>|&nbsp;&gt;&nbsp;2.87, which G crosses and M does not.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 1.</span> Symbol frequency in the body (positions 3&ndash;40) of 40-character Group 2 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;39). Dashed line: uniform expectation of 3.125%. The largest deviations are a G excess at <em>z</em>&nbsp;=&nbsp;+3.06 and an M deficit at <em>z</em>&nbsp;=&nbsp;-3.03; no other symbol exceeds |<em>z</em>|&nbsp;=&nbsp;2.5. At <em>N</em>&nbsp;=&nbsp;39 the per-symbol Bonferroni threshold across 32 symbols (&alpha;&nbsp;=&nbsp;0.05) is |<em>z</em>|&nbsp;&gt;&nbsp;2.87, which G crosses and M does not.</span><span class="jp" lang="ja"><span class="label">図1.</span>40文字グループ2の初回放送メッセージ（<em>N</em>&nbsp;=&nbsp;39）の本体（3&ndash;40文字目）での記号の頻度。破線：一様分布の期待値3.125%。最大のずれは<em>z</em>&nbsp;=&nbsp;+3.06のGの過剰と<em>z</em>&nbsp;=&nbsp;-3.03のMの不足で、|<em>z</em>|&nbsp;=&nbsp;2.5を超える記号はほかにない。<em>N</em>&nbsp;=&nbsp;39では、32記号にわたる記号ごとのボンフェローニ閾値（&alpha;&nbsp;=&nbsp;0.05）は|<em>z</em>|&nbsp;&gt;&nbsp;2.87で、Gはそれを超え、Mは超えない。</span></span></div>
 
 <figure class="plot" role="img" aria-label="Base32 symbol frequency in 40-character G3 body">
 <svg viewBox="0 0 585 220" xmlns="http://www.w3.org/2000/svg">
@@ -536,7 +617,7 @@
 <line class="ax" x1="44" y1="12" x2="44" y2="180"/>
 <line class="ax" x1="44" y1="180" x2="540" y2="180"/>
 <line class="ref-line" x1="44" y1="75.0" x2="540" y2="75.0" stroke="#5c1f1f" stroke-dasharray="4,3" stroke-width="0.8" opacity="0.5"/>
-<text class="ax-label" text-anchor="start" x="542.00" y="78.00" fill="#5c1f1f">uniform</text>
+<text class="en ax-label" text-anchor="start" x="542.00" y="78.00" fill="#5c1f1f">uniform</text><text class="jp ax-label" text-anchor="start" x="542.00" y="78.00" fill="#5c1f1f" lang="ja">一様</text>
 <rect class="bar" x="45.9" y="100.42" width="11.6" height="79.58"><title>A: 2.37% (count 18; z = -1.20)</title></rect>
 <text class="ax-label" text-anchor="middle" x="51.8" y="192" style="font-size:8.5px">A</text>
 <rect class="bar" x="61.4" y="51.79" width="11.6" height="128.21"><title>B: 3.82% (count 29; z = +1.09)</title></rect>
@@ -601,18 +682,18 @@
 <text class="ax-label" text-anchor="middle" x="516.8" y="192" style="font-size:8.5px">6</text>
 <rect class="bar" x="526.4" y="60.63" width="11.6" height="119.37"><title>7: 3.55% (count 27; z = +0.68)</title></rect>
 <text class="ax-label" text-anchor="middle" x="532.2" y="192" style="font-size:8.5px">7</text>
-<text class="ax-title" text-anchor="middle" x="292.0" y="214">G3 body symbol distribution</text>
+<text class="en ax-title" text-anchor="middle" x="292.0" y="214">G3 body symbol distribution</text><text class="jp ax-title" text-anchor="middle" x="292.0" y="214" lang="ja">G3 本体の記号分布</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 2.</span> Symbol frequency in the body (positions 3&ndash;40) of 40-character Group 3 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;20). The largest deviations are an S deficit at <em>z</em>&nbsp;=&nbsp;-2.45 and a Z excess at <em>z</em>&nbsp;=&nbsp;+2.76. At <em>N</em>&nbsp;=&nbsp;20 the per-symbol Bonferroni threshold is |<em>z</em>|&nbsp;&gt;&nbsp;2.87, which no symbol crosses. The observed deviations are within the range expected from stratum mixing plus Poisson noise at this sample size; they are reported for completeness but do not constitute a first-order non-uniformity finding.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 2.</span> Symbol frequency in the body (positions 3&ndash;40) of 40-character Group 3 first-broadcast messages (<em>N</em>&nbsp;=&nbsp;20). The largest deviations are an S deficit at <em>z</em>&nbsp;=&nbsp;-2.45 and a Z excess at <em>z</em>&nbsp;=&nbsp;+2.76. At <em>N</em>&nbsp;=&nbsp;20 the per-symbol Bonferroni threshold is |<em>z</em>|&nbsp;&gt;&nbsp;2.87, which no symbol crosses. The observed deviations are within the range expected from stratum mixing plus Poisson noise at this sample size; they are reported for completeness but do not constitute a first-order non-uniformity finding.</span><span class="jp" lang="ja"><span class="label">図2.</span>40文字グループ3の初回放送メッセージ（<em>N</em>&nbsp;=&nbsp;20）の本体（3&ndash;40文字目）での記号の頻度。最大のずれは<em>z</em>&nbsp;=&nbsp;-2.45のSの不足と<em>z</em>&nbsp;=&nbsp;+2.76のZの過剰である。<em>N</em>&nbsp;=&nbsp;20では記号ごとのボンフェローニ閾値は|<em>z</em>|&nbsp;&gt;&nbsp;2.87で、それを超える記号はない。観測されたずれは、このサンプルサイズでの層の混在とポアソンのノイズから期待される範囲内にあり、完全を期すために報告するが、一次の不均一性の発見にはあたらない。</span></span></div>
 
-<p>Compared with the 30-character Group-1 cohort where M and 5 each fall at <em>z</em>&nbsp;&asymp;&nbsp;&minus;21, the 40-character cohorts show at most a single-symbol deviation at the Bonferroni threshold (G in G2). The M/5 deficit that dominated the 30-character Group-1 paper is not reproduced in either 40-character cohort.</p>
+<p><span class="bi"><span class="en">Compared with the 30-character Group-1 cohort where M and 5 each fall at <em>z</em>&nbsp;&asymp;&nbsp;&minus;21, the 40-character cohorts show at most a single-symbol deviation at the Bonferroni threshold (G in G2). The M/5 deficit that dominated the 30-character Group-1 paper is not reproduced in either 40-character cohort.</span><span class="jp" lang="ja">Mと5がそれぞれ<em>z</em>&nbsp;&asymp;&nbsp;&minus;21となる30文字グループ1コホートと比べると、40文字のコホートが示すのは、せいぜいボンフェローニ閾値上の1記号のずれ（G2のG）である。30文字グループ1の論文の中心だったM/5の不足は、40文字のどちらのコホートでも再現されない。</span></span></p>
 
-<p>Tables 1 and 2 report the full 32-symbol tabulations.</p>
+<p><span class="bi"><span class="en">Tables 1 and 2 report the full 32-symbol tabulations.</span><span class="jp" lang="ja">表1と表2に32記号すべての集計を示す。</span></span></p>
 
-<h3><span class="num">3.1</span>Group 2 symbol tabulation</h3>
+<h3><span class="bi-i"><span class="en"><span class="num">3.1</span>Group 2 symbol tabulation</span><span class="jp" lang="ja"><span class="num">3.1</span>グループ2の記号の集計</span></span></h3>
 <div class="scroll-x"><table class="sym-count">
-<thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
+<thead><tr><th><span class="bi-i"><span class="en">symbol</span><span class="jp" lang="ja">記号</span></span></th><th class="num"><span class="bi-i"><span class="en">count</span><span class="jp" lang="ja">件数</span></span></th><th class="num"><span class="bi-i"><span class="en">pct</span><span class="jp" lang="ja">割合</span></span></th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class="negative"><td class="num">M</td><td class="num">26</td><td class="num">1.75%</td><td class="num">-3.03</td></tr>
 <tr class=""><td class="num">V</td><td class="num">30</td><td class="num">2.02%</td><td class="num">-2.44</td></tr>
@@ -647,11 +728,11 @@
 <tr class=""><td class="num">A</td><td class="num">60</td><td class="num">4.05%</td><td class="num">+2.04</td></tr>
 <tr class="positive"><td class="num">G</td><td class="num">64</td><td class="num">4.32%</td><td class="num">+2.64</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 1.</span> G2 body (positions 3&ndash;40) symbol counts, percentages, and Poisson z-scores against the uniform null. Rows sorted by z-score.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 1.</span> G2 body (positions 3&ndash;40) symbol counts, percentages, and Poisson z-scores against the uniform null. Rows sorted by z-score.</span><span class="jp" lang="ja"><span class="label">表1.</span>G2本体（3&ndash;40文字目）の記号ごとの件数、割合、一様帰無仮説に対するポアソンzスコア。zスコア順。</span></span></div>
 
-<h3><span class="num">3.2</span>Group 3 symbol tabulation</h3>
+<h3><span class="bi-i"><span class="en"><span class="num">3.2</span>Group 3 symbol tabulation</span><span class="jp" lang="ja"><span class="num">3.2</span>グループ3の記号の集計</span></span></h3>
 <div class="scroll-x"><table class="sym-count">
-<thead><tr><th>symbol</th><th class="num">count</th><th class="num">pct</th><th class="num">z</th></tr></thead>
+<thead><tr><th><span class="bi-i"><span class="en">symbol</span><span class="jp" lang="ja">記号</span></span></th><th class="num"><span class="bi-i"><span class="en">count</span><span class="jp" lang="ja">件数</span></span></th><th class="num"><span class="bi-i"><span class="en">pct</span><span class="jp" lang="ja">割合</span></span></th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">S</td><td class="num">12</td><td class="num">1.58%</td><td class="num">-2.45</td></tr>
 <tr class=""><td class="num">F</td><td class="num">14</td><td class="num">1.84%</td><td class="num">-2.03</td></tr>
@@ -686,12 +767,12 @@
 <tr class="positive"><td class="num">Z</td><td class="num">37</td><td class="num">4.87%</td><td class="num">+2.76</td></tr>
 <tr class="positive"><td class="num">X</td><td class="num">38</td><td class="num">5.00%</td><td class="num">+2.97</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 2.</span> G3 body (positions 3&ndash;40) symbol counts, percentages, and Poisson z-scores. No symbol crosses the per-family Bonferroni threshold.</div>
-<h2 id="profile"><span class="num">4.</span>Position-wise bias profile</h2>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 2.</span> G3 body (positions 3&ndash;40) symbol counts, percentages, and Poisson z-scores. No symbol crosses the per-family Bonferroni threshold.</span><span class="jp" lang="ja"><span class="label">表2.</span>G3本体（3&ndash;40文字目）の記号ごとの件数、割合、ポアソンzスコア。族ごとのボンフェローニ閾値を超える記号はない。</span></span></div>
+<h2 id="profile"><a class="anc" href="#profile"><span class="bi-i"><span class="en"><span class="num">4.</span>Position-wise bias profile</span><span class="jp" lang="ja"><span class="num">4.</span>位置ごとの偏り</span></span></a></h2>
 
-<p>The 30-character paper tracked per-position z-scores for the symbols M and 5 specifically, motivated by their aggregate-level deficits in Group 1. The same per-position M/5 probe at 40 characters returns a flat profile for both cohorts (Figures 2a and 2b): no position attains |<em>z</em>|&nbsp;&gt;&nbsp;3.86 in either cohort for M or 5. Since the aggregate M/5 deficit of the 30-character Group-1 cohort is not reproduced at 40 characters (§3), there is no attenuation profile to find — there is no baseline deficit to break from.</p>
+<p><span class="bi"><span class="en">The 30-character paper tracked per-position z-scores for the symbols M and 5 specifically, motivated by their aggregate-level deficits in Group 1. The same per-position M/5 probe at 40 characters returns a flat profile for both cohorts (Figures 2a and 2b): no position attains |<em>z</em>|&nbsp;&gt;&nbsp;3.86 in either cohort for M or 5. Since the aggregate M/5 deficit of the 30-character Group-1 cohort is not reproduced at 40 characters (§3), there is no attenuation profile to find — there is no baseline deficit to break from.</span><span class="jp" lang="ja">30文字の論文では、グループ1での全体の不足を動機として、特に記号Mと5の位置ごとのzスコアを追った。同じ位置ごとのM/5検定を40文字で行うと、どちらのコホートでも平坦なプロファイルになる（図2aと2b）：どちらのコホートでも、Mと5のどちらも|<em>z</em>|&nbsp;&gt;&nbsp;3.86に達する位置はない。30文字グループ1コホートの全体のM/5の不足は40文字では再現されない（&sect;3）ので、見つけるべき減衰のプロファイルはない――そこから外れる基準の不足がないのである。</span></span></p>
 
-<p>This is not the whole picture. The M/5 projection is two channels of a 32-channel probe, and per-position structure in <em>other</em> symbols would be missed by tracking M/5 only. Figures 2a and 2b reproduce the M/5-only profile for direct comparison with the 30-character paper; Figures 2c (G2) and 2d (G3) report the full per-position probe, showing for each position the largest |<em>z</em>|-score attained by any of the 32 symbols.</p>
+<p><span class="bi"><span class="en">This is not the whole picture. The M/5 projection is two channels of a 32-channel probe, and per-position structure in <em>other</em> symbols would be missed by tracking M/5 only. Figures 2a and 2b reproduce the M/5-only profile for direct comparison with the 30-character paper; Figures 2c (G2) and 2d (G3) report the full per-position probe, showing for each position the largest |<em>z</em>|-score attained by any of the 32 symbols.</span><span class="jp" lang="ja">これで全体像ではない。M/5への射影は32チャンネルの検定のうち2チャンネルで、<em>ほかの</em>記号の位置ごとの構造は、M/5だけを追っていては見落とされる。図2aと2bは30文字の論文と直接比べるためにM/5だけのプロファイルを再現し、図2c（G2）と2d（G3）は全体の位置ごとの検定を示して、各位置について32記号のいずれかが示す最大の|<em>z</em>|スコアを表す。</span></span></p>
 
 <figure class="plot" role="img" aria-label="Per-position M and 5 z-scores for G2">
 <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg">
@@ -802,17 +883,17 @@
 <text class="ax-label" text-anchor="middle" x="413.8" y="224">30</text>
 <text class="ax-label" text-anchor="middle" x="476.9" y="224">35</text>
 <text class="ax-label" text-anchor="middle" x="540.0" y="224">40</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="238">character position</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="238">character position</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="238" lang="ja">文字位置</text>
 <line class="line-m" x1="400" y1="250" x2="420" y2="250"/>
 <circle class="dot-m" cx="410" cy="250" r="2.2"/>
-<text class="legend-txt" text-anchor="start" x="425" y="253">symbol M</text>
+<text class="en legend-txt" text-anchor="start" x="425" y="253">symbol M</text><text class="jp legend-txt" text-anchor="start" x="425" y="253" lang="ja">記号M</text>
 <line class="line-5" x1="475" y1="250" x2="495" y2="250"/>
 <circle class="dot-5" cx="485" cy="250" r="2.2"/>
-<text class="legend-txt" text-anchor="start" x="500" y="253">symbol 5</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="14">G2: per-position z-scores (M, 5)</text>
+<text class="en legend-txt" text-anchor="start" x="500" y="253">symbol 5</text><text class="jp legend-txt" text-anchor="start" x="500" y="253" lang="ja">記号5</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="14">G2: per-position z-scores (M, 5)</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="14" lang="ja">G2：位置ごとのzスコア（M、5）</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 3.</span> Per-position M and 5 z-scores for the 40-character Group 2 cohort. Both symbols sit within the within-noise band at every position. This is the flat profile one would expect either under a uniform-output generator or under a weakly non-uniform generator whose bias is not concentrated in the M/5 channels; the probe alone cannot distinguish these.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 3.</span> Per-position M and 5 z-scores for the 40-character Group 2 cohort. Both symbols sit within the within-noise band at every position. This is the flat profile one would expect either under a uniform-output generator or under a weakly non-uniform generator whose bias is not concentrated in the M/5 channels; the probe alone cannot distinguish these.</span><span class="jp" lang="ja"><span class="label">図3.</span>40文字グループ2コホートにおける位置ごとのMと5のzスコア。どちらの記号も、すべての位置でノイズの帯の中にある。これは、一様な出力の生成でも、偏りがM/5のチャンネルに集中していない弱い不均一な生成でも期待される平坦なプロファイルであり、この検定だけではそれらを区別できない。</span></span></div>
 
 <figure class="plot" role="img" aria-label="Per-position M and 5 z-scores for G3">
 <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg">
@@ -923,21 +1004,21 @@
 <text class="ax-label" text-anchor="middle" x="413.8" y="224">30</text>
 <text class="ax-label" text-anchor="middle" x="476.9" y="224">35</text>
 <text class="ax-label" text-anchor="middle" x="540.0" y="224">40</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="238">character position</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="238">character position</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="238" lang="ja">文字位置</text>
 <line class="line-m" x1="400" y1="250" x2="420" y2="250"/>
 <circle class="dot-m" cx="410" cy="250" r="2.2"/>
-<text class="legend-txt" text-anchor="start" x="425" y="253">symbol M</text>
+<text class="en legend-txt" text-anchor="start" x="425" y="253">symbol M</text><text class="jp legend-txt" text-anchor="start" x="425" y="253" lang="ja">記号M</text>
 <line class="line-5" x1="475" y1="250" x2="495" y2="250"/>
 <circle class="dot-5" cx="485" cy="250" r="2.2"/>
-<text class="legend-txt" text-anchor="start" x="500" y="253">symbol 5</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="14">G3: per-position z-scores (M, 5)</text>
+<text class="en legend-txt" text-anchor="start" x="500" y="253">symbol 5</text><text class="jp legend-txt" text-anchor="start" x="500" y="253" lang="ja">記号5</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="14">G3: per-position z-scores (M, 5)</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="14" lang="ja">G3：位置ごとのzスコア（M、5）</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 4.</span> Per-position M and 5 z-scores for the 40-character Group 3 cohort. At <em>N</em>&nbsp;=&nbsp;20 the per-position discretisation is coarse (counts of 0–3 correspond to z-scores of −0.76, +0.59, +1.95, +3.30). One isolated position-3.30 excess appears at position 37 for symbol 5; at 38 body positions tested this is within chance rate.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 4.</span> Per-position M and 5 z-scores for the 40-character Group 3 cohort. At <em>N</em>&nbsp;=&nbsp;20 the per-position discretisation is coarse (counts of 0–3 correspond to z-scores of −0.76, +0.59, +1.95, +3.30). One isolated position-3.30 excess appears at position 37 for symbol 5; at 38 body positions tested this is within chance rate.</span><span class="jp" lang="ja"><span class="label">図4.</span>40文字グループ3コホートにおける位置ごとのMと5のzスコア。<em>N</em>&nbsp;=&nbsp;20では位置ごとの離散化が粗い（件数0–3がzスコア−0.76、+0.59、+1.95、+3.30にあたる）。37文字目に記号5の+3.30の孤立した過剰が1つ現れるが、検定した本体38位置ではこれは偶然の率の範囲内である。</span></span></div>
 
-<h3><span class="num">4.1</span>Per-position all-symbol probe</h3>
+<h3><span class="bi-i"><span class="en"><span class="num">4.1</span>Per-position all-symbol probe</span><span class="jp" lang="ja"><span class="num">4.1</span>位置ごとの全記号の検定</span></span></h3>
 
-<p>For each body position we compute the Poisson z-score of every one of the 32 base32 symbols and report the largest |<em>z</em>| at that position. This catches per-position excesses that the M/5 projection does not.</p>
+<p><span class="bi"><span class="en">For each body position we compute the Poisson z-score of every one of the 32 base32 symbols and report the largest |<em>z</em>| at that position. This catches per-position excesses that the M/5 projection does not.</span><span class="jp" lang="ja">本体の各位置について、32のbase32記号すべてのポアソンzスコアを計算し、その位置での最大の|<em>z</em>|を報告する。これでM/5への射影が見落とす位置ごとの過剰をとらえられる。</span></span></p>
 
 <figure class="plot" role="img" aria-label="Per-position max-z across all 32 symbols for G2">
 <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
@@ -1016,15 +1097,15 @@
 <text class="ax-label" text-anchor="middle" x="410.9" y="184">30</text>
 <text class="ax-label" text-anchor="middle" x="472.4" y="184">35</text>
 <text class="ax-label" text-anchor="middle" x="533.9" y="184">40</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="214">character position</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="14">G2: per-position max-|z| across all 32 symbols</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="214">character position</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="214" lang="ja">文字位置</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="14">G2: per-position max-|z| across all 32 symbols</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="14" lang="ja">G2：32記号すべての位置ごとの最大|z|</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 5.</span> For each position, the largest |<em>z</em>| across all 32 symbols in Group 2. Dashed red line: per-family Bonferroni threshold for 32×38&nbsp;=&nbsp;1,216 tests at <em>α</em>&nbsp;=&nbsp;0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;3.86). Dashed grey line: per-position uncorrected α&nbsp;=&nbsp;0.05 for 32 symbols (|<em>z</em>|&nbsp;&gt;&nbsp;2.87). Positions 1 and 2 reflect the PR distribution and are not body-generator properties. Among body positions (3–40), a single cell — <strong>pos 7, G (count 6, <em>z</em>&nbsp;=&nbsp;+4.77)</strong> — exceeds the Bonferroni threshold. <strong>Positions 3 and 4 sit just below the threshold at <em>z</em>&nbsp;=&nbsp;+3.79 each (A appears 5 of 35 at position 3; T appears 5 of 35 at position 4).</strong> The broader profile: 13 of 38 body positions carry at least one symbol above the uncorrected <em>z</em>&nbsp;&gt;&nbsp;2.87 — roughly twice the expectation under the uniform null (which would give about 4.8 such positions by chance, or closer to 4.9 by a Poisson approximation). The excess is distributed across the body rather than concentrated at any particular region.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 5.</span> For each position, the largest |<em>z</em>| across all 32 symbols in Group 2. Dashed red line: per-family Bonferroni threshold for 32×38&nbsp;=&nbsp;1,216 tests at <em>α</em>&nbsp;=&nbsp;0.05 (|<em>z</em>|&nbsp;&gt;&nbsp;3.86). Dashed grey line: per-position uncorrected α&nbsp;=&nbsp;0.05 for 32 symbols (|<em>z</em>|&nbsp;&gt;&nbsp;2.87). Positions 1 and 2 reflect the PR distribution and are not body-generator properties. Among body positions (3–40), a single cell — <strong>pos 7, G (count 6, <em>z</em>&nbsp;=&nbsp;+4.77)</strong> — exceeds the Bonferroni threshold. <strong>Positions 3 and 4 sit just below the threshold at <em>z</em>&nbsp;=&nbsp;+3.79 each (A appears 5 of 35 at position 3; T appears 5 of 35 at position 4).</strong> The broader profile: 13 of 38 body positions carry at least one symbol above the uncorrected <em>z</em>&nbsp;&gt;&nbsp;2.87 — roughly twice the expectation under the uniform null (which would give about 4.8 such positions by chance, or closer to 4.9 by a Poisson approximation). The excess is distributed across the body rather than concentrated at any particular region.</span><span class="jp" lang="ja"><span class="label">図5.</span>グループ2の各位置での、32記号すべてにわたる最大の|<em>z</em>|。赤の破線：32×38&nbsp;=&nbsp;1,216検定・<em>α</em>&nbsp;=&nbsp;0.05の族ごとのボンフェローニ閾値（|<em>z</em>|&nbsp;&gt;&nbsp;3.86）。灰色の破線：32記号に対する補正なしの位置ごとのα&nbsp;=&nbsp;0.05（|<em>z</em>|&nbsp;&gt;&nbsp;2.87）。1文字目と2文字目はPRの分布を反映しており、本体の生成の性質ではない。本体の位置（3–40）では、1つのセル――<strong>7文字目のG（件数6、<em>z</em>&nbsp;=&nbsp;+4.77）</strong>――だけがボンフェローニ閾値を超える。<strong>3文字目と4文字目はそれぞれ<em>z</em>&nbsp;=&nbsp;+3.79で閾値のすぐ下にある（3文字目では35件中5件にA、4文字目では35件中5件にTが現れる）。</strong>全体のプロファイル：本体38位置のうち13位置で、補正なしの<em>z</em>&nbsp;&gt;&nbsp;2.87を超える記号が少なくとも1つあり、一様帰無仮説での期待値（偶然でそのような位置が約4.8、ポアソン近似では約4.9）のおよそ2倍である。過剰は特定の領域に集中せず、本体全体に分布している。</span></span></div>
 
-<div class="callout key">
+<div class="callout key"><span class="bi"><span class="en">
   <strong>On positions 3 and 4 specifically.</strong> The M/5-only probe (Figure 3) is flat at positions 3 and 4, as it is everywhere else for G2. The all-symbol probe (Figure 5 for G2, Figure 6 for G3) shows that both positions sit at |<em>z</em>|&nbsp;=&nbsp;+3.79 — A appears at position 3 in 5 of 35 messages (14% against a uniform rate of 3.125%), and T appears at position 4 in 5 of 35 messages. Neither crosses the full-family Bonferroni threshold individually, and neither position is statistically distinguishable from other body positions — the same magnitude of single-symbol excess appears at positions 5 (A=5, J=5), 7 (G=6, the highest), 18 (X=5), 20 (G=5), 27 (F=5), 31 (R=5), 37 (S=5), and 38 (7=5). The evidence does not support treating positions 3–4 as a distinguished region in the G2 40-character format. What it supports is a weaker and more general claim: the whole body of G2 40-character messages shows per-position single-symbol preferences at roughly 2× the chance rate, none individually significant under multiple-testing correction, consistent with either a mild template structure or with the tail of a chance distribution at <em>N</em>&nbsp;=&nbsp;35. We cannot distinguish those alternatives at this sample size, and we flag positions 3–4 here to make the full picture visible rather than letting the M/5 projection understate it.
-</div>
+</span><span class="jp" lang="ja"><strong>3文字目と4文字目について。</strong>M/5だけの検定（図3）は、G2のほかのすべての位置と同様、3文字目と4文字目でも平坦である。全記号の検定（G2は図5、G3は図6）は、どちらの位置も|<em>z</em>|&nbsp;=&nbsp;+3.79にあることを示す――3文字目には35件中5件でA（一様な率3.125%に対して14%）、4文字目には35件中5件でTが現れる。どちらも単独では族全体のボンフェローニ閾値を超えず、どちらの位置もほかの本体の位置と統計的に区別できない――同じ大きさの1記号の過剰が、5文字目（A=5、J=5）、7文字目（G=6、最大）、18文字目（X=5）、20文字目（G=5）、27文字目（F=5）、31文字目（R=5）、37文字目（S=5）、38文字目（7=5）にも現れる。証拠は、3–4文字目をG2の40文字の形式の中の特別な領域として扱うことを支持しない。支持するのはより弱く一般的な主張である：G2の40文字のメッセージの本体全体が、偶然のおよそ2倍の率で位置ごとの1記号の好みを示し、多重検定の補正のもとではどれも単独では有意でなく、弱いテンプレート構造とも、<em>N</em>&nbsp;=&nbsp;35での偶然の分布の裾とも矛盾しない。このサンプルサイズではこれらの選択肢を区別できないので、M/5への射影が全体像を過小に見せることのないよう、ここで3–4文字目に触れておく。</span></span></div>
 
 <figure class="plot" role="img" aria-label="Per-position max-z across all 32 symbols for G3">
 <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
@@ -1117,21 +1198,21 @@
 <text class="ax-label" text-anchor="middle" x="410.9" y="184">30</text>
 <text class="ax-label" text-anchor="middle" x="472.4" y="184">35</text>
 <text class="ax-label" text-anchor="middle" x="533.9" y="184">40</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="214">character position</text>
-<text class="ax-title" text-anchor="middle" x="294.0" y="14">G3: per-position max-|z| across all 32 symbols</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="214">character position</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="214" lang="ja">文字位置</text>
+<text class="en ax-title" text-anchor="middle" x="294.0" y="14">G3: per-position max-|z| across all 32 symbols</text><text class="jp ax-title" text-anchor="middle" x="294.0" y="14" lang="ja">G3：32記号すべての位置ごとの最大|z|</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 6.</span> Per-position max-|<em>z</em>| for the Group 3 cohort. At <em>N</em>&nbsp;=&nbsp;20, count=3 corresponds to <em>z</em>&nbsp;=&nbsp;+3.30 and count=4 to <em>z</em>&nbsp;=&nbsp;+4.66; positions with count=4 therefore cross the Bonferroni threshold. 5 body positions do so (including 14, 19, 24, 25, 34 — all at count=4). Many of these positions sit inside or adjacent to the repeat-copy regions (22–28 and 31–37) analysed in §6; the per-position excesses are not independent of the internal-repeat finding and are partially attributable to it (if a specific symbol is over-represented in the repeat region's first copy, it appears at the same offset in the second copy by construction). Positions 3 and 4 in G3 carry max-|<em>z</em>|&nbsp;=&nbsp;+1.95 (count=2 at one symbol in each), well below any threshold of interest. We do not find G3-specific positions-3–4 structure.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 6.</span> Per-position max-|<em>z</em>| for the Group 3 cohort. At <em>N</em>&nbsp;=&nbsp;20, count=3 corresponds to <em>z</em>&nbsp;=&nbsp;+3.30 and count=4 to <em>z</em>&nbsp;=&nbsp;+4.66; positions with count=4 therefore cross the Bonferroni threshold. 5 body positions do so (including 14, 19, 24, 25, 34 — all at count=4). Many of these positions sit inside or adjacent to the repeat-copy regions (22–28 and 31–37) analysed in §6; the per-position excesses are not independent of the internal-repeat finding and are partially attributable to it (if a specific symbol is over-represented in the repeat region's first copy, it appears at the same offset in the second copy by construction). Positions 3 and 4 in G3 carry max-|<em>z</em>|&nbsp;=&nbsp;+1.95 (count=2 at one symbol in each), well below any threshold of interest. We do not find G3-specific positions-3–4 structure.</span><span class="jp" lang="ja"><span class="label">図6.</span>グループ3コホートの位置ごとの最大|<em>z</em>|。<em>N</em>&nbsp;=&nbsp;20では件数3が<em>z</em>&nbsp;=&nbsp;+3.30、件数4が<em>z</em>&nbsp;=&nbsp;+4.66にあたるので、件数4の位置はボンフェローニ閾値を超える。そうなる本体の位置は5つ（14、19、24、25、34――すべて件数4）である。これらの位置の多くは、&sect;6で分析する反復コピーの領域（22–28と31–37）の中か隣にある。位置ごとの過剰は内部反復の発見と独立ではなく、一部はそれに起因する（ある記号が反復領域の1つ目のコピーで多ければ、構造上、2つ目のコピーの同じオフセットにも現れる）。G3の3文字目と4文字目の最大|<em>z</em>|は+1.95（それぞれ1記号で件数2）で、注目すべきどの閾値も大きく下回る。G3に特有の3–4文字目の構造は見つからない。</span></span></div>
 
-<h2 id="doublets"><span class="num">5.</span>Doublet profile</h2>
-<p>We test the rate of consecutive-character doublets at each position pair (i, i+1). Under the uniform null the probability is 1/32 at each pair regardless of marginal distribution. At <em>N</em>&nbsp;=&nbsp;39&ndash;20, the expected doublet count per pair is 1.22 (G2) or 0.62 (G3).</p>
+<h2 id="doublets"><a class="anc" href="#doublets"><span class="bi-i"><span class="en"><span class="num">5.</span>Doublet profile</span><span class="jp" lang="ja"><span class="num">5.</span>ダブレットのプロファイル</span></span></a></h2>
+<p><span class="bi"><span class="en">We test the rate of consecutive-character doublets at each position pair (i, i+1). Under the uniform null the probability is 1/32 at each pair regardless of marginal distribution. At <em>N</em>&nbsp;=&nbsp;39&ndash;20, the expected doublet count per pair is 1.22 (G2) or 0.62 (G3).</span><span class="jp" lang="ja">各位置ペア（i, i+1）で、連続する同一文字（ダブレット）の率を検定する。一様帰無仮説では、周辺分布によらず各ペアの確率は1/32である。<em>N</em>&nbsp;=&nbsp;39&ndash;20では、ペアごとのダブレットの期待件数は1.22（G2）または0.62（G3）である。</span></span></p>
 
 <figure class="plot" role="img" aria-label="Doublet counts per position pair in G2">
 <svg viewBox="0 0 611 240" xmlns="http://www.w3.org/2000/svg">
 <line class="ax" x1="44" y1="28" x2="44" y2="192"/>
 <line class="ax" x1="44" y1="192" x2="560" y2="192"/>
 <line x1="44" y1="142.03125" x2="560" y2="142.03125" stroke="#5c1f1f" stroke-dasharray="4,3" stroke-width="0.8" opacity="0.5"/>
-<text class="ax-label" text-anchor="start" x="562.00" y="145.03" fill="#5c1f1f">expected</text>
+<text class="en ax-label" text-anchor="start" x="562.00" y="145.03" fill="#5c1f1f">expected</text><text class="jp ax-label" text-anchor="start" x="562.00" y="145.03" fill="#5c1f1f" lang="ja">期待値</text>
 <line class="ax-tick" x1="40" y1="192.0" x2="44" y2="192.0"/>
 <text class="ax-label" text-anchor="end" x="38" y="195.0">0</text>
 <line class="ax-tick" x1="40" y1="151.0" x2="44" y2="151.0"/>
@@ -1190,18 +1271,18 @@
 <rect class="bar" x="535.2" y="192.00" width="9.9" height="0.00"><title>pos 38-39: 0 doublets (z = -1.12)</title></rect>
 <rect class="bar" x="548.4" y="151.00" width="9.9" height="41.00"><title>pos 39-40: 1 doublets (z = -0.20)</title></rect>
 <text class="ax-label" text-anchor="middle" x="553.4" y="204" style="font-size:8.5px">39-40</text>
-<text class="ax-title" text-anchor="middle" x="302.0" y="234">consecutive position pair</text>
-<text class="ax-title" text-anchor="middle" x="302.0" y="14">G2: doublet count per consecutive position pair</text>
+<text class="en ax-title" text-anchor="middle" x="302.0" y="234">consecutive position pair</text><text class="jp ax-title" text-anchor="middle" x="302.0" y="234" lang="ja">隣接する位置のペア</text>
+<text class="en ax-title" text-anchor="middle" x="302.0" y="14">G2: doublet count per consecutive position pair</text><text class="jp ax-title" text-anchor="middle" x="302.0" y="14" lang="ja">G2：隣接位置ペアごとのダブレット数</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 7.</span> G2 doublet counts per consecutive position pair. All pairs fall within the uniform-null envelope (|<em>z</em>|&nbsp;&lt;&nbsp;2 across all 39 pairs). No tail-region doublet suppression is detected; the last five pairs (35&ndash;36 through 39&ndash;40) carry doublet counts between 0 and 1, within 1.1 standard deviations of the uniform expectation.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 7.</span> G2 doublet counts per consecutive position pair. All pairs fall within the uniform-null envelope (|<em>z</em>|&nbsp;&lt;&nbsp;2 across all 39 pairs). No tail-region doublet suppression is detected; the last five pairs (35&ndash;36 through 39&ndash;40) carry doublet counts between 0 and 1, within 1.1 standard deviations of the uniform expectation.</span><span class="jp" lang="ja"><span class="label">図7.</span>G2の隣接位置ペアごとのダブレット数。すべてのペアが一様帰無の範囲内にある（39ペアすべてで|<em>z</em>|&nbsp;&lt;&nbsp;2）。末尾の領域でのダブレットの抑制は検出されず、最後の5ペア（35&ndash;36から39&ndash;40まで）のダブレット数は0から1で、一様分布の期待値から1.1標準偏差以内にある。</span></span></div>
 
 <figure class="plot" role="img" aria-label="Doublet counts per position pair in G3">
 <svg viewBox="0 0 611 240" xmlns="http://www.w3.org/2000/svg">
 <line class="ax" x1="44" y1="28" x2="44" y2="192"/>
 <line class="ax" x1="44" y1="192" x2="560" y2="192"/>
 <line x1="44" y1="179.1875" x2="560" y2="179.1875" stroke="#5c1f1f" stroke-dasharray="4,3" stroke-width="0.8" opacity="0.5"/>
-<text class="ax-label" text-anchor="start" x="562.00" y="182.19" fill="#5c1f1f">expected</text>
+<text class="en ax-label" text-anchor="start" x="562.00" y="182.19" fill="#5c1f1f">expected</text><text class="jp ax-label" text-anchor="start" x="562.00" y="182.19" fill="#5c1f1f" lang="ja">期待値</text>
 <line class="ax-tick" x1="40" y1="192.0" x2="44" y2="192.0"/>
 <text class="ax-label" text-anchor="end" x="38" y="195.0">0</text>
 <line class="ax-tick" x1="40" y1="151.0" x2="44" y2="151.0"/>
@@ -1260,15 +1341,15 @@
 <rect class="bar" x="535.2" y="171.50" width="9.9" height="20.50"><title>pos 38-39: 1 doublets (z = +0.48)</title></rect>
 <rect class="bar" x="548.4" y="151.00" width="9.9" height="41.00"><title>pos 39-40: 2 doublets (z = +1.77)</title></rect>
 <text class="ax-label" text-anchor="middle" x="553.4" y="204" style="font-size:8.5px">39-40</text>
-<text class="ax-title" text-anchor="middle" x="302.0" y="234">consecutive position pair</text>
-<text class="ax-title" text-anchor="middle" x="302.0" y="14">G3: doublet count per consecutive position pair</text>
+<text class="en ax-title" text-anchor="middle" x="302.0" y="234">consecutive position pair</text><text class="jp ax-title" text-anchor="middle" x="302.0" y="234" lang="ja">隣接する位置のペア</text>
+<text class="en ax-title" text-anchor="middle" x="302.0" y="14">G3: doublet count per consecutive position pair</text><text class="jp ax-title" text-anchor="middle" x="302.0" y="14" lang="ja">G3：隣接位置ペアごとのダブレット数</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 8.</span> G3 doublet counts per consecutive position pair. Two pairs stand out: pair (23&ndash;24) with 6 doublets against 0.56 expected (<em>z</em>&nbsp;=&nbsp;+7.37) and pair (32&ndash;33) with 7 doublets against 0.56 expected (<em>z</em>&nbsp;=&nbsp;+8.72). These pairs sit symmetrically around the internal-repeat offset pair (first@22, second@31) discussed in §6 and are the pair-level manifestation of the same structural feature: the two occurrences of the repeated substring share a doublet at position pair (23, 24) on the first copy and at position pair (32, 33) on the second copy. The excesses are not independent evidence; they are projections of the §6 repeat onto the pairwise doublet probe.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 8.</span> G3 doublet counts per consecutive position pair. Two pairs stand out: pair (23&ndash;24) with 6 doublets against 0.56 expected (<em>z</em>&nbsp;=&nbsp;+7.37) and pair (32&ndash;33) with 7 doublets against 0.56 expected (<em>z</em>&nbsp;=&nbsp;+8.72). These pairs sit symmetrically around the internal-repeat offset pair (first@22, second@31) discussed in §6 and are the pair-level manifestation of the same structural feature: the two occurrences of the repeated substring share a doublet at position pair (23, 24) on the first copy and at position pair (32, 33) on the second copy. The excesses are not independent evidence; they are projections of the §6 repeat onto the pairwise doublet probe.</span><span class="jp" lang="ja"><span class="label">図8.</span>G3の隣接位置ペアごとのダブレット数。2つのペアが目立つ：ペア（23&ndash;24）は期待値0.56に対して6件のダブレット（<em>z</em>&nbsp;=&nbsp;+7.37）、ペア（32&ndash;33）は期待値0.56に対して7件（<em>z</em>&nbsp;=&nbsp;+8.72）である。これらのペアは&sect;6で扱う内部反復のオフセットのペア（1回目@22、2回目@31）の周りに対称に位置し、同じ構造的特徴のペアのレベルでの現れである：反復される部分文字列の2回の出現が、1つ目のコピーでは位置ペア（23, 24）で、2つ目のコピーでは位置ペア（32, 33）でダブレットを共有している。過剰は独立した証拠ではなく、&sect;6の反復をペアのダブレットの検定に投影したものである。</span></span></div>
 
-<h3><span class="num">5.1</span>Doublet table (G3 pairs, for reference)</h3>
+<h3><span class="bi-i"><span class="en"><span class="num">5.1</span>Doublet table (G3 pairs, for reference)</span><span class="jp" lang="ja"><span class="num">5.1</span>ダブレットの表（G3のペア、参考）</span></span></h3>
 <div class="scroll-x"><table class="sym-count">
-<thead><tr><th>pair</th><th class="num">count</th><th class="num">exp</th><th class="num">z</th></tr></thead>
+<thead><tr><th><span class="bi-i"><span class="en">pair</span><span class="jp" lang="ja">ペア</span></span></th><th class="num"><span class="bi-i"><span class="en">count</span><span class="jp" lang="ja">件数</span></span></th><th class="num"><span class="bi-i"><span class="en">exp</span><span class="jp" lang="ja">期待値</span></span></th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class=""><td class="num">1-2</td><td class="num">0</td><td class="num">0.62</td><td class="num">-0.80</td></tr>
 <tr class=""><td class="num">2-3</td><td class="num">0</td><td class="num">0.62</td><td class="num">-0.80</td></tr>
@@ -1310,31 +1391,31 @@
 <tr class=""><td class="num">38-39</td><td class="num">1</td><td class="num">0.62</td><td class="num">+0.48</td></tr>
 <tr class=""><td class="num">39-40</td><td class="num">2</td><td class="num">0.62</td><td class="num">+1.77</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 3.</span> G3 doublet counts per consecutive position pair. Pairs (23&ndash;24) and (32&ndash;33) are highlighted; all other pairs are within the uniform envelope.</div>
-<h2 id="ipe"><span class="num">6.</span>Inter-position equality probe</h2>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 3.</span> G3 doublet counts per consecutive position pair. Pairs (23&ndash;24) and (32&ndash;33) are highlighted; all other pairs are within the uniform envelope.</span><span class="jp" lang="ja"><span class="label">表3.</span>G3の隣接位置ペアごとのダブレット数。ペア（23&ndash;24）と（32&ndash;33）を強調している。ほかのペアはすべて一様分布の範囲内にある。</span></span></div>
+<h2 id="ipe"><a class="anc" href="#ipe"><span class="bi-i"><span class="en"><span class="num">6.</span>Inter-position equality probe</span><span class="jp" lang="ja"><span class="num">6.</span>位置間一致の検定</span></span></a></h2>
 
-<p>The consecutive-doublet probe of §5 tests each adjacent position pair (<em>i</em>, <em>i</em>+1) for identical-character rates. A more general version of that probe tests <em>every</em> position pair (<em>i</em>, <em>j</em>) for <em>j</em>&nbsp;&gt;&nbsp;<em>i</em> — including non-adjacent pairs — and asks the same question: how often does the character at position <em>i</em> equal the character at position <em>j</em>? Under the uniform null the expected rate at any pair is 1/32, so the expected count across <em>N</em> messages is <em>N</em>/32 regardless of the gap <em>j</em>&minus;<em>i</em>. A per-family Bonferroni threshold for 40-character messages considers 40·39/2&nbsp;=&nbsp;780 tests at α=0.05, giving |<em>z</em>|&nbsp;&gt;&nbsp;4.00.</p>
+<p><span class="bi"><span class="en">The consecutive-doublet probe of §5 tests each adjacent position pair (<em>i</em>, <em>i</em>+1) for identical-character rates. A more general version of that probe tests <em>every</em> position pair (<em>i</em>, <em>j</em>) for <em>j</em>&nbsp;&gt;&nbsp;<em>i</em> — including non-adjacent pairs — and asks the same question: how often does the character at position <em>i</em> equal the character at position <em>j</em>? Under the uniform null the expected rate at any pair is 1/32, so the expected count across <em>N</em> messages is <em>N</em>/32 regardless of the gap <em>j</em>&minus;<em>i</em>. A per-family Bonferroni threshold for 40-character messages considers 40·39/2&nbsp;=&nbsp;780 tests at α=0.05, giving |<em>z</em>|&nbsp;&gt;&nbsp;4.00.</span><span class="jp" lang="ja">&sect;5のダブレットの検定は、隣り合う各位置ペア（<em>i</em>, <em>i</em>+1）で同じ文字の率を調べる。その検定をより一般化したものは、隣り合わないペアも含め、<em>j</em>&nbsp;&gt;&nbsp;<em>i</em>となる<em>すべての</em>位置ペア（<em>i</em>, <em>j</em>）について同じ問い――<em>i</em>文字目の文字が<em>j</em>文字目の文字と同じになるのはどれくらいの頻度か――を問う。一様帰無仮説では、どのペアでも期待される率は1/32なので、<em>N</em>件のメッセージ全体での期待件数は、間隔<em>j</em>&minus;<em>i</em>によらず<em>N</em>/32である。40文字のメッセージの族ごとのボンフェローニ閾値は、α=0.05で40·39/2&nbsp;=&nbsp;780検定を考え、|<em>z</em>|&nbsp;&gt;&nbsp;4.00となる。</span></span></p>
 
-<p>The probe is sensitive to structural signatures that are invisible to the narrower consecutive-doublet probe of §5 and to the length-&geq;3 internal-repeat probe of §7. A single-character equality at a non-adjacent position pair falls into the blind spot between those two: adjacent-only probes miss the non-zero gap, and multi-character-substring probes miss the length-1 repeat. The IPE probe closes the gap.</p>
+<p><span class="bi"><span class="en">The probe is sensitive to structural signatures that are invisible to the narrower consecutive-doublet probe of §5 and to the length-&geq;3 internal-repeat probe of §7. A single-character equality at a non-adjacent position pair falls into the blind spot between those two: adjacent-only probes miss the non-zero gap, and multi-character-substring probes miss the length-1 repeat. The IPE probe closes the gap.</span><span class="jp" lang="ja">この検定は、&sect;5の狭いダブレットの検定や&sect;7の長さ&geq;3の内部反復の検定では見えない構造的な特徴に敏感である。隣り合わない位置ペアでの1文字の一致は、その2つの間の死角に落ちる：隣接だけの検定は0でない間隔を見落とし、複数文字の部分文字列の検定は長さ1の反復を見落とす。IPEの検定がその隙間を埋める。</span></span></p>
 
-<h3><span class="num">6.1</span>Group 2 — two-character repeat at positions 16–17, 21–22</h3>
-<p>Applied to the 40-character Group 2 cohort (<em>N</em>&nbsp;=&nbsp;39), the IPE probe returns 5 position pairs above the Bonferroni threshold. The top five:</p>
+<h3><span class="bi-i"><span class="en"><span class="num">6.1</span>Group 2 — two-character repeat at positions 16–17, 21–22</span><span class="jp" lang="ja"><span class="num">6.1</span>グループ2――16–17文字目と21–22文字目での2文字の反復</span></span></h3>
+<p><span class="bi"><span class="en">Applied to the 40-character Group 2 cohort (<em>N</em>&nbsp;=&nbsp;39), the IPE probe returns 5 position pairs above the Bonferroni threshold. The top five:</span><span class="jp" lang="ja">40文字グループ2コホート（<em>N</em>&nbsp;=&nbsp;39）に適用すると、IPEの検定はボンフェローニ閾値を超える位置ペアを5つ示す。その上位5つ：</span></span></p>
 
 <div class="scroll-x"><table>
-<thead><tr><th class="num">pos a</th><th class="num">pos b</th><th class="num">gap</th><th class="num">matches</th><th class="num">exp</th><th class="num">z</th></tr></thead>
+<thead><tr><th class="num"><span class="bi-i"><span class="en">pos a</span><span class="jp" lang="ja">位置a</span></span></th><th class="num"><span class="bi-i"><span class="en">pos b</span><span class="jp" lang="ja">位置b</span></span></th><th class="num"><span class="bi-i"><span class="en">gap</span><span class="jp" lang="ja">間隔</span></span></th><th class="num"><span class="bi-i"><span class="en">matches</span><span class="jp" lang="ja">一致数</span></span></th><th class="num"><span class="bi-i"><span class="en">exp</span><span class="jp" lang="ja">期待値</span></span></th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class="highlight"><td class="num">16</td><td class="num">21</td><td class="num">5</td><td class="num">24</td><td class="num">1.22</td><td class="num">+20.97</td></tr><tr class="highlight"><td class="num">17</td><td class="num">22</td><td class="num">5</td><td class="num">24</td><td class="num">1.22</td><td class="num">+20.97</td></tr><tr class="highlight"><td class="num">19</td><td class="num">24</td><td class="num">5</td><td class="num">13</td><td class="num">1.22</td><td class="num">+10.84</td></tr><tr class="highlight"><td class="num">26</td><td class="num">37</td><td class="num">11</td><td class="num">11</td><td class="num">1.22</td><td class="num">+9.00</td></tr><tr class="highlight"><td class="num">7</td><td class="num">40</td><td class="num">33</td><td class="num">6</td><td class="num">1.22</td><td class="num">+4.40</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 4.</span> Group 2 inter-position equality pairs above Bonferroni (|<em>z</em>|&nbsp;&gt;&nbsp;4.00). Expected count per pair: 1.22. The two largest pairs are (16, 21) and (17, 22), each at 22 matches out of 35 messages (63% match rate, <em>z</em>&nbsp;=&nbsp;+20.31).</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 4.</span> Group 2 inter-position equality pairs above Bonferroni (|<em>z</em>|&nbsp;&gt;&nbsp;4.00). Expected count per pair: 1.22. The two largest pairs are (16, 21) and (17, 22), each at 22 matches out of 35 messages (63% match rate, <em>z</em>&nbsp;=&nbsp;+20.31).</span><span class="jp" lang="ja"><span class="label">表4.</span>ボンフェローニ閾値（|<em>z</em>|&nbsp;&gt;&nbsp;4.00）を超える、グループ2の位置間一致のペア。各ペアの期待件数：1.22。最大の2ペアは（16, 21）と（17, 22）で、それぞれ35件中22件の一致（一致率63%、<em>z</em>&nbsp;=&nbsp;+20.31）である。</span></span></div>
 
-<div class="callout key">
+<div class="callout key"><span class="bi"><span class="en">
   <strong>Group 2 has a 2-character fixed-offset repeat.</strong> In 22 of 35 messages (63%), the character at position 16 equals the character at position 21, <em>and</em> the character at position 17 equals the character at position 22. Equivalently, the 2-character bigram at positions 16&ndash;17 is reproduced at positions 21&ndash;22, with a fixed 5-character interval between the start of the first copy and the start of the second. Two additional Bonferroni-significant pairs appear at (19, 24) with 12 matches (<em>z</em>&nbsp;=&nbsp;+10.60) and (26, 37) with 10 matches (<em>z</em>&nbsp;=&nbsp;+8.65), suggesting additional but weaker structure elsewhere in the body. The Group 2 40-character format is <strong>not</strong> a uniform-random generator; it is a structured format in which a 2-character region is duplicated.
-</div>
+</span><span class="jp" lang="ja"><strong>グループ2には固定オフセットでの2文字の反復がある。</strong>35件中22件（63%）のメッセージで、16文字目の文字が21文字目の文字と同じで、<em>そして</em>17文字目の文字が22文字目の文字と同じである。言い換えると、16&ndash;17文字目の2文字の組が21&ndash;22文字目に再び現れ、1つ目のコピーの開始から2つ目のコピーの開始までの間隔は固定の5文字である。ほかにボンフェローニで有意なペアが2つ、（19, 24）で12件の一致（<em>z</em>&nbsp;=&nbsp;+10.60）と（26, 37）で10件の一致（<em>z</em>&nbsp;=&nbsp;+8.65）として現れ、本体のほかの場所に、より弱い構造がさらにあることを示している。グループ2の40文字の形式は一様ランダムな生成<strong>ではなく</strong>、2文字の領域が複製される構造化された形式である。</span></span></div>
 
 <figure class="plot" role="img" aria-label="G2 IPE z-score heatmap">
 <svg viewBox="0 0 560 594.0" xmlns="http://www.w3.org/2000/svg">
 <style>.ipe-matrix-bg   { fill: #f3f0e4; }.ipe-grid        { stroke: #f3f0e4; stroke-width: 0.5; }.ipe-grid-major  { stroke: #f3f0e4; stroke-width: 1.0; }.ipe-excess      { fill: rgb(190, 45, 45); }.ipe-deficit     { fill: rgb(40, 95, 170); }.ipe-noise       { fill: #e8e4d2; }@media (prefers-color-scheme: dark) {  .ipe-matrix-bg  { fill: #15130f; }  .ipe-grid       { stroke: #15130f; }  .ipe-grid-major { stroke: #15130f; }}</style>
-<text class="ax-title" text-anchor="middle" x="280.0" y="16">G2: IPE z-score heatmap (all pairs)</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="16">G2: IPE z-score heatmap (all pairs)</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="16" lang="ja">G2：IPEのzスコア・ヒートマップ（全ペア）</text>
 <rect class="ipe-matrix-bg" x="40.0" y="34.0" width="480.0" height="480.0" stroke="none"/>
 <rect class="ipe-noise" fill-opacity="0.40" x="52.0" y="34.0" width="12.0" height="12.0" stroke="none"><title>pos (1, 2): count=0, z=-1.12</title></rect>
 <rect class="ipe-noise" fill-opacity="0.40" x="64.0" y="34.0" width="12.0" height="12.0" stroke="none"><title>pos (1, 3): count=3, z=+1.64</title></rect>
@@ -2216,32 +2297,32 @@
 <text class="ax-label" text-anchor="end" x="36" y="451.0">35</text>
 <text class="ax-label" text-anchor="middle" x="514.0" y="530.0">40</text>
 <text class="ax-label" text-anchor="end" x="36" y="511.0">40</text>
-<text class="ax-title" text-anchor="middle" x="280.0" y="550.0">position j</text>
-<text class="ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0">position i</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="550.0">position j</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="550.0" lang="ja">位置j</text>
+<text class="en ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0">position i</text><text class="jp ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0" lang="ja">位置i</text>
 <rect class="ipe-deficit" fill-opacity="0.85" x="165.0" y="566.0" width="12" height="12"/>
-<text class="ax-label" x="182.0" y="576.0">deficit</text>
+<text class="en ax-label" x="182.0" y="576.0">deficit</text><text class="jp ax-label" x="182.0" y="576.0" lang="ja">不足</text>
 <rect class="ipe-noise" fill-opacity="0.4" x="245.0" y="566.0" width="12" height="12"/>
-<text class="ax-label" x="262.0" y="576.0">noise</text>
+<text class="en ax-label" x="262.0" y="576.0">noise</text><text class="jp ax-label" x="262.0" y="576.0" lang="ja">ノイズ</text>
 <rect class="ipe-excess" fill-opacity="0.85" x="315.0" y="566.0" width="12" height="12"/>
-<text class="ax-label" x="332.0" y="576.0">excess</text>
+<text class="en ax-label" x="332.0" y="576.0">excess</text><text class="jp ax-label" x="332.0" y="576.0" lang="ja">過剰</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 9.</span> Group 2 inter-position equality heatmap. Each cell (<em>i</em>, <em>j</em>) shows the z-score of the match count at that pair against the uniform null. Red = excess matches (structured equality), blue = deficit, grey = within noise. The brightest red cells at (16, 21) and (17, 22) are the 2-character repeat signature. Secondary red cells at (19, 24) and (26, 37) mark additional fixed-offset equalities. All other pairs fall within the noise envelope.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 9.</span> Group 2 inter-position equality heatmap. Each cell (<em>i</em>, <em>j</em>) shows the z-score of the match count at that pair against the uniform null. Red = excess matches (structured equality), blue = deficit, grey = within noise. The brightest red cells at (16, 21) and (17, 22) are the 2-character repeat signature. Secondary red cells at (19, 24) and (26, 37) mark additional fixed-offset equalities. All other pairs fall within the noise envelope.</span><span class="jp" lang="ja"><span class="label">図9.</span>グループ2の位置間一致のヒートマップ。各セル（<em>i</em>, <em>j</em>）は、そのペアでの一致数の一様帰無仮説に対するzスコアを示す。赤＝一致の過剰（構造的な一致）、青＝不足、灰色＝ノイズの範囲内。（16, 21）と（17, 22）の最も明るい赤のセルが2文字の反復の特徴である。（19, 24）と（26, 37）の二次的な赤いセルは、ほかの固定オフセットでの一致を示す。ほかのペアはすべてノイズの範囲内にある。</span></span></div>
 
-<h3><span class="num">6.2</span>Group 3 — character-level confirmation of the §7 repeat</h3>
-<p>Applied to Group 3 (<em>N</em>&nbsp;=&nbsp;20), the IPE probe returns 17 position pairs above the Bonferroni threshold. The top pairs correspond exactly to the repeat-copy structure identified by the internal-repeat probe in §7:</p>
+<h3><span class="bi-i"><span class="en"><span class="num">6.2</span>Group 3 — character-level confirmation of the §7 repeat</span><span class="jp" lang="ja"><span class="num">6.2</span>グループ3――&sect;7の反復を文字レベルで確かめる</span></span></h3>
+<p><span class="bi"><span class="en">Applied to Group 3 (<em>N</em>&nbsp;=&nbsp;20), the IPE probe returns 17 position pairs above the Bonferroni threshold. The top pairs correspond exactly to the repeat-copy structure identified by the internal-repeat probe in §7:</span><span class="jp" lang="ja">グループ3（<em>N</em>&nbsp;=&nbsp;20）に適用すると、IPEの検定はボンフェローニ閾値を超える位置ペアを17示す。上位のペアは、&sect;7の内部反復の検定で見いだした反復コピーの構造とぴったり対応する：</span></span></p>
 
 <div class="scroll-x"><table>
-<thead><tr><th class="num">pos a</th><th class="num">pos b</th><th class="num">gap</th><th class="num">matches</th><th class="num">exp</th><th class="num">z</th></tr></thead>
+<thead><tr><th class="num"><span class="bi-i"><span class="en">pos a</span><span class="jp" lang="ja">位置a</span></span></th><th class="num"><span class="bi-i"><span class="en">pos b</span><span class="jp" lang="ja">位置b</span></span></th><th class="num"><span class="bi-i"><span class="en">gap</span><span class="jp" lang="ja">間隔</span></span></th><th class="num"><span class="bi-i"><span class="en">matches</span><span class="jp" lang="ja">一致数</span></span></th><th class="num"><span class="bi-i"><span class="en">exp</span><span class="jp" lang="ja">期待値</span></span></th><th class="num">z</th></tr></thead>
 <tbody>
 <tr class="highlight"><td class="num">22</td><td class="num">31</td><td class="num">9</td><td class="num">20</td><td class="num">0.62</td><td class="num">+24.90</td></tr><tr class="highlight"><td class="num">23</td><td class="num">32</td><td class="num">9</td><td class="num">20</td><td class="num">0.62</td><td class="num">+24.90</td></tr><tr class="highlight"><td class="num">27</td><td class="num">36</td><td class="num">9</td><td class="num">18</td><td class="num">0.62</td><td class="num">+22.33</td></tr><tr class="highlight"><td class="num">24</td><td class="num">33</td><td class="num">9</td><td class="num">17</td><td class="num">0.62</td><td class="num">+21.04</td></tr><tr class="highlight"><td class="num">25</td><td class="num">34</td><td class="num">9</td><td class="num">16</td><td class="num">0.62</td><td class="num">+19.76</td></tr><tr class="highlight"><td class="num">26</td><td class="num">35</td><td class="num">9</td><td class="num">12</td><td class="num">0.62</td><td class="num">+14.62</td></tr><tr class="highlight"><td class="num">23</td><td class="num">25</td><td class="num">2</td><td class="num">8</td><td class="num">0.62</td><td class="num">+9.48</td></tr><tr class="highlight"><td class="num">23</td><td class="num">33</td><td class="num">10</td><td class="num">8</td><td class="num">0.62</td><td class="num">+9.48</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 5.</span> Group 3 inter-position equality pairs above Bonferroni. All top-ranked pairs have gap 9 — consistent with the fixed-offset-9 verbatim repeat identified in §7. The IPE probe and the internal-repeat probe converge on the same structural feature.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 5.</span> Group 3 inter-position equality pairs above Bonferroni. All top-ranked pairs have gap 9 — consistent with the fixed-offset-9 verbatim repeat identified in §7. The IPE probe and the internal-repeat probe converge on the same structural feature.</span><span class="jp" lang="ja"><span class="label">表5.</span>ボンフェローニ閾値を超える、グループ3の位置間一致のペア。上位のペアはすべて間隔9で、&sect;7で見いだした固定オフセット9でのそのままの反復と矛盾しない。IPEの検定と内部反復の検定は、同じ構造的特徴に行き着く。</span></span></div>
 
 <figure class="plot" role="img" aria-label="G3 IPE z-score heatmap">
 <svg viewBox="0 0 560 594.0" xmlns="http://www.w3.org/2000/svg">
 <style>.ipe-matrix-bg   { fill: #f3f0e4; }.ipe-grid        { stroke: #f3f0e4; stroke-width: 0.5; }.ipe-grid-major  { stroke: #f3f0e4; stroke-width: 1.0; }.ipe-excess      { fill: rgb(190, 45, 45); }.ipe-deficit     { fill: rgb(40, 95, 170); }.ipe-noise       { fill: #e8e4d2; }@media (prefers-color-scheme: dark) {  .ipe-matrix-bg  { fill: #15130f; }  .ipe-grid       { stroke: #15130f; }  .ipe-grid-major { stroke: #15130f; }}</style>
-<text class="ax-title" text-anchor="middle" x="280.0" y="16">G3: IPE z-score heatmap (all pairs)</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="16">G3: IPE z-score heatmap (all pairs)</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="16" lang="ja">G3：IPEのzスコア・ヒートマップ（全ペア）</text>
 <rect class="ipe-matrix-bg" x="40.0" y="34.0" width="480.0" height="480.0" stroke="none"/>
 <rect class="ipe-noise" fill-opacity="0.40" x="52.0" y="34.0" width="12.0" height="12.0" stroke="none"><title>pos (1, 2): count=0, z=-0.80</title></rect>
 <rect class="ipe-noise" fill-opacity="0.40" x="64.0" y="34.0" width="12.0" height="12.0" stroke="none"><title>pos (1, 3): count=0, z=-0.80</title></rect>
@@ -3123,27 +3204,27 @@
 <text class="ax-label" text-anchor="end" x="36" y="451.0">35</text>
 <text class="ax-label" text-anchor="middle" x="514.0" y="530.0">40</text>
 <text class="ax-label" text-anchor="end" x="36" y="511.0">40</text>
-<text class="ax-title" text-anchor="middle" x="280.0" y="550.0">position j</text>
-<text class="ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0">position i</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="550.0">position j</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="550.0" lang="ja">位置j</text>
+<text class="en ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0">position i</text><text class="jp ax-title" transform="rotate(-90 12 274.0)" x="12" y="274.0" lang="ja">位置i</text>
 <rect class="ipe-deficit" fill-opacity="0.85" x="165.0" y="566.0" width="12" height="12"/>
-<text class="ax-label" x="182.0" y="576.0">deficit</text>
+<text class="en ax-label" x="182.0" y="576.0">deficit</text><text class="jp ax-label" x="182.0" y="576.0" lang="ja">不足</text>
 <rect class="ipe-noise" fill-opacity="0.4" x="245.0" y="566.0" width="12" height="12"/>
-<text class="ax-label" x="262.0" y="576.0">noise</text>
+<text class="en ax-label" x="262.0" y="576.0">noise</text><text class="jp ax-label" x="262.0" y="576.0" lang="ja">ノイズ</text>
 <rect class="ipe-excess" fill-opacity="0.85" x="315.0" y="566.0" width="12" height="12"/>
-<text class="ax-label" x="332.0" y="576.0">excess</text>
+<text class="en ax-label" x="332.0" y="576.0">excess</text><text class="jp ax-label" x="332.0" y="576.0" lang="ja">過剰</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 10.</span> Group 3 inter-position equality heatmap. The diagonal band at gap 9 (offset 9 off the diagonal) between positions 22–28 and 31–37 is the signature of the verbatim repeat covered in §7.</div>
-<h2 id="repeats"><span class="num">7.</span>Internal-repeat structure (Group 3)</h2>
-<p>The inter-position equality probe of §6 tests for single-character equalities at every pair of positions. Its multi-character generalisation tests for length-<em>L</em> substrings (<em>L</em>&nbsp;&geq;&nbsp;3) appearing at two disjoint positions. For Group 3 the finding of §6 is that equalities at offset 9 span the entire positions-22-through-33 region; this longer-substring probe confirms that the equalities are not per-position coincidences but a full verbatim substring repeat.</p>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 10.</span> Group 3 inter-position equality heatmap. The diagonal band at gap 9 (offset 9 off the diagonal) between positions 22–28 and 31–37 is the signature of the verbatim repeat covered in §7.</span><span class="jp" lang="ja"><span class="label">図10.</span>グループ3の位置間一致のヒートマップ。22–28文字目と31–37文字目の間の間隔9（対角線から9ずれた）対角の帯が、&sect;7で扱うそのままの反復の特徴である。</span></span></div>
+<h2 id="repeats"><a class="anc" href="#repeats"><span class="bi-i"><span class="en"><span class="num">7.</span>Internal-repeat structure (Group 3)</span><span class="jp" lang="ja"><span class="num">7.</span>内部反復の構造（グループ3）</span></span></a></h2>
+<p><span class="bi"><span class="en">The inter-position equality probe of §6 tests for single-character equalities at every pair of positions. Its multi-character generalisation tests for length-<em>L</em> substrings (<em>L</em>&nbsp;&geq;&nbsp;3) appearing at two disjoint positions. For Group 3 the finding of §6 is that equalities at offset 9 span the entire positions-22-through-33 region; this longer-substring probe confirms that the equalities are not per-position coincidences but a full verbatim substring repeat.</span><span class="jp" lang="ja">&sect;6の位置間一致の検定は、すべての位置ペアで1文字の一致を調べる。それを複数文字に一般化したものは、重ならない2か所に現れる長さ<em>L</em>の部分文字列（<em>L</em>&nbsp;&geq;&nbsp;3）を調べる。グループ3についての&sect;6の発見は、オフセット9での一致が22文字目から33文字目までの領域全体に及ぶということであり、この長い部分文字列の検定は、その一致が位置ごとの偶然の一致ではなく、部分文字列全体のそのままの反復であることを確かめる。</span></span></p>
 
-<div class="callout key">
+<div class="callout key"><span class="bi"><span class="en">
   <strong>Group 3: 3-to-7 character verbatim repeat at offset 9.</strong> 19 of 20 messages contain a length-3-to-7 substring that appears verbatim at two positions — the first occurrence starting at character 22, the second starting at character 31. The substrings differ across messages but the offset pair is near-invariant.
-</div>
+</span><span class="jp" lang="ja"><strong>グループ3：オフセット9での3〜7文字のそのままの反復。</strong>20件中19件のメッセージが、2か所にそのまま現れる長さ3〜7の部分文字列を含み、1回目は22文字目から、2回目は31文字目から始まる。部分文字列はメッセージごとに異なるが、オフセットのペアはほぼ不変である。</span></span></div>
 
-<h3><span class="num">7.1</span>Per-message repeat table (Group 3)</h3>
+<h3><span class="bi-i"><span class="en"><span class="num">7.1</span>Per-message repeat table (Group 3)</span><span class="jp" lang="ja"><span class="num">7.1</span>メッセージごとの反復の表（グループ3）</span></span></h3>
 <div class="scroll-x"><table class="sym-count">
-<thead><tr><th>message</th><th class="num">len</th><th class="num">first@</th><th class="num">second@</th><th>substring</th></tr></thead>
+<thead><tr><th><span class="bi-i"><span class="en">message</span><span class="jp" lang="ja">メッセージ</span></span></th><th class="num"><span class="bi-i"><span class="en">len</span><span class="jp" lang="ja">長さ</span></span></th><th class="num"><span class="bi-i"><span class="en">first@</span><span class="jp" lang="ja">1回目@</span></span></th><th class="num"><span class="bi-i"><span class="en">second@</span><span class="jp" lang="ja">2回目@</span></span></th><th><span class="bi-i"><span class="en">substring</span><span class="jp" lang="ja">部分文字列</span></span></th></tr></thead>
 <tbody>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJTO7B2V2ITMXMWYYSY465NZVRECHW5NZVLCCCBI</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">5NZV</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">FJE7XHB6LXCJXPIZISJGDH5OJUIGNGH5OJ7IRMRN</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">H5OJ</td></tr>
@@ -3154,7 +3235,7 @@
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DX2T377LNVJAQYZSR2KTZYQIQPX7IEYQIQEXBFCN</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">YQIQ</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DX3D7M6TOENVE5ATJJFPWYEQEYQ4XUYEQEGQDPWS</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">YEQE</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DXKDCGKS74QV2WDHWULWTPZZOEA6HJPZZOEAZXPB</td><td class="num">6</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">PZZOEA</td></tr>
-<tr><td style="font-family:monospace;font-size:0.82em">DXVGURR3MON6BZADYUAEHWGZGBUZ5SWGGIBUKFRU</td><td class="num" colspan="4" style="text-align:center;color:var(--muted)">(no repeat of length &geq; 3)</td></tr>
+<tr><td style="font-family:monospace;font-size:0.82em">DXVGURR3MON6BZADYUAEHWGZGBUZ5SWGGIBUKFRU</td><td class="num" colspan="4" style="text-align:center;color:var(--muted)"><span class="bi-i"><span class="en">(no repeat of length &geq; 3)</span><span class="jp" lang="ja">（長さ&geq; 3の反復なし）</span></span></td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">L6QO42WYAATGOEWNLXLGF345X5IBGG345XWBBBZX</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">345X</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DQMJLEOPKUXZGFPK4WIXAET4T3UHYNET4TZUFVTG</td><td class="num">4</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">ET4T</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">DQ4SHPDMW2RLT3USPKQE4344TUBO45344TUBNJVZ</td><td class="num">6</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">344TUB</td></tr>
@@ -3166,13 +3247,13 @@
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">AKNHLJPITLXGXHRQAZPPA4RRX6ZYBI4RRX6ZMFCD</td><td class="num">6</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">4RRX6Z</td></tr>
 <tr class="highlight"><td style="font-family:monospace;font-size:0.82em">D5E4SRHXF4RL6S6E2KZ7WH4K4MGXEEH4KYMGZXUT</td><td class="num">3</td><td class="num">22</td><td class="num">31</td><td style="font-family:monospace">H4K</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 6.</span> Per-message longest-internal-repeat record for Group 3 first-broadcast messages. Highlighted rows: repeats beginning at the canonical offset pair (22, 31).</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 6.</span> Per-message longest-internal-repeat record for Group 3 first-broadcast messages. Highlighted rows: repeats beginning at the canonical offset pair (22, 31).</span><span class="jp" lang="ja"><span class="label">表6.</span>グループ3の初回放送メッセージごとの最長の内部反復の記録。強調した行：標準のオフセットのペア（22, 31）で始まる反復。</span></span></div>
 
-<h3><span class="num">7.2</span>Per-message repeat table (Group 2)</h3>
-<p>The 2-character repeat identified in §6.1 at positions (16, 17) &rarr; (21, 22) is shorter than the length-3 threshold of the substring-repeat probe, so it does <em>not</em> appear in the longest-internal-repeat table below. The table records length-3-or-longer repeats separately; Group 2 at 40 characters has 9 such messages out of 39, scattered across varied offsets with no concentration:</p>
+<h3><span class="bi-i"><span class="en"><span class="num">7.2</span>Per-message repeat table (Group 2)</span><span class="jp" lang="ja"><span class="num">7.2</span>メッセージごとの反復の表（グループ2）</span></span></h3>
+<p><span class="bi"><span class="en">The 2-character repeat identified in §6.1 at positions (16, 17) &rarr; (21, 22) is shorter than the length-3 threshold of the substring-repeat probe, so it does <em>not</em> appear in the longest-internal-repeat table below. The table records length-3-or-longer repeats separately; Group 2 at 40 characters has 9 such messages out of 39, scattered across varied offsets with no concentration:</span><span class="jp" lang="ja">&sect;6.1で見いだした（16, 17）&rarr;（21, 22）の2文字の反復は、部分文字列の反復の検定の長さ3の閾値より短いので、下の最長の内部反復の表には現れ<em>ない</em>。表は長さ3以上の反復を別に記録する。40文字のグループ2には、そのようなメッセージが39件中9件あり、さまざまなオフセットに散らばっていて集中はない：</span></span></p>
 
 <div class="scroll-x"><table class="sym-count">
-<thead><tr><th>message</th><th class="num">len</th><th class="num">first@</th><th class="num">second@</th><th>substring</th></tr></thead>
+<thead><tr><th><span class="bi-i"><span class="en">message</span><span class="jp" lang="ja">メッセージ</span></span></th><th class="num"><span class="bi-i"><span class="en">len</span><span class="jp" lang="ja">長さ</span></span></th><th class="num"><span class="bi-i"><span class="en">first@</span><span class="jp" lang="ja">1回目@</span></span></th><th class="num"><span class="bi-i"><span class="en">second@</span><span class="jp" lang="ja">2回目@</span></span></th><th><span class="bi-i"><span class="en">substring</span><span class="jp" lang="ja">部分文字列</span></span></th></tr></thead>
 <tbody>
 <tr class=""><td style="font-family:monospace;font-size:0.82em">ARALJD5A2DQJUH6IC6BDICGB556IC5BEZ6LQS4YT</td><td class="num">3</td><td class="num">15</td><td class="num">27</td><td style="font-family:monospace">6IC</td></tr>
 <tr class=""><td style="font-family:monospace;font-size:0.82em">BPXCLQJ5DAQ62IKHZXAGHZX37P7A6MEH26G37KJ5</td><td class="num">3</td><td class="num">16</td><td class="num">21</td><td style="font-family:monospace">HZX</td></tr>
@@ -3184,28 +3265,28 @@
 <tr class=""><td style="font-family:monospace;font-size:0.82em">XBDIASPC367ARLCDT4ZADT4EJ4DYQBSQ2TWE63U6</td><td class="num">3</td><td class="num">16</td><td class="num">21</td><td style="font-family:monospace">DT4</td></tr>
 <tr class=""><td style="font-family:monospace;font-size:0.82em">I4FFJUUA4DYJCOFGP4Z22XCWHSW2H7WP2B6HSW7Z</td><td class="num">3</td><td class="num">25</td><td class="num">36</td><td style="font-family:monospace">HSW</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 7.</span> Group-2 messages with a length-3-or-longer internal repeat (26 messages without any such repeat are omitted). The 2-character fixed-offset repeat identified in §6.1 is below the length threshold of this probe and does not appear here. Absence of a length-3 repeat does not imply absence of structure; §6 is the relevant probe.</div>
-<h2 id="within-key"><span class="num">8.</span>Within-prefix structural probes</h2>
-<p>The 30-character paper reported three within-prefix probes — pairwise positional mutual information, LZMA compressibility, and modular-difference structure across date-ordered consecutive messages — each requiring <em>N</em>&nbsp;&geq;&nbsp;50 per prefix cell for credible z-scores. In the 40-character cohort, <strong>no prefix cell has more than 15 messages</strong> in either group. The per-prefix probes cannot be run at the same statistical power and are skipped.</p>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 7.</span> Group-2 messages with a length-3-or-longer internal repeat (26 messages without any such repeat are omitted). The 2-character fixed-offset repeat identified in §6.1 is below the length threshold of this probe and does not appear here. Absence of a length-3 repeat does not imply absence of structure; §6 is the relevant probe.</span><span class="jp" lang="ja"><span class="label">表7.</span>長さ3以上の内部反復を持つグループ2のメッセージ（そのような反復のない26件は省略）。&sect;6.1で見いだした固定オフセットの2文字の反復は、この検定の長さの閾値を下回るのでここには現れない。長さ3の反復がないことは構造がないことを意味しない。関係するのは&sect;6の検定である。</span></span></div>
+<h2 id="within-key"><a class="anc" href="#within-key"><span class="bi-i"><span class="en"><span class="num">8.</span>Within-prefix structural probes</span><span class="jp" lang="ja"><span class="num">8.</span>プレフィックス内の構造の検定</span></span></a></h2>
+<p><span class="bi"><span class="en">The 30-character paper reported three within-prefix probes — pairwise positional mutual information, LZMA compressibility, and modular-difference structure across date-ordered consecutive messages — each requiring <em>N</em>&nbsp;&geq;&nbsp;50 per prefix cell for credible z-scores. In the 40-character cohort, <strong>no prefix cell has more than 15 messages</strong> in either group. The per-prefix probes cannot be run at the same statistical power and are skipped.</span><span class="jp" lang="ja">30文字の論文は、プレフィックス内の検定を3つ報告した――位置ペアの相互情報量、LZMA圧縮率、日付順に並べた連続メッセージ間の剰余差の構造――で、どれもzスコアの信頼性のためにプレフィックスのセルごとに<em>N</em>&nbsp;&geq;&nbsp;50が必要である。40文字のコホートでは、どちらのグループでも<strong>15件を超えるプレフィックスのセルはない</strong>。プレフィックスごとの検定は同じ統計的な検出力では実行できないので省略する。</span></span></p>
 
-<p>What can be run is an <em>aggregate</em> compressibility probe on the body bytes of each whole-cohort corpus:</p>
+<p><span class="bi"><span class="en">What can be run is an <em>aggregate</em> compressibility probe on the body bytes of each whole-cohort corpus:</span><span class="jp" lang="ja">実行できるのは、コホート全体のコーパスの本体バイトに対する<em>全体の</em>圧縮率の検定である：</span></span></p>
 
 <div class="scroll-x"><table>
-<thead><tr><th>cohort</th><th class="num">body bytes</th><th class="num">obs ratio</th><th class="num">null mean</th><th class="num">null sd</th><th class="num">z</th></tr></thead>
+<thead><tr><th><span class="bi-i"><span class="en">cohort</span><span class="jp" lang="ja">コホート</span></span></th><th class="num"><span class="bi-i"><span class="en">body bytes</span><span class="jp" lang="ja">本体バイト数</span></span></th><th class="num"><span class="bi-i"><span class="en">obs ratio</span><span class="jp" lang="ja">観測比</span></span></th><th class="num"><span class="bi-i"><span class="en">null mean</span><span class="jp" lang="ja">帰無平均</span></span></th><th class="num"><span class="bi-i"><span class="en">null sd</span><span class="jp" lang="ja">帰無標準偏差</span></span></th><th class="num">z</th></tr></thead>
 <tbody>
 <tr><td>G2</td><td class="num">1482</td><td class="num">0.7368</td><td class="num">0.7345</td><td class="num">0.0022</td><td class="num">+1.07</td></tr>
 <tr class="highlight"><td>G3</td><td class="num">760</td><td class="num">0.7789</td><td class="num">0.8142</td><td class="num">0.0050</td><td class="num">-7.10</td></tr>
 </tbody></table></div>
-<div class="caption"><span class="label">Table 8.</span> Aggregate LZMA compressibility of the body (positions 3&ndash;40) of each cohort. The null distribution is 50 synthetic uniform-random base32 draws of matched length. G2 matches the synthetic null; G3 compresses at a ratio <em>7.1&sigma;</em> below the null, consistent with the repeat finding of §6 producing locally redundant bytes.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Table 8.</span> Aggregate LZMA compressibility of the body (positions 3&ndash;40) of each cohort. The null distribution is 50 synthetic uniform-random base32 draws of matched length. G2 matches the synthetic null; G3 compresses at a ratio <em>7.1&sigma;</em> below the null, consistent with the repeat finding of §6 producing locally redundant bytes.</span><span class="jp" lang="ja"><span class="label">表8.</span>各コホートの本体（3&ndash;40文字目）の全体のLZMA圧縮率。帰無分布は、同じ長さの人工的な一様ランダムbase32の50回の抽出である。G2は人工的な帰無と一致し、G3は帰無より<em>7.1&sigma;</em>低い比で圧縮され、&sect;6の反復の発見が局所的に冗長なバイトを生むことと矛盾しない。</span></span></div>
 
-<p>Pairwise mutual-information scans require <em>N</em>&nbsp;&geq;&nbsp;50 to populate 32&times;32 joint tables with non-zero count per bin. Both cohorts fail that requirement; the MI probe is flagged as skipped in the reproduction output.</p>
+<p><span class="bi"><span class="en">Pairwise mutual-information scans require <em>N</em>&nbsp;&geq;&nbsp;50 to populate 32&times;32 joint tables with non-zero count per bin. Both cohorts fail that requirement; the MI probe is flagged as skipped in the reproduction output.</span><span class="jp" lang="ja">位置ペアの相互情報量の走査には、32&times;32の同時分布表のビンを0でない件数で埋めるために<em>N</em>&nbsp;&geq;&nbsp;50が必要である。どちらのコホートもその条件を満たさず、相互情報量の検定は再現出力で省略と記される。</span></span></p>
 
-<p>Differential structure between date-ordered consecutive broadcasts likewise requires per-prefix sample sizes we do not have; no prefix in either cohort has &geq;&nbsp;50 messages.</p>
-<h2 id="synthesis"><span class="num">9.</span>Synthesis</h2>
-<p>Both 40-character cohorts carry format-level structure. The two structures are distinct; neither matches the 30-character Group 1 format.</p>
+<p><span class="bi"><span class="en">Differential structure between date-ordered consecutive broadcasts likewise requires per-prefix sample sizes we do not have; no prefix in either cohort has &geq;&nbsp;50 messages.</span><span class="jp" lang="ja">日付順に並べた連続する放送の間の差の構造も、同様に手元にないプレフィックスごとのサンプルサイズを必要とし、どちらのコホートにも&geq;&nbsp;50件のプレフィックスはない。</span></span></p>
+<h2 id="synthesis"><a class="anc" href="#synthesis"><span class="bi-i"><span class="en"><span class="num">9.</span>Synthesis</span><span class="jp" lang="ja"><span class="num">9.</span>総合</span></span></a></h2>
+<p><span class="bi"><span class="en">Both 40-character cohorts carry format-level structure. The two structures are distinct; neither matches the 30-character Group 1 format.</span><span class="jp" lang="ja">40文字のどちらのコホートにも形式レベルの構造がある。2つの構造は別々で、どちらも30文字グループ1の形式とは合わない。</span></span></p>
 
-<h3><span class="num">9.1</span>Group 2 — 2-character fixed-offset repeat</h3>
-<p>The 40-character Group 2 payload is <strong>not</strong> a uniform-random generator. In 22 of 35 messages (63%), the character at position 16 equals the character at position 21, <em>and</em> the character at position 17 equals the character at position 22 — equivalently, the 2-character bigram at positions 16&ndash;17 is reproduced at positions 21&ndash;22 with a fixed 5-character interval between the starts. Two additional Bonferroni-significant fixed-offset equalities appear at (19, 24) with 12 matches and (26, 37) with 10 matches, indicating further (weaker) repeat-like structure elsewhere in the body. The structure is invisible to the consecutive-doublet probe of §5 and the length-&geq;3 internal-repeat probe of §7; the inter-position equality probe of §6 is what surfaces it, at overwhelming significance (<em>z</em>&nbsp;=&nbsp;+20.31 at each of the two leading pairs).</p>
+<h3><span class="bi-i"><span class="en"><span class="num">9.1</span>Group 2 — 2-character fixed-offset repeat</span><span class="jp" lang="ja"><span class="num">9.1</span>グループ2――固定オフセットでの2文字の反復</span></span></h3>
+<p><span class="bi"><span class="en">The 40-character Group 2 payload is <strong>not</strong> a uniform-random generator. In 22 of 35 messages (63%), the character at position 16 equals the character at position 21, <em>and</em> the character at position 17 equals the character at position 22 — equivalently, the 2-character bigram at positions 16&ndash;17 is reproduced at positions 21&ndash;22 with a fixed 5-character interval between the starts. Two additional Bonferroni-significant fixed-offset equalities appear at (19, 24) with 12 matches and (26, 37) with 10 matches, indicating further (weaker) repeat-like structure elsewhere in the body. The structure is invisible to the consecutive-doublet probe of §5 and the length-&geq;3 internal-repeat probe of §7; the inter-position equality probe of §6 is what surfaces it, at overwhelming significance (<em>z</em>&nbsp;=&nbsp;+20.31 at each of the two leading pairs).</span><span class="jp" lang="ja">40文字グループ2のペイロードは一様ランダムな生成<strong>ではない</strong>。35件中22件（63%）のメッセージで、16文字目の文字が21文字目の文字と同じで、<em>そして</em>17文字目の文字が22文字目の文字と同じである――言い換えると、16&ndash;17文字目の2文字の組が、開始の間隔が固定の5文字で21&ndash;22文字目に再び現れる。ほかにボンフェローニで有意な固定オフセットの一致が2つ、（19, 24）で12件、（26, 37）で10件の一致として現れ、本体のほかの場所にさらに（より弱い）反復のような構造があることを示している。この構造は&sect;5のダブレットの検定と&sect;7の長さ&geq;3の内部反復の検定では見えず、&sect;6の位置間一致の検定が圧倒的な有意性で表に出す（先頭の2ペアのそれぞれで<em>z</em>&nbsp;=&nbsp;+20.31）。</span></span></p>
 
 <figure class="plot" role="img" aria-label="Schematic of the observed Group 2 40-character format">
 <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg">
@@ -3225,20 +3306,20 @@
 <text class="ax-label" text-anchor="middle" x="510.0" y="23">192</text>
 <line class="ax-tick" x1="530.0" y1="27" x2="530.0" y2="40"/>
 <text class="ax-label" text-anchor="middle" x="530.0" y="23">200</text>
-<text class="ax-title" text-anchor="middle" x="280.0" y="10">bit offset along the 200-bit payload</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="10">bit offset along the 200-bit payload</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="10" lang="ja">200ビットのペイロード上のビット位置</text>
 <g class="fmt-region"><rect class="fmt-p" x="30.0" y="45" width="25.0" height="48"/><line class="fmt-divider" x1="42.50" y1="45.00" x2="42.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="42.5" y="67">P</text>
-<text class="fmt-lbl" text-anchor="middle" x="42.5" y="83" style="font-size:8px">10 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="42.5" y="105">prefix</text>
+<text class="en fmt-lbl" text-anchor="middle" x="42.5" y="83" style="font-size:8px">10 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="42.5" y="83" style="font-size:8px" lang="ja">10ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="42.5" y="105">prefix</text><text class="jp fmt-ann" text-anchor="middle" x="42.5" y="105" lang="ja">プレフィックス</text>
 <text class="fmt-ann" text-anchor="middle" x="42.5" y="118">(PR)</text>
 <g class="fmt-region"><rect class="fmt-t" x="55.0" y="45" width="162.5" height="48"/><line class="fmt-divider" x1="67.50" y1="45.00" x2="67.50" y2="93.00"/><line class="fmt-divider" x1="80.00" y1="45.00" x2="80.00" y2="93.00"/><line class="fmt-divider" x1="92.50" y1="45.00" x2="92.50" y2="93.00"/><line class="fmt-divider" x1="105.00" y1="45.00" x2="105.00" y2="93.00"/><line class="fmt-divider" x1="117.50" y1="45.00" x2="117.50" y2="93.00"/><line class="fmt-divider" x1="130.00" y1="45.00" x2="130.00" y2="93.00"/><line class="fmt-divider" x1="142.50" y1="45.00" x2="142.50" y2="93.00"/><line class="fmt-divider" x1="155.00" y1="45.00" x2="155.00" y2="93.00"/><line class="fmt-divider" x1="167.50" y1="45.00" x2="167.50" y2="93.00"/><line class="fmt-divider" x1="180.00" y1="45.00" x2="180.00" y2="93.00"/><line class="fmt-divider" x1="192.50" y1="45.00" x2="192.50" y2="93.00"/><line class="fmt-divider" x1="205.00" y1="45.00" x2="205.00" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="136.2" y="67">H</text>
-<text class="fmt-lbl" text-anchor="middle" x="136.2" y="83" style="font-size:8px">65 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="136.2" y="105">header</text>
+<text class="en fmt-lbl" text-anchor="middle" x="136.2" y="83" style="font-size:8px">65 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="136.2" y="83" style="font-size:8px" lang="ja">65ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="136.2" y="105">header</text><text class="jp fmt-ann" text-anchor="middle" x="136.2" y="105" lang="ja">ヘッダ</text>
 <g class="fmt-region"><rect class="fmt-r" x="217.5" y="45" width="25.0" height="48"/><line class="fmt-divider" x1="230.00" y1="45.00" x2="230.00" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="230.0" y="67">R₁</text>
 <text class="fmt-lbl" text-anchor="middle" x="230.0" y="83" style="font-size:8px"></text>
-<text class="fmt-ann" text-anchor="middle" x="230.0" y="105">copy 1</text>
+<text class="en fmt-ann" text-anchor="middle" x="230.0" y="105">copy 1</text><text class="jp fmt-ann" text-anchor="middle" x="230.0" y="105" lang="ja">コピー1</text>
 <g class="fmt-region"><rect class="fmt-x" x="242.5" y="45" width="37.5" height="48"/><line class="fmt-divider" x1="255.00" y1="45.00" x2="255.00" y2="93.00"/><line class="fmt-divider" x1="267.50" y1="45.00" x2="267.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="261.2" y="67">s</text>
 <text class="fmt-lbl" text-anchor="middle" x="261.2" y="83" style="font-size:8px"></text>
@@ -3246,11 +3327,11 @@
 <g class="fmt-region"><rect class="fmt-r" x="280.0" y="45" width="25.0" height="48"/><line class="fmt-divider" x1="292.50" y1="45.00" x2="292.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="292.5" y="67">R₂</text>
 <text class="fmt-lbl" text-anchor="middle" x="292.5" y="83" style="font-size:8px"></text>
-<text class="fmt-ann" text-anchor="middle" x="292.5" y="105">copy 2</text>
+<text class="en fmt-ann" text-anchor="middle" x="292.5" y="105">copy 2</text><text class="jp fmt-ann" text-anchor="middle" x="292.5" y="105" lang="ja">コピー2</text>
 <g class="fmt-region"><rect class="fmt-b" x="305.0" y="45" width="225.0" height="48"/><line class="fmt-divider" x1="317.50" y1="45.00" x2="317.50" y2="93.00"/><line class="fmt-divider" x1="330.00" y1="45.00" x2="330.00" y2="93.00"/><line class="fmt-divider" x1="342.50" y1="45.00" x2="342.50" y2="93.00"/><line class="fmt-divider" x1="355.00" y1="45.00" x2="355.00" y2="93.00"/><line class="fmt-divider" x1="367.50" y1="45.00" x2="367.50" y2="93.00"/><line class="fmt-divider" x1="380.00" y1="45.00" x2="380.00" y2="93.00"/><line class="fmt-divider" x1="392.50" y1="45.00" x2="392.50" y2="93.00"/><line class="fmt-divider" x1="405.00" y1="45.00" x2="405.00" y2="93.00"/><line class="fmt-divider" x1="417.50" y1="45.00" x2="417.50" y2="93.00"/><line class="fmt-divider" x1="430.00" y1="45.00" x2="430.00" y2="93.00"/><line class="fmt-divider" x1="442.50" y1="45.00" x2="442.50" y2="93.00"/><line class="fmt-divider" x1="455.00" y1="45.00" x2="455.00" y2="93.00"/><line class="fmt-divider" x1="467.50" y1="45.00" x2="467.50" y2="93.00"/><line class="fmt-divider" x1="480.00" y1="45.00" x2="480.00" y2="93.00"/><line class="fmt-divider" x1="492.50" y1="45.00" x2="492.50" y2="93.00"/><line class="fmt-divider" x1="505.00" y1="45.00" x2="505.00" y2="93.00"/><line class="fmt-divider" x1="517.50" y1="45.00" x2="517.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="417.5" y="67">T</text>
-<text class="fmt-lbl" text-anchor="middle" x="417.5" y="83" style="font-size:8px">90 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="417.5" y="105">trailing body</text>
+<text class="en fmt-lbl" text-anchor="middle" x="417.5" y="83" style="font-size:8px">90 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="417.5" y="83" style="font-size:8px" lang="ja">90ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="417.5" y="105">trailing body</text><text class="jp fmt-ann" text-anchor="middle" x="417.5" y="105" lang="ja">末尾の本体</text>
 <line class="ax" x1="30" y1="150" x2="530" y2="150"/>
 <line class="ax-tick" x1="36.25" y1="146" x2="36.25" y2="154"/>
 <text class="ax-label" text-anchor="middle" x="36.25" y="164">1</text>
@@ -3266,13 +3347,13 @@
 <text class="ax-label" text-anchor="middle" x="311.25" y="164">23</text>
 <line class="ax-tick" x1="523.75" y1="146" x2="523.75" y2="154"/>
 <text class="ax-label" text-anchor="middle" x="523.75" y="164">40</text>
-<text class="ax-title" text-anchor="middle" x="280.0" y="194">character position</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="194">character position</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="194" lang="ja">文字位置</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 11.</span> G2 40-character observational region schematic. After the 10-bit prefix (P, positions 1&ndash;2) and a header region (H, positions 3&ndash;15, approximately 65 bits), the body carries a 2-character region (R&#8321;, positions 16&ndash;17) whose content is reproduced at positions 21&ndash;22 (R&#8322;) with a short gap (s) at positions 18&ndash;20 between them. Positions 23&ndash;40 are a trailing body region (T) within which additional weaker equalities appear at positions 19–24 and 26–37 but do not organise into a single dominant structure. The schematic is observational and the exact boundaries of R&#8321;/R&#8322; are approximate. 22 of 35 messages carry the R&#8321; = R&#8322; equality; the remaining 13 messages do not, and we do not infer a cryptographic role for the repeat.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 11.</span> G2 40-character observational region schematic. After the 10-bit prefix (P, positions 1&ndash;2) and a header region (H, positions 3&ndash;15, approximately 65 bits), the body carries a 2-character region (R&#8321;, positions 16&ndash;17) whose content is reproduced at positions 21&ndash;22 (R&#8322;) with a short gap (s) at positions 18&ndash;20 between them. Positions 23&ndash;40 are a trailing body region (T) within which additional weaker equalities appear at positions 19–24 and 26–37 but do not organise into a single dominant structure. The schematic is observational and the exact boundaries of R&#8321;/R&#8322; are approximate. 22 of 35 messages carry the R&#8321; = R&#8322; equality; the remaining 13 messages do not, and we do not infer a cryptographic role for the repeat.</span><span class="jp" lang="ja"><span class="label">図11.</span>G2の40文字の観測領域の模式図。10ビットのプレフィックス（P、1&ndash;2文字目）とヘッダ領域（H、3&ndash;15文字目、約65ビット）の後、本体には2文字の領域（R&#8321;、16&ndash;17文字目）があり、その内容が21&ndash;22文字目（R&#8322;）に再び現れ、間の18&ndash;20文字目に短い隙間（s）がある。23&ndash;40文字目は末尾の本体領域（T）で、その中に19–24文字目と26–37文字目のより弱い一致が現れるが、1つの支配的な構造にはまとまらない。模式図は観測に基づくもので、R&#8321;／R&#8322;の正確な境界はおおよそである。35件中22件がR&#8321; = R&#8322;の一致を持ち、残る13件は持たない。反復に暗号上の役割は推定しない。</span></span></div>
 
-<h3><span class="num">9.2</span>Group 3 — 3-to-7 character fixed-offset repeat</h3>
-<p>The Group 3 cohort carries a related but stronger structure: a 3-to-7 character substring starting at position 22 is duplicated verbatim starting at position 31 in 19 of 20 messages. The inter-position equality probe confirms at the character level (all 18 messages match at (22, 31), at (23, 32), at (24, 33)) and the longest-substring probe confirms at the substring level. Compressibility (<em>z</em>&nbsp;=&nbsp;-7.10 against a uniform null) corroborates the redundancy.</p>
+<h3><span class="bi-i"><span class="en"><span class="num">9.2</span>Group 3 — 3-to-7 character fixed-offset repeat</span><span class="jp" lang="ja"><span class="num">9.2</span>グループ3――固定オフセットでの3〜7文字の反復</span></span></h3>
+<p><span class="bi"><span class="en">The Group 3 cohort carries a related but stronger structure: a 3-to-7 character substring starting at position 22 is duplicated verbatim starting at position 31 in 19 of 20 messages. The inter-position equality probe confirms at the character level (all 18 messages match at (22, 31), at (23, 32), at (24, 33)) and the longest-substring probe confirms at the substring level. Compressibility (<em>z</em>&nbsp;=&nbsp;-7.10 against a uniform null) corroborates the redundancy.</span><span class="jp" lang="ja">グループ3のコホートには、関連するがより強い構造がある：22文字目から始まる3〜7文字の部分文字列が、20件中19件のメッセージで31文字目からそのまま複製される。位置間一致の検定が文字レベルで（18件すべてが（22, 31）、（23, 32）、（24, 33）で一致）、最長部分文字列の検定が部分文字列のレベルでこれを確かめる。圧縮率（一様帰無に対して<em>z</em>&nbsp;=&nbsp;-7.10）も冗長性を裏づける。</span></span></p>
 
 <figure class="plot" role="img" aria-label="Schematic of the observed Group 3 40-character format">
 <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg">
@@ -3292,32 +3373,32 @@
 <text class="ax-label" text-anchor="middle" x="510.0" y="23">192</text>
 <line class="ax-tick" x1="530.0" y1="27" x2="530.0" y2="40"/>
 <text class="ax-label" text-anchor="middle" x="530.0" y="23">200</text>
-<text class="ax-title" text-anchor="middle" x="280.0" y="10">bit offset along the 200-bit payload</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="10">bit offset along the 200-bit payload</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="10" lang="ja">200ビットのペイロード上のビット位置</text>
 <g class="fmt-region"><rect class="fmt-p" x="30.0" y="45" width="25.0" height="48"/><line class="fmt-divider" x1="42.50" y1="45.00" x2="42.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="42.5" y="67">P</text>
-<text class="fmt-lbl" text-anchor="middle" x="42.5" y="83" style="font-size:8px">10 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="42.5" y="105">prefix</text>
+<text class="en fmt-lbl" text-anchor="middle" x="42.5" y="83" style="font-size:8px">10 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="42.5" y="83" style="font-size:8px" lang="ja">10ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="42.5" y="105">prefix</text><text class="jp fmt-ann" text-anchor="middle" x="42.5" y="105" lang="ja">プレフィックス</text>
 <text class="fmt-ann" text-anchor="middle" x="42.5" y="118">(PR)</text>
 <g class="fmt-region"><rect class="fmt-t" x="55.0" y="45" width="237.5" height="48"/><line class="fmt-divider" x1="67.50" y1="45.00" x2="67.50" y2="93.00"/><line class="fmt-divider" x1="80.00" y1="45.00" x2="80.00" y2="93.00"/><line class="fmt-divider" x1="92.50" y1="45.00" x2="92.50" y2="93.00"/><line class="fmt-divider" x1="105.00" y1="45.00" x2="105.00" y2="93.00"/><line class="fmt-divider" x1="117.50" y1="45.00" x2="117.50" y2="93.00"/><line class="fmt-divider" x1="130.00" y1="45.00" x2="130.00" y2="93.00"/><line class="fmt-divider" x1="142.50" y1="45.00" x2="142.50" y2="93.00"/><line class="fmt-divider" x1="155.00" y1="45.00" x2="155.00" y2="93.00"/><line class="fmt-divider" x1="167.50" y1="45.00" x2="167.50" y2="93.00"/><line class="fmt-divider" x1="180.00" y1="45.00" x2="180.00" y2="93.00"/><line class="fmt-divider" x1="192.50" y1="45.00" x2="192.50" y2="93.00"/><line class="fmt-divider" x1="205.00" y1="45.00" x2="205.00" y2="93.00"/><line class="fmt-divider" x1="217.50" y1="45.00" x2="217.50" y2="93.00"/><line class="fmt-divider" x1="230.00" y1="45.00" x2="230.00" y2="93.00"/><line class="fmt-divider" x1="242.50" y1="45.00" x2="242.50" y2="93.00"/><line class="fmt-divider" x1="255.00" y1="45.00" x2="255.00" y2="93.00"/><line class="fmt-divider" x1="267.50" y1="45.00" x2="267.50" y2="93.00"/><line class="fmt-divider" x1="280.00" y1="45.00" x2="280.00" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="173.8" y="67">H</text>
-<text class="fmt-lbl" text-anchor="middle" x="173.8" y="83" style="font-size:8px">95 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="173.8" y="105">header</text>
+<text class="en fmt-lbl" text-anchor="middle" x="173.8" y="83" style="font-size:8px">95 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="173.8" y="83" style="font-size:8px" lang="ja">95ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="173.8" y="105">header</text><text class="jp fmt-ann" text-anchor="middle" x="173.8" y="105" lang="ja">ヘッダ</text>
 <g class="fmt-region"><rect class="fmt-r" x="292.5" y="45" width="87.5" height="48"/><line class="fmt-divider" x1="305.00" y1="45.00" x2="305.00" y2="93.00"/><line class="fmt-divider" x1="317.50" y1="45.00" x2="317.50" y2="93.00"/><line class="fmt-divider" x1="330.00" y1="45.00" x2="330.00" y2="93.00"/><line class="fmt-divider" x1="342.50" y1="45.00" x2="342.50" y2="93.00"/><line class="fmt-divider" x1="355.00" y1="45.00" x2="355.00" y2="93.00"/><line class="fmt-divider" x1="367.50" y1="45.00" x2="367.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="336.2" y="67">R₁</text>
-<text class="fmt-lbl" text-anchor="middle" x="336.2" y="83" style="font-size:8px">35 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="336.2" y="105">copy 1</text>
+<text class="en fmt-lbl" text-anchor="middle" x="336.2" y="83" style="font-size:8px">35 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="336.2" y="83" style="font-size:8px" lang="ja">35ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="336.2" y="105">copy 1</text><text class="jp fmt-ann" text-anchor="middle" x="336.2" y="105" lang="ja">コピー1</text>
 <g class="fmt-region"><rect class="fmt-x" x="380.0" y="45" width="25.0" height="48"/><line class="fmt-divider" x1="392.50" y1="45.00" x2="392.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="392.5" y="67">s</text>
 <text class="fmt-lbl" text-anchor="middle" x="392.5" y="83" style="font-size:8px"></text>
-<text class="fmt-ann" text-anchor="middle" x="392.5" y="105">gap</text>
+<text class="en fmt-ann" text-anchor="middle" x="392.5" y="105">gap</text><text class="jp fmt-ann" text-anchor="middle" x="392.5" y="105" lang="ja">隙間</text>
 <g class="fmt-region"><rect class="fmt-r" x="405.0" y="45" width="87.5" height="48"/><line class="fmt-divider" x1="417.50" y1="45.00" x2="417.50" y2="93.00"/><line class="fmt-divider" x1="430.00" y1="45.00" x2="430.00" y2="93.00"/><line class="fmt-divider" x1="442.50" y1="45.00" x2="442.50" y2="93.00"/><line class="fmt-divider" x1="455.00" y1="45.00" x2="455.00" y2="93.00"/><line class="fmt-divider" x1="467.50" y1="45.00" x2="467.50" y2="93.00"/><line class="fmt-divider" x1="480.00" y1="45.00" x2="480.00" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="448.8" y="67">R₂</text>
-<text class="fmt-lbl" text-anchor="middle" x="448.8" y="83" style="font-size:8px">35 bits</text>
-<text class="fmt-ann" text-anchor="middle" x="448.8" y="105">copy 2</text>
+<text class="en fmt-lbl" text-anchor="middle" x="448.8" y="83" style="font-size:8px">35 bits</text><text class="jp fmt-lbl" text-anchor="middle" x="448.8" y="83" style="font-size:8px" lang="ja">35ビット</text>
+<text class="en fmt-ann" text-anchor="middle" x="448.8" y="105">copy 2</text><text class="jp fmt-ann" text-anchor="middle" x="448.8" y="105" lang="ja">コピー2</text>
 <g class="fmt-region"><rect class="fmt-x" x="492.5" y="45" width="37.5" height="48"/><line class="fmt-divider" x1="505.00" y1="45.00" x2="505.00" y2="93.00"/><line class="fmt-divider" x1="517.50" y1="45.00" x2="517.50" y2="93.00"/></g>
 <text class="fmt-lbl" text-anchor="middle" x="511.2" y="67">T</text>
 <text class="fmt-lbl" text-anchor="middle" x="511.2" y="83" style="font-size:8px"></text>
-<text class="fmt-ann" text-anchor="middle" x="511.2" y="105">tail</text>
+<text class="en fmt-ann" text-anchor="middle" x="511.2" y="105">tail</text><text class="jp fmt-ann" text-anchor="middle" x="511.2" y="105" lang="ja">末尾</text>
 <line class="ax" x1="30" y1="150" x2="530" y2="150"/>
 <line class="ax-tick" x1="36.25" y1="146" x2="36.25" y2="154"/>
 <text class="ax-label" text-anchor="middle" x="36.25" y="164">1</text>
@@ -3333,37 +3414,37 @@
 <text class="ax-label" text-anchor="middle" x="498.75" y="164">38</text>
 <line class="ax-tick" x1="523.75" y1="146" x2="523.75" y2="154"/>
 <text class="ax-label" text-anchor="middle" x="523.75" y="164">40</text>
-<text class="ax-title" text-anchor="middle" x="280.0" y="194">character position</text>
+<text class="en ax-title" text-anchor="middle" x="280.0" y="194">character position</text><text class="jp ax-title" text-anchor="middle" x="280.0" y="194" lang="ja">文字位置</text>
 </svg>
 </figure>
-<div class="caption"><span class="label">Figure 12.</span> G3 40-character observational region schematic. After the 10-bit prefix (P), the body carries a header region (H, positions 3&ndash;21), a first copy of a repeat region (R&#8321;, positions 22&ndash;28), a short gap (s, positions 29&ndash;30), a second verbatim copy (R&#8322;, positions 31&ndash;37), and a tail (T, positions 38&ndash;40). The exact boundaries of R&#8321; and R&#8322; vary across messages between length 3 and length 7 (the longest repeats observed). We do not assign cryptographic or semantic roles to any region; the figure summarises observed message structure.</div>
+<div class="caption"><span class="bi"><span class="en"><span class="label">Figure 12.</span> G3 40-character observational region schematic. After the 10-bit prefix (P), the body carries a header region (H, positions 3&ndash;21), a first copy of a repeat region (R&#8321;, positions 22&ndash;28), a short gap (s, positions 29&ndash;30), a second verbatim copy (R&#8322;, positions 31&ndash;37), and a tail (T, positions 38&ndash;40). The exact boundaries of R&#8321; and R&#8322; vary across messages between length 3 and length 7 (the longest repeats observed). We do not assign cryptographic or semantic roles to any region; the figure summarises observed message structure.</span><span class="jp" lang="ja"><span class="label">図12.</span>G3の40文字の観測領域の模式図。10ビットのプレフィックス（P）の後、本体にはヘッダ領域（H、3&ndash;21文字目）、反復領域の1つ目のコピー（R&#8321;、22&ndash;28文字目）、短い隙間（s、29&ndash;30文字目）、2つ目のそのままのコピー（R&#8322;、31&ndash;37文字目）、末尾（T、38&ndash;40文字目）がある。R&#8321;とR&#8322;の正確な境界は、メッセージによって長さ3から長さ7（観測された最長の反復）の間で変わる。どの領域にも暗号上や意味上の役割は割り当てない。図は観測されたメッセージの構造をまとめたものである。</span></span></div>
 
-<p>The Group 2 and Group 3 40-character repeat structures are different in scale (2 characters vs 3&ndash;7), offset (5 positions vs 9), and anchor position (16 vs 22). They are not variants of a single underlying rule. Both reject the null of a uniform-random generator, and neither reproduces the 30-character Group 1 signatures.</p>
-<h2 id="discussion"><span class="num">10.</span>Discussion and limits</h2>
+<p><span class="bi"><span class="en">The Group 2 and Group 3 40-character repeat structures are different in scale (2 characters vs 3&ndash;7), offset (5 positions vs 9), and anchor position (16 vs 22). They are not variants of a single underlying rule. Both reject the null of a uniform-random generator, and neither reproduces the 30-character Group 1 signatures.</span><span class="jp" lang="ja">グループ2とグループ3の40文字の反復構造は、規模（2文字と3&ndash;7文字）、オフセット（5位置と9位置）、起点の位置（16と22）が異なる。1つの規則の変種ではない。どちらも一様ランダムな生成という帰無仮説を棄却し、どちらも30文字グループ1の特徴を再現しない。</span></span></p>
+<h2 id="discussion"><a class="anc" href="#discussion"><span class="bi-i"><span class="en"><span class="num">10.</span>Discussion and limits</span><span class="jp" lang="ja"><span class="num">10.</span>考察と限界</span></span></a></h2>
 
-<h3><span class="num">10.1</span>Scope of the probe battery</h3>
-<p>The probes reported here span four classes of statistical test: first-order symbol marginals (§3), per-position marginal z-scores by symbol (§4), consecutive-doublet and inter-position equality rates (§5 and §6), and multi-character internal repeats (§7). The IPE probe of §6 is the probe that surfaces the Group 2 finding: a 2-character repeat at a non-zero gap falls into the blind spot between the consecutive-doublet probe (which tests only pairs <em>i</em>, <em>i</em>+1) and the length-&geq;3 internal-repeat probe (which tests only multi-character substrings). Readers applying this probe battery to other cohorts should include the IPE probe from the start.</p>
+<h3><span class="bi-i"><span class="en"><span class="num">10.1</span>Scope of the probe battery</span><span class="jp" lang="ja"><span class="num">10.1</span>一連の検定の範囲</span></span></h3>
+<p><span class="bi"><span class="en">The probes reported here span four classes of statistical test: first-order symbol marginals (§3), per-position marginal z-scores by symbol (§4), consecutive-doublet and inter-position equality rates (§5 and §6), and multi-character internal repeats (§7). The IPE probe of §6 is the probe that surfaces the Group 2 finding: a 2-character repeat at a non-zero gap falls into the blind spot between the consecutive-doublet probe (which tests only pairs <em>i</em>, <em>i</em>+1) and the length-&geq;3 internal-repeat probe (which tests only multi-character substrings). Readers applying this probe battery to other cohorts should include the IPE probe from the start.</span><span class="jp" lang="ja">ここで報告した検定は4つの種類にわたる：記号の一次周辺分布（&sect;3）、記号ごとの位置別の周辺zスコア（&sect;4）、ダブレットと位置間一致の率（&sect;5と&sect;6）、複数文字の内部反復（&sect;7）。グループ2の発見を表に出すのは&sect;6のIPEの検定である：0でない間隔での2文字の反復は、ダブレットの検定（ペア<em>i</em>, <em>i</em>+1だけを調べる）と長さ&geq;3の内部反復の検定（複数文字の部分文字列だけを調べる）の間の死角に落ちる。この一連の検定をほかのコホートに適用する読者は、最初からIPEの検定を含めるべきである。</span></span></p>
 
-<h3><span class="num">10.2</span>Statistical power</h3>
-<p>At <em>N<sub>G2</sub></em>&nbsp;=&nbsp;39 and <em>N<sub>G3</sub></em>&nbsp;=&nbsp;20 the probe battery operates at roughly 1% and 0.3% of the 30-character Group 1 cohort's sample size. The probes that dominated the 30-character paper's positive findings — aggregate doublet z-scores of order 20σ, within-prefix MI/compressibility — require much larger per-cell samples than available here, and their absence at 40 characters does not rule out effects of the same relative magnitude. What is robustly detectable at this sample is any fixed-offset repeat effect whose per-message probability is meaningfully above the uniform null. Both groups carry such an effect.</p>
+<h3><span class="bi-i"><span class="en"><span class="num">10.2</span>Statistical power</span><span class="jp" lang="ja"><span class="num">10.2</span>統計的な検出力</span></span></h3>
+<p><span class="bi"><span class="en">At <em>N<sub>G2</sub></em>&nbsp;=&nbsp;39 and <em>N<sub>G3</sub></em>&nbsp;=&nbsp;20 the probe battery operates at roughly 1% and 0.3% of the 30-character Group 1 cohort's sample size. The probes that dominated the 30-character paper's positive findings — aggregate doublet z-scores of order 20σ, within-prefix MI/compressibility — require much larger per-cell samples than available here, and their absence at 40 characters does not rule out effects of the same relative magnitude. What is robustly detectable at this sample is any fixed-offset repeat effect whose per-message probability is meaningfully above the uniform null. Both groups carry such an effect.</span><span class="jp" lang="ja"><em>N<sub>G2</sub></em>&nbsp;=&nbsp;39と<em>N<sub>G3</sub></em>&nbsp;=&nbsp;20では、一連の検定は30文字グループ1コホートのサンプルサイズのおよそ1%と0.3%で動いている。30文字の論文の陽性の発見の中心だった検定――20σ程度の全体のダブレットのzスコア、プレフィックス内の相互情報量／圧縮率――には、ここで得られるよりはるかに大きなセルごとのサンプルが必要で、40文字でそれらがないことは、同じ相対的な大きさの効果を否定しない。このサンプルで頑健に検出できるのは、メッセージごとの確率が一様帰無仮説を意味のある程度上回る固定オフセットの反復の効果であり、どちらのグループにもそのような効果がある。</span></span></p>
 
-<h3><span class="num">10.3</span>What the G2 repeat does not say</h3>
-<p>The observation is format-level: in most G2 messages, two specific 2-character positions are equal. We do not identify what those characters encode, why the repeat exists, or whether the repeat is cryptographically significant. A 2-character repeat at a fixed offset is consistent with many sub-hypotheses — a short redundancy field for error detection, a counter that encodes its value at two positions, a format that uses identical separators at two locations. The observation does not distinguish them.</p>
+<h3><span class="bi-i"><span class="en"><span class="num">10.3</span>What the G2 repeat does not say</span><span class="jp" lang="ja"><span class="num">10.3</span>G2の反復が言っていないこと</span></span></h3>
+<p><span class="bi"><span class="en">The observation is format-level: in most G2 messages, two specific 2-character positions are equal. We do not identify what those characters encode, why the repeat exists, or whether the repeat is cryptographically significant. A 2-character repeat at a fixed offset is consistent with many sub-hypotheses — a short redundancy field for error detection, a counter that encodes its value at two positions, a format that uses identical separators at two locations. The observation does not distinguish them.</span><span class="jp" lang="ja">観測は形式レベルのものである：G2のメッセージの大半で、特定の2文字の位置が同じである。その文字が何を表すのか、なぜ反復があるのか、反復が暗号上意味を持つのかは特定しない。固定オフセットでの2文字の反復は多くの下位の仮説と矛盾しない――誤り検出のための短い冗長フィールド、値を2つの位置に書き込むカウンター、2か所で同じ区切りを使う形式など。観測はそれらを区別しない。</span></span></p>
 
-<h3><span class="num">10.4</span>Future probes</h3>
-<p>(i) Does the G2 repeat substring correlate with prefix, date, or any other observable? (ii) Do the remaining 13 of 35 G2 messages lack the repeat for systematic reasons (different sub-format) or by chance at this sample? (iii) Are positions (19, 24) and (26, 37) — the secondary G2 IPE pairs — part of the same structure, part of a different one, or chance projections? (iv) Do the G2 and G3 repeat geometries at 40 characters share an underlying rule, or are they independent designs? These questions are answerable only with larger cohorts or cross-length comparison at Group 3 cohorts at other lengths.</p>
-<h2 id="conclusion"><span class="num">11.</span>Conclusion</h2>
-<p>Applied to 40-character HFGCS broadcasts, the expanded probe battery (with the inter-position equality probe added to the 30-character paper's original battery) returns two independent positive findings:</p>
+<h3><span class="bi-i"><span class="en"><span class="num">10.4</span>Future probes</span><span class="jp" lang="ja"><span class="num">10.4</span>今後の検定</span></span></h3>
+<p><span class="bi"><span class="en">(i) Does the G2 repeat substring correlate with prefix, date, or any other observable? (ii) Do the remaining 13 of 35 G2 messages lack the repeat for systematic reasons (different sub-format) or by chance at this sample? (iii) Are positions (19, 24) and (26, 37) — the secondary G2 IPE pairs — part of the same structure, part of a different one, or chance projections? (iv) Do the G2 and G3 repeat geometries at 40 characters share an underlying rule, or are they independent designs? These questions are answerable only with larger cohorts or cross-length comparison at Group 3 cohorts at other lengths.</span><span class="jp" lang="ja">（i）G2の反復の部分文字列は、プレフィックス、日付、そのほかの観測できるものと相関するか。（ii）G2の35件のうち残りの13件に反復がないのは、系統的な理由（別の下位形式）によるのか、このサンプルでの偶然か。（iii）G2の二次的なIPEのペアである（19, 24）と（26, 37）の位置は、同じ構造の一部か、別の構造の一部か、偶然の投影か。（iv）40文字のG2とG3の反復の配置は共通の規則を持つのか、独立した設計なのか。これらの問いは、より大きなコホートか、ほかの長さのグループ3コホートとの長さをまたいだ比較でしか答えられない。</span></span></p>
+<h2 id="conclusion"><a class="anc" href="#conclusion"><span class="bi-i"><span class="en"><span class="num">11.</span>Conclusion</span><span class="jp" lang="ja"><span class="num">11.</span>結論</span></span></a></h2>
+<p><span class="bi"><span class="en">Applied to 40-character HFGCS broadcasts, the expanded probe battery (with the inter-position equality probe added to the 30-character paper's original battery) returns two independent positive findings:</span><span class="jp" lang="ja">40文字のHFGCS放送に適用すると、拡張した一連の検定（30文字の論文の元の一連の検定に位置間一致の検定を加えたもの）は、独立した2つの陽性の発見を示す：</span></span></p>
 <ol>
-<li><strong>Group 2 (<em>N</em>&nbsp;=&nbsp;39): 2-character fixed-offset repeat.</strong> In 22 of 35 messages, the character at position 16 equals the character at position 21, <em>and</em> the character at position 17 equals the character at position 22 (<em>z</em>&nbsp;=&nbsp;+20.31 each). The 2-character bigram at positions 16&ndash;17 is reproduced at positions 21&ndash;22.</li>
-<li><strong>Group 3 (<em>N</em>&nbsp;=&nbsp;20): 3-to-7 character fixed-offset repeat.</strong> In 15 of 18 messages, a length-3-to-7 substring starting at position 22 is reproduced verbatim starting at position 31.</li>
+<li><span class="bi-i"><span class="en"><strong>Group 2 (<em>N</em>&nbsp;=&nbsp;39): 2-character fixed-offset repeat.</strong> In 22 of 35 messages, the character at position 16 equals the character at position 21, <em>and</em> the character at position 17 equals the character at position 22 (<em>z</em>&nbsp;=&nbsp;+20.31 each). The 2-character bigram at positions 16&ndash;17 is reproduced at positions 21&ndash;22.</span><span class="jp" lang="ja"><strong>グループ2（<em>N</em>&nbsp;=&nbsp;39）：固定オフセットでの2文字の反復。</strong>35件中22件のメッセージで、16文字目の文字が21文字目の文字と同じで、<em>そして</em>17文字目の文字が22文字目の文字と同じである（それぞれ<em>z</em>&nbsp;=&nbsp;+20.31）。16&ndash;17文字目の2文字の組が21&ndash;22文字目に再び現れる。</span></span></li>
+<li><span class="bi-i"><span class="en"><strong>Group 3 (<em>N</em>&nbsp;=&nbsp;20): 3-to-7 character fixed-offset repeat.</strong> In 15 of 18 messages, a length-3-to-7 substring starting at position 22 is reproduced verbatim starting at position 31.</span><span class="jp" lang="ja"><strong>グループ3（<em>N</em>&nbsp;=&nbsp;20）：固定オフセットでの3〜7文字の反復。</strong>18件中15件のメッセージで、22文字目から始まる長さ3〜7の部分文字列が、31文字目からそのまま再び現れる。</span></span></li>
 </ol>
-<p>Both findings are surfaced by the inter-position equality probe of §6, which tests every position pair for character equality — a probe the consecutive-doublet and length-&geq;3 internal-repeat probes do not cover. Neither the 30-character Group 1 signatures (M/5 deficit, mid-body transition, trailing no-run constraint) nor a shared G2/G3 rule is reproduced here. G2 and G3 40-character are distinct formats.</p>
+<p><span class="bi"><span class="en">Both findings are surfaced by the inter-position equality probe of §6, which tests every position pair for character equality — a probe the consecutive-doublet and length-&geq;3 internal-repeat probes do not cover. Neither the 30-character Group 1 signatures (M/5 deficit, mid-body transition, trailing no-run constraint) nor a shared G2/G3 rule is reproduced here. G2 and G3 40-character are distinct formats.</span><span class="jp" lang="ja">どちらの発見も、すべての位置ペアで文字の一致を調べる&sect;6の位置間一致の検定で表に出る――ダブレットの検定と長さ&geq;3の内部反復の検定ではカバーされない検定である。30文字グループ1の特徴（M/5の不足、本体途中の切り替わり、末尾の連続禁止の制約）も、G2とG3に共通する規則も、ここでは再現されない。40文字のG2とG3は別々の形式である。</span></span></p>
 
-<h2 id="appendix"><span class="num">A.</span>Methodology</h2>
-<p>The probe battery extends the 30-character paper's battery with the inter-position equality probe (§6) and the internal-repeat probe (§7). Forward-fill group resolution and first-broadcast itemisation are applied identically. See the <a href="eam_30char_format_analysis.html">30-character paper</a> for the full methodology, threat model, and references.</p>
+<h2 id="appendix"><a class="anc" href="#appendix"><span class="bi-i"><span class="en"><span class="num">A.</span>Methodology</span><span class="jp" lang="ja"><span class="num">A.</span>方法</span></span></a></h2>
+<p><span class="bi"><span class="en">The probe battery extends the 30-character paper's battery with the inter-position equality probe (§6) and the internal-repeat probe (§7). Forward-fill group resolution and first-broadcast itemisation are applied identically. See the <a href="eam_30char_format_analysis.html">30-character paper</a> for the full methodology, threat model, and references.</span><span class="jp" lang="ja">一連の検定は、30文字の論文の一連の検定に位置間一致の検定（&sect;6）と内部反復の検定（&sect;7）を加えたものである。前方補完によるグループ判定と初回放送での一意化は同じように適用する。方法、脅威モデル、参考文献の全体は<a href="eam_30char_format_analysis.html">30文字の論文</a>を参照。</span></span></p>
 <footer style="margin-top:48px;padding-top:16px;border-top:1px solid var(--soft);color:var(--muted);font-size:0.82em;">
-<p>Cohort analysis of the 40-character HFGCS broadcast band. Forward-fill group resolution; first-broadcast itemisation; probe battery established in the <a href="eam_30char_format_analysis.html">30-character base paper</a>, extended with the inter-position equality and internal-repeat probes.</p>
+<p><span class="bi"><span class="en">Cohort analysis of the 40-character HFGCS broadcast band. Forward-fill group resolution; first-broadcast itemisation; probe battery established in the <a href="eam_30char_format_analysis.html">30-character base paper</a>, extended with the inter-position equality and internal-repeat probes.</span><span class="jp" lang="ja">40文字のHFGCS放送のコホート分析。前方補完によるグループ判定、初回放送での一意化、<a href="eam_30char_format_analysis.html">30文字の基本の論文</a>で確立した一連の検定に、位置間一致と内部反復の検定を加えたもの。</span></span></p>
 </footer>
 </div>
 <script>
@@ -3449,5 +3530,160 @@
   }
 })();
 </script>
+<script>
+// the figures' hover titles follow the language (they are short formulas: a word list is enough)
+(function () {
+  var RULES = [[" at pos (\\d+)", "・位置$1"], ["\\bpos\\b ?", "位置"], ["count=", "件数="], ["\\(count ", "（件数 "], [" doublets\\b", " ダブレット"], ["\\bdoublet\\b", "ダブレット"], ["\\bmax ", "最大 "], ["\\bmatches\\b", "一致"], ["\\bmatch\\b", "一致"], ["\\bexpected\\b", "期待値"], ["\\bexp\\b", "期待値"], ["\\bmessages\\b", "件"], ["\\bmessage\\b", "件"], ["\\bgap\\b", "間隔"], ["\\bcount\\b", "件数"], ["\\bsymbol\\b", "記号"], ["\\bbits\\b", "ビット"], ["\\bprefix\\b", "プレフィックス"], ["\\bbody\\b", "本体"], ["\\bobserved\\b", "観測"], ["\\bnull\\b", "帰無"], ["\\brate\\b", "率"], ["\\bexcess\\b", "過剰"], ["\\bdeficit\\b", "不足"]];
+  var titles = Array.prototype.slice.call(document.querySelectorAll('svg title'));
+  var orig = titles.map(function (t) { return t.textContent; });
+  function ja(s) { RULES.forEach(function (r) { s = s.replace(new RegExp(r[0], 'g'), r[1]); }); return s; }
+  function paint() {
+    var j = document.documentElement.classList.contains('show-jp');
+    titles.forEach(function (t, i) { t.textContent = j ? ja(orig[i]) : orig[i]; });
+  }
+  document.addEventListener('langchange', paint);
+  paint();
+})();
+</script>
+<!-- hfgcs controls -->
+<script>
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
+(function () {
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
+
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
+
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
+  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j') { e.preventDefault(); lb.click(); }
+    else if (k === 'n') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
+</script>
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
+  function inHorizontalScroller(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 1) return true;
+    }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
+    e.preventDefault();
+    flip();
+  });
+  var MIN_PX = 45, MAX_MS = 800, origin = null;
+  document.addEventListener('touchstart', function (e) {
+    var t = e.target;
+    if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
+    var p = e.touches[0];
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
+  document.addEventListener('touchend', function (e) {
+    var o = origin; origin = null;
+    if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
+    var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
+    if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    flip();
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
+})();
+</script>
+<!-- /hfgcs controls -->
 </body>
 </html>

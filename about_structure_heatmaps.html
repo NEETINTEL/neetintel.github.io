@@ -1,567 +1,405 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-title-en="About These Heatmaps" data-title-ja="ヒートマップについて">
 <head>
     <meta charset="UTF-8">
+<!-- hfgcs controls -->
+<script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script>
+<!-- /hfgcs controls -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;600&display=swap">
     <title>About These Heatmaps</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Mono&family=IBM+Plex+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; }
+<style>
+/* the explainer pages' look (the block pages): pitch black in dark mode, slate in light */
+:root{--bg:#01060b;--panel:#161b22;--panel2:#0d1117;--line:#222a35;--ink:#e6edf3;--dim:#8b949e;--mut:#6e7681;--mk:#4a9eff;
+--pale-ink:#e0e0e0;--pa-bl:.12;--pa-co:.12;--pa-am:.10;--pa-vi:.10;color-scheme:dark}
+:root[data-theme="light"]{--bg:#f3f5f7;--panel:#ffffff;--panel2:#f9fafb;--line:#d6dce2;--ink:#17202a;--dim:#4b5765;--mut:#7d8894;--mk:#2b78d6;
+--pale-ink:#17202a;--pa-bl:.24;--pa-co:.24;--pa-am:.22;--pa-vi:.22;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);margin:0;font-family:"IBM Plex Sans","IBM Plex Sans JP",system-ui,sans-serif;font-size:14px;line-height:1.55}
+header,.wrap{max-width:1460px;margin:0 auto;padding-left:28px;padding-right:28px}   /* as wide as its pair, cross_length_patterns.html */
+header{padding-top:36px}
+.wrap{padding-bottom:64px}
+.eyebrow{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--dim);padding-right:140px}
+h1{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Arial Narrow",sans-serif;font-weight:600;font-size:30px;margin:0 0 4px;letter-spacing:.01em;text-wrap:balance}
+nav.links{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;margin:6px 0 18px;color:var(--mut)}
+nav.links a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line);margin-right:14px}
+nav.links a:hover{color:var(--ink)}
+nav.links b{color:var(--ink);font-weight:400;margin-right:14px}
+.sub{color:var(--dim);margin:6px 0 12px}
+.genstamp{color:var(--mut);font-size:12px;margin:0}
+h2{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-weight:600;font-size:19px;color:var(--ink);text-wrap:balance}
+p,ul{color:var(--dim);margin:6px 0 12px}
+ul{padding-left:22px}
+li{margin:3px 0}
+li::marker{color:var(--mut)}
+strong,p b,li b{color:var(--ink);font-weight:600}
+a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--mk)}
+a:hover{color:var(--mk)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.92em;color:var(--ink)}
+.wrap .bi>*,header .bi>*{margin-top:0;margin-bottom:0}
+.bi-h2{margin:38px 0 8px;scroll-margin-top:60px}
+.bi-p{margin:6px 0 12px}
 
-        html { scroll-behavior: smooth; }
+/* group dots */
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin:8px 0 18px;font-size:12px;color:var(--dim)}
+.legend .item{display:flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%}
+[data-theme="light"] .legend .dot.g3{box-shadow:inset 0 0 0 1px #8a6e00}
 
-        body {
-            font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
-            background-color: #0d0d0d;
-            color: #ccc;
-            margin: 0;
-            padding: 30px 20px;
-            line-height: 1.8;
-            font-size: 15px;
-        }
+/* heatmap characters, in the colours of the heatmap pages */
+.chips{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;line-height:1.45;white-space:nowrap}
+.ch{display:inline-block;width:1.3em;text-align:center;border-radius:2px;margin-right:1px;color:#000;font-weight:600}
+.ch.n{color:var(--ink);font-weight:400}
+.ch.r{background:rgba(209,112,97,var(--a,1))}
+.ch.co{background:rgba(232,145,94,var(--a,1))}
+.ch.am{background:rgba(222,186,115,var(--a,1))}
+.ch.te{background:rgba(55,190,127,var(--a,1))}
+.ch.bl{background:rgba(122,171,240,var(--a,1))}
+.ch.vi{background:rgba(212,185,244,var(--a,1))}
+.ch.ma{background:rgba(185,143,214,var(--a,1))}
+.ch.ro{background:rgba(221,143,154,var(--a,1))}
+.ch.pw{background:rgba(154,140,240,var(--a,1))}
+.ch.p{color:var(--pale-ink);font-weight:400}
+.ch.p.bl{background:rgba(122,171,240,var(--pa-bl))}
+.ch.p.co{background:rgba(232,145,94,var(--pa-co))}
+.ch.p.am{background:rgba(222,186,115,var(--pa-am))}
+.ch.p.vi{background:rgba(212,185,244,var(--pa-vi))}
 
-        .content {
-            max-width: 720px;
-            margin: 0 auto;
-        }
+/* each pattern section shows its colours, as in the key */
+.fmt{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;margin:2px 0 10px}
+.fmt .it{display:inline-flex;align-items:center;gap:9px;font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;font-weight:600;color:var(--ink)}
 
-        .nav-bar {
-            font-size: 0.85em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .nav-bar a { color: #4a9eff; text-decoration: none; }
-        .nav-bar a:hover { text-decoration: underline; }
+/* colour key: one panel per colour */
+.key{list-style:none;padding:0;margin:8px 0 12px;display:grid;gap:6px}
+.key>li{display:grid;grid-template-columns:7.2em minmax(0,1fr);gap:12px;align-items:baseline;margin:0;padding:8px 12px;background:var(--panel);border:1px solid var(--line)}
 
-        .lang-btn {
-            display: inline-block;
-            padding: 6px 14px;
-            background-color: #2a2a2a;
-            color: #999;
-            border: 1px solid #444;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
-            transition: all 0.2s;
-            float: right;
-        }
+/* worked example, in a message panel */
+.card{background:var(--panel2);border:1px solid var(--line);padding:12px 14px 10px;margin:8px 0 12px;max-width:100%;overflow-x:auto}
+.card .cap{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;color:var(--dim);margin-bottom:8px}
+.card .cap b{color:var(--ink);font-size:14px;font-weight:600}
+.exw{display:flex;flex-wrap:wrap;row-gap:6px}
+.ex{display:grid;grid-template-columns:repeat(15,calc(1.3em + 1px));font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;line-height:1.45;width:max-content}
+.ex .ch{margin:0}
+.ex .ru{font-size:9px;line-height:1.6;color:var(--mut);text-align:center;font-variant-numeric:tabular-nums;width:auto;margin-right:1px}
 
-        .lang-btn:hover {
-            background-color: #333;
-            color: #ccc;
-            border-color: #555;
-        }
+@media (max-width:640px){.key>li{grid-template-columns:minmax(0,1fr);gap:4px}}
+@media (max-width:560px){header,.wrap{padding-left:16px;padding-right:16px}header{padding-top:24px}.wrap{padding-bottom:56px}h1{font-size:24px}}
 
-        h1 {
-            color: #fff;
-            font-size: 1.5rem;
-            border-bottom: 2px solid #4a9eff;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-
-        h2 {
-            color: #fff;
-            font-size: 1.15rem;
-            margin-top: 45px;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #2a2a2a;
-        }
-
-        h3 {
-            color: #ddd;
-            font-size: 1rem;
-            margin-top: 28px;
-            margin-bottom: 8px;
-        }
-
-        p { margin: 12px 0; }
-
-        a { color: #4a9eff; }
-        a:hover { color: #6bb6ff; }
-
-        strong { color: #e0e0e0; }
-        em { color: #ddd; }
-
-        ol, ul {
-            padding-left: 24px;
-            margin: 12px 0;
-        }
-
-        li { margin-bottom: 8px; }
-
-        code {
-            font-family: 'Roboto Mono', monospace;
-            background-color: #1a1a1a;
-            padding: 1px 5px;
-            border-radius: 3px;
-            font-size: 0.92em;
-            color: #e0e0e0;
-        }
-
-        .example {
-            background-color: #111;
-            border-left: 3px solid #333;
-            padding: 12px 16px;
-            margin: 14px 0;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 2;
-            overflow-x: auto;
-            color: #888;
-        }
-
-        .example .caption {
-            font-family: 'Roboto', 'IBM Plex Sans JP', sans-serif;
-            font-size: 0.82rem;
-            color: #666;
-            margin-bottom: 6px;
-        }
-
-        .c {
-            padding: 1px 4px;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .c-blue { background-color: #4a9eff; }
-        .c-green { background-color: #51cf66; }
-        .c-purple { background-color: #cc5de8; }
-        .c-pink { background-color: #ff69b4; }
-        .c-coral { background-color: #ed727f; }
-
-        .t-blue { color: #4a9eff; }
-        .t-green { color: #51cf66; }
-        .t-purple { color: #cc5de8; }
-        .t-pink { color: #ff69b4; }
-        .t-coral { color: #ed727f; }
-
-        .note {
-            background-color: rgba(255, 193, 7, 0.08);
-            border-left: 3px solid #ffc107;
-            padding: 12px 16px;
-            margin: 18px 0;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .note strong { color: #ffc107; }
-
-        .color-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .color-list li {
-            margin-bottom: 6px;
-            padding: 8px 12px;
-            background-color: #111;
-            border-radius: 4px;
-        }
-
-        .swatch {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-
-        .group-dots span {
-            margin-right: 12px;
-            white-space: nowrap;
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid #222;
-            margin: 40px 0;
-        }
-
-        /* Language toggle */
-        .jp { display: none; }
-        body.show-jp .en { display: none; }
-        body.show-jp .jp { display: block; }
-
-        .footer {
-            text-align: center;
-            margin: 50px 0 20px 0;
-        }
-        .footer a {
-            color: #555;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.8em;
-            text-decoration: none;
-            letter-spacing: 0.05em;
-            transition: color 0.2s;
-        }
-        .footer a:hover { color: #fff; }
-
-        @media (max-width: 600px) {
-            body { padding: 16px 14px; font-size: 14px; }
-            h1 { font-size: 1.25rem; }
-            .example { font-size: 0.82rem; padding: 10px 12px; }
-        }
-    </style>
+/* hfgcs controls */
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* /hfgcs controls */
+/* the floating controls take this page's own colours */
+html:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:var(--ink);--fab-dim:var(--dim);--fab-hover:var(--panel);--fab-focus:var(--mk)}
+html:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:var(--ink);--fab-dim:var(--dim);--fab-hover:#dfe4ea;--fab-focus:var(--mk)}
+</style>
 </head>
 <body>
+<!-- hfgcs controls -->
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<!-- /hfgcs controls -->
 
-<div class="content">
+<header>
+<div class="eyebrow"><span class="bi-i"><span class="en">HFGCS · Structural heatmaps</span><span class="jp" lang="ja">HFGCS · 構造ヒートマップ</span></span></div>
+<h1><span class="bi-i"><span class="en">How to Read These Heatmaps</span><span class="jp" lang="ja">ヒートマップの読み方</span></span></h1>
+<nav class="links bi"><div class="en"><a href="index.html">Index</a><b>Heatmap guide</b><a href="cross_length_patterns.html">Pairs Across Lengths</a></div><div class="jp" lang="ja"><a href="index.html">目次</a><b>ヒートマップの読み方</b><a href="cross_length_patterns.html">長さをまたぐペア</a></div></nav>
+<div class="bi sub"><p class="en">There is one heatmap page for each message length from 17 to 292 characters. Each row is one message. A character is coloured when it is part of a pattern that passed its test, and pale when the pattern came close.</p><p class="jp" lang="ja">17文字から292文字まで、メッセージの長さごとにヒートマップのページが1つあります。1行が1つのメッセージです。検定を通ったパターンに含まれる文字に色が付き、あと少しで届かなかったパターンの文字は淡い色になります。</p></div>
+<p class="genstamp"><span class="bi-i"><span class="en">Last updated 261005.</span><span class="jp" lang="ja">最終更新 261005。</span></span></p>
+</header>
 
-<div class="nav-bar">
-    <a href="index.html">&larr; Index</a>
+<div class="wrap">
+
+<div class="bi bi-h2" id="eams"><h2 class="en">What are EAMs?</h2><h2 class="jp" lang="ja">EAMとは</h2></div>
+<div class="bi bi-p"><p class="en">EAM stands for Emergency Action Message. EAMs are coded messages broadcast over high-frequency radio by the US military's High Frequency Global Communications System (HFGCS). Each one is a string of capital letters and digits. They are sent in the clear, but what they mean is encoded. Listeners log them, and the heatmaps are built from that log (SHORTWAVES).</p><p class="jp" lang="ja">EAMはEmergency Action Message（緊急行動メッセージ）の略です。アメリカ軍の高周波グローバル通信システム（HFGCS）が短波で放送する暗号化されたメッセージです。1つ1つが大文字のアルファベットと数字の並びです。電波は暗号化されずに送られますが、意味は符号化されています。聴取者がこれを記録しており、ヒートマップはその記録（SHORTWAVES）から作られています。</p></div>
+
+<div class="bi bi-h2" id="rows"><h2 class="en">The rows</h2><h2 class="jp" lang="ja">行</h2></div>
+<div class="bi bi-p"><p class="en">Each row is one message text. A message that was rebroadcast appears once, and the date, time and callsign above it are from its first row in the log. Rows are sorted by group, oldest first. The Chronological view puts every row in time order.</p><p class="jp" lang="ja">1行が1つのメッセージ本文です。再放送されたメッセージも1行だけで、上に表示される日付・時刻・コールサインは、記録での最初の行のものです。行はグループごとに古い順に並びます。「Chronological」表示では、すべての行が時間順になります。</p></div>
+<div class="bi bi-p"><p class="en">Each message is put in a group by its prefix, the first two characters. The PR_GROUPS table in the log lists which group used each prefix from which year, and the latest entry at or before the year of the broadcast decides. A prefix with no entry goes to Unknown.</p><p class="jp" lang="ja">各メッセージは、最初の2文字であるプレフィックスによってグループに振り分けられます。記録のPR_GROUPS表には、どのグループがどの年からそのプレフィックスを使ったかが載っており、放送の年かそれ以前の最新の行で決まります。表にないプレフィックスはUnknown（不明）になります。</p></div>
+<div class="legend">
+<span class="item"><i class="dot" style="background:#06b050"></i><span class="bi-i"><span class="en">Group 1</span><span class="jp" lang="ja">グループ1</span></span></span>
+<span class="item"><i class="dot" style="background:#ed7d32"></i><span class="bi-i"><span class="en">Group 2</span><span class="jp" lang="ja">グループ2</span></span></span>
+<span class="item"><i class="dot g3" style="background:#ffcc00"></i><span class="bi-i"><span class="en">Group 3</span><span class="jp" lang="ja">グループ3</span></span></span>
+<span class="item"><i class="dot" style="background:#ff0467"></i><span class="bi-i"><span class="en">Group 4</span><span class="jp" lang="ja">グループ4</span></span></span>
+<span class="item"><i class="dot" style="background:#9063cd"></i><span class="bi-i"><span class="en">Group 5</span><span class="jp" lang="ja">グループ5</span></span></span>
+<span class="item"><i class="dot" style="background:#555"></i><span class="bi-i"><span class="en">Unknown</span><span class="jp" lang="ja">不明</span></span></span>
 </div>
-<div style="text-align: right; margin-bottom: 20px;">
-    <button class="lang-btn" onclick="toggleLang()">日本語</button>
-</div>
+<div class="bi bi-p"><p class="en">Every test runs separately inside each group at each length. Groups never share evidence, and nothing is borrowed from other lengths.</p><p class="jp" lang="ja">すべての検定は、長さごと・グループごとに別々に行います。グループ間で証拠を共有することはなく、ほかの長さから借りることもありません。</p></div>
 
-<!-- ==================== ENGLISH ==================== -->
-<div class="en">
+<div class="bi bi-h2" id="left-out"><h2 class="en">What is left out</h2><h2 class="jp" lang="ja">除外されるもの</h2></div>
+<ul>
+<li><div class="bi"><div class="en">Partial captures (Q = *) and disregarded reads (Q = \).</div><div class="jp" lang="ja">部分的な受信（Q = *）と、無効とした読み取り（Q = \）。</div></div></li>
+<li><div class="bi"><div class="en">Rows with no message, and any message with an uncopied character (?, _ or .). Rows marked &amp; or + stay in.</div><div class="jp" lang="ja">メッセージのない行と、受信できなかった文字（?、_、.）を含むメッセージ。&amp;や+の付いた行は残ります。</div></div></li>
+<li><div class="bi"><div class="en">Positions 1 and 2. They are the prefix, a label that rotates, so no pattern may include them.</div><div class="jp" lang="ja">1文字目と2文字目。ここは入れ替わるラベルであるプレフィックスなので、どのパターンにも含めません。</div></div></li>
+<li><div class="bi"><div class="en">Groups 1 and 2 on the 30 character page. There are over 9,000 of them, too many for one page. The <a href="eam_30char_format_analysis.html">30 character format analysis</a> covers them.</div><div class="jp" lang="ja">30文字のページのグループ1とグループ2。合わせて9,000件を超え、1ページには多すぎるためです。これらは<a href="eam_30char_format_analysis.html">30文字フォーマットの分析</a>で扱っています。</div></div></li>
+</ul>
+<div class="bi bi-p"><p class="en">As of 261005, 15,211 rows pass these filters.</p><p class="jp" lang="ja">261005時点で、15,211行がこの条件を通ります。</p></div>
 
-<h1>How to Read These Heatmaps</h1>
-
-<div class="note" style="margin-bottom: 25px;">
-    <strong>Note:</strong> This page was generated with AI assistance and may contain inaccuracies or oversimplifications. It is intended as a general introduction, not a definitive reference.
-</div>
-
-<h2>What Are EAMs?</h2>
-
-<p><strong>EAM</strong> stands for <strong>Emergency Action Message</strong>. These are coded messages broadcast over high-frequency (HF) radio by the United States military's <strong>High Frequency Global Communications System (HFGCS)</strong>, a network of transmitter stations that can reach receivers anywhere in the world.</p>
-
-<p>Each EAM is a string of uppercase letters and numbers. They are transmitted in the clear (unencrypted at the radio level), but their contents are encoded&mdash;only the intended recipients know what a given message means. Radio hobbyists routinely log these broadcasts, and over time a large collection accumulates.</p>
-
-<p>These heatmaps are a tool for exploring <em>structural patterns</em> in that collection: recurring regularities that suggest the messages follow an underlying format rather than being purely random.</p>
-
-<h2>What This Tool Does</h2>
-
-<p>Each heatmap page shows all logged EAMs that share the same character length. The "55 Character EAMs" page, for example, shows every message that is exactly 55 characters long.</p>
-
-<p>The tool analyzes these same-length messages as a group and looks for places where the same characters, sequences, or relationships appear again and again&mdash;across different messages or within individual ones&mdash;in ways that are unlikely to happen by chance. When it finds patterns, it highlights them with colors. Each color represents a different type of pattern.</p>
-
-<h2>The Heatmap Bar</h2>
-
-<p>At the top of each page is a horizontal bar that stays visible as you scroll. This is the aggregate heatmap. Each column represents one character position (position 1, position 2, etc.), and the brightness of each column reflects how much pattern activity was detected at that position across <em>all</em> messages on the page.</p>
-
-<p><strong>Dark columns</strong> indicate few or no patterns. Those positions likely hold unpredictable data&mdash;encrypted content, random identifiers, and so on.</p>
-
-<p><strong>Bright columns</strong> indicate many messages share structural patterns at that position. This suggests the position has a defined role in the message format: a fixed field, a check character, a predictable delimiter.</p>
-
-<h2>Pattern Colors</h2>
-
-<p>When a character is part of a detected pattern, it is highlighted in one of five colors:</p>
-
-<ul class="color-list">
-    <li><span class="swatch" style="background:#4a9eff;"></span><strong class="t-blue">Blue &mdash; Exact Repeat.</strong> A sequence of two or more characters that appears more than once in the same message.</li>
-    <li><span class="swatch" style="background:#51cf66;"></span><strong class="t-green">Green &mdash; Gapped Repeat.</strong> A sequence that repeats within the message, but with one or more wildcard positions (characters that differ between the two occurrences).</li>
-    <li><span class="swatch" style="background:#cc5de8;"></span><strong class="t-purple">Purple &mdash; Hot Position Pair.</strong> Single characters at two positions that match each other across many different messages.</li>
-    <li><span class="swatch" style="background:#ff69b4;"></span><strong class="t-pink">Pink &mdash; Quadruple Repeat.</strong> Four or more identical characters in a row.</li>
-    <li><span class="swatch" style="background:#ed727f;"></span><strong class="t-coral">Coral &mdash; Partial Quad.</strong> Two or three identical characters in a row, at a position where other messages tend to have quadruple repeats.</li>
+<div class="bi bi-h2" id="colours"><h2 class="en">Colours</h2><h2 class="jp" lang="ja">色</h2></div>
+<div class="bi bi-p"><p class="en">Each colour is one kind of pattern. How bright it is shows how common the pattern is in the group (see <a href="#brightness">Brightness</a>).</p><p class="jp" lang="ja">色はそれぞれパターンの種類を表します。明るさは、そのパターンがグループ内でどれだけ多いかを表します（<a href="#brightness">明るさ</a>を参照）。</p></div>
+<ul class="key">
+<li><span class="chips"><span class="ch r">7</span><span class="ch r">7</span><span class="ch r">7</span><span class="ch r">7</span></span><div class="bi"><div class="en"><strong>Red.</strong> A run: the same character 4 or more times in a row.</div><div class="jp" lang="ja"><strong>赤</strong>　連続：同じ文字が4つ以上続くもの。</div></div></li>
+<li><span class="chips"><span class="ch co">3</span><span class="ch co">3</span></span><div class="bi"><div class="en"><strong>Coral.</strong> A short run: 2 or 3 in a row where the group's runs line up (see <a href="#runs">Runs</a>). Also a doubled character found as an alternative form.</div><div class="jp" lang="ja"><strong>コーラル</strong>　短い連続：グループの連続が揃う位置にある2〜3文字の連続（<a href="#runs">連続</a>を参照）。代替形として見つかった二重文字もこの色です。</div></div></li>
+<li><span class="chips"><span class="ch am">S</span><span class="ch n">I</span><span class="ch n">H</span><span class="ch am">S</span></span><div class="bi"><div class="en"><strong>Amber.</strong> Two positions 3 apart with the same character, X??X, such as 21 and 24 on long Group 4 messages. Also alternative forms of that shape.</div><div class="jp" lang="ja"><strong>琥珀色</strong>　3つ離れた2つの位置に同じ文字があるもの（X??X）。たとえば長文グループ4の21文字目と24文字目。この形の代替形もこの色です。</div></div></li>
+<li><span class="chips"><span class="ch te">K</span><span class="ch te">4</span><span class="ch te">J</span></span><div class="bi"><div class="en"><strong>Teal.</strong> The message repeats part of itself (see <a href="#repeats">Repeats inside a message</a>).</div><div class="jp" lang="ja"><strong>青緑</strong>　メッセージが自分の一部を繰り返しているもの（<a href="#repeats">メッセージ内の繰り返し</a>を参照）。</div></div></li>
+<li><span class="chips"><span class="ch bl">I</span><span class="ch n">A</span><span class="ch bl">I</span></span><div class="bi"><div class="en"><strong>Blue.</strong> Two positions with the same character in many of the group's messages (a hot pair), or a block of 2 to 5 characters that each message repeats at the same two places (a mirror block). Also alternative forms of other shapes.</div><div class="jp" lang="ja"><strong>青</strong>　グループの多くのメッセージで2つの位置に同じ文字があるもの（ホットペア）、または各メッセージが2〜5文字のブロックを同じ2か所に繰り返しているもの（ミラーブロック）。ほかの形の代替形もこの色です。</div></div></li>
+<li><span class="chips"><span class="ch vi">N</span><span class="ch n">R</span><span class="ch vi">N</span></span><div class="bi"><div class="en"><strong>Violet.</strong> A sub-format: pairs that hold only in some of the group's messages, coloured in those messages only.</div><div class="jp" lang="ja"><strong>薄紫</strong>　サブフォーマット：グループの一部のメッセージだけで成り立つペア。そのメッセージにだけ色が付きます。</div></div></li>
+<li><span class="chips"><span class="ch ma">H</span><span class="ch ro">H</span><span class="ch pw">H</span></span><div class="bi"><div class="en"><strong>Mauve, rose, periwinkle.</strong> Accent shades for overlapping pairs of one colour (see <a href="#accents">Accent shades</a>).</div><div class="jp" lang="ja"><strong>モーブ、ローズ、ペリウィンクル</strong>　同じ色のペアが重なるときのアクセント色（<a href="#accents">アクセント色</a>を参照）。</div></div></li>
+<li><span class="chips"><span class="ch p bl">K</span><span class="ch p am">K</span><span class="ch p co">K</span></span><div class="bi"><div class="en"><strong>Pale.</strong> Any colour, pale: a near miss (see <a href="#pale">Pale colours</a>).</div><div class="jp" lang="ja"><strong>淡い色</strong>　どの色でも淡いものは、あと少しで届かなかったもの（<a href="#pale">淡い色</a>を参照）。</div></div></li>
+<li><span class="chips"><span class="ch n">X</span></span><div class="bi"><div class="en"><strong>No colour.</strong> No pattern passed.</div><div class="jp" lang="ja"><strong>色なし</strong>　どのパターンも通らなかった文字。</div></div></li>
 </ul>
 
-<hr>
-
-<h3>Exact Repeats <span class="t-blue">(Blue)</span></h3>
-
-<p>The most common pattern type. The tool scans each message for substrings&mdash;sequences of consecutive characters&mdash;that appear more than once within that same message. In bioinformatics, a substring of length <em>k</em> is called a <strong>k-mer</strong> ("mer" just means "part," so a 3-mer is a three-character part).</p>
-
-<div class="example">
-    <div class="caption">The 2-character sequence "WF" appears at two places in this message:</div>
-    ...QHXXI<span class="c c-blue">W</span><span class="c c-blue">F</span>NJ2UL...URA<span class="c c-blue">W</span><span class="c c-blue">F</span>2PH...
+<div class="card">
+<div class="cap"><span class="bi-i"><span class="en"><b>221116 06:22 CHOPHOUSE</b> · Group 4 · 142 characters, positions 1–45 as coloured on its page</span><span class="jp" lang="ja"><b>221116 06:22 CHOPHOUSE</b> · グループ4 · 142文字、ページでの色のまま1〜45文字目</span></span></div>
+<div class="exw" aria-label="positions 1 to 45"><div class="ex"><span class="ch n">P</span><span class="ch n">D</span><span class="ch n">Z</span><span class="ch n">Q</span><span class="ch n">V</span><span class="ch n">P</span><span class="ch n">L</span><span class="ch n">Q</span><span class="ch n">A</span><span class="ch n">3</span><span class="ch n">V</span><span class="ch n">S</span><span class="ch n">J</span><span class="ch n">O</span><span class="ch n">X</span><span class="ru">1</span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span></div><div class="ex"><span class="ch n">T</span><span class="ch n">J</span><span class="ch n">7</span><span class="ch n">B</span><span class="ch n">Z</span><span class="ch am" style="--a:0.93">S</span><span class="ch n">I</span><span class="ch n">H</span><span class="ch am" style="--a:0.99">S</span><span class="ch n">A</span><span class="ch n">M</span><span class="ch n">H</span><span class="ch n">J</span><span class="ch n">E</span><span class="ch bl" style="--a:0.68">I</span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru">21</span><span class="ru"></span><span class="ru"></span><span class="ru">24</span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru">30</span></div><div class="ex"><span class="ch n">A</span><span class="ch bl" style="--a:0.72">I</span><span class="ch n">J</span><span class="ch n">6</span><span class="ch n">D</span><span class="ch n">H</span><span class="ch n">L</span><span class="ch n">A</span><span class="ch n">K</span><span class="ch n">A</span><span class="ch n">4</span><span class="ch r">7</span><span class="ch r">7</span><span class="ch r">7</span><span class="ch r">7</span><span class="ru"></span><span class="ru">32</span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru"></span><span class="ru">42</span><span class="ru"></span><span class="ru"></span><span class="ru">45</span></div></div>
 </div>
+<div class="bi bi-p"><p class="en">Positions 1 and 2 (PD) are the prefix and stay uncoloured. Positions 21 and 24 carry the same character (S), in amber. Positions 30 and 32 match too (I), in blue, and 42–45 is a run (7777), in red.</p><p class="jp" lang="ja">1〜2文字目（PD）はプレフィックスなので色が付きません。21文字目と24文字目には同じ文字（S）があり、琥珀色です。30文字目と32文字目も一致し（I）、青です。42〜45文字目は連続（7777）で、赤です。</p></div>
 
-<p>Longer repeats are generally more significant. A 2-character match in a long message could easily happen by chance, while a 5-character match is far less likely to be coincidental. The tool uses a confidence score to account for this (see <a href="#confidence-en">Confidence Filtering</a> below).</p>
-
-<h3>Gapped Repeats <span class="t-green">(Green)</span></h3>
-
-<p>Similar to exact repeats, but with flexibility. A gapped pattern is a sequence that repeats in the message where most characters match, but one or more positions act as wildcards&mdash;they can differ between the two occurrences.</p>
-
-<div class="example">
-    <div class="caption">"A_CD" repeats&mdash;the second character differs, but the rest matches:</div>
-    ...<span class="c c-green">A</span><span style="color:#666;">X</span><span class="c c-green">C</span><span class="c c-green">D</span>......<span class="c c-green">A</span><span style="color:#666;">Y</span><span class="c c-green">C</span><span class="c c-green">D</span>...
-</div>
-
-<p>The wildcard characters (X and Y above) are not highlighted&mdash;only the matching positions get green. These patterns must be at least four characters long and often reflect structured fields where some positions are fixed and others vary, like a template with fill-in-the-blank slots.</p>
-
-<h3>Hot Position Pairs <span class="t-purple">(Purple)</span></h3>
-
-<p>This is the only pattern type that looks <em>across</em> messages rather than within a single one. The tool compares all messages of the same length and asks: are there two positions that tend to hold the same character as each other, message after message?</p>
-
-<div class="example">
-    <div class="caption">Position 15 and position 28 match in most messages:</div>
-    Msg 1: ...pos 15 = <span class="c c-purple">A</span> ... pos 28 = <span class="c c-purple">A</span><br>
-    Msg 2: ...pos 15 = <span class="c c-purple">K</span> ... pos 28 = <span class="c c-purple">K</span><br>
-    Msg 3: ...pos 15 = <span class="c c-purple">B</span> ... pos 28 = <span class="c c-purple">B</span><br>
-    <span style="color:#555;">Msg 4: ...pos 15 = 4 ... pos 28 = 8 (no match, no highlight)</span>
-</div>
-
-<p>The threshold is 30%: the characters at the two positions must match in at least 30% of messages within a group to qualify. The specific character changes from message to message, but the <em>relationship</em> persists&mdash;the two positions are structurally linked. This suggests they may be computed from the same input, or one is derived from the other.</p>
-
-<p>Hot pairs are also detected in contiguous blocks. If positions 15&ndash;17 consistently mirror positions 23&ndash;25 across messages (as a 3-character block), this is identified statistically even when no individual position pair meets the 30% threshold on its own.</p>
-
-<h3>Quadruple Repeats <span class="t-pink">(Pink)</span></h3>
-
-<p>The simplest pattern: four or more of the same character in a row (e.g., <code>AAAA</code>). In a random 36-character alphabet (A&ndash;Z plus 0&ndash;9), a run of four identical characters is quite rare. When it happens, it likely reflects something deliberate in the encoding&mdash;padding, a separator, or a special marker.</p>
-
-<p>Quadruple repeats that occur at the same positions across multiple messages are shown at full intensity. A quad that appears at a position where no other message has one is slightly dimmed&mdash;still prominent, but visually distinguished from structurally confirmed quads.</p>
-
-<h3>Partial Quads <span class="t-coral">(Coral)</span></h3>
-
-<p>Sometimes a message has a double or triple repeat (like <code>AA</code> or <code>BBB</code>) at a position where other messages of the same length tend to have full quadruple repeats. The coral highlight means: "this position is a known quad-repeat zone, and this message has a partial match here." A double repeat at an arbitrary position would <em>not</em> be highlighted&mdash;it only triggers when the position is structurally significant across the broader message set.</p>
-
-<hr>
-
-<h2>How the Analysis Works</h2>
-
-<ol>
-    <li><strong>Group by length.</strong> All logged EAMs are sorted by character count. Each unique length gets its own page. Position-based analysis only makes sense when position 15 in one message corresponds to position 15 in another, so same-length grouping is essential.</li>
-    <li><strong>Identify hot position pairs.</strong> Messages are further divided into groups based on their two-character prefix. Within each group, the tool checks every possible pair of positions to see if they tend to hold matching characters. Pairs that match in at least 30% of messages are flagged as "hot." The tool also detects contiguous block pairs&mdash;runs of 2&ndash;5 positions that mirror each other&mdash;using a statistically corrected threshold that accounts for the number of candidates tested. This is a cross-message, group-aware analysis; each group's patterns are computed independently.</li>
-    <li><strong>Scan each message for within-message patterns.</strong> Each individual message is checked for exact repeating substrings, gapped repeats, quadruple runs, and partial quads.</li>
-    <li><strong>Score confidence.</strong> Short repeats in long messages are often coincidental&mdash;the birthday paradox makes collisions surprisingly likely. The tool estimates the probability of each pattern occurring by chance and assigns a confidence weight accordingly. Low-confidence patterns appear dimmer; very weak ones are filtered out.</li>
-    <li><strong>Consolidate and prioritize.</strong> When multiple patterns overlap at the same position, the most informative one is displayed. Priority order, highest to lowest: <span class="t-pink">Quad Repeat</span> &gt; <span class="t-coral">Partial Quad</span> &gt; <span class="t-green">Gapped</span> &gt; <span class="t-blue">Exact</span> &gt; <span class="t-purple">Hot Pair</span>. However, when a position has both a blue exact repeat and a purple hot pair, the tool checks whether the exact k-mer is structurally corroborated: if every offset in the exact match is backed by a hot pair, the blue stays (the block match is genuine). If not, the purple overrides (the exact is incidental at that position, and the cross-message evidence is the real signal).</li>
-    <li><strong>Render.</strong> The results are assembled into the interactive page, with the aggregate bar at top and per-message colored characters below. Each group's highlight intensity is computed from its own pattern data, so one group's activity at a position does not inflate or diminish another group's display.</li>
-</ol>
-
-<h2>Interacting with the Pages</h2>
-
-<p><strong>Click a highlighted character</strong> in any message. Every other message that shares the same pattern at that position will light up with a white outline, and non-matching messages will dim. This is the fastest way to see how widespread a pattern is. For purple (hot pair) patterns, clicking is especially useful: it shows every message where the two linked positions match.</p>
-
-<p><strong>Click a dot</strong> (the colored circle to the left of each message). This highlights all messages in the same group, so you can see which messages were classified together.</p>
-
-<p><strong>Filter controls</strong> let you show or hide specific groups using checkboxes. Useful for isolating one group at a time.</p>
-
-<p><strong>Sort controls</strong> let you switch between grouped ordering (messages organized by group, then by time) and chronological ordering (all messages in time order).</p>
-
-<p><strong>Navigation:</strong> arrows move to adjacent message lengths, the dropdown jumps to a specific length, and the "Index" link returns to the overview page.</p>
-
-<h2>Groups and Dots</h2>
-
-<p>Messages of the same length are further divided into groups based on shared characteristics. Grouping helps identify families of messages that may follow different sub-formats within the same overall length.</p>
-
-<p class="group-dots">
-    <span style="color: #06b050; font-weight: bold;">&#9679; Group 1</span>
-    <span style="color: #ed7d32; font-weight: bold;">&#9679; Group 2</span>
-    <span style="color: #ffcc00; font-weight: bold;">&#9679; Group 3</span>
-    <span style="color: #ff0467; font-weight: bold;">&#9679; Group 4</span>
-    <span style="color: #9063cd; font-weight: bold;">&#9679; Group 5</span>
-    <span style="color: #555; font-weight: bold;">&#9679; Unclassified</span>
-</p>
-
-<p>The dot next to each message reflects its group. Messages that couldn't be confidently assigned get a gray dot and are labeled "Unclassified."</p>
-
-<h2 id="confidence-en">Confidence Filtering</h2>
-
-<p>Not all detected patterns are equally meaningful. A 2-character substring repeating in a 142-character message is not very surprising&mdash;with that many characters and only 36 possible values, short collisions are statistically expected. A 5-character repeat in the same message is far more noteworthy.</p>
-
-<p>The tool estimates how likely a repeat of a given length is to occur by chance in a message of a given size, using a concept from probability theory called the <a href="https://www.britannica.com/science/birthday-problem" target="_blank">birthday paradox</a>. Shorter repeats in longer messages score lower. Each pattern detection system stands on its own evidence&mdash;within-message patterns (blue, green) are scored independently from cross-message patterns (purple), so neither inflates the other.</p>
-
-<p>Low-confidence patterns appear at reduced opacity (more transparent). Brighter, more opaque highlights are the ones most worth paying attention to.</p>
-
-<h2>Tips for Reading the Data</h2>
-
-<p><strong>Start with the heatmap bar.</strong> Look for bright columns&mdash;those are the structurally active positions. Positions that stay dark across many message lengths likely carry unpredictable data.</p>
-
-<p><strong>Look for consistency across messages.</strong> A pattern that appears in one message might be coincidence. A pattern at the same positions across dozens of messages is almost certainly structural. Click highlighted characters to check how many messages share the pattern.</p>
-
-<p><strong>Compare across lengths.</strong> Some structural features may persist across different message lengths (e.g., the first few positions might always serve as a callsign field). Jump between length pages to check.</p>
-
-<p><strong>Pay attention to opacity.</strong> Bright, solid highlights are high-confidence. Faint, transparent highlights are statistically weaker.</p>
-
-<p><strong>Purple is special.</strong> Purple highlights are the only ones validated across the entire message corpus rather than within a single message. They represent structural relationships between positions&mdash;arguably the most interesting finding, because they suggest the encoding scheme has internal dependencies where one part of the message is determined by another.</p>
-
-<div class="note">
-    <strong>A note on interpretation.</strong> These heatmaps reveal correlations and structural regularities&mdash;the "shape" of the format&mdash;without decoding or breaking any encryption. Think of it like studying letters written in a language you can't read: you can't understand what they say, but you start to notice that the third word always seems to rhyme with the seventh, certain phrases repeat with only one part swapped out, and blocks of four identical characters show up in predictable places. You're mapping the grammar and skeleton of the format, not reading the content.
-</div>
-
-</div>
-
-<!-- ==================== JAPANESE ==================== -->
-<div class="jp">
-
-<h1>ヒートマップの読み方</h1>
-
-<div class="note" style="margin-bottom: 25px;">
-    <strong>注意：</strong>このページはAIの支援を受けて作成されており、不正確な記述や過度な簡略化が含まれている可能性があります。あくまで一般的な入門資料としてご参照ください。
-</div>
-
-<h2>EAMとは</h2>
-
-<p><strong>EAM</strong>は<strong>Emergency Action Message（緊急行動メッセージ）</strong>の略称です。アメリカ軍の<strong>高周波グローバル通信システム（HFGCS）</strong>&mdash;世界中の受信機に到達可能な送信局ネットワーク&mdash;を通じて、高周波（HF）無線で放送される暗号化メッセージです。</p>
-
-<p>各EAMは大文字のアルファベットと数字で構成された文字列です。電波自体は暗号化されずに送信されますが、内容は符号化されており、意図された受信者のみがメッセージの意味を理解できます。無線愛好家がこれらの放送を日常的に記録しており、時間の経過とともに大量のメッセージが蓄積されています。</p>
-
-<p>このヒートマップは、蓄積されたメッセージの中に存在する<em>構造的パターン</em>&mdash;メッセージが純粋にランダムではなく、何らかのフォーマットに従っていることを示唆する規則性&mdash;を探索するためのツールです。</p>
-
-<h2>このツールの機能</h2>
-
-<p>各ヒートマップページは、同じ文字数を持つすべてのEAMを表示します。たとえば「55文字のEAM」ページには、ちょうど55文字のメッセージがすべて表示されます。</p>
-
-<p>ツールはこれらの同一文字数のメッセージをグループとして分析し、同じ文字、配列、または関係性が偶然とは考えにくい形で繰り返し出現する箇所を探します。パターンが見つかると、色で強調表示されます。各色は異なる種類のパターンを表しています。</p>
-
-<h2>ヒートマップバー</h2>
-
-<p>各ページの上部には、スクロールしても表示され続ける横長のバーがあります。これが集約ヒートマップです。各列はメッセージの1つの文字位置（位置1、位置2など）に対応し、列の明るさはページ上の<em>すべての</em>メッセージにおいて、その位置でどれだけのパターンが検出されたかを反映しています。</p>
-
-<p><strong>暗い列</strong>は、パターンがほとんどまたは全く検出されなかったことを示します。おそらく暗号化されたデータやランダムな識別子など、予測不可能なデータが含まれている位置です。</p>
-
-<p><strong>明るい列</strong>は、多くのメッセージがその位置で構造的パターンを共有していることを示します。その位置がメッセージフォーマットにおいて特定の役割（固定フィールド、チェック文字、予測可能な区切り文字など）を持っていることを示唆しています。</p>
-
-<h2>パターンの色分け</h2>
-
-<p>文字が検出されたパターンの一部である場合、5つの色のいずれかで強調表示されます。</p>
-
-<ul class="color-list">
-    <li><span class="swatch" style="background:#4a9eff;"></span><strong class="t-blue">青 &mdash; 完全一致リピート。</strong>同一メッセージ内で2回以上出現する、2文字以上の連続した配列。</li>
-    <li><span class="swatch" style="background:#51cf66;"></span><strong class="t-green">緑 &mdash; ギャップ付きリピート。</strong>メッセージ内で繰り返される配列だが、1つ以上の位置がワイルドカード（2つの出現箇所で異なる文字）として機能する。</li>
-    <li><span class="swatch" style="background:#cc5de8;"></span><strong class="t-purple">紫 &mdash; ホットポジションペア。</strong>多くの異なるメッセージにわたって、2つの位置の文字が互いに一致する。</li>
-    <li><span class="swatch" style="background:#ff69b4;"></span><strong class="t-pink">ピンク &mdash; 4連続リピート。</strong>同じ文字が4つ以上連続して出現する。</li>
-    <li><span class="swatch" style="background:#ed727f;"></span><strong class="t-coral">コーラル &mdash; 部分的4連続。</strong>他のメッセージで4連続リピートが頻出する位置において、同じ文字が2つまたは3つ連続して出現する。</li>
+<div class="bi bi-h2" id="test"><h2 class="en">The significance test</h2><h2 class="jp" lang="ja">有意性の検定</h2></div>
+<div class="bi bi-p"><p class="en">With hundreds of thousands of position pairs, some will match often by chance alone. So each kind of pattern is corrected for every test of its kind across the whole dataset (a Bonferroni correction): the chance probability a pattern must beat is 0.05 divided by the number of tests. As of 261005 the counts are:</p><p class="jp" lang="ja">位置のペアは何十万もあるので、偶然だけでよく一致するものも出てきます。そこで、パターンの種類ごとに、データ全体でのその種類の検定すべてについて補正します（ボンフェローニ補正）。パターンが下回るべき偶然の確率は、0.05を検定の数で割った値です。261005時点の数は次のとおりです。</p></div>
+<ul>
+<li><div class="bi"><div class="en"><strong>Pairs and runs</strong>, one count: every pair of positions and every start of a run of 2 to 5, in every group at every length. 538,498 tests, so a solid pair or run needs a chance probability below 0.05 ÷ 538,498, about 1 in 11 million.</div><div class="jp" lang="ja"><strong>ペアと連続</strong>（共通の数）：すべての長さ・すべてのグループにおける、位置のすべてのペアと、2〜5文字の連続のすべての開始位置。538,498件なので、濃い色のペアや連続には、0.05 ÷ 538,498、約1,100万分の1未満の偶然の確率が必要です。</div></div></li>
+<li><div class="bi"><div class="en"><strong>Mirror blocks:</strong> 1,879,956 tests, about 1 in 38 million.</div><div class="jp" lang="ja"><strong>ミラーブロック：</strong>1,879,956件、約3,800万分の1。</div></div></li>
+<li><div class="bi"><div class="en"><strong>Motifs:</strong> 1,066 tests, about 1 in 21,000.</div><div class="jp" lang="ja"><strong>モチーフ：</strong>1,066件、約2万1,000分の1。</div></div></li>
+<li><div class="bi"><div class="en"><strong>Format changes:</strong> 52 tests, one per group of 8 or more messages at a length, about 1 in 1,000.</div><div class="jp" lang="ja"><strong>フォーマットの変化：</strong>52件（ある長さで8件以上のメッセージがあるグループごとに1件）、約1,000分の1。</div></div></li>
+</ul>
+<div class="bi bi-p"><p class="en">The chance that even one pair or run that passed, on any page, is luck is at most 5%. The same holds for each of the other kinds.</p><p class="jp" lang="ja">検定を通ったペアや連続のうち、どのページのものであれ1つでも偶然である確率は5%以下です。ほかの種類もそれぞれ同じです。</p></div>
+<div class="bi bi-p"><p class="en">The cost is that small groups need near-total agreement. If two positions match by chance 3% of the time, a match in all 4 of 4 messages has a chance of 0.03⁴, about 1 in 1.2 million: not enough, so it shows pale. All 5 of 5 is 0.03⁵, about 1 in 41 million: solid. Groups are never pooled across lengths, so a pattern known from other lengths still shows pale where its group is small.</p><p class="jp" lang="ja">その代わり、小さなグループではほぼ全部が一致する必要があります。偶然の一致が3%の2つの位置で、4件中4件が一致する確率は0.03⁴、約120万分の1で、足りないため淡い色になります。5件中5件なら0.03⁵、約4,100万分の1で、濃い色になります。長さをまたいでグループをまとめることはないので、ほかの長さで知られているパターンでも、グループが小さいページでは淡い色になります。</p></div>
+<div class="bi bi-p"><p class="en">Not every colour uses this test:</p><p class="jp" lang="ja">すべての色がこの検定を使うわけではありません。</p></div>
+<ul>
+<li><div class="bi"><div class="en">Runs of 4 or more are coloured in every message, with no test.</div><div class="jp" lang="ja">4文字以上の連続は、検定なしですべてのメッセージで色が付きます。</div></div></li>
+<li><div class="bi"><div class="en">Short runs are coloured only inside run zones, and a run zone can also come from a plain rule (see <a href="#runs">Runs</a>).</div><div class="jp" lang="ja">短い連続は連続ゾーンの中でだけ色が付きますが、連続ゾーンは単純な規則からも作られます（<a href="#runs">連続</a>を参照）。</div></div></li>
+<li><div class="bi"><div class="en">Repeats inside a message use a rule of their own (see <a href="#repeats">Repeats inside a message</a>).</div><div class="jp" lang="ja">メッセージ内の繰り返しは独自の規則を使います（<a href="#repeats">メッセージ内の繰り返し</a>を参照）。</div></div></li>
+<li><div class="bi"><div class="en">Sub-formats and alternative forms are corrected for the tests run in their own group, times 74, the number of message lengths in the log that have a group of 2 or more messages.</div><div class="jp" lang="ja">サブフォーマットと代替形は、そのグループで行った検定の数に74を掛けた数で補正します。74は、記録の中で2件以上のグループがあるメッセージの長さの数です。</div></div></li>
+<li><div class="bi"><div class="en">Pale colours are corrected only for the tests on their own page.</div><div class="jp" lang="ja">淡い色は、そのページの検定の数だけで補正します。</div></div></li>
 </ul>
 
-<hr>
+<div class="bi bi-h2" id="pale"><h2 class="en">Pale colours</h2><h2 class="jp" lang="ja">淡い色</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch p bl">K</span><span class="ch p am">K</span><span class="ch p co">K</span></span><span class="bi-i"><span class="en">Pale</span><span class="jp" lang="ja">淡い色</span></span></span></div>
+<div class="bi bi-p"><p class="en">A pale pair or run missed the dataset-wide bar, but would be expected by chance fewer than 2 times among all the tests of its kind on its page. Some pale chips are luck. Sub-formats have a pale tier too; mirror blocks do not.</p><p class="jp" lang="ja">淡い色のペアや連続は、データ全体の基準には届かなかったものの、そのページでのその種類の検定全体で、偶然なら2回未満しか起きないと見込まれるものです。淡い色の中には偶然のものもあります。サブフォーマットにも淡い色がありますが、ミラーブロックにはありません。</p></div>
+<div class="bi bi-p"><p class="en">Every pale colour is set to the same low brightness against the dark page, about 0.1, with light text. Pale chips only go on characters that have no other pattern.</p><p class="jp" lang="ja">淡い色はどの色も、暗い背景に対して同じ低い明るさ（約0.1）にそろえ、文字は明るい色で表示します。淡い色は、ほかのパターンがない文字にだけ付きます。</p></div>
 
-<h3>完全一致リピート <span class="t-blue">（青）</span></h3>
+<div class="bi bi-h2" id="pairs"><h2 class="en">Pairs</h2><h2 class="jp" lang="ja">ペア</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch bl">I</span><span class="ch n">A</span><span class="ch bl">I</span></span><span class="bi-i"><span class="en">Blue</span><span class="jp" lang="ja">青</span></span></span><span class="it"><span class="chips"><span class="ch am">S</span><span class="ch n">I</span><span class="ch n">H</span><span class="ch am">S</span></span><span class="bi-i"><span class="en">Amber</span><span class="jp" lang="ja">琥珀色</span></span></span></div>
+<div class="bi bi-p"><p class="en">For each pair of positions in a group, the test counts the messages where both positions carry the same character; at least 3 are needed. Chance is the probability that two characters of that group match at random: each character's share of the group's text, squared and summed, about 3% for Group 4. A pair that passes is coloured blue.</p><p class="jp" lang="ja">グループ内の位置のペアごとに、両方の位置に同じ文字があるメッセージを数えます。3件以上が必要です。偶然の確率は、そのグループの2つの文字が偶然一致する確率で、グループの本文で各文字が占める割合を2乗して足したものです。グループ4では約3%です。通ったペアは青になります。</p></div>
+<div class="bi bi-p"><p class="en">A pair with exactly two characters between its ends, X??X, is coloured amber instead. The test is the same; only the colour differs.</p><p class="jp" lang="ja">両端の間にちょうど2文字があるペア（X??X）は、代わりに琥珀色になります。検定は同じで、色だけが違います。</p></div>
+<div class="bi bi-p"><p class="en">A mirror block is a block of 2 to 5 characters that each message repeats at the same two places, whatever the characters are. It needs at least 3 messages (2 if the group has only 2) and is tested as one block. Its pairs are coloured blue, and clicking one lights the matching block in the other messages.</p><p class="jp" lang="ja">ミラーブロックは、各メッセージが2〜5文字のブロックを同じ2か所に繰り返しているものです。文字の中身は問いません。3件以上（グループが2件だけなら2件）が必要で、1つのブロックとして検定します。そのペアは青になり、1つをクリックすると、ほかのメッセージの対応するブロックも明るくなります。</p></div>
 
-<p>最も一般的なパターンです。ツールは各メッセージを走査し、同じメッセージ内で2回以上出現する部分文字列（連続した文字の配列）を探します。バイオインフォマティクスでは、長さ<em>k</em>の部分文字列を<strong>k-mer</strong>（k連結文字）と呼びます（「mer」は「部分」の意味で、3-merは3文字の部分を指します）。</p>
+<div class="bi bi-h2" id="runs"><h2 class="en">Runs</h2><h2 class="jp" lang="ja">連続</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch r">7</span><span class="ch r">7</span><span class="ch r">7</span><span class="ch r">7</span></span><span class="bi-i"><span class="en">Red</span><span class="jp" lang="ja">赤</span></span></span><span class="it"><span class="chips"><span class="ch co">3</span><span class="ch co">3</span></span><span class="bi-i"><span class="en">Coral</span><span class="jp" lang="ja">コーラル</span></span></span></div>
+<div class="bi bi-p"><p class="en">A run of 4 or more identical characters is coloured red in every message. It is at full brightness inside a run zone and at least 0.75 outside one.</p><p class="jp" lang="ja">同じ文字が4つ以上続く連続は、すべてのメッセージで赤になります。連続ゾーンの中では最大の明るさ、外では0.75以上です。</p></div>
+<div class="bi bi-p"><p class="en">A run zone is a stretch where the group's runs line up. Either of two things makes one: a run of 2 to 5 at that start that passes the dataset-wide test (in at least 2 messages), or at least 15% of the group's messages (and at least 2) having a run of 4 or more there.</p><p class="jp" lang="ja">連続ゾーンは、グループの連続が揃う範囲です。次のどちらかで決まります。その開始位置の2〜5文字の連続がデータ全体の検定を通ること（2件以上）、またはグループのメッセージの15%以上（かつ2件以上）がそこに4文字以上の連続を持つことです。</p></div>
+<div class="bi bi-p"><p class="en">A run of 2 or 3 is coloured coral only where at least 2 of its characters fall in a run zone. A run that recurs but misses the bar shows pale coral, only on uncoloured characters in messages that have it.</p><p class="jp" lang="ja">2〜3文字の連続は、そのうち2文字以上が連続ゾーンに入るときだけコーラルになります。繰り返し現れるものの基準に届かない連続は、その連続を持つメッセージの色のない文字にだけ、淡いコーラルで表示されます。</p></div>
 
-<div class="example">
-    <div class="caption">2文字の配列「WF」がメッセージ内の2箇所に出現：</div>
-    ...QHXXI<span class="c c-blue">W</span><span class="c c-blue">F</span>NJ2UL...URA<span class="c c-blue">W</span><span class="c c-blue">F</span>2PH...
-</div>
+<div class="bi bi-h2" id="repeats"><h2 class="en">Repeats inside a message</h2><h2 class="jp" lang="ja">メッセージ内の繰り返し</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch te">K</span><span class="ch te">4</span><span class="ch te">J</span></span><span class="bi-i"><span class="en">Teal</span><span class="jp" lang="ja">青緑</span></span></span></div>
+<div class="bi bi-p"><p class="en">A message can repeat part of itself. Three kinds are coloured teal:</p><p class="jp" lang="ja">メッセージは自分の一部を繰り返すことがあります。次の3種類が青緑になります。</p></div>
+<ul>
+<li><div class="bi"><div class="en">an exact repeat: the same 2 or more characters in two places</div><div class="jp" lang="ja">完全な繰り返し：同じ2文字以上が2か所にあるもの</div></div></li>
+<li><div class="bi"><div class="en">a gapped repeat: a stretch of 4 or more that matches another stretch except at some characters, which stay uncoloured</div><div class="jp" lang="ja">一部が異なる繰り返し：4文字以上の範囲が別の範囲と一致し、一部の文字だけが違うもの。違う文字には色が付きません</div></div></li>
+<li><div class="bi"><div class="en">a motif: 3 or more characters that recur at least 3 times in the message, tested against the 1,066 motif tests. One click lights every copy.</div><div class="jp" lang="ja">モチーフ：3文字以上の並びがメッセージ内で3回以上現れるもの。1,066件のモチーフ検定で判定します。1回のクリックですべての写しが明るくなります。</div></div></li>
+</ul>
+<div class="bi bi-p"><p class="en">An exact or gapped repeat is coloured only if it is too long to be chance in a message of that length. The expected number of chance repeats, <span class="mono">L² ÷ (2 × 26ᵏ)</span>, must be below 0.05, where L is the message length and k the number of matching characters. That means 3 or more characters at 30, 4 or more at 142 and 5 or more at 292. A shorter one stays uncoloured, unless the same characters are part of a pair or block that passed.</p><p class="jp" lang="ja">完全な繰り返しと一部が異なる繰り返しは、その長さのメッセージで偶然とは言えないほど長いときだけ色が付きます。偶然の繰り返しの期待数 <span class="mono">L² ÷ (2 × 26ᵏ)</span> が0.05未満である必要があります。Lはメッセージの長さ、kは一致する文字の数です。つまり30文字では3文字以上、142文字では4文字以上、292文字では5文字以上です。それより短いものには色が付きません。ただし、同じ文字が検定を通ったペアやブロックの一部であれば色が付きます。</p></div>
 
-<p>より長いリピートほど重要性が高くなります。長いメッセージでの2文字の一致は偶然起きやすい一方、5文字の一致が偶然である可能性ははるかに低くなります。ツールはこれを信頼度スコアで考慮しています（下記の<a href="#confidence-jp">信頼度フィルタリング</a>を参照）。</p>
+<div class="bi bi-h2" id="alt"><h2 class="en">Alternative forms</h2><h2 class="jp" lang="ja">代替形</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch co">3</span><span class="ch co">3</span></span><span class="bi-i"><span class="en">Coral</span><span class="jp" lang="ja">コーラル</span></span></span><span class="it"><span class="chips"><span class="ch am">S</span><span class="ch n">I</span><span class="ch n">H</span><span class="ch am">S</span></span><span class="bi-i"><span class="en">Amber</span><span class="jp" lang="ja">琥珀色</span></span></span><span class="it"><span class="chips"><span class="ch bl">I</span><span class="ch n">A</span><span class="ch bl">I</span></span><span class="bi-i"><span class="en">Blue</span><span class="jp" lang="ja">青</span></span></span></div>
+<div class="bi bi-p"><p class="en">Some structures have a minority form. Long Group 4 messages without the same character at 21 and 24 often have a doubled character at 23–24 instead (??XX). On the 142 page, 5 of the 6 messages without it have the double.</p><p class="jp" lang="ja">構造の中には少数派の形を持つものがあります。21文字目と24文字目が同じ文字でない長文グループ4のメッセージは、代わりに23〜24文字目に二重文字（??XX）を持つことがよくあります。142文字のページでは、それがない6件のうち5件が二重文字を持っています。</p></div>
+<div class="bi bi-p"><p class="en">The test takes a structure that passed (a pair 3 to 6 apart, or a run zone of 4 or more), keeps only the messages that lack it, and re-tests the pairs within 3 positions of it on those messages alone. The group needs at least 5 messages. A form that passes is coloured by its shape: coral for a double, amber for X??X, blue otherwise. Its brightness follows how many of those messages carry it.</p><p class="jp" lang="ja">検定では、通った構造（3〜6離れたペア、または4文字以上の連続ゾーン）を取り上げ、それを持たないメッセージだけを残して、その前後3位置以内のペアをそのメッセージだけで検定し直します。グループには5件以上が必要です。通った形は形によって色が決まります。二重文字はコーラル、X??Xは琥珀色、それ以外は青です。明るさは、それらのメッセージのうち何件がその形を持つかで決まります。</p></div>
 
-<h3>ギャップ付きリピート <span class="t-green">（緑）</span></h3>
+<div class="bi bi-h2" id="subformats"><h2 class="en">Sub-formats</h2><h2 class="jp" lang="ja">サブフォーマット</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch vi">N</span><span class="ch n">R</span><span class="ch vi">N</span></span><span class="bi-i"><span class="en">Violet</span><span class="jp" lang="ja">薄紫</span></span></span></div>
+<div class="bi bi-p"><p class="en">A sub-format is a set of pairs that all hold in the same subset of the group's messages: at least 3 messages, and fewer than three quarters of the group. It needs at least 4 pairs, at least 2 of them independent (a stretch of neighbouring columns counts once). It is looked for in groups of 3 to 80 messages and coloured violet in its member messages only, on characters no other pattern holds. Click one to see the members.</p><p class="jp" lang="ja">サブフォーマットは、グループの同じ一部のメッセージですべて成り立つペアの集まりです。3件以上で、グループの4分の3未満である必要があります。ペアは4つ以上、そのうち独立したものが2つ以上必要です（隣り合う列の並びは1つと数えます）。3〜80件のグループで探し、メンバーのメッセージにだけ、ほかのパターンのない文字に薄紫で色を付けます。クリックするとメンバーが分かります。</p></div>
 
-<p>完全一致リピートに似ていますが、柔軟性があります。ギャップ付きパターンは、ほとんどの文字は一致するが、1つ以上の位置がワイルドカードとして機能する（2つの出現箇所で異なりうる）配列です。</p>
+<div class="bi bi-h2" id="formats"><h2 class="en">Format changes (2A and 2B)</h2><h2 class="jp" lang="ja">フォーマットの変化（2Aと2B）</h2></div>
+<div class="bi bi-p"><p class="en">Some groups changed format partway through. For each group with at least 8 messages, the test orders the messages by first airing and finds the split where the matching positions change most. The split counts if a shuffle test puts it below 0.05 ÷ 52, if each side with fewer than 5 messages is at least 75% consistent with at most 1 exception, and if the two sides share less than a quarter of their structural columns. If they share more, it is a variant and the group stays whole.</p><p class="jp" lang="ja">途中でフォーマットが変わったグループがあります。8件以上のグループごとに、メッセージを最初の放送の順に並べ、一致する位置が最も大きく変わる分け目を探します。並べ替えの検定で0.05 ÷ 52を下回り、5件未満の側が75%以上一貫していて例外が1件以下で、両側が共有する構造の列が4分の1未満なら、分け目と認めます。共有が多ければ変種とみなし、グループは分けません。</p></div>
+<div class="bi bi-p"><p class="en">A group with no split gets one more test at a fixed date, 2024-10-02 01:30 UTC, when the 30 character Group 1 format changed. It passes if the shuffle test holds at that date, or if 3 or more positions have a doubled character in every message on one side and in none on the other.</p><p class="jp" lang="ja">分け目が見つからないグループには、30文字のグループ1のフォーマットが変わった2024-10-02 01:30 UTCという決まった日時で、もう1回だけ検定を行います。その日時で並べ替えの検定が成り立つか、一方の側のすべてのメッセージに二重文字があり、もう一方には1件もない位置が3つ以上あれば通ります。</p></div>
+<div class="bi bi-p"><p class="en">A split group is shown as two parts, such as 2A (before) and 2B (after), each tested on its own. Both keep the group colour. The splits are at 38 (Group 3), and at 39, 43 and 55 (Group 2).</p><p class="jp" lang="ja">分けたグループは2Aと2B（前と後）のように2つに分けて表示し、それぞれ別に検定します。どちらもグループの色のままです。38文字（グループ3）と、39文字・43文字・55文字（グループ2）で分かれています。</p></div>
 
-<div class="example">
-    <div class="caption">「A_CD」が繰り返される&mdash;2番目の文字は異なるが、残りは一致：</div>
-    ...<span class="c c-green">A</span><span style="color:#666;">X</span><span class="c c-green">C</span><span class="c c-green">D</span>......<span class="c c-green">A</span><span style="color:#666;">Y</span><span class="c c-green">C</span><span class="c c-green">D</span>...
-</div>
+<div class="bi bi-h2" id="accents"><h2 class="en">Accent shades</h2><h2 class="jp" lang="ja">アクセント色</h2></div>
+<div class="fmt"><span class="it"><span class="chips"><span class="ch ma">H</span><span class="ch ro">H</span><span class="ch pw">H</span></span><span class="bi-i"><span class="en">Mauve, rose, periwinkle</span><span class="jp" lang="ja">モーブ、ローズ、ペリウィンクル</span></span></span></div>
+<div class="bi bi-p"><p class="en">Between two run zones, several pairs of one colour can overlap and blur together. When they do, the second and third get an accent shade: mauve, rose or periwinkle. A pair keeps its shade in every row. The pattern and its test are unchanged.</p><p class="jp" lang="ja">2つの連続ゾーンの間で、同じ色のペアがいくつも重なって見分けにくくなることがあります。そのときは2つ目と3つ目にアクセント色（モーブ、ローズ、ペリウィンクル）を付けます。ペアの色はどの行でも同じです。パターンも検定も変わりません。</p></div>
 
-<p>ワイルドカード文字（上の例ではXとY）は強調表示されません。一致する位置のみが緑色になります。これらのパターンは4文字以上の長さが必要で、一部の位置が固定で他が可変となる構造化フィールド（穴埋め式のテンプレートのようなもの）を反映していることが多いです。</p>
+<div class="bi bi-h2" id="brightness"><h2 class="en">Brightness</h2><h2 class="jp" lang="ja">明るさ</h2></div>
+<div class="bi bi-p"><p class="en">Brightness shows how common a position's pattern is in its group. For each position, the page counts how many of the group's messages have a pattern there. The fill is <span class="mono">0.4 + 0.6 × (log(c + 1) ÷ log(m + 1))³</span>, where c is that count and m the highest count in the group, and never below 0.15. Only the fill fades; the character stays readable.</p><p class="jp" lang="ja">明るさは、その位置のパターンがグループ内でどれだけ多いかを表します。位置ごとに、そこにパターンを持つグループのメッセージを数えます。塗りの濃さは <span class="mono">0.4 + 0.6 × (log(c + 1) ÷ log(m + 1))³</span> で、cはその数、mはグループ内で最も多い数です。0.15より薄くはなりません。薄くなるのは塗りだけで、文字は読めるままです。</p></div>
+<div class="bi bi-p"><p class="en">So a dim solid chip is a pattern that passed, in a column that few of the group's messages share. It does not mean a weaker result. Runs are the exception: full brightness inside a run zone, at least 0.75 outside.</p><p class="jp" lang="ja">つまり、暗めの濃い色は、検定を通ったパターンが、グループの中で少数のメッセージにしかない列にあるということです。結果が弱いという意味ではありません。例外は連続で、連続ゾーンの中では最大の明るさ、外では0.75以上です。</p></div>
 
-<h3>ホットポジションペア <span class="t-purple">（紫）</span></h3>
+<div class="bi bi-h2" id="order"><h2 class="en">Which colour wins</h2><h2 class="jp" lang="ja">色の優先順位</h2></div>
+<div class="bi bi-p"><p class="en">When patterns overlap on one character, it shows one colour, in this order: run of 4 or more, short run, gapped repeat or motif, exact repeat, pair. There are two exceptions. An exact repeat that is also the end of a pair shows as the pair, unless it sits inside a mirrored stretch of 2 or more pairs that passed. A gapped repeat inside such a stretch shows as an exact repeat. Pale colours and sub-formats only go on characters with no other pattern.</p><p class="jp" lang="ja">1つの文字に複数のパターンが重なるときは、次の順で1つの色を表示します。4文字以上の連続、短い連続、一部が異なる繰り返しまたはモチーフ、完全な繰り返し、ペア。例外が2つあります。ペアの端でもある完全な繰り返しは、検定を通った2つ以上のペアからなるミラーの範囲の中にない限り、ペアとして表示されます。そうした範囲の中にある一部が異なる繰り返しは、完全な繰り返しとして表示されます。淡い色とサブフォーマットは、ほかのパターンがない文字にだけ付きます。</p></div>
 
-<p>単一メッセージ内ではなく、<em>メッセージ間</em>を横断して分析する唯一のパターンタイプです。ツールは同じ文字数のすべてのメッセージを比較し、次の問いに答えます：メッセージごとに、同じ文字を保持する傾向がある2つの位置は存在するか？</p>
+<div class="bi bi-h2" id="by-hand"><h2 class="en">What is set by hand</h2><h2 class="jp" lang="ja">手で設定しているもの</h2></div>
+<div class="bi bi-p"><p class="en">No pattern is placed by hand. The X??X at 21–24 on long Group 4 messages comes out of the pair test like any other pair: positions 21 and 24 carry the same character far more often than chance. What is set by hand:</p><p class="jp" lang="ja">手で置いたパターンはありません。長文グループ4の21〜24文字目のX??Xも、ほかのペアと同じくペアの検定から出てきたものです。21文字目と24文字目には、偶然よりはるかに多く同じ文字があります。手で設定しているのは次のものです。</p></div>
+<ul>
+<li><div class="bi"><div class="en">The amber colour for a pair that passed with exactly two characters between its ends. It applies at every position, length and group. It marks 21 = 24 on the 120, 142, 164, 186 and 246 pages (Group 4); 108 = 111 on 120; 50 = 53, 51 = 54, 82 = 85, 125 = 128 and 127 = 130 on 142; 102 = 105 and 125 = 128 on 246; and 14 = 17 on the 30 and 43 pages (Group 3).</div><div class="jp" lang="ja">両端の間にちょうど2文字がある、検定を通ったペアの琥珀色。すべての位置・長さ・グループに当てはまります。120・142・164・186・246文字のページ（グループ4）の21 = 24、120文字の108 = 111、142文字の50 = 53、51 = 54、82 = 85、125 = 128、127 = 130、246文字の102 = 105と125 = 128、30文字と43文字のページ（グループ3）の14 = 17に付いています。</div></div></li>
+<li><div class="bi"><div class="en">The lengths: 17 to 292.</div><div class="jp" lang="ja">長さの範囲：17〜292文字。</div></div></li>
+<li><div class="bi"><div class="en">Positions 1 and 2 left out of every pattern.</div><div class="jp" lang="ja">1文字目と2文字目をすべてのパターンから除くこと。</div></div></li>
+<li><div class="bi"><div class="en">Groups 1 and 2 left out of the 30 character page.</div><div class="jp" lang="ja">30文字のページからグループ1と2を除くこと。</div></div></li>
+<li><div class="bi"><div class="en">Two notes: the 17 character page credits recordings of the 260321 EAM, and the 222 character page links a provisional Group 4 layout shown in HFGCS TIMECARD 250814.</div><div class="jp" lang="ja">2つの注記：17文字のページには260321のEAMの録音へのクレジット、222文字のページにはHFGCS TIMECARD 250814で示された暫定的なグループ4の構成へのリンクがあります。</div></div></li>
+<li><div class="bi"><div class="en">The fixed date 2024-10-02 01:30 UTC for the second format-change test.</div><div class="jp" lang="ja">フォーマットの変化の2回目の検定に使う決まった日時、2024-10-02 01:30 UTC。</div></div></li>
+<li><div class="bi"><div class="en">Fixed settings: at least 3 messages for a pair or block, a pale budget of 2 chance hits, alternative forms within 3 positions of a pair 3 to 6 apart, sub-formats on groups of up to 80, and split sides sharing under 25% of their columns.</div><div class="jp" lang="ja">固定の設定値：ペアやブロックには3件以上、淡い色は偶然の見込み2回未満、代替形は3〜6離れたペアの前後3位置以内、サブフォーマットは80件までのグループ、分け目の両側が共有する列は25%未満。</div></div></li>
+</ul>
 
-<div class="example">
-    <div class="caption">位置15と位置28がほとんどのメッセージで一致：</div>
-    Msg 1: ...pos 15 = <span class="c c-purple">A</span> ... pos 28 = <span class="c c-purple">A</span><br>
-    Msg 2: ...pos 15 = <span class="c c-purple">K</span> ... pos 28 = <span class="c c-purple">K</span><br>
-    Msg 3: ...pos 15 = <span class="c c-purple">B</span> ... pos 28 = <span class="c c-purple">B</span><br>
-    <span style="color:#555;">Msg 4: ...pos 15 = 4 ... pos 28 = 8（不一致、強調表示なし）</span>
-</div>
+<div class="bi bi-h2" id="bar"><h2 class="en">The bar</h2><h2 class="jp" lang="ja">バー</h2></div>
+<div class="bi bi-p"><p class="en">The bar above the rows has one cell per position and stays at the top as you scroll. Its orange is the average fill of the coloured characters in that column over the rows on screen: their brightness added up and divided by the number of rows, up to 1. It is recalculated when groups are filtered. Hover over a cell for its value.</p><p class="jp" lang="ja">行の上のバーは位置ごとに1つのセルがあり、スクロールしても上に残ります。オレンジの濃さは、表示中の行でその列にある色付き文字の平均の濃さです。明るさを足して行の数で割ったもので、最大は1です。グループを絞り込むと計算し直します。セルにカーソルを合わせると値が表示されます。</p></div>
 
-<p>閾値は30%です。グループ内のメッセージの少なくとも30%で2つの位置の文字が一致する必要があります。具体的な文字はメッセージごとに変わりますが、<em>関係性</em>（2つの位置が等しいこと）は維持されます。これは2つの位置が構造的にリンクしていることを示唆しており、同じ入力から計算されるか、一方が他方から導出される可能性があります。</p>
+<div class="bi bi-h2" id="using"><h2 class="en">Using the pages</h2><h2 class="jp" lang="ja">ページの操作</h2></div>
+<ul>
+<li><div class="bi"><div class="en">Click a coloured character to pick out one pattern. Rows of the same group (2A and 2B count separately) that carry the whole pattern stay bright, and the rest fade. Missing pieces in those rows show as dashed outlines.</div><div class="jp" lang="ja">色の付いた文字をクリックすると、パターンを1つ選べます。同じグループ（2Aと2Bは別）でそのパターン全体を持つ行は明るいままで、ほかは薄くなります。それらの行で欠けている部分は点線の枠で表示されます。</div></div></li>
+<li><div class="bi"><div class="en">Click the same character again to step through its other patterns. The dots under it (●○○) show which one is selected. After the last one the selection clears. Esc or a click on empty space also clears it.</div><div class="jp" lang="ja">同じ文字をもう一度クリックすると、その文字のほかのパターンに順に切り替わります。下の点（●○○）が今どれを選んでいるかを示します。最後のパターンの次で選択が解除されます。Escキーや何もない場所のクリックでも解除できます。</div></div></li>
+<li><div class="bi"><div class="en">Hover over a character for the name of its pattern.</div><div class="jp" lang="ja">文字にカーソルを合わせると、パターンの名前が表示されます。</div></div></li>
+<li><div class="bi"><div class="en">Click the ● dot before a message to copy its text.</div><div class="jp" lang="ja">メッセージの前の●をクリックすると、本文をコピーできます。</div></div></li>
+<li><div class="bi"><div class="en">Display Mode switches between rows by group and rows in time order. Filter by Group shows or hides groups, and the Messages box counts the rows shown. Both appear when a page has more than one group or a split group.</div><div class="jp" lang="ja">「Display Mode」で、グループ別の並びと時間順の並びを切り替えます。「Filter by Group」でグループの表示・非表示を切り替え、「Messages」の欄に表示中の行数が出ます。どちらも、グループが2つ以上あるか、分かれたグループがあるページに表示されます。</div></div></li>
+<li><div class="bi"><div class="en"><span class="mono">?g=</span> in the address picks the groups to show, for example <span class="mono">?g=3</span> or <span class="mono">?g=2a,2b</span>.</div><div class="jp" lang="ja">アドレスの<span class="mono">?g=</span>で表示するグループを選べます。たとえば<span class="mono">?g=3</span>や<span class="mono">?g=2a,2b</span>です。</div></div></li>
+<li><div class="bi"><div class="en">← and →, or a sideways swipe, go to the previous or next length. Go to: jumps to any length.</div><div class="jp" lang="ja">←と→、または横のスワイプで前後の長さに移動します。「Go to:」で任意の長さに移動できます。</div></div></li>
+<li><div class="bi"><div class="en">On a narrow screen the characters shrink, down to 7 pixels. Below that, each row becomes a strip of coloured bars.</div><div class="jp" lang="ja">画面の幅が狭いと文字が小さくなり、最小7ピクセルまで縮みます。それでも収まらない場合、各行は色の付いた棒の帯になります。</div></div></li>
+<li><div class="bi"><div class="en">↑ or ↓, or pulling past the top or bottom of the page, switches to the older version of the same length and back.</div><div class="jp" lang="ja">↑と↓、またはページの上端・下端を越えて引っ張ると、同じ長さの旧版に切り替わり、もう一度で戻ります。</div></div></li>
+</ul>
 
-<p>ホットペアは連続ブロックとしても検出されます。位置15〜17が位置23〜25と3文字ブロックとしてメッセージ間で一貫して対応する場合、個々のペアが単独で30%の閾値を満たさなくても、統計的に特定されます。</p>
-
-<h3>4連続リピート <span class="t-pink">（ピンク）</span></h3>
-
-<p>最も単純なパターンです。同じ文字が4つ以上連続して出現します（例：<code>AAAA</code>）。ランダムな36文字のアルファベット（A〜Zおよび0〜9）において、同じ文字が4つ連続する確率は非常に低いです。これが発生する場合、符号化における意図的な要素&mdash;パディング、区切り、特殊マーカーなど&mdash;を反映している可能性が高いです。</p>
-
-<p>複数のメッセージで同じ位置に4連続リピートが出現する場合、最大の強度で表示されます。他のメッセージでは見られない位置に出現する4連続リピートはやや薄く表示されますが、依然として目立つ形で表示され、構造的に確認されたものと視覚的に区別されます。</p>
-
-<h3>部分的4連続 <span class="t-coral">（コーラル）</span></h3>
-
-<p>同じ文字数の他のメッセージで完全な4連続リピートが頻出する位置に、2つまたは3つの連続する同一文字（例：<code>AA</code>や<code>BBB</code>）が存在する場合があります。コーラル色の強調は「この位置は4連続リピートが発生しやすい構造的に重要な場所であり、このメッセージにはそこに部分的な一致がある」ことを意味します。任意の位置にある2文字の繰り返しは強調表示<em>されません</em>&mdash;その位置がメッセージ集合全体にわたって構造的に重要である場合にのみ検出されます。</p>
-
-<hr>
-
-<h2>分析の仕組み</h2>
-
-<ol>
-    <li><strong>文字数でグループ化。</strong>すべてのEAMを文字数で分類します。各文字数が個別のページを持ちます。位置ベースの分析は、あるメッセージの位置15が別のメッセージの位置15と対応する場合にのみ意味を持つため、同一文字数でのグループ化は不可欠です。</li>
-    <li><strong>ホットポジションペアの特定。</strong>メッセージは2文字のプレフィックスに基づいてさらにグループに分類されます。各グループ内で、すべての位置の組み合わせについて、一致する文字を持つ傾向があるかを確認します。メッセージの30%以上で一致するペアが「ホット」としてフラグ付けされます。ツールはさらに、2〜5位置の連続ブロックが互いに対応するパターンも検出します。テスト候補数を考慮した統計的補正閾値が使用されます。これはメッセージ間のグループ別分析であり、各グループのパターンは独立して計算されます。</li>
-    <li><strong>各メッセージのパターン走査。</strong>各メッセージについて、完全一致する部分文字列、ギャップ付きリピート、4連続リピート、部分的4連続を検出します。</li>
-    <li><strong>信頼度スコアリング。</strong>長いメッセージでの短いリピートは偶然の産物であることが多く、誕生日のパラドックスにより衝突は驚くほど高い確率で発生します。ツールは各パターンが偶然発生する確率を推定し、信頼度の重みを付与します。低信頼度のパターンはより薄く表示され、非常に弱いものは除外されます。</li>
-    <li><strong>統合と優先順位付け。</strong>同じ位置に複数のパターンが重なる場合、最も情報量の多いものが表示されます。優先順位（高い順）：<span class="t-pink">4連続リピート</span> &gt; <span class="t-coral">部分的4連続</span> &gt; <span class="t-green">ギャップ付き</span> &gt; <span class="t-blue">完全一致</span> &gt; <span class="t-purple">ホットペア</span>。ただし、ある位置に青（完全一致）と紫（ホットペア）の両方が存在する場合、ツールは完全一致が構造的に裏付けられているかを確認します。完全一致の各オフセットがホットペアで裏付けられていれば青のまま（ブロック一致が本物）ですが、裏付けがなければ紫に上書きされます（完全一致はその位置では偶発的であり、メッセージ間の証拠が真のシグナル）。</li>
-    <li><strong>レンダリング。</strong>結果がインタラクティブなページに組み立てられ、上部に集約バー、下部にメッセージごとの色付き文字が表示されます。各グループの強調表示の強度はそのグループ自体のパターンデータから計算されるため、あるグループの位置での活動が別のグループの表示を膨張させたり減少させたりすることはありません。</li>
-</ol>
-
-<h2>ページの操作方法</h2>
-
-<p><strong>強調表示された文字をクリック</strong>すると、同じ位置で同じパターンを共有する他のすべてのメッセージが白い輪郭線で強調表示され、一致しないメッセージは薄くなります。パターンがどの程度広範に存在するかを確認する最も手軽な方法です。紫（ホットペア）パターンでは特に有用で、リンクされた2つの位置が一致するすべてのメッセージを表示します。</p>
-
-<p><strong>ドットをクリック</strong>（各メッセージの左にある色付きの丸）すると、同じグループのすべてのメッセージが強調表示されます。</p>
-
-<p><strong>フィルターコントロール</strong>では、チェックボックスを使って特定のグループの表示・非表示を切り替えることができます。</p>
-
-<p><strong>ソートコントロール</strong>では、グループ別の順序（グループごと、次に時系列）と時系列順序（グループに関係なく全メッセージを時間順に表示）を切り替えることができます。</p>
-
-<p><strong>ナビゲーション：</strong>矢印で隣接する文字数のページに移動し、ドロップダウンで特定の文字数にジャンプできます。「Index」リンクで全体の一覧ページに戻ります。</p>
-
-<h2>グループとドット</h2>
-
-<p>同じ文字数のメッセージは、共有する特徴に基づいてさらにグループに分類されます。グループ化により、同じ文字数の中でも異なるサブフォーマットに従うメッセージのファミリーを特定できます。</p>
-
-<p class="group-dots">
-    <span style="color: #06b050; font-weight: bold;">&#9679; グループ1</span>
-    <span style="color: #ed7d32; font-weight: bold;">&#9679; グループ2</span>
-    <span style="color: #ffcc00; font-weight: bold;">&#9679; グループ3</span>
-    <span style="color: #ff0467; font-weight: bold;">&#9679; グループ4</span>
-    <span style="color: #9063cd; font-weight: bold;">&#9679; グループ5</span>
-    <span style="color: #555; font-weight: bold;">&#9679; 未分類</span>
-</p>
-
-<p>各メッセージの横にあるドットはそのグループを反映しています。自信を持って分類できなかったメッセージは灰色のドットで「未分類」と表示されます。</p>
-
-<h2 id="confidence-jp">信頼度フィルタリング</h2>
-
-<p>検出されたパターンがすべて等しく意味があるわけではありません。142文字のメッセージ内で2文字の部分文字列が繰り返されても、それほど驚くことではありません&mdash;それだけの文字数と36種類の値しかない状況では、短い衝突は統計的に予想される範囲内です。一方、同じメッセージで5文字のリピートが見つかれば、はるかに注目に値します。</p>
-
-<p>ツールは確率論の<a href="https://manabitimes.jp/math/996" target="_blank">誕生日のパラドックス</a>という概念を用いて、特定のサイズのメッセージで特定の長さのリピートが偶然発生する確率を推定します。長いメッセージでの短いリピートほどスコアが低くなります。各パターン検出システムはそれぞれ独立した証拠に基づきます&mdash;メッセージ内パターン（青、緑）はメッセージ間パターン（紫）とは独立してスコアリングされ、互いに数値を膨張させることはありません。</p>
-
-<p>低信頼度のパターンは透明度が高く（より薄く）表示されます。明るく不透明な強調表示ほど、注目する価値が高いパターンです。</p>
-
-<h2>データの読み方のコツ</h2>
-
-<p><strong>ヒートマップバーから始める。</strong>明るい列を探しましょう&mdash;それらが構造的に活発な位置です。多くの文字数にわたって暗いままの位置は、おそらく予測不可能なデータを含んでいます。</p>
-
-<p><strong>メッセージ間の一貫性を見る。</strong>1つのメッセージにしか現れないパターンは偶然かもしれません。数十のメッセージにわたって同じ位置に現れるパターンは、ほぼ確実に構造的なものです。強調表示された文字をクリックして、何件のメッセージがそのパターンを共有しているか確認しましょう。</p>
-
-<p><strong>文字数間で比較する。</strong>一部の構造的特徴は異なる文字数のメッセージ間で持続する場合があります（たとえば、最初の数位置が常にコールサインフィールドとして機能するなど）。文字数ページ間を移動して確認しましょう。</p>
-
-<p><strong>透明度に注意する。</strong>明るく不透明な強調表示は高信頼度です。薄く透明な強調表示は統計的に弱いものです。</p>
-
-<p><strong>紫は特別。</strong>紫の強調表示は、単一メッセージ内ではなく、メッセージ集合全体にわたって検証された唯一のパターンです。位置間の構造的関係性を表しており、符号化方式にメッセージの一部が別の部分によって決定される内部依存性があることを示唆しています&mdash;おそらく最も興味深い発見と言えるでしょう。</p>
-
-<div class="note">
-    <strong>解釈についての注意。</strong>これらのヒートマップは相関関係と構造的規則性&mdash;フォーマットの「形」&mdash;を明らかにしますが、メッセージを解読したり暗号を破ったりするものではありません。読めない言語で書かれた手紙を研究するようなものです：内容の意味はわからなくても、3番目の単語がいつも7番目の単語と韻を踏んでいること、一部だけ入れ替わった形でフレーズが繰り返されること、4文字つづきの同じ文字のブロックが予測可能な位置に現れることに気づき始めます。フォーマットの文法と骨格を地図にしているのであって、内容を読んでいるのではありません。
-</div>
+<div class="bi bi-h2" id="older"><h2 class="en">The older version</h2><h2 class="jp" lang="ja">旧版</h2></div>
+<div class="bi bi-p"><p class="en">The older version has no dataset-wide test. A pair is hot if the same character is at both positions in at least 30% of the group's messages (and at least 3). Repeats are faded by a chance score instead of removed. Positions 1 and 2 are included. Its colours are pink for runs of 4 or more, rose for runs of 2 or 3, green for gapped repeats, blue for exact repeats and purple for pairs.</p><p class="jp" lang="ja">旧版にはデータ全体での検定がありません。グループのメッセージの30%以上（かつ3件以上）で2つの位置に同じ文字があれば、ホットペアになります。繰り返しは取り除かず、偶然のスコアに応じて薄くします。1文字目と2文字目も含みます。色は、4文字以上の連続がピンク、2〜3文字の連続がローズ、一部が異なる繰り返しが緑、完全な繰り返しが青、ペアが紫です。</p></div>
 
 </div>
 
-<div class="footer">
-    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><span class="en">&uarr; RETURN</span><span class="jp">&uarr; 戻る</span></a>
-</div>
-
-</div>
-
+<!-- hfgcs controls -->
 <script>
-function toggleLang() {
-    var body = document.body;
-    var btn = document.querySelector('.lang-btn');
-    body.classList.toggle('show-jp');
-    btn.textContent = body.classList.contains('show-jp') ? 'EN' : '日本語';
-}
-</script>
-
-
-<script>
-// ← / → and a horizontal swipe flip EN/JP, by pressing the page's own
-// language button — so it does exactly what a click does. Added 2026-09-10.
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
 (function () {
-  var flip = function () { var b = document.querySelector('.lang-btn'); if (b) b.click(); };
-  var SKIP = 'input, select, textarea, button, label';
-  // A drag inside something that scrolls sideways is that thing's, not ours.
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
+
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
+
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
+  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j') { e.preventDefault(); lb.click(); }
+    else if (k === 'n') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
+</script>
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
   function inHorizontalScroller(el) {
     for (; el && el !== document.body; el = el.parentElement) {
       var ox = getComputedStyle(el).overflowX;
@@ -571,9 +409,10 @@ function toggleLang() {
   }
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     var t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
     e.preventDefault();
     flip();
   });
@@ -582,17 +421,18 @@ function toggleLang() {
     var t = e.target;
     if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
     var p = e.touches[0];
-    origin = { x: p.clientX, y: p.clientY, at: Date.now() };
-  }, { passive: true });
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
   document.addEventListener('touchend', function (e) {
     var o = origin; origin = null;
     if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
     var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
     if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
     flip();
-  }, { passive: true });
-  document.addEventListener('touchcancel', function () { origin = null; }, { passive: true });
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
 })();
 </script>
+<!-- /hfgcs controls -->
 </body>
 </html>

@@ -1,686 +1,404 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-title-en="Long G4 Messages" data-title-ja="長文G4メッセージ">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cross-Message 44-Character Alignment Periodicity in HFGCS EAM Ciphertext</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Long G4 Messages</title>
+<script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;600&display=swap">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1a1a24;
-    --border: #2a2a3a;
-    --text: #c8c8d8;
-    --text-dim: #7a7a90;
-    --accent: #ff0467;
-    --match-color: #44ee88;
-    --offset-color: #4488ff;
-  }
-  html { scroll-behavior: smooth; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    line-height: 1.6;
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  h1 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.3rem; }
-  h2 {
-    color: #ddd; font-size: 1.1rem; margin: 2.5rem 0 0.8rem;
-    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
-  }
-  h3 { color: #bbb; font-size: 0.95rem; margin: 1.5rem 0 0.6rem; }
-  .subtitle { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 2rem; }
-  p, li {
-    font-size: 0.83rem; margin-bottom: 0.6rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.7;
-  }
-  ul { padding-left: 1.5rem; margin-bottom: 1rem; }
-  code { font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #ddd; }
-  strong { color: #eee; }
+:root{--bg:#01060b;--panel:#161b22;--panel2:#0d1117;--line:#222a35;--ink:#e6edf3;--dim:#8b949e;--mut:#6e7681;
+--g4:#ff0467;--mk:#4a9eff;--on-g4:#1a0610;--on-mk:#06121f;--prc:#ffffff;--track:#161b22;
+--float:rgba(22,28,34,.92);--shadow:0 4px 18px rgba(0,0,0,.45);color-scheme:dark}
+:root[data-theme="light"]{--bg:#f3f5f7;--panel:#ffffff;--panel2:#f9fafb;--line:#d6dce2;--ink:#17202a;--dim:#4b5765;--mut:#7d8894;
+--g4:#e0005a;--mk:#2b78d6;--on-g4:#ffffff;--on-mk:#ffffff;--prc:#000000;--track:#e3e8ed;
+--float:rgba(255,255,255,.94);--shadow:0 4px 18px rgba(20,30,40,.13);color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);margin:0;font-family:"IBM Plex Sans","IBM Plex Sans JP",system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:36px 28px 64px}
+.eyebrow{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--dim);padding-right:140px}
+h1{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Arial Narrow",sans-serif;font-weight:600;font-size:30px;margin:0 0 4px;letter-spacing:.01em;text-wrap:balance}
+nav.links{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;margin:6px 0 18px;color:var(--mut)}
+nav.links a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line);margin-right:14px}
+nav.links a:hover{color:var(--ink)}
+nav.links b{color:var(--ink);font-weight:400;margin-right:14px}
+h2{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-weight:600;font-size:19px;margin:38px 0 8px;color:var(--ink);scroll-margin-top:60px;text-wrap:balance}
+h2 small{font-weight:400;color:var(--mut);font-size:13px;margin-left:10px;letter-spacing:.04em}
+p,ul{color:var(--dim);margin:6px 0 12px}
+ul{padding-left:22px}
+li{margin:3px 0}
+p b,li b{color:var(--ink);font-weight:600}
+a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--mk)}
+a:hover{color:var(--mk)}
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0 10px}
+.rule{background:var(--panel);border:1px solid var(--line);padding:12px 14px}
+.rule b{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.rule .ex{font-family:"IBM Plex Mono",monospace;font-size:20px;margin:6px 0 2px;color:var(--ink)}
+.rule p{margin:4px 0 0;color:var(--dim);font-size:13px}
+.msg{background:var(--panel2);border:1px solid var(--line);padding:12px 14px 10px;margin:8px 0 12px;overflow-x:auto;min-width:0}
+.tag{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;color:var(--dim);margin-bottom:8px}
+.tag b{color:var(--ink);font-size:14px;font-weight:600}
+.stack{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:2px 12px;align-items:baseline}
+.stack.fam{grid-template-columns:auto auto;margin-bottom:10px}
+.sub{grid-column:1 / -1;font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:12px;color:var(--dim);margin:8px 0 2px}
+.sub:first-child{margin-top:0}
+.pos{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;color:var(--mut);text-align:right;min-width:3ch;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chars{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;line-height:1.45;white-space:nowrap;padding:0 4px;border-radius:2px}
+.chars span{display:inline-block;width:1ch;text-align:center}
+.chars .c{color:var(--ink)}
+.chars .e{color:var(--mut)}
+.chars .pr{color:var(--prc);font-weight:600}
+.chars .mk{background:var(--mk);color:var(--on-mk);font-weight:600}
+.chars .hit{background:var(--g4);color:var(--on-g4);font-weight:600}
+.chars .f1{color:var(--g4);font-weight:600}
+.chars .f2{color:var(--g4);opacity:.6}
+.chars .ruler{color:var(--mut);opacity:.6}
+.chars.pair{padding-top:3px;padding-bottom:3px}
+.chars.trailer{color:var(--dim)}
+.chars.cons{border-top:1px solid var(--line);padding-top:2px}
+.kind{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:11px;color:var(--mut);letter-spacing:.04em;white-space:normal;min-width:0;line-height:1.2}
+.kind i{font-style:normal;color:var(--dim);margin-right:7px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-variant-numeric:tabular-nums}
+.kind em{font-style:normal;color:var(--g4)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--dim);font-size:12px;margin:8px 0 18px}
+.sw{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:6px;border-radius:2px}
+.formula{font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.5;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:12px 16px;margin:10px 0 14px;white-space:pre;overflow-x:auto}
+.formula b{color:var(--g4);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0 6px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--dim);font-weight:600}
+th.n,td.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.m{font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+td.lens{font-family:"IBM Plex Mono",monospace;font-size:12px}
+td{color:var(--ink)}
+td.d{color:var(--dim)}
+tr.dim td{color:var(--mut)}
+.tablewrap{overflow-x:auto}
+.hbars{display:grid;gap:3px;margin:10px 0 6px;max-width:720px}
+.hb{display:grid;grid-template-columns:9em minmax(0,1fr) 6em;gap:10px;align-items:center;font-size:12px}
+.hb .l{font-family:"IBM Plex Mono","IBM Plex Sans JP",monospace;color:var(--dim);white-space:nowrap}
+.hb .t{background:var(--track);height:13px;border-radius:2px}
+.hb .t i{display:block;height:100%;background:var(--g4);opacity:.85;border-radius:2px}
+.hb .v{font-family:"IBM Plex Mono",monospace;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bars{display:grid;grid-template-columns:repeat(22,minmax(0,1fr));gap:3px;align-items:end;height:120px;margin:10px 0 4px;max-width:720px}
+.bar{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.bar i{display:block;background:var(--g4);opacity:.85;border-radius:2px 2px 0 0}
+.bar.rk i{background:var(--mut);opacity:1}
+.bar b{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--mut);text-align:center;font-weight:400;margin-top:3px}
+.barcap{color:var(--dim);font-size:12px;max-width:720px}
+.foot{color:var(--mut);font-size:12px;margin-top:30px}
+.wrap .bi>*{margin-top:0;margin-bottom:0}
+.bi-p,.bi-ul{margin:6px 0 12px}
+.bi-h2{margin:38px 0 8px;scroll-margin-top:60px}
+.bi-rules{margin:14px 0 10px}
+.bi-section{margin:8px 0 12px}
+.bi-hbars{margin:10px 0 6px;max-width:720px}
+.bi-bars{margin:10px 0 4px;max-width:720px}
+.bi-legend{margin:8px 0 18px}
+.bi-pre{margin:10px 0 14px}
+/* the floating controls take this page's own colours */
+html:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:var(--ink);--fab-dim:var(--dim);--fab-hover:var(--panel);--fab-focus:var(--mk)}
+html:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:var(--ink);--fab-dim:var(--dim);--fab-hover:#dfe4ea;--fab-focus:var(--mk)}
 
-  .stat-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.8rem; margin: 1.2rem 0;
-  }
-  .stat-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 6px; padding: 0.8rem; text-align: center;
-  }
-  .stat-card .number {
-    font-size: 1.8rem; font-weight: bold; color: var(--accent);
-    font-family: 'SF Mono', monospace;
-  }
-  .stat-card .label {
-    font-size: 0.7rem; color: var(--text-dim); margin-top: 0.2rem;
-    font-family: -apple-system, sans-serif;
-  }
-
-  /* Alignment pair visualization */
-  .pair-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0;
-    overflow-x: auto;
-  }
-  .pair-header {
-    font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.6rem;
-    font-family: -apple-system, sans-serif;
-  }
-  .pair-header strong { color: var(--accent); }
-  .pair-header .offset-badge {
-    display: inline-block; background: rgba(68,136,255,0.2);
-    border: 1px solid rgba(68,136,255,0.4); border-radius: 4px;
-    padding: 1px 6px; color: var(--offset-color); font-weight: 600;
-    font-family: 'SF Mono', monospace; font-size: 0.78rem;
-  }
-  .pair-header .match-badge {
-    display: inline-block; background: rgba(68,238,136,0.15);
-    border: 1px solid rgba(68,238,136,0.3); border-radius: 4px;
-    padding: 1px 6px; color: var(--match-color); font-weight: 600;
-    font-family: 'SF Mono', monospace; font-size: 0.78rem;
-  }
-
-  .align-row {
-    display: flex; align-items: center; margin: 1px 0; white-space: nowrap;
-  }
-  .row-label {
-    width: 24px; font-size: 0.65rem; color: var(--text-dim);
-    flex-shrink: 0; text-align: right; padding-right: 4px;
-  }
-  .char-strip { display: flex; gap: 0; }
-  .ac {
-    width: 11px; height: 17px; display: flex; align-items: center;
-    justify-content: center; font-size: 9px; flex-shrink: 0;
-  }
-  .ac.normal { color: #555; }
-  .ac.match { color: #fff; background: rgba(68,238,136,0.3); font-weight: bold; }
-  .ac.spacer { }
-  .ac.bar { color: rgba(68,238,136,0.5); font-size: 7px; }
-  .ac.bar.hit { color: rgba(68,238,136,0.9); }
-
-  /* Histogram */
-  .histogram {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 1.2rem; margin: 1.2rem 0;
-  }
-  .hist-bar-row {
-    display: flex; align-items: center; margin: 2px 0; font-size: 0.72rem;
-  }
-  .hist-label {
-    width: 60px; text-align: right; padding-right: 8px; color: var(--text-dim);
-    font-family: 'SF Mono', monospace; flex-shrink: 0;
-  }
-  .hist-bar-bg {
-    flex: 1; height: 18px; background: var(--surface2); border-radius: 3px;
-    position: relative; overflow: hidden;
-  }
-  .hist-bar-fill {
-    height: 100%; border-radius: 3px; position: absolute; left: 0; top: 0;
-  }
-  .hist-bar-fill.mul44 { background: var(--accent); }
-  .hist-bar-fill.mul22 { background: rgba(255,4,103,0.5); }
-  .hist-bar-fill.even { background: rgba(100,100,140,0.5); }
-  .hist-bar-fill.odd { background: rgba(60,60,80,0.5); }
-  .hist-value {
-    width: 70px; padding-left: 8px; color: var(--text-dim);
-    font-family: 'SF Mono', monospace; flex-shrink: 0;
-  }
-
-  .note {
-    background: var(--surface2); border-left: 3px solid var(--accent);
-    padding: 0.7rem 1rem; margin: 1rem 0; font-size: 0.8rem;
-    font-family: -apple-system, sans-serif;
-  }
-
-  table.stats {
-    border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem;
-  }
-  table.stats th, table.stats td {
-    padding: 0.35rem 0.7rem; border: 1px solid var(--border); text-align: right;
-  }
-  table.stats th {
-    background: var(--surface); color: #aaa; font-weight: 600;
-    font-family: -apple-system, sans-serif;
-  }
-  table.stats td { font-family: 'SF Mono', monospace; }
-  table.stats td.lc {
-    text-align: left; font-family: -apple-system, sans-serif; color: var(--text-dim);
-  }
-  .hl { background: rgba(255,4,103,0.08); }
-  .separator { border-top: 1px solid var(--border); margin: 2rem 0; }
-
-  .method-diagram {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 1.2rem; margin: 1.2rem 0;
-    font-size: 0.8rem; line-height: 1.9;
-  }
-  .method-diagram .dim { color: #555; }
-  .method-diagram .bright { color: #fff; }
-  .method-diagram .grn { color: var(--match-color); }
-  .method-diagram .blu { color: var(--offset-color); }
-
-  .nav-bar {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-bar a { color: var(--offset-color); text-decoration: none; }
-  .nav-bar a:hover { text-decoration: underline; }
-  .nav-bar .nav-sep { color: var(--text-dim); margin: 0 0.5rem; }
+@media (max-width:900px){.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.wrap{padding:24px 16px 56px}.rules{grid-template-columns:1fr}h1{font-size:24px}.hb{grid-template-columns:7.5em minmax(0,1fr) 5em}}
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
 </style>
 </head>
 <body>
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<div class="wrap">
+<div class="eyebrow"><span class="bi-i"><span class="en">HFGCS · Group 4 long messages · 241 of 60+ characters · 221116 – 261005</span><span class="jp" lang="ja">HFGCS · グループ4 長文メッセージ · 60文字以上 241件 · 221116 – 261005</span></span></div>
+<h1><span class="bi-i"><span class="en">Long G4 Messages</span><span class="jp" lang="ja">長文G4メッセージ</span></span></h1>
+<nav class="links bi"><div class="en"><a href="index.html">Index</a><b>Overview</b><a href="block_structure.html">Block layout</a><a href="block_vocabulary.html">Block reuse</a></div><div class="jp" lang="ja"><a href="index.html">目次</a><b>概要</b><a href="block_structure.html">ブロック構成</a><a href="block_vocabulary.html">ブロック再利用</a></div></nav>
+<div class="bi bi-p"><p class="en">Most long G4s are built the same way. Split one at its markers and you get five parts:</p><p lang="ja" class="jp">長文G4のほとんどは同じ組み立て方をしています。マーカーで区切ると、次の5つの部分に分かれます。</p></div>
+<div class="bi bi-ul"><ul class="en">
+<li>a 2-character prefix</li>
+<li>row A: 18 characters, then an X??X (the 21st and 24th characters match)</li>
+<li>row B: 17 characters, then a quad (one character four times)</li>
+<li>blocks: 18 characters, then a quad, as many as the message has room for</li>
+<li>a 9-character trailer</li>
+</ul><ul lang="ja" class="jp">
+<li>2文字のプレフィックス</li>
+<li>A行：18文字のあとにX??X（21文字目と24文字目が同じ）</li>
+<li>B行：17文字のあとにクアッド（同じ文字が4つ続く）</li>
+<li>ブロック：18文字のあとにクアッド。メッセージの長さに応じて複数続く</li>
+<li>9文字のトレーラー</li>
+</ul></div>
+<div class="bi bi-p"><p class="en">Later messages under the same prefix often reuse whole blocks from earlier ones.</p><p lang="ja" class="jp">同じプレフィックスの後のメッセージは、前のメッセージのブロックを丸ごと再利用することがよくあります。</p></div>
+<div class="bi bi-p"><p class="en">Two messages are a <b>match</b> when sliding one along the other lines them up far better than chance at some point.
+How far it slides is the <b>offset</b>. The score is z = (m − n·p) / √(n·p·(1 − p)), where m is the number of matching
+characters, n the number of overlapping characters, and p (about 0.032) the chance that two G4 characters agree. A match
+needs z of 15 or more.</p><p lang="ja" class="jp">2つのメッセージを互いにずらしていき、ある位置で偶然では説明できないほど文字が揃う場合、その2つは<b>一致</b>していると呼びます。ずらした量が<b>オフセット</b>です。スコアは z = (m − n·p) / √(n·p·(1 − p)) で、mは一致した文字数、nは重なった文字数、p（約0.032）はG4の2文字が偶然一致する確率です。一致と認めるには、zが15以上必要です。</p></div>
+<div class="bi bi-p"><p class="en">Most matches are <b>direct</b>: the later message took the blocks straight from the earlier one. A few are
+<b>indirect</b>, matching only because both share blocks with a message in between.</p><p lang="ja" class="jp">ほとんどの一致は<b>直接</b>一致で、後のメッセージが前のメッセージから直接ブロックを取っています。いくつかは<b>間接</b>一致で、間にある別のメッセージと双方がブロックを共有しているために文字が揃っているだけです。</p></div>
+<div class="bi bi-rules"><div class="en rules">
+<div class="rule"><b>Messages</b><div class="ex">241</div><p>long G4s under 31 prefixes, 221116–261005</p></div>
+<div class="rule"><b>Reuse</b><div class="ex">92 of 210</div><p>reused blocks from an earlier long G4 under the same prefix (44%)</p></div>
+<div class="rule"><b>Matches</b><div class="ex">167</div><p>all between messages of the same prefix. The best cross-prefix pair scores z 10.7</p></div>
+<div class="rule"><b>Offsets</b><div class="ex">94 of 167</div><p>are multiples of 22. None is odd</p></div>
+</div><div lang="ja" class="jp rules">
+<div class="rule"><b>メッセージ</b><div class="ex">241</div><p>31のプレフィックスにわたる長文G4（221116〜261005）</p></div>
+<div class="rule"><b>再利用</b><div class="ex">92 / 210</div><p>同じプレフィックスの前の長文G4のブロックを再利用（44%）</p></div>
+<div class="rule"><b>一致</b><div class="ex">167</div><p>すべて同じプレフィックス内。異なるプレフィックス間の最高スコアはz 10.7</p></div>
+<div class="rule"><b>オフセット</b><div class="ex">94 / 167</div><p>が22の倍数。奇数は1件もない</p></div>
+</div></div>
+<div class="bi bi-h2"><h2 class="en">The layout</h2><h2 lang="ja" class="jp">構成</h2></div>
+<div class="bi bi-p"><p class="en">Here&#39;s an example, the MM-164 aired 261004 at 21:38 UTC, one row per line. The closing markers are in blue. The
+number on the left is where each row starts, and the one on the right is its length.</p><p lang="ja" class="jp">例として、261004の21:38 UTCに放送されたMM-164を1行ずつ示します。行を閉じるマーカーは青で表示しています。左の数字は各行の開始位置、右の数字は行の長さです。</p></div>
+<div class="bi bi-section"><section class="en msg"><div class="tag"><b>261004 21:38z MM-164</b> · plain, 5 blocks</div><div class="stack"><div class="pos">1</div><div class="chars"><span class="pr">M</span><span class="pr">M</span></div><div class="kind"><i>2</i>prefix</div><div class="pos">3</div><div class="chars"><span class="c">V</span><span class="c">4</span><span class="c">M</span><span class="c">N</span><span class="c">S</span><span class="c">R</span><span class="c">J</span><span class="c">I</span><span class="c">S</span><span class="c">B</span><span class="c">S</span><span class="c">I</span><span class="c">6</span><span class="c">L</span><span class="c">5</span><span class="c">Y</span><span class="c">P</span><span class="c">H</span><span class="mk">J</span><span class="c">T</span><span class="c">A</span><span class="mk">J</span></div><div class="kind"><i>22</i>row A · 18 + X??X</div><div class="pos">25</div><div class="chars"><span class="c">I</span><span class="c">G</span><span class="c">T</span><span class="c">J</span><span class="c">I</span><span class="c">L</span><span class="c">N</span><span class="c">I</span><span class="c">N</span><span class="c">D</span><span class="c">I</span><span class="c">2</span><span class="c">X</span><span class="c">2</span><span class="c">A</span><span class="c">A</span><span class="c">Q</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span></div><div class="kind"><i>21</i>row B · 17 + quad</div><div class="pos">46</div><div class="chars"><span class="c">S</span><span class="c">N</span><span class="c">D</span><span class="c">N</span><span class="c">S</span><span class="c">H</span><span class="c">H</span><span class="c">S</span><span class="c">G</span><span class="c">S</span><span class="c">X</span><span class="c">K</span><span class="c">P</span><span class="c">G</span><span class="c">P</span><span class="c">G</span><span class="c">N</span><span class="c">G</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span></div><div class="kind"><i>22</i>block 1 · 18 + quad</div><div class="pos">68</div><div class="chars"><span class="c">7</span><span class="c">N</span><span class="c">I</span><span class="c">L</span><span class="c">Z</span><span class="c">I</span><span class="c">I</span><span class="c">T</span><span class="c">3</span><span class="c">A</span><span class="c">S</span><span class="c">P</span><span class="c">O</span><span class="c">R</span><span class="c">R</span><span class="c">L</span><span class="c">R</span><span class="c">N</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span></div><div class="kind"><i>22</i>block 2 · 18 + quad</div><div class="pos">90</div><div class="chars"><span class="c">C</span><span class="c">P</span><span class="c">P</span><span class="c">C</span><span class="c">S</span><span class="c">O</span><span class="c">O</span><span class="c">K</span><span class="c">I</span><span class="c">V</span><span class="c">A</span><span class="c">C</span><span class="c">B</span><span class="c">H</span><span class="c">H</span><span class="c">H</span><span class="c">H</span><span class="c">H</span><span class="mk">W</span><span class="mk">W</span><span class="mk">W</span><span class="mk">W</span></div><div class="kind"><i>22</i>block 3 · 18 + quad</div><div class="pos">112</div><div class="chars"><span class="c">S</span><span class="c">G</span><span class="c">7</span><span class="c">F</span><span class="c">2</span><span class="c">D</span><span class="c">D</span><span class="c">3</span><span class="c">B</span><span class="c">I</span><span class="c">O</span><span class="c">G</span><span class="c">S</span><span class="c">J</span><span class="c">G</span><span class="c">W</span><span class="c">H</span><span class="c">J</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span></div><div class="kind"><i>22</i>block 4 · 18 + quad</div><div class="pos">134</div><div class="chars"><span class="c">X</span><span class="c">7</span><span class="c">5</span><span class="c">B</span><span class="c">7</span><span class="c">2</span><span class="c">2</span><span class="c">2</span><span class="c">Q</span><span class="c">W</span><span class="c">E</span><span class="c">H</span><span class="c">S</span><span class="c">D</span><span class="c">H</span><span class="c">S</span><span class="c">Q</span><span class="c">2</span><span class="mk">7</span><span class="mk">7</span><span class="mk">7</span><span class="mk">7</span></div><div class="kind"><i>22</i>block 5 · 18 + quad</div><div class="pos">156</div><div class="chars trailer"><span class="c">2</span><span class="c">S</span><span class="c">Y</span><span class="c">L</span><span class="c">5</span><span class="c">K</span><span class="c">T</span><span class="c">F</span><span class="c">H</span></div><div class="kind"><i>9</i>trailer</div></div></section><section lang="ja" class="jp msg"><div class="tag"><b>261004 21:38z MM-164</b> · 基本形、ブロック5つ</div><div class="stack"><div class="pos">1</div><div class="chars"><span class="pr">M</span><span class="pr">M</span></div><div class="kind"><i>2</i>プレフィックス</div><div class="pos">3</div><div class="chars"><span class="c">V</span><span class="c">4</span><span class="c">M</span><span class="c">N</span><span class="c">S</span><span class="c">R</span><span class="c">J</span><span class="c">I</span><span class="c">S</span><span class="c">B</span><span class="c">S</span><span class="c">I</span><span class="c">6</span><span class="c">L</span><span class="c">5</span><span class="c">Y</span><span class="c">P</span><span class="c">H</span><span class="mk">J</span><span class="c">T</span><span class="c">A</span><span class="mk">J</span></div><div class="kind"><i>22</i>A行 · 18 + X??X</div><div class="pos">25</div><div class="chars"><span class="c">I</span><span class="c">G</span><span class="c">T</span><span class="c">J</span><span class="c">I</span><span class="c">L</span><span class="c">N</span><span class="c">I</span><span class="c">N</span><span class="c">D</span><span class="c">I</span><span class="c">2</span><span class="c">X</span><span class="c">2</span><span class="c">A</span><span class="c">A</span><span class="c">Q</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span></div><div class="kind"><i>21</i>B行 · 17 + クアッド</div><div class="pos">46</div><div class="chars"><span class="c">S</span><span class="c">N</span><span class="c">D</span><span class="c">N</span><span class="c">S</span><span class="c">H</span><span class="c">H</span><span class="c">S</span><span class="c">G</span><span class="c">S</span><span class="c">X</span><span class="c">K</span><span class="c">P</span><span class="c">G</span><span class="c">P</span><span class="c">G</span><span class="c">N</span><span class="c">G</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span></div><div class="kind"><i>22</i>ブロック1 · 18 + クアッド</div><div class="pos">68</div><div class="chars"><span class="c">7</span><span class="c">N</span><span class="c">I</span><span class="c">L</span><span class="c">Z</span><span class="c">I</span><span class="c">I</span><span class="c">T</span><span class="c">3</span><span class="c">A</span><span class="c">S</span><span class="c">P</span><span class="c">O</span><span class="c">R</span><span class="c">R</span><span class="c">L</span><span class="c">R</span><span class="c">N</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span></div><div class="kind"><i>22</i>ブロック2 · 18 + クアッド</div><div class="pos">90</div><div class="chars"><span class="c">C</span><span class="c">P</span><span class="c">P</span><span class="c">C</span><span class="c">S</span><span class="c">O</span><span class="c">O</span><span class="c">K</span><span class="c">I</span><span class="c">V</span><span class="c">A</span><span class="c">C</span><span class="c">B</span><span class="c">H</span><span class="c">H</span><span class="c">H</span><span class="c">H</span><span class="c">H</span><span class="mk">W</span><span class="mk">W</span><span class="mk">W</span><span class="mk">W</span></div><div class="kind"><i>22</i>ブロック3 · 18 + クアッド</div><div class="pos">112</div><div class="chars"><span class="c">S</span><span class="c">G</span><span class="c">7</span><span class="c">F</span><span class="c">2</span><span class="c">D</span><span class="c">D</span><span class="c">3</span><span class="c">B</span><span class="c">I</span><span class="c">O</span><span class="c">G</span><span class="c">S</span><span class="c">J</span><span class="c">G</span><span class="c">W</span><span class="c">H</span><span class="c">J</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span></div><div class="kind"><i>22</i>ブロック4 · 18 + クアッド</div><div class="pos">134</div><div class="chars"><span class="c">X</span><span class="c">7</span><span class="c">5</span><span class="c">B</span><span class="c">7</span><span class="c">2</span><span class="c">2</span><span class="c">2</span><span class="c">Q</span><span class="c">W</span><span class="c">E</span><span class="c">H</span><span class="c">S</span><span class="c">D</span><span class="c">H</span><span class="c">S</span><span class="c">Q</span><span class="c">2</span><span class="mk">7</span><span class="mk">7</span><span class="mk">7</span><span class="mk">7</span></div><div class="kind"><i>22</i>ブロック5 · 18 + クアッド</div><div class="pos">156</div><div class="chars trailer"><span class="c">2</span><span class="c">S</span><span class="c">Y</span><span class="c">L</span><span class="c">5</span><span class="c">K</span><span class="c">T</span><span class="c">F</span><span class="c">H</span></div><div class="kind"><i>9</i>トレーラー</div></div></section></div>
+<div class="bi bi-p"><p class="en">The markers hold across the set. Among the 203 messages of 100+ characters, the 21st and 24th characters
+match in 178 (88%, where chance would give about 3%), and 161
+(79%) have a quad at 42–45. So a plain message with n blocks comes to:</p><p lang="ja" class="jp">マーカーはこのメッセージだけのものではありません。100文字以上の203件のうち、21文字目と24文字目が一致するのは178件（88%。偶然なら約3%）、42〜45文字目にクアッドがあるのは161件（79%）です。したがって、ブロックがn個の基本形のメッセージの長さは次のようになります。</p></div>
+<div class="bi bi-pre"><pre class="en formula">L  =  PR + A + B + n·blk + T  =  2 + 22 + 21 + 22n + 9  =  <b>54 + 22n</b>
 
-<div class="nav-bar">
-  <a href="index.html">&larr; Index</a>
-  <span class="nav-sep">|</span>
-  <a href="block_structure.html">Block structure evidence</a>
-  <span class="nav-sep">|</span>
-  <a href="block_vocabulary.html">Block vocabulary</a>
+      n = 3, 4, 5   →   120, 142, 164   (the three commonest lengths)</pre><pre lang="ja" class="jp formula">L  =  PR + A + B + n·blk + T  =  2 + 22 + 21 + 22n + 9  =  <b>54 + 22n</b>
+
+      n = 3, 4, 5   →   120, 142, 164   （最も多い3つの長さ）</pre></div>
+<div class="bi bi-p"><p class="en">Not every message is plain:</p><p lang="ja" class="jp">基本形でないメッセージもあります。</p></div>
+<div class="bi bi-ul"><ul class="en">
+<li>16 extra characters inside one block make it 38 long: 158, 180, 202 and so on</li>
+<li>a longer head: 52 extra in 8 of the 14 messages of 216 characters, 40 extra in 6 messages (160, 182, 182, 204, 222 and 222), and 46 extra in 2 (166 and 210)</li>
+<li>in 11 of the 12 messages of 166 characters, and in the 188, the last two blocks (44 characters) are swapped for 46: a 17-character field and a 29-character run of four short fields, each ending in a doubled character</li>
+<li>22 of the 203 messages at 100+ characters have no quads at all, and 28 of the 38 under 100. Their rows can&#39;t be placed this way.</li>
+</ul><ul lang="ja" class="jp">
+<li>1つのブロックに16文字が加わり、38文字になるもの：158、180、202など</li>
+<li>頭部が長いもの：216文字の14件中8件で52文字、6件（160、182、182、204、222、222）で40文字、2件（166、210）で46文字長い</li>
+<li>166文字の12件中11件と188文字の1件では、最後の2ブロック（44文字）が46文字に置き換わっている：17文字のフィールドと、それぞれ二重文字で終わる短いフィールド4つからなる29文字の連なり</li>
+<li>100文字以上の203件中22件、100文字未満の38件中28件にはクアッドがまったくない。これらはこの方法では行を決められない</li>
+</ul></div>
+<div class="bi bi-p"><p class="en"><a href="block_structure.html">Block layout</a> has the full list with counts.</p><p lang="ja" class="jp">全一覧と件数は<a href="block_structure.html">ブロック構成</a>のページにあります。</p></div>
+<div class="bi bi-h2"><h2 class="en">Block reuse</h2><h2 lang="ja" class="jp">ブロックの再利用</h2></div>
+<div class="bi bi-p"><p class="en">When a message reuses blocks, it usually takes 3 or 4 whole blocks from a message 2 to 5 long G4s earlier under the same
+prefix, typically about 20 days before (the median).</p><p lang="ja" class="jp">ブロックを再利用するメッセージは、たいてい同じプレフィックスで2〜5件前の長文G4から、ブロックを3つか4つ丸ごと取ります。再利用元は中央値で約20日前です。</p></div>
+<div class="bi bi-p"><p class="en">The copies aren&#39;t exact. In a reused block, the quad and positions 4 and 11 nearly always match the source. The
+rest of positions 1–5 and 11–13 match 60–91% of the time, and the other ten positions
+only 8–23%. <a href="block_structure.html#kept">Kept and changed positions</a> has the
+chart. Blocks also often land a slot or two away from where they were in the source.</p><p lang="ja" class="jp">コピーは完全ではありません。再利用されたブロックでは、クアッドと4文字目・11文字目はほぼ必ず再利用元と一致します。1〜5文字目と11〜13文字目の残りは60〜91%、それ以外の10か所は8〜23%しか一致しません（グラフは<a href="block_structure.html#kept">保持される位置と変わる位置</a>）。また、ブロックは再利用元での位置から1〜2スロットずれて置かれることもよくあります。</p></div>
+<div class="bi bi-p"><p class="en">Prefixes change every so often, and nothing has been found carrying over from one prefix to the next: no direct
+copies, and nothing disguised by a constant letter shift, a 22-character repeating key or a letter-for-letter swap.
+Details are under <a href="block_vocabulary.html#prefix">Across prefix changes</a>.</p><p lang="ja" class="jp">プレフィックスはときどき切り替わりますが、あるプレフィックスから次のプレフィックスへ引き継がれたものは見つかっていません。そのままのコピーもなく、一定の文字シフト、22文字周期の鍵、1文字ずつの置換で形を変えたものもありません。詳しくは<a href="block_vocabulary.html#prefix">プレフィックスをまたいで</a>を参照してください。</p></div>
+<div class="bi bi-h2" id="offsets"><h2 class="en">Why most match offsets are multiples of 22 <small>94 of 167</small></h2><h2 lang="ja" class="jp">一致のオフセットの多くが22の倍数になる理由 <small>167件中94件</small></h2></div>
+<div class="bi bi-p"><p class="en">A block that moves one slot moves 22 characters, and two slots is 44. That&#39;s why most match offsets are multiples
+of 22.</p><p lang="ja" class="jp">ブロックが1スロット移動すると22文字、2スロットなら44文字ずれます。そのため、一致のオフセットの多くは22の倍数になります。</p></div>
+<div class="bi bi-p"><p class="en">The ones that aren&#39;t are still never odd. Every part that can differ in length between two messages of a prefix
+has an even length: a block (22), the insert (16), the longer heads (40, 46, 52). Row B (21) and the trailer (9) are odd,
+but every message has them, so they cancel out. Each off-grid group matches one of those parts:</p><p lang="ja" class="jp">22の倍数でないものも、奇数になることはありません。同じプレフィックスの2つのメッセージで長さが変わりうる部分は、どれも長さが偶数だからです：ブロック（22）、挿入（16）、長い頭部（40、46、52）。B行（21）とトレーラー（9）は奇数ですが、どのメッセージにもあるので打ち消し合います。22の倍数からずれたグループは、それぞれ次のどれかに対応します。</p></div>
+<div class="bi bi-ul"><ul class="en">
+<li>22n ± 6: the insert (16 = 22 − 6)</li>
+<li>22n ± 8: the head 52 longer (52 = 2 × 22 + 8)</li>
+<li>22n ± 4: the head 40 longer (40 = 2 × 22 − 4)</li>
+<li>22n ± 10: lengths 12 apart, such as the 52-longer head against the 40-longer one (52 − 40 = 12)</li>
+<li>22n ± 2: a mix. 3 of the 7 involve the head 46 longer (46 = 2 × 22 + 2), and 3 the quad-free 240120 LO-108</li>
+</ul><ul lang="ja" class="jp">
+<li>22n ± 6：挿入（16 = 22 − 6）</li>
+<li>22n ± 8：52文字長い頭部（52 = 2 × 22 + 8）</li>
+<li>22n ± 4：40文字長い頭部（40 = 2 × 22 − 4）</li>
+<li>22n ± 10：長さが12文字違うもの。たとえば52文字長い頭部と40文字長い頭部（52 − 40 = 12）</li>
+<li>22n ± 2：混在。7件中3件は46文字長い頭部（46 = 2 × 22 + 2）、3件はクアッドのない240120のLO-108</li>
+</ul></div>
+<div class="bi bi-p"><p class="en">The 167 matches by how far their offset is from a multiple of 22:</p><p lang="ja" class="jp">167件の一致を、オフセットが最も近い22の倍数からどれだけずれているかで分けたもの：</p></div>
+<div class="bi bi-hbars"><div class="en hbars">
+<div class="hb"><span class="l">multiple of 22</span><span class="t"><i style="width:100.0%"></i></span><span class="v">94</span></div>
+<div class="hb"><span class="l">22n − 2</span><span class="t"><i style="width:3.2%"></i></span><span class="v">3</span></div>
+<div class="hb"><span class="l">22n + 2</span><span class="t"><i style="width:4.3%"></i></span><span class="v">4</span></div>
+<div class="hb"><span class="l">22n − 4</span><span class="t"><i style="width:6.4%"></i></span><span class="v">6</span></div>
+<div class="hb"><span class="l">22n + 4</span><span class="t"><i style="width:2.1%"></i></span><span class="v">2</span></div>
+<div class="hb"><span class="l">22n − 6</span><span class="t"><i style="width:17.0%"></i></span><span class="v">16</span></div>
+<div class="hb"><span class="l">22n + 6</span><span class="t"><i style="width:13.8%"></i></span><span class="v">13</span></div>
+<div class="hb"><span class="l">22n − 8</span><span class="t"><i style="width:7.4%"></i></span><span class="v">7</span></div>
+<div class="hb"><span class="l">22n + 8</span><span class="t"><i style="width:14.9%"></i></span><span class="v">14</span></div>
+<div class="hb"><span class="l">22n − 10</span><span class="t"><i style="width:3.2%"></i></span><span class="v">3</span></div>
+<div class="hb"><span class="l">22n + 10</span><span class="t"><i style="width:5.3%"></i></span><span class="v">5</span></div>
+</div><div lang="ja" class="jp hbars">
+<div class="hb"><span class="l">22の倍数</span><span class="t"><i style="width:100.0%"></i></span><span class="v">94</span></div>
+<div class="hb"><span class="l">22n − 2</span><span class="t"><i style="width:3.2%"></i></span><span class="v">3</span></div>
+<div class="hb"><span class="l">22n + 2</span><span class="t"><i style="width:4.3%"></i></span><span class="v">4</span></div>
+<div class="hb"><span class="l">22n − 4</span><span class="t"><i style="width:6.4%"></i></span><span class="v">6</span></div>
+<div class="hb"><span class="l">22n + 4</span><span class="t"><i style="width:2.1%"></i></span><span class="v">2</span></div>
+<div class="hb"><span class="l">22n − 6</span><span class="t"><i style="width:17.0%"></i></span><span class="v">16</span></div>
+<div class="hb"><span class="l">22n + 6</span><span class="t"><i style="width:13.8%"></i></span><span class="v">13</span></div>
+<div class="hb"><span class="l">22n − 8</span><span class="t"><i style="width:7.4%"></i></span><span class="v">7</span></div>
+<div class="hb"><span class="l">22n + 8</span><span class="t"><i style="width:14.9%"></i></span><span class="v">14</span></div>
+<div class="hb"><span class="l">22n − 10</span><span class="t"><i style="width:3.2%"></i></span><span class="v">3</span></div>
+<div class="hb"><span class="l">22n + 10</span><span class="t"><i style="width:5.3%"></i></span><span class="v">5</span></div>
+</div></div>
+<div class="bi bi-p"><p class="en barcap">None of the 167 matches has an odd offset. Across all 28,920 pairs of long G4s, 13,679 (47%) do.</p><p lang="ja" class="jp barcap">167件の一致に奇数のオフセットは1件もありません。長文G4の全28,920ペアでは、13,679ペア（47%）が奇数です。</p></div>
+<p class="foot"><span class="bi-i"><span class="en">Built 261005 from SHORTWAVES. A long G4 is a Group 4 message of 60 characters or more, first airing only, without partial captures or disregarded reads. Positions count from 1. Generated by eam_block_pages_.py.</span><span class="jp" lang="ja">261005にSHORTWAVESから作成。長文G4は60文字以上のグループ4メッセージ（初回の放送のみ。部分的な受信と無効とした読み取りは除く）。位置は1から数える。生成：eam_block_pages_.py</span></span></p>
 </div>
-
-<h1>Cross-Message Alignment Periodicity in HFGCS EAM Ciphertext</h1>
-<div class="subtitle">
-  Pairwise sliding comparison reveals 44-character structural periodicity across independent messages &mdash; NEET INTEL, 2026
-</div>
-
-<!-- ============================================================ -->
-<h2>1. What was found</h2>
-
-<p>
-  When two different HFGCS EAM messages are slid against each other character-by-character to find
-  the alignment offset that produces the most matching characters, the best-fit offsets
-  <strong>cluster at multiples of 22 and 44</strong> far beyond what random chance predicts.
-</p>
-<p>
-  This holds across messages from different prefix groups, different dates (spanning 2022&ndash;2026),
-  and different message lengths. The messages being compared are independent intercepts &mdash;
-  different content, different days, often different originators &mdash; yet they structurally
-  align at 44-character intervals.
-</p>
-
-<div class="stat-grid">
-  <div class="stat-card">
-    <div class="number">1,512</div>
-    <div class="label">pairwise comparisons</div>
-  </div>
-  <div class="stat-card">
-    <div class="number">10.5%</div>
-    <div class="label">best offset = &plusmn;22, &plusmn;44, or &plusmn;66</div>
-  </div>
-  <div class="stat-card">
-    <div class="number">67.6%</div>
-    <div class="label">even offsets (vs 32.4% odd)</div>
-  </div>
-  <div class="stat-card">
-    <div class="number">23.8%</div>
-    <div class="label">offsets divisible by 22</div>
-  </div>
-</div>
-
-<!-- ============================================================ -->
-<h2>2. Method</h2>
-
-<p>
-  The technique is a standard sliding window comparison. For two messages A and B:
-</p>
-
-<ol>
-  <li>Try every possible horizontal offset (shifting B left or right relative to A).</li>
-  <li>At each offset, count how many character positions align to the same character.</li>
-  <li>Record the offset that produces the maximum number of matches.</li>
-</ol>
-
-<div class="method-diagram" style="overflow-x:auto;">
-  <div style="margin-bottom:4px; color:var(--text-dim); font-family:-apple-system,sans-serif; font-size:0.75rem;">
-    Example: two real messages from prefix RO, aligned at offset +44 (positions 82&ndash;115 shown)
-  </div>
-  <pre style="margin:0; font-size:0.8rem; line-height:1.9; background:transparent; overflow-x:auto;"><span class="dim">Msg A: ...</span><span class="grn">K</span><span class="bright"> Z O </span><span class="grn">C C C C X 5 L G V</span><span class="bright"> O T O 5 Z </span><span class="grn">Q V H</span><span class="bright"> H 4 C K H </span><span class="grn">L L L L G 3 F A E</span>
-<span class="dim">          </span><span class="grn">|</span><span class="dim"> . . </span><span class="grn">| | | | | | | | |</span><span class="dim"> . . . . . </span><span class="grn">| | |</span><span class="dim"> . . . . . </span><span class="grn">| | | | | | | | |</span>
-<span class="dim">Msg B: ...</span><span class="grn">K</span><span class="bright"> 2 K </span><span class="grn">C C C C X 5 L G V</span><span class="bright"> W N 5 T J </span><span class="grn">Q V H</span><span class="bright"> 4 H P 4 I </span><span class="grn">L L L L G 3 F A E</span></pre>
-  <div style="margin-top:6px; color:var(--text-dim); font-family:-apple-system,sans-serif; font-size:0.72rem;">
-    <span class="grn">Green</span> = matching characters at this offset. 22 of 34 characters match in this window. The question: why does offset +44 produce so many more matches than, say, +43 or +45?
-  </div>
-</div>
-
-<p>
-  This is performed within each prefix group (messages sharing the same 2-character prefix).
-  243 unique messages from 21 prefix groups yield 1,512 pairwise comparisons.
-</p>
-
-<!-- ============================================================ -->
-<h2>3. Offset distribution</h2>
-
-<p>
-  If message structure were unrelated to a 44-character period, best-fit offsets would scatter
-  roughly uniformly across all possible values. Instead, multiples of 22 dominate:
-</p>
-
-<div class="histogram">
-  <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:8px; font-family:-apple-system,sans-serif;">
-    Distribution of |best offset| &mdash; top 15 values.
-    <span style="color:var(--accent);">&block;</span> multiple of 44 &nbsp;
-    <span style="color:rgba(255,4,103,0.5);">&block;</span> multiple of 22 &nbsp;
-    <span style="color:rgba(100,100,140,0.5);">&block;</span> even &nbsp;
-    <span style="color:rgba(60,60,80,0.5);">&block;</span> odd
-  </div>
-
-  <div class="hist-bar-row">
-    <div class="hist-label">|0|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill mul44" style="width:100%"></div></div>
-    <div class="hist-value">172 (11.4%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|22|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill mul22" style="width:33.7%"></div></div>
-    <div class="hist-value">58 (3.8%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|44|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill mul44" style="width:30.8%"></div></div>
-    <div class="hist-value">53 (3.5%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|66|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill mul22" style="width:27.9%"></div></div>
-    <div class="hist-value">48 (3.2%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|12|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:19.2%"></div></div>
-    <div class="hist-value">33 (2.2%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|6|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:17.4%"></div></div>
-    <div class="hist-value">30 (2.0%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|18|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:16.9%"></div></div>
-    <div class="hist-value">29 (1.9%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|10|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:16.3%"></div></div>
-    <div class="hist-value">28 (1.9%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|2|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:15.7%"></div></div>
-    <div class="hist-value">27 (1.8%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|9|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill odd" style="width:15.1%"></div></div>
-    <div class="hist-value">26 (1.7%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|1|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill odd" style="width:14.5%"></div></div>
-    <div class="hist-value">25 (1.7%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|14|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:14.5%"></div></div>
-    <div class="hist-value">25 (1.7%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|5|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill odd" style="width:14.5%"></div></div>
-    <div class="hist-value">25 (1.7%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|4|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:12.8%"></div></div>
-    <div class="hist-value">22 (1.5%)</div>
-  </div>
-  <div class="hist-bar-row">
-    <div class="hist-label">|16|</div>
-    <div class="hist-bar-bg"><div class="hist-bar-fill even" style="width:11.6%"></div></div>
-    <div class="hist-value">20 (1.3%)</div>
-  </div>
-</div>
-
-<p>
-  The three multiples of 22 (excluding zero) &mdash; |22|, |44|, |66| &mdash; account for
-  <strong>10.5%</strong> of all pairs despite representing only 3 out of ~200+ possible offset values.
-  Under uniform distribution, they would represent roughly 1.5%.
-</p>
-
-<div class="note">
-  <strong>Controlling for the obvious:</strong> Offset 0 is elevated partly because messages in the
-  same prefix group share their first 2 characters (the prefix itself). Stripping positions 0&ndash;1
-  from the match count reduces offset-0 dominance, but the &plusmn;22/&plusmn;44/&plusmn;66 peaks remain
-  because they are <em>not</em> explained by the shared prefix.
-</div>
-
-<!-- ============================================================ -->
-<h2>4. Real examples</h2>
-
-<p>
-  Below are actual message pairs whose best sliding alignment falls at multiples of 22.
-  These are different messages, intercepted on different dates. Green characters are positions
-  that match at the given offset.
-</p>
-
-<!-- Example 1: RO +44, 85 matches, 51% density -->
-<div class="pair-box">
-  <div class="pair-header">
-    <strong>RO</strong> &mdash;
-    216 chars (2024-08-25) vs 166 chars (2024-09-18) &mdash;
-    <span class="offset-badge">offset +44</span>
-    <span class="match-badge">85 matches (51% density)</span>
-  </div>
-  <div class="align-row">
-    <div class="row-label">A</div>
-    <div class="char-strip" id="ex1a"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label"></div>
-    <div class="char-strip" id="ex1m"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label">B</div>
-    <div class="char-strip" id="ex1b"></div>
-  </div>
-</div>
-
-<!-- Example 2: YP -44, 49 matches -->
-<div class="pair-box">
-  <div class="pair-header">
-    <strong>YP</strong> &mdash;
-    246 chars (2025-06-14) vs 216 chars (2025-07-15) &mdash;
-    <span class="offset-badge">offset &minus;44</span>
-    <span class="match-badge">49 matches (24% density)</span>
-    &mdash; <em style="color:var(--text-dim);">1 month apart</em>
-  </div>
-  <div class="align-row">
-    <div class="row-label">A</div>
-    <div class="char-strip" id="ex2a"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label"></div>
-    <div class="char-strip" id="ex2m"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label">B</div>
-    <div class="char-strip" id="ex2b"></div>
-  </div>
-</div>
-
-<!-- Example 3: N2 -44, 47 matches -->
-<div class="pair-box">
-  <div class="pair-header">
-    <strong>N2</strong> &mdash;
-    164 chars (2025-02-04) vs 268 chars (2025-02-16) &mdash;
-    <span class="offset-badge">offset &minus;44</span>
-    <span class="match-badge">47 matches (39% density)</span>
-  </div>
-  <div class="align-row">
-    <div class="row-label">A</div>
-    <div class="char-strip" id="ex3a"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label"></div>
-    <div class="char-strip" id="ex3m"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label">B</div>
-    <div class="char-strip" id="ex3b"></div>
-  </div>
-</div>
-
-<!-- Example 4: LO -22, 96 matches, 64% density -->
-<div class="pair-box">
-  <div class="pair-header">
-    <strong>LO</strong> &mdash;
-    172 chars (2024-01-31) vs 194 chars (2024-02-10) &mdash;
-    <span class="offset-badge">offset &minus;22</span>
-    <span class="match-badge">96 matches (64% density)</span>
-    &mdash; <em style="color:var(--text-dim);">half-period alignment</em>
-  </div>
-  <div class="align-row">
-    <div class="row-label">A</div>
-    <div class="char-strip" id="ex4a"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label"></div>
-    <div class="char-strip" id="ex4m"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label">B</div>
-    <div class="char-strip" id="ex4b"></div>
-  </div>
-</div>
-
-<!-- Example 5: RO +66, 62 matches -->
-<div class="pair-box">
-  <div class="pair-header">
-    <strong>RO</strong> &mdash;
-    290 chars (2024-08-24) vs 268 chars (2024-08-30) &mdash;
-    <span class="offset-badge">offset +66</span>
-    <span class="match-badge">62 matches (28% density)</span>
-    &mdash; <em style="color:var(--text-dim);">3 &times; 22 alignment</em>
-  </div>
-  <div class="align-row">
-    <div class="row-label">A</div>
-    <div class="char-strip" id="ex5a"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label"></div>
-    <div class="char-strip" id="ex5m"></div>
-  </div>
-  <div class="align-row">
-    <div class="row-label">B</div>
-    <div class="char-strip" id="ex5b"></div>
-  </div>
-</div>
-
-<!-- ============================================================ -->
-<h2>5. Even/odd asymmetry</h2>
-
-<p>
-  Beyond the 22/44 peaks, there is a broader structural signal: <strong>67.6% of all best-fit
-  offsets are even</strong>, versus 32.4% odd. Under random expectation, even and odd would
-  each be ~50%.
-</p>
-
-<table class="stats">
-  <tr><th>Category</th><th>Count</th><th>Percentage</th><th>Expected (uniform)</th></tr>
-  <tr class="hl"><td class="lc">Even offsets</td><td>1,022</td><td>67.6%</td><td>~50%</td></tr>
-  <tr><td class="lc">Odd offsets</td><td>490</td><td>32.4%</td><td>~50%</td></tr>
-  <tr class="hl"><td class="lc">Divisible by 22</td><td>360</td><td>23.8%</td><td>~2&ndash;3%</td></tr>
-  <tr class="hl"><td class="lc">Divisible by 44</td><td>242</td><td>16.0%</td><td>~1&ndash;2%</td></tr>
-</table>
-
-<p>
-  This even-offset dominance suggests a <strong>2-character subunit</strong> (character pair)
-  as a building block, with the 22-character and 44-character periods built from groups of
-  11 and 22 such pairs.
-</p>
-
-<!-- ============================================================ -->
-<h2>6. Cross-group consistency</h2>
-
-<p>
-  The 22/44-character periodicity appears across all 21 Group 4 prefix groups analyzed.
-  These prefixes are believed to represent different message originators, routing paths,
-  or message types. Despite different content and temporal separation, the structural
-  alignment period is the same.
-</p>
-
-<table class="stats">
-  <tr><th>Prefix</th><th>Messages</th><th>Pairs at &plusmn;44</th><th>Example</th></tr>
-  <tr><td class="lc">PD</td><td>6</td><td>3</td><td>31 matches, Nov 2022</td></tr>
-  <tr><td class="lc">6K</td><td>9</td><td>4</td><td>39 matches, Jun&ndash;Jul 2023</td></tr>
-  <tr><td class="lc">ET</td><td>9</td><td>2</td><td>13 matches, Jan&ndash;Feb 2023</td></tr>
-  <tr><td class="lc">BH</td><td>20</td><td>5</td><td>Visible in slider heatmap</td></tr>
-  <tr><td class="lc">BV</td><td>15</td><td>4</td><td>Visible in slider heatmap</td></tr>
-  <tr><td class="lc">JC</td><td>20</td><td>3</td><td>12&ndash;13 matches, Jul&ndash;Aug 2023</td></tr>
-  <tr><td class="lc">JO</td><td>18</td><td>4</td><td>Visible in slider heatmap</td></tr>
-  <tr><td class="lc" style="color:#666;">+ 14 others</td><td></td><td></td><td></td></tr>
-</table>
-
-<!-- ============================================================ -->
-<h2>7. What this implies</h2>
-
-<p>
-  The cross-message alignment at 44-character intervals means that structurally similar
-  positions recur every 44 characters not just within a single message, but
-  <strong>across different messages from different dates</strong>. This constrains the
-  possible explanations:
-</p>
-
-<ul>
-  <li><strong>Fixed-width field format:</strong> The underlying message format uses 44-character
-    records or fields. When two messages happen to share content in corresponding fields,
-    sliding by &plusmn;44 brings those fields into alignment.</li>
-  <li><strong>Key periodicity:</strong> If encryption uses a key or keystream with a period
-    related to 44, the same key positions would mask corresponding plaintext positions,
-    creating cross-message alignment when identical plaintext appears at corresponding
-    positions in different messages.</li>
-  <li><strong>Encoding block structure:</strong> A pre-encryption encoding step may group
-    data into 44-character blocks, introducing positional regularity that survives encryption.</li>
-</ul>
-
-<p>
-  The 22-character half-period (offset &plusmn;22 is also elevated, as is &plusmn;66 = 3&times;22)
-  suggests a possible <strong>22-character base unit</strong>, with 44 being a double period.
-  The even-offset asymmetry further suggests a <strong>2-character pairing</strong> as the
-  smallest structural element.
-</p>
-
-<div class="separator"></div>
-
-<!-- ============================================================ -->
-<h2>8. What this does NOT claim</h2>
-
-<ul>
-  <li>No plaintext has been recovered. This is <strong>not a decryption</strong>.</li>
-  <li>The specific cipher, encoding, or message format in use is <strong>not identified</strong>.</li>
-  <li>This is <strong>structural / traffic analysis</strong> of the ciphertext only.</li>
-</ul>
-
-<div class="separator"></div>
-
-<!-- ============================================================ -->
-<h2>9. Block structure</h2>
-
-<p>
-  A follow-up analysis asks: is the 44-character periodicity a <strong>repeating cipher key</strong>
-  (where position <em>i</em> and position <em>i</em>+44 are always governed by the same rule), or a
-  <strong>discrete block structure</strong> (where messages are composed of independent 44-character blocks)?
-</p>
-<p>
-  The discriminating test: when two messages align at offset &plusmn;44, a periodic cipher predicts all
-  overlapping block pairs should match at similar rates. Instead, the match rate is concentrated in one
-  or two specific block pairs, with adjacent blocks falling to near-random levels. This pattern is
-  consistent across all prefix groups examined.
-</p>
-
-<div class="note">
-  Block-by-block alignment evidence with five worked examples:
-  <a href="block_structure.html" style="color:var(--offset-color);">block_structure.html</a>
-  <br>Block vocabulary, chains, and ordering analysis:
-  <a href="block_vocabulary.html" style="color:var(--offset-color);">block_vocabulary.html</a>
-</div>
-
-<div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
-  Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
-  243 unique Group 4 messages, 21 prefix groups, 1,512 pairwise comparisons.
-  Methodology and source code available on GitHub.
-</div>
-
 <script>
-// Compute matches dynamically — no hardcoded position arrays
-const examples = [
-  {
-    // RO 2024.08.25 vs 2024.09.18, offset=+44, 85 matches, 51% density
-    idA: 'ex1a', idM: 'ex1m', idB: 'ex1b',
-    msgA: 'ROSY6Y3CIA5ESDCVV3FGZ7YZX2GH4NZNA7HZZNSZHIIIIZKYYJD2D5EFZKK7NKXWWWWE3BTFRER7FF2WWLKZOCCCCX5LGVOTO5ZQVHH4CKHLLLLG3FAENO2MMCGNNNGOPRRRRFMWZYTPDPD73BBWS3BVVVVH5PPRVHU7JKBE3GP3LETCSU6RAD7PYH6JHXG5FRTZH5ARIXNXG74KXBUMYVU4',
-    msgB: 'ROVJTCDV2SNVEOP7XGH4VUSVQ7TFJ7R7EF2WZWK2KCCCCX5LGVWN5TJQVH4HP4ILLLLG3FAE2MFKYCGN3HH7PRRRRFMWZYSDL5573BWYOZSVVVVH5PPDFU67JP6E3G4YLETCS56RADDOYH6JHGG5FRRZH5ARRUNJUJ4C3J',
-    offset: 44,
-  },
-  {
-    // YP 2025.06.14 vs 2025.07.15, offset=-44, 49 matches, 24% density
-    idA: 'ex2a', idM: 'ex2m', idB: 'ex2b',
-    msgA: 'YPNIX3WH4PRJDNATO6QCJHVJMCQFHISI73S656QSQRRRR7JQR5JFQSIFLJSJ3SXYYYYRHSRKCUVBZHBKCFFS4JJJJVAYKOJ4YFFYTRXKOLQNNNNK4E4ZPAGFQDU52XI2G6GFMMLI4ZL33OG3ETTTT3ATZTXX2XXS7JP22JE2222DNGZSCCYSYWCURPCRPGGGG2FJF2D5TW5SA43RBEBKKKKNVXUHPPOVNFA47T2762IUUW56WICIY6',
-    msgB: 'YPXVAZUQQUVORF7KTJGVSJISLFDB7BJSUJK22MYEKVVVV5YP6U2WXPBR7EESBQESSSSEQYQFGDDFI3GWWWSUGRRRR7JQR5QI5IXFCAAAKKPYYYYRHSRKBZBL4HTSSS4K2JJJJVAYKO7FOOHYLOOOQKTNNNNK4E4FIF5FQYA52XA2GO72TZNXB2ASLZ46W2CSNCFVL4IURE5B3PG3HFKX6GWI',
-    offset: -44,
-  },
-  {
-    // N2 2025.02.04 vs 2025.02.16, offset=-44, 47 matches, 39% density
-    idA: 'ex3a', idM: 'ex3m', idB: 'ex3b',
-    msgA: 'N2HEFPRKBKN7YB6EK4X3SC5SGLZPKJKUSA6RWUQKROOOOJUA53WBBWO3EYGVLCVTTTT45GONENYITY3O33DE35555PN36HXHH4V6T2TGTGGUUUUOFNJVSVK3I3Y2YHFH5CCCCLZPJ4D4ZPPDH7HRFHT6666TFHVACPSO',
-    msgB: 'N2ETDU3XZWJHSXR3FNXRNZWNICJVSKRVYONTZRENPVVVVJKBUSZPZPZETZIFWFZPPPPNBMZP6KJUKA6KRURVVOOOOJUA53QWOBY3EZYWGVWTTTT45GONTEEWBY3OZD33A5555PN36HZ4OXI6T2GNOVTUUUUOFSBPCIPTBKZAK7LKI6JV234SS3YHVH5FVCCCCLZPJ47PNONDHR6RFTH6666TF3ED5F6UY3GC7CIFUVVVV2DKGULKZTKZKXJXGKXEEEEYXCPGYLQX',
-    offset: -44,
-  },
-  {
-    // LO 2024.01.31 vs 2024.02.10, offset=-22, 96 matches, 64% density
-    idA: 'ex4a', idM: 'ex4m', idB: 'ex4b',
-    msgA: 'LOEIVYAGPOPDEXLRVXPYH4WHQO6UTNDDQIUQWCDQTSSSS5WNMLBVWF2YXV2JPJCVVVV67RR47XZNOLB7K7CG4PPPPWJHB4O5DPITF2O2VCVVVVVDNCUVVCFDMO7KPGBP6FNECYD7UQSE2ZFD4ZRJU6JWQ7ILDSW7U3OMRBUV7OUJ',
-    msgB: 'LOPXUT7MASPJDTNQX6YV7GT7EK23WXRMWT5S66XSV6666HGQ6SUNDSUIUQWWDCCSSSS5WNMWL42VBYXV2VX3CVVVV67RRN46Z4YLB7K7C7UPPPPWJHBP4W74PTF2O2WVVVVVDNCUJKAFDMOAKPDBP6FNEQLD7UQJR2ZFDUVRJU6B7Q7ILCAW7U3L2RBUZXAAJ',
-    offset: -22,
-  },
-  {
-    // RO 2024.08.24 vs 2024.08.30, offset=+66, 62 matches, 28% density
-    idA: 'ex5a', idM: 'ex5m', idB: 'ex5b',
-    msgA: 'RO6EO4OYBN4KKQ535NKWD3SDT74RXPTTKD7HQQYSHOOOOJZPR3PO6OIA7XIIYX2OOOOXWRRNV7NNFQB4DDWDBEEEE5PXP4SIHFXTKEIIKNG2222SR2W6JD3SPF3QIIB3QBBBBV77H2KCIWBKITLSXLTWLXNMOVMKUW6UGI233336B4J6HDH7LCDGZXH6D2222QW2I2YZ3AOZSA72TTQGGGGTESIUT22U6YFJUHNN6FFFFE37RB3UWB3FRAQUONVBBBB4HFENUGXXGGPR6NPQRLLLLCIBNE5PJK',
-    msgB: 'RO7C57J6U3QV5NW4BUQKQO6QDKP4FBIH4T6K7EEIK2222SR2W6CIPDCFN3XQ7N3BBBBV72LXVEVMXKVUGWLWI3333XB4J637LD4CFDYG6HY2222IW7BUAIJG73VR63W6RGI2V2HZHZVTV22TVGGGGKESIUHU5BQYN6NHJFHFFFFJ37RBFBBVVFOVOU2OUBBBBXHFENXXCN2GQEQNT4RLLLL3IPGHOOH3O6FAFNSZNIIIIZKYYJ72D7UFX7XV7K2WWWWE3NGT4T2W',
-    offset: 66,
-  },
-];
-
-function renderPair(ex) {
-  const a = ex.msgA, b = ex.msgB, off = ex.offset;
-
-  // Compute spacers
-  let spacersA = 0, spacersB = 0;
-  if (off >= 0) { spacersB = off; }
-  else { spacersA = Math.abs(off); }
-  const totalCols = Math.max(a.length + spacersA, b.length + spacersB);
-
-  const rowA = [], rowB = [], rowM = [];
-  for (let col = 0; col < totalCols; col++) {
-    const posInA = col - spacersA;
-    const posInB = col - spacersB;
-    const charA = (posInA >= 0 && posInA < a.length) ? a[posInA] : null;
-    const charB = (posInB >= 0 && posInB < b.length) ? b[posInB] : null;
-
-    // Match = both chars present AND identical
-    const isMatch = charA !== null && charB !== null && charA === charB;
-
-    const spanA = document.createElement('span');
-    spanA.className = 'ac ' + (charA ? (isMatch ? 'match' : 'normal') : 'spacer');
-    spanA.textContent = charA || '';
-    rowA.push(spanA);
-
-    const spanM = document.createElement('span');
-    spanM.className = 'ac bar' + (isMatch ? ' hit' : '');
-    spanM.textContent = isMatch ? '|' : '';
-    rowM.push(spanM);
-
-    const spanB = document.createElement('span');
-    spanB.className = 'ac ' + (charB ? (isMatch ? 'match' : 'normal') : 'spacer');
-    spanB.textContent = charB || '';
-    rowB.push(spanB);
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
+(function () {
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
   }
 
-  document.getElementById(ex.idA).append(...rowA);
-  document.getElementById(ex.idM).append(...rowM);
-  document.getElementById(ex.idB).append(...rowB);
-}
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
 
-examples.forEach(renderPair);
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
+  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j') { e.preventDefault(); lb.click(); }
+    else if (k === 'n') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
 </script>
-
-<div style="text-align:center;margin:50px 0 20px 0;">
-  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">&uarr; RETURN</a>
-</div>
-
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
+  function inHorizontalScroller(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 1) return true;
+    }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
+    e.preventDefault();
+    flip();
+  });
+  var MIN_PX = 45, MAX_MS = 800, origin = null;
+  document.addEventListener('touchstart', function (e) {
+    var t = e.target;
+    if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
+    var p = e.touches[0];
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
+  document.addEventListener('touchend', function (e) {
+    var o = origin; origin = null;
+    if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
+    var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
+    if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    flip();
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
+})();
+</script>
 </body>
 </html>

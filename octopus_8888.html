@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- hfgcs controls -->
+<script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script>
+<!-- /hfgcs controls -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>8888 Messages</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,28 +61,10 @@
         .info-box a:hover { text-decoration: underline; }
 
         /* ── Language toggle ──────────────────────────────────────── */
-        .lang-btn {
-            display: inline-block;
-            padding: 3px 10px;
-            background-color: #1a1a1a;
-            color: #555;
-            border: 1px solid #2e2e2e;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.7em;
-            font-weight: 600;
-            font-family: 'IBM Plex Mono', monospace;
-            letter-spacing: 0.1em;
-            transition: color 0.15s, border-color 0.15s;
-        }
-        .lang-btn:hover { color: #999; border-color: #444; }
-        .jp { display: none; }
-        body.show-jp .en { display: none; }
-        body.show-jp .jp { display: block; }
-        /* inline variants for diagram labels */
-        .jp-text { display: none; }
-        body.show-jp .en-text { display: none; }
-        body.show-jp .jp-text { display: inline; }
+        /* members of a stacked pair (.bi / .bi-i) are never hidden with display: they only swap visibility */
+        .jp:not(.bi > .jp, .bi-i > .jp) { display: none; }
+        .show-jp .en:not(.bi > .en, .bi-i > .en) { display: none; }
+        .show-jp .jp:not(.bi > .jp, .bi-i > .jp) { display: block; }
 
         /* ── Timeline ─────────────────────────────────────────── */
 
@@ -239,8 +226,8 @@
             position: fixed;
             display: none;
             background: #1a1a1a;
-            border: 1px solid #252525;
-            border-radius: 2px;
+            border: 1px solid #333;   /* the floating controls' outline: the table's rule */
+            border-radius: 6px;       /* the page's panel corners, as on the floating controls */
             padding: 8px 12px;
             font-size: 0.74em;
             pointer-events: none;
@@ -250,7 +237,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.7);
         }
         .tt-date   { color: #666; display: block; margin-bottom: 2px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 0.88em; }
-        .tt-medium { font-weight: 600; padding: 1px 5px; border-radius: 2px; font-size: 0.78em; letter-spacing: 0.05em; font-family: 'IBM Plex Mono', 'Courier New', monospace; display: inline-block; margin-bottom: 3px; }
+        .tt-medium { font-weight: 600; padding: 1px 5px; border-radius: 2px; font-size: 0.78em; letter-spacing: 0.05em; font-family: 'IBM Plex Mono', 'Courier New', monospace; display: inline-block; margin-bottom: 3px; text-align: center; }
         .tt-medium.hf  { background: #0d2210; color: #4eff80; }
         .tt-medium.vlf { background: #0d1f2d; color: #42c8ff; }
         .tt-medium.pub { background: #1e1e1e; color: #e0e0e0; }
@@ -366,6 +353,8 @@
             color: #444;
             text-align: right;
         }
+        /* room under the last line so the floating ↑ never sits on it (the old ↑ RETURN link below it gave this room) */
+        .footer { margin-bottom: 44px; }
 
         /* ── Mobile ───────────────────────────────────────────── */
         @media (max-width: 680px) {
@@ -413,19 +402,163 @@
                 white-space: normal;
             }
         }
+
+        /* ── Light mode ───────────────────────────────────────────── */
+        [data-theme="light"] body { background-color: #f3f5f7; color: #17202a; }
+        [data-theme="light"] h1 { color: #17202a; border-bottom-color: #22b455; }
+        [data-theme="light"] .nav-bar { border-bottom-color: #d6dce2; }
+        [data-theme="light"] .nav-bar a { color: #0f7a36; }
+        [data-theme="light"] .info-box { background-color: #ffffff; border-left-color: #22b455; color: #4b5765; }
+        [data-theme="light"] .info-box strong { color: #0f7a36; }
+        [data-theme="light"] .info-box em     { color: #5b6672; }
+        [data-theme="light"] .info-box code   { color: #17202a; }
+        [data-theme="light"] .info-box cite   { color: #b0560f; }
+        [data-theme="light"] .info-box a      { color: #b0560f; }
+
+        [data-theme="light"] .tl-section { border-top-color: #d6dce2; border-bottom-color: #d6dce2; }
+        [data-theme="light"] .tl-section h3 { color: #2c3640; }
+        [data-theme="light"] .tl-subtitle { color: #5b6672; }
+        /* lanes, lane labels and ticks get their colours from the script: restyle them here */
+        [data-theme="light"] #tlChart > .tl-lane:nth-child(1) { background: rgba(34,180,85,0.07) !important; border-top-color: rgba(34,180,85,0.32) !important; border-bottom-color: rgba(34,180,85,0.18) !important; }
+        [data-theme="light"] #tlChart > .tl-lane:nth-child(2) { background: rgba(11,110,156,0.06) !important; border-top-color: rgba(11,110,156,0.28) !important; border-bottom-color: rgba(11,110,156,0.16) !important; }
+        [data-theme="light"] #tlLabelCol > .tl-lane-label:nth-child(1) { color: rgba(15,122,54,0.75) !important; }
+        [data-theme="light"] #tlLabelCol > .tl-lane-label:nth-child(2) { color: rgba(11,110,156,0.75) !important; }
+        /* ticks: the light palette's HF green / VLF blue, about 4.7:1 on their lane; disregarded ticks stay as faint
+           against the lane as they are in dark mode (about 1.6:1) */
+        [data-theme="light"] .tl-tick-hf,
+        [data-theme="light"] .tl-legend-item:nth-child(1) .tl-legend-swatch { background-color: #0d682e !important; }
+        [data-theme="light"] .tl-tick-vlf,
+        [data-theme="light"] .tl-legend-item:nth-child(2) .tl-legend-swatch { background-color: #095e85 !important; }
+        [data-theme="light"] .tl-tick-dis:not(:hover) { opacity: 0.3 !important; }
+        [data-theme="light"] .tl-tick:hover { filter: brightness(0.7) !important; }
+        [data-theme="light"] .tl-tick-hinata:hover { filter: brightness(0.75) drop-shadow(0 0 4px #3a9fd0) drop-shadow(0 0 10px #3a9fd0) !important; }
+        /* leader lines and publication dots: the script's opacities are for the dark ground */
+        [data-theme="light"] #tlChart svg path { stroke: #4b5765; }
+        [data-theme="light"] #tlChart svg path[stroke-opacity="0.3"] { stroke-opacity: 0.7; }
+        [data-theme="light"] #tlChart svg path[stroke-opacity="0.25"] { stroke-opacity: 0.64; }
+        [data-theme="light"] .tl-pub-dot,
+        [data-theme="light"] .tl-legend-pub-dot { background: #4b5765; opacity: 0.8; }
+        [data-theme="light"] .tl-pub-label,
+        [data-theme="light"] .tl-evt-label { color: #5b6672; }
+        [data-theme="light"] .tl-pub-label:hover,
+        [data-theme="light"] .tl-evt-label:hover { color: #17202a; }
+        [data-theme="light"] .hinata-row:hover,
+        [data-theme="light"] .hinata-row.tl-highlighted {
+            background-color: rgba(58, 159, 208, 0.10) !important;
+            outline: 1px solid rgba(58, 159, 208, 0.45) !important;
+        }
+        [data-theme="light"] .tl-year-tick { background: #8a939c; }
+        [data-theme="light"] .tl-year-label { color: #5b6672; }
+        [data-theme="light"] .tl-legend { color: #5b6672; }
+        [data-theme="light"] #tlTooltip { background: #ffffff; border-color: #d6dce2; box-shadow: 0 4px 18px rgba(20,30,40,0.15); }
+        [data-theme="light"] .tt-date   { color: #5b6672; }
+        [data-theme="light"] .tt-medium.hf  { background: #dff5e6; color: #0f7a36; }
+        [data-theme="light"] .tt-medium.vlf { background: #dcf0fa; color: #0b6e9c; }
+        [data-theme="light"] .tt-medium.pub { background: #eceff2; color: #17202a; }
+        [data-theme="light"] .tt-cs     { color: #17202a; }
+        [data-theme="light"] .tt-msg    { color: #0f7a36; }
+        [data-theme="light"] .tt-notes  { color: #5b6672; }
+        [data-theme="light"] .tt-desc   { color: #4b5765; }
+
+        [data-theme="light"] .table-wrap { background-color: #ffffff; }
+        [data-theme="light"] thead th { background-color: #ffffff; color: #0f7a36; border-bottom-color: #d6dce2; }
+        [data-theme="light"] tbody tr { border-bottom-color: #e6eaee; }
+        [data-theme="light"] tbody tr:hover,
+        [data-theme="light"] tbody tr.tl-highlighted { background-color: #eef2f5; }
+        [data-theme="light"] tbody tr.tl-highlighted { outline-color: #9fd8b1; }
+        [data-theme="light"] tr.disregarded .callsign-cell,
+        [data-theme="light"] tr.disregarded .message-cell {
+            text-decoration-color: rgba(15, 122, 54, 0.55);
+            color: #8a939c;
+        }
+        [data-theme="light"] .date-cell     { color: #5b6672; }
+        [data-theme="light"] .utc-cell      { color: #6b7580; }
+        [data-theme="light"] .callsign-cell { color: #0f7a36; }
+        [data-theme="light"] .message-cell  { color: #0f7a36; }
+        [data-theme="light"] .notes-cell    { color: #4b5765; }
+        [data-theme="light"] .source-cell a { color: #b0560f; }
+        [data-theme="light"] .source-cell .no-source { color: #9aa3ab; }
+        [data-theme="light"] .source-author { color: #6b7580; }
+        [data-theme="light"] .hex-badge { background: #fbe9da; color: #a2500f; }
+        [data-theme="light"] .badge-hf  { background-color: #dff5e6; color: #0f7a36; }
+        [data-theme="light"] .badge-vlf { background-color: #dcf0fa; color: #0b6e9c; }
+        [data-theme="light"] .footer { border-top-color: #d6dce2; color: #6b7580; }
+
+        @media (max-width: 680px) {
+            [data-theme="light"] .table-wrap { background: transparent; }
+            [data-theme="light"] tbody tr { border-color: #d6dce2; background-color: #ffffff; }
+            [data-theme="light"] tbody tr:hover,
+            [data-theme="light"] tbody tr.tl-highlighted { background-color: #eef2f5; }
+            [data-theme="light"] .date-cell { color: #5b6672; }
+            [data-theme="light"] .message-cell { color: #4b5765; }
+            [data-theme="light"] .notes-cell { color: #4b5765; }
+        }
+
+        /* hfgcs controls */
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* /hfgcs controls */
+        /* floating controls: the shared segmented bar in this page's own colours, both themes: its panel (.info-box /
+           .table-wrap) with the table's rule as the outline, body text as the ink, the table's row hover as the hover,
+           the page's font and its 6px panel corners */
+        html:root,html:root[data-theme="dark"]{--fab-bg:#1a1a1a;--fab-line:#333;--fab-ink:#e0e0e0;--fab-dim:#aaa;--fab-hover:#252525;--fab-focus:#4eff80;--fab-radius:6px;--fab-shadow:none}
+        html:root[data-theme="light"]{--fab-bg:#ffffff;--fab-line:#d6dce2;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#eef2f5;--fab-focus:#0f7a36;--fab-radius:6px;--fab-shadow:none}
+        html .fab button,html .totop{font-family:'IBM Plex Sans','IBM Plex Sans JP',Arial,sans-serif;font-size:12.5px;line-height:17.5px;font-weight:400;padding:5px 13px}
+        html .fab .theme-btn{font-size:13px;padding:5px 11px}
+        /* the sun and moon glyphs in the system UI font, so they draw solid/filled as on the rebroadcast page
+           (Plex draws a thin outline sun and the moon otherwise falls back to a monospace hairline) */
+        html .fab .theme-btn>span{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+        html .fab button:hover,html .totop:hover{color:#ffffff}
+        html[data-theme="light"] .fab button:hover,html[data-theme="light"] .totop:hover{color:#17202a}
+
+
     </style>
 </head>
 <body>
+<!-- hfgcs controls -->
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<!-- /hfgcs controls -->
     <div class="nav-bar">
         <a href="index.html">&larr; Index</a>
     </div>
 
     <h1>8888 Messages</h1>
 
-    <div style="text-align:right; margin-bottom:8px;">
-        <button class="lang-btn" onclick="toggleLang()">日本語</button>
-    </div>
     <div class="info-box">
+        <div class="bi">
         <div class="en">
             8888 messages &mdash; also called <strong>Quad 8s</strong> or
             <strong>octopus messages</strong> &mdash; are most likely <em>not</em> standard EAMs, and
@@ -444,7 +577,7 @@
             were a mistake, unusual terminations like what was heard in the disregarded <i>&#8220;oh I see&#8221;</i> 8888
             (2023.06.13) make it difficult to come to any particular conclusion.
         </div>
-        <div class="jp" style="font-family:'IBM Plex Sans JP','IBM Plex Sans',sans-serif;">
+        <div class="jp" lang="ja" style="font-family:'IBM Plex Sans JP','IBM Plex Sans',sans-serif;">
             8888メッセージ&mdash;<strong>クアッド8</strong>または<strong>オクトパスメッセージ</strong>とも呼ばれる&mdash;は、
             おそらく標準的なEAMではなく、HFGCSで放送されるべきでもないと考えられる。
             その異常さは一目瞭然だ：EAMは0も8も使用しない32文字セット（アルファベット26文字と9種の数字で構成されるが、
@@ -462,12 +595,13 @@
             取り消し宣言を受けた<i>&#8220;oh I see&#8221;</i> 8888（2023.06.13）に聞こえたような異例の終話音声を前にすると、
             特定の結論を導き出すことは難しい。
         </div>
+        </div>
     </div>
 
     <!-- Timeline -->
     <div class="tl-section">
-        <h3><span class="en-text">Observation Timeline</span><span class="jp-text">観測タイムライン</span></h3>
-        <div class="tl-subtitle"><span class="en-text">HF &amp; VLF &middot; 1999&ndash;present</span><span class="jp-text">HF・VLF・1999年〜現在</span></div>
+        <h3><span class="bi-i"><span class="en">Observation Timeline</span><span class="jp" lang="ja">観測タイムライン</span></span></h3>
+        <div class="tl-subtitle"><span class="bi-i"><span class="en">HF &amp; VLF &middot; 1999&ndash;present</span><span class="jp" lang="ja">HF・VLF・1999年〜現在</span></span></div>
         <div class="tl-body">
             <div class="tl-label-col" id="tlLabelCol"></div>
             <div class="tl-chart" id="tlChart"></div>
@@ -476,7 +610,7 @@
         <div class="tl-legend">
             <div class="tl-legend-item"><span class="tl-legend-swatch" style="background:#4eff80;"></span>HF</div>
             <div class="tl-legend-item"><span class="tl-legend-swatch" style="background:#42c8ff;"></span>VLF</div>
-            <div class="tl-legend-item"><span class="tl-legend-pub-dot"></span><span class="en-text">Publication</span><span class="jp-text">文献</span></div>
+            <div class="tl-legend-item"><span class="tl-legend-pub-dot"></span><span class="bi-i"><span class="en">Publication</span><span class="jp" lang="ja">文献</span></span></div>
         </div>
     </div>
     <div id="tlTooltip"></div>
@@ -880,8 +1014,9 @@
         function esc(s) {
             return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
-        function t(en, jp) {
-            return (document.body.classList.contains('show-jp') && jp) ? jp : en;
+        // both languages in one cell: a language switch only changes which one is visible
+        function bi(en, jp) {
+            return jp ? '<span class="bi-i"><span class="en">' + esc(en) + '</span><span class="jp" lang="ja">' + esc(jp) + '</span></span>' : esc(en);
         }
 
         const EVENTS = [
@@ -1033,7 +1168,7 @@
             const opacity = ev.dis ? 0.18 : 0.88;
 
             const el = document.createElement('div');
-            el.className = isHinata ? 'tl-tick tl-tick-hinata' : 'tl-tick';
+            el.className = (isHinata ? 'tl-tick tl-tick-hinata' : 'tl-tick') + (isVlf ? ' tl-tick-vlf' : ' tl-tick-hf') + (ev.dis ? ' tl-tick-dis' : '');
             el.style.cssText =
                 'left:'             + leftPct + '%;' +
                 'top:'              + laneTop + 'px;' +
@@ -1079,7 +1214,7 @@
                         const displayName = ev.cs === 'YOUNG BOY' ? 'Hinatazaka46' : '\u201coh I see\u201d';
                         let html = '<span class="tt-date">' + esc(ev.date) + '</span>';
                         html += '<span class="tt-cs">' + displayName + '</span>';
-                        html += '<span class="tt-desc">' + esc(t(ev.anecdote, ev.anecdote_jp)) + '</span>';
+                        html += '<span class="tt-desc">' + bi(ev.anecdote, ev.anecdote_jp) + '</span>';
                         tooltip.innerHTML = html;
                         tooltip.style.display = 'block';
                         posTooltip(e);
@@ -1116,16 +1251,16 @@
 
                 let html = '<span class="tt-date">' + esc(ev.date) + '</span>';
                 if (isPub) {
-                    html += '<span class="tt-medium pub">' + t('PUBLICATION', '文献') + '</span>';
+                    html += '<span class="tt-medium pub">' + bi('PUBLICATION', '文献') + '</span>';
                     html += '<span class="tt-cs">' + esc(ev.cs) + '</span>';
-                    if (ev.desc) html += '<span class="tt-desc">' + esc(t(ev.desc, ev.desc_jp)) + '</span>';
+                    if (ev.desc) html += '<span class="tt-desc">' + bi(ev.desc, ev.desc_jp) + '</span>';
                 } else {
                     const medCls = isVlf ? 'vlf' : 'hf';
                     const struckClass = ev.dis ? ' tt-struck' : '';
                     html += '<span class="tt-medium ' + medCls + '">' + ev.medium + '</span>';
                     html += '<span class="tt-cs' + struckClass + '">' + esc(ev.cs) + '</span>';
                     html += '<span class="tt-msg' + struckClass + '">' + esc(ev.msg) + '</span>';
-                    if (ev.notes) html += '<span class="tt-notes">' + esc(t(ev.notes, ev.notes_jp)) + '</span>';
+                    if (ev.notes) html += '<span class="tt-notes">' + bi(ev.notes, ev.notes_jp) + '</span>';
                 }
                 tooltip.innerHTML = html;
                 tooltip.style.display = 'block';
@@ -1149,27 +1284,115 @@
             tooltip.style.top  = y + 'px';
         }
     })();
-
-    function toggleLang() {
-        var body = document.body;
-        var btn  = document.querySelector('.lang-btn');
-        body.classList.toggle('show-jp');
-        btn.textContent = body.classList.contains('show-jp') ? 'EN' : '日本語';
-    }
     </script>
 
-<div style="text-align:center;margin:50px 0 20px 0;">
-    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'IBM Plex Mono',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'"><span class="en">&uarr; RETURN</span><span class="jp">&uarr; 戻る</span></a>
-</div>
 
-
+<!-- hfgcs controls -->
 <script>
-// ← / → and a horizontal swipe flip EN/JP, by pressing the page's own
-// language button — so it does exactly what a click does. Added 2026-09-10.
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
 (function () {
-  var flip = function () { var b = document.querySelector('.lang-btn'); if (b) b.click(); };
-  var SKIP = 'input, select, textarea, button, label';
-  // A drag inside something that scrolls sideways is that thing's, not ours.
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
+
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
+
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
+  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j') { e.preventDefault(); lb.click(); }
+    else if (k === 'n') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
+</script>
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
   function inHorizontalScroller(el) {
     for (; el && el !== document.body; el = el.parentElement) {
       var ox = getComputedStyle(el).overflowX;
@@ -1179,9 +1402,10 @@
   }
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     var t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
     e.preventDefault();
     flip();
   });
@@ -1190,17 +1414,18 @@
     var t = e.target;
     if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
     var p = e.touches[0];
-    origin = { x: p.clientX, y: p.clientY, at: Date.now() };
-  }, { passive: true });
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
   document.addEventListener('touchend', function (e) {
     var o = origin; origin = null;
     if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
     var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
     if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
     flip();
-  }, { passive: true });
-  document.addEventListener('touchcancel', function () { origin = null; }, { passive: true });
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
 })();
 </script>
+<!-- /hfgcs controls -->
 </body>
 </html>

@@ -1,563 +1,362 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-title-en="Long G4 Block Layout" data-title-ja="長文G4のブロック構成">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>44-Character Block Structure: Blocks vs. Periodic Cipher</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Long G4 Block Layout</title>
+<script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;600&display=swap">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1a1a24;
-    --border: #2a2a3a;
-    --text: #c8c8d8;
-    --text-dim: #7a7a90;
-    --accent: #ff0467;
-    --match-color: #44ee88;
-    --offset-color: #4488ff;
-    --shared-bg: rgba(68,238,136,0.06);
-    --shared-border: rgba(68,238,136,0.25);
-    --unshared-bg: rgba(100,100,140,0.04);
-    --unshared-border: rgba(100,100,140,0.15);
-  }
-  html { scroll-behavior: smooth; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    line-height: 1.6;
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  h1 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.3rem; }
-  h2 {
-    color: #ddd; font-size: 1.1rem; margin: 2.5rem 0 0.8rem;
-    padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
-  }
-  h3 { color: #bbb; font-size: 0.95rem; margin: 1.5rem 0 0.6rem; }
-  .subtitle { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 2rem; }
-  p, li {
-    font-size: 0.83rem; margin-bottom: 0.6rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.7;
-  }
-  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
-  code { font-family: 'SF Mono', monospace; font-size: 0.82rem; color: #ddd; }
-  strong { color: #eee; }
+:root{--bg:#01060b;--panel:#161b22;--panel2:#0d1117;--line:#222a35;--ink:#e6edf3;--dim:#8b949e;--mut:#6e7681;
+--g4:#ff0467;--mk:#4a9eff;--on-g4:#1a0610;--on-mk:#06121f;--prc:#ffffff;--track:#161b22;
+--float:rgba(22,28,34,.92);--shadow:0 4px 18px rgba(0,0,0,.45);color-scheme:dark}
+:root[data-theme="light"]{--bg:#f3f5f7;--panel:#ffffff;--panel2:#f9fafb;--line:#d6dce2;--ink:#17202a;--dim:#4b5765;--mut:#7d8894;
+--g4:#e0005a;--mk:#2b78d6;--on-g4:#ffffff;--on-mk:#ffffff;--prc:#000000;--track:#e3e8ed;
+--float:rgba(255,255,255,.94);--shadow:0 4px 18px rgba(20,30,40,.13);color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);margin:0;font-family:"IBM Plex Sans","IBM Plex Sans JP",system-ui,sans-serif;font-size:14px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:36px 28px 64px}
+.eyebrow{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--dim);padding-right:140px}
+h1{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Arial Narrow",sans-serif;font-weight:600;font-size:30px;margin:0 0 4px;letter-spacing:.01em;text-wrap:balance}
+nav.links{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;margin:6px 0 18px;color:var(--mut)}
+nav.links a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line);margin-right:14px}
+nav.links a:hover{color:var(--ink)}
+nav.links b{color:var(--ink);font-weight:400;margin-right:14px}
+h2{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-weight:600;font-size:19px;margin:38px 0 8px;color:var(--ink);scroll-margin-top:60px;text-wrap:balance}
+h2 small{font-weight:400;color:var(--mut);font-size:13px;margin-left:10px;letter-spacing:.04em}
+p,ul{color:var(--dim);margin:6px 0 12px}
+ul{padding-left:22px}
+li{margin:3px 0}
+p b,li b{color:var(--ink);font-weight:600}
+a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--mk)}
+a:hover{color:var(--mk)}
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0 10px}
+.rule{background:var(--panel);border:1px solid var(--line);padding:12px 14px}
+.rule b{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.rule .ex{font-family:"IBM Plex Mono",monospace;font-size:20px;margin:6px 0 2px;color:var(--ink)}
+.rule p{margin:4px 0 0;color:var(--dim);font-size:13px}
+.msg{background:var(--panel2);border:1px solid var(--line);padding:12px 14px 10px;margin:8px 0 12px;overflow-x:auto;min-width:0}
+.tag{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:13px;color:var(--dim);margin-bottom:8px}
+.tag b{color:var(--ink);font-size:14px;font-weight:600}
+.stack{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:2px 12px;align-items:baseline}
+.stack.fam{grid-template-columns:auto auto;margin-bottom:10px}
+.sub{grid-column:1 / -1;font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:12px;color:var(--dim);margin:8px 0 2px}
+.sub:first-child{margin-top:0}
+.pos{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;color:var(--mut);text-align:right;min-width:3ch;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chars{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;line-height:1.45;white-space:nowrap;padding:0 4px;border-radius:2px}
+.chars span{display:inline-block;width:1ch;text-align:center}
+.chars .c{color:var(--ink)}
+.chars .e{color:var(--mut)}
+.chars .pr{color:var(--prc);font-weight:600}
+.chars .mk{background:var(--mk);color:var(--on-mk);font-weight:600}
+.chars .hit{background:var(--g4);color:var(--on-g4);font-weight:600}
+.chars .f1{color:var(--g4);font-weight:600}
+.chars .f2{color:var(--g4);opacity:.6}
+.chars .ruler{color:var(--mut);opacity:.6}
+.chars.pair{padding-top:3px;padding-bottom:3px}
+.chars.trailer{color:var(--dim)}
+.chars.cons{border-top:1px solid var(--line);padding-top:2px}
+.kind{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:11px;color:var(--mut);letter-spacing:.04em;white-space:normal;min-width:0;line-height:1.2}
+.kind i{font-style:normal;color:var(--dim);margin-right:7px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-variant-numeric:tabular-nums}
+.kind em{font-style:normal;color:var(--g4)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--dim);font-size:12px;margin:8px 0 18px}
+.sw{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:6px;border-radius:2px}
+.formula{font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.5;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:12px 16px;margin:10px 0 14px;white-space:pre;overflow-x:auto}
+.formula b{color:var(--g4);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0 6px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--dim);font-weight:600}
+th.n,td.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.m{font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+td.lens{font-family:"IBM Plex Mono",monospace;font-size:12px}
+td{color:var(--ink)}
+td.d{color:var(--dim)}
+tr.dim td{color:var(--mut)}
+.tablewrap{overflow-x:auto}
+.hbars{display:grid;gap:3px;margin:10px 0 6px;max-width:720px}
+.hb{display:grid;grid-template-columns:9em minmax(0,1fr) 6em;gap:10px;align-items:center;font-size:12px}
+.hb .l{font-family:"IBM Plex Mono","IBM Plex Sans JP",monospace;color:var(--dim);white-space:nowrap}
+.hb .t{background:var(--track);height:13px;border-radius:2px}
+.hb .t i{display:block;height:100%;background:var(--g4);opacity:.85;border-radius:2px}
+.hb .v{font-family:"IBM Plex Mono",monospace;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bars{display:grid;grid-template-columns:repeat(22,minmax(0,1fr));gap:3px;align-items:end;height:120px;margin:10px 0 4px;max-width:720px}
+.bar{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.bar i{display:block;background:var(--g4);opacity:.85;border-radius:2px 2px 0 0}
+.bar.rk i{background:var(--mut);opacity:1}
+.bar b{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--mut);text-align:center;font-weight:400;margin-top:3px}
+.barcap{color:var(--dim);font-size:12px;max-width:720px}
+.foot{color:var(--mut);font-size:12px;margin-top:30px}
+.wrap .bi>*{margin-top:0;margin-bottom:0}
+.bi-p,.bi-ul{margin:6px 0 12px}
+.bi-h2{margin:38px 0 8px;scroll-margin-top:60px}
+.bi-rules{margin:14px 0 10px}
+.bi-section{margin:8px 0 12px}
+.bi-hbars{margin:10px 0 6px;max-width:720px}
+.bi-bars{margin:10px 0 4px;max-width:720px}
+.bi-legend{margin:8px 0 18px}
+.bi-pre{margin:10px 0 14px}
+/* the floating controls take this page's own colours */
+html:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:var(--ink);--fab-dim:var(--dim);--fab-hover:var(--panel);--fab-focus:var(--mk)}
+html:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:var(--ink);--fab-dim:var(--dim);--fab-hover:#dfe4ea;--fab-focus:var(--mk)}
 
-  .nav-bar {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-bar a { color: var(--offset-color); text-decoration: none; }
-  .nav-bar a:hover { text-decoration: underline; }
-  .nav-bar .nav-sep { color: var(--text-dim); margin: 0 0.5rem; }
-
-  .note {
-    background: var(--surface2); border-left: 3px solid var(--accent);
-    padding: 0.7rem 1rem; margin: 1rem 0; font-size: 0.8rem;
-    font-family: -apple-system, sans-serif;
-  }
-
-  .separator { border-top: 1px solid var(--border); margin: 2rem 0; }
-
-  /* Block comparison visualisations */
-  .example-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0;
-  }
-  .example-header {
-    font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.8rem;
-    font-family: -apple-system, sans-serif;
-  }
-  .example-header strong { color: var(--accent); }
-  .offset-badge {
-    display: inline-block; background: rgba(68,136,255,0.2);
-    border: 1px solid rgba(68,136,255,0.4); border-radius: 4px;
-    padding: 1px 6px; color: var(--offset-color); font-weight: 600;
-    font-family: 'SF Mono', monospace; font-size: 0.78rem;
-  }
-  .match-badge {
-    display: inline-block; background: rgba(68,238,136,0.15);
-    border: 1px solid rgba(68,238,136,0.3); border-radius: 4px;
-    padding: 1px 6px; color: var(--match-color); font-weight: 600;
-    font-family: 'SF Mono', monospace; font-size: 0.78rem;
-  }
-
-  .msg-layout {
-    margin: 0.8rem 0 1rem; overflow-x: auto;
-  }
-  .msg-label {
-    font-size: 0.7rem; color: var(--text-dim); margin-bottom: 2px;
-    font-family: -apple-system, sans-serif;
-  }
-  .block-row {
-    display: flex; gap: 2px; margin-bottom: 3px; flex-direction: column;
-  }
-  .block-chip {
-    font-size: 0.62rem; padding: 3px 5px; border-radius: 3px;
-    font-family: 'SF Mono', monospace; white-space: nowrap;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--text-dim); max-width: 100%; overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .block-chip .block-num {
-    color: #666; font-size: 0.58rem; margin-right: 3px;
-  }
-
-  /* Block comparison cards */
-  .block-compare {
-    margin: 0.6rem 0; padding: 0.7rem 0.8rem; border-radius: 6px;
-    overflow-x: auto;
-  }
-  .block-compare.shared {
-    background: var(--shared-bg); border: 1px solid var(--shared-border);
-  }
-  .block-compare.unshared {
-    background: var(--unshared-bg); border: 1px solid var(--unshared-border);
-  }
-  .block-compare-header {
-    font-size: 0.72rem; margin-bottom: 0.4rem;
-    font-family: -apple-system, sans-serif;
-  }
-  .block-compare-header .pct {
-    font-family: 'SF Mono', monospace; font-weight: 600;
-  }
-  .block-compare-header .pct.high { color: var(--match-color); }
-  .block-compare-header .pct.low { color: var(--text-dim); }
-  .block-compare-header .shared-tag {
-    font-size: 0.65rem; color: var(--match-color); font-weight: 600;
-    margin-left: 0.5rem;
-  }
-
-  .align-line {
-    display: flex; align-items: center; white-space: nowrap;
-    margin: 1px 0;
-  }
-  .align-line .lbl {
-    width: 18px; font-size: 0.62rem; color: var(--text-dim);
-    flex-shrink: 0; text-align: right; padding-right: 4px;
-    font-family: 'SF Mono', monospace;
-  }
-  .ch {
-    width: 11px; height: 17px; display: inline-flex; align-items: center;
-    justify-content: center; font-size: 9px; flex-shrink: 0;
-    font-family: 'SF Mono', monospace; color: #555;
-  }
-  .ch.hit { color: #fff; background: rgba(68,238,136,0.3); font-weight: bold; }
-  .ch.bar { color: rgba(68,238,136,0.4); font-size: 7px; }
-  .ch.bar.hit { color: rgba(68,238,136,0.9); }
-
-  .verdict-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 1.2rem; margin: 1.5rem 0;
-  }
-  .verdict-box .v-label {
-    font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.3rem;
-    font-family: -apple-system, sans-serif; text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .verdict-box .v-text {
-    font-size: 0.88rem; color: var(--match-color); font-weight: 600;
-    font-family: -apple-system, sans-serif;
-  }
-
-  table.compare-table {
-    border-collapse: collapse; margin: 1rem 0; font-size: 0.78rem; width: 100%;
-  }
-  table.compare-table th, table.compare-table td {
-    padding: 0.35rem 0.6rem; border: 1px solid var(--border); text-align: center;
-  }
-  table.compare-table th {
-    background: var(--surface); color: #aaa; font-weight: 600;
-    font-family: -apple-system, sans-serif; font-size: 0.72rem;
-  }
-  table.compare-table td { font-family: 'SF Mono', monospace; }
-  table.compare-table td.lbl {
-    text-align: left; font-family: -apple-system, sans-serif; color: var(--text-dim);
-  }
-  table.compare-table .high { color: var(--match-color); font-weight: 600; }
-  table.compare-table .low { color: var(--text-dim); }
+@media (max-width:900px){.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.wrap{padding:24px 16px 56px}.rules{grid-template-columns:1fr}h1{font-size:24px}.hb{grid-template-columns:7.5em minmax(0,1fr) 5em}}
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
 </style>
 </head>
 <body>
-
-<div class="nav-bar">
-  <a href="index.html">&larr; Index</a>
-  <span class="nav-sep">|</span>
-  <a href="block_vocabulary.html">Block vocabulary</a>
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<div class="wrap">
+<div class="eyebrow"><span class="bi-i"><span class="en">HFGCS · Group 4 long messages · 241 of 60+ characters · 221116 – 261005</span><span class="jp" lang="ja">HFGCS · グループ4 長文メッセージ · 60文字以上 241件 · 221116 – 261005</span></span></div>
+<h1><span class="bi-i"><span class="en">Long G4 Block Layout</span><span class="jp" lang="ja">長文G4のブロック構成</span></span></h1>
+<nav class="links bi"><div class="en"><a href="index.html">Index</a><a href="block_structure_explainer.html">Overview</a><b>Block layout</b><a href="block_vocabulary.html">Block reuse</a></div><div class="jp" lang="ja"><a href="index.html">目次</a><a href="block_structure_explainer.html">概要</a><b>ブロック構成</b><a href="block_vocabulary.html">ブロック再利用</a></div></nav>
+<div class="bi bi-p"><p class="en">Positions count from 1. Every row except the prefix and the trailer ends in a marker. Messages are labelled by date
+(YYMMDD), time (UTC), prefix and length, like 261004 21:38z MM-164.</p><p lang="ja" class="jp">位置は1から数えます。プレフィックスとトレーラー以外の行は、すべてマーカーで終わります。メッセージは日付（YYMMDD）、時刻（UTC）、プレフィックス、長さで表記します（例：261004 21:38z MM-164）。</p></div>
+<div class="bi bi-h2"><h2 class="en">Rows</h2><h2 lang="ja" class="jp">行</h2></div>
+<div class="bi bi-tablewrap"><div class="en tablewrap"><table>
+<tr><th>Row</th><th>Positions</th><th>Closed by</th><th>Evidence</th></tr>
+<tr><td>Prefix</td><td class="m">1–2</td><td class="d">—</td><td class="d">Shared by every message of the prefix.</td></tr>
+<tr><td>A</td><td class="m">3–24</td><td class="d">X??X</td><td class="d">21 = 24 in 178 of 203 messages of 100+ characters (88%; chance is about 3%).</td></tr>
+<tr><td>B</td><td class="m">25–45</td><td class="d">quad</td><td class="d">Quad at 42–45 in 161 of the same messages (79%). Four equal characters at a fixed spot almost never happen by chance.</td></tr>
+<tr><td>Blocks</td><td class="m">46–67, 68–89 …</td><td class="d">quad</td><td class="d">18 characters + quad, repeated.</td></tr>
+<tr><td>Insert</td><td class="m">inside a block</td><td class="d">X??X, quad</td><td class="d">16 extra characters that stretch one block to 38. 39 of the 46 inserts split the way rows A and B do, only shorter: 13 + X??X, then 17 + quad.</td></tr>
+<tr><td>Trailer</td><td class="m">last 9</td><td class="d">—</td><td class="d">The last block&#39;s quad sits right before it in 84 of 108 plain messages and 37 of 40 with an insert. Other families end differently.</td></tr>
+</table></div><div lang="ja" class="jp tablewrap"><table>
+<tr><th>行</th><th>位置</th><th>閉じるマーカー</th><th>根拠</th></tr>
+<tr><td>プレフィックス</td><td class="m">1–2</td><td class="d">—</td><td class="d">そのプレフィックスのすべてのメッセージで共通。</td></tr>
+<tr><td>A行</td><td class="m">3–24</td><td class="d">X??X</td><td class="d">100文字以上のメッセージ203件中178件で21文字目と24文字目が一致（88%。偶然なら約3%）。</td></tr>
+<tr><td>B行</td><td class="m">25–45</td><td class="d">クアッド</td><td class="d">同じメッセージのうち161件（79%）で42〜45文字目がクアッド。決まった位置に同じ文字が4つ並ぶことは、偶然ではまず起きない。</td></tr>
+<tr><td>ブロック</td><td class="m">46–67, 68–89 …</td><td class="d">クアッド</td><td class="d">18文字＋クアッドの繰り返し。</td></tr>
+<tr><td>挿入</td><td class="m">ブロック内</td><td class="d">X??X、クアッド</td><td class="d">1つのブロックを38文字に伸ばす16文字。46個中39個はA行・B行と同じ形を短くしたもの：13文字＋X??X、続いて17文字＋クアッド。</td></tr>
+<tr><td>トレーラー</td><td class="m">最後の9文字</td><td class="d">—</td><td class="d">最後のブロックのクアッドが直前にあるのは、基本形108件中84件、挿入ありの40件中37件。ほかの系統は終わり方が異なる。</td></tr>
+</table></div></div>
+<div class="bi bi-h2" id="markers"><h2 class="en">Which row each marker closes</h2><h2 lang="ja" class="jp">各マーカーが閉じる行</h2></div>
+<div class="bi bi-p"><p class="en">You can tell which row a marker belongs to by what gets copied along with it:</p><p lang="ja" class="jp">マーカーがどの行に属するかは、一緒にコピーされるものを見ればわかります。</p></div>
+<div class="bi bi-ul"><ul class="en">
+<li>the quad right after the last reused block comes along <b>148 of 150</b> times (99%)</li>
+<li>the quad right before the first reused block comes along 108 of 149 times, and only when the row it closes was copied too: <b>106 of 106</b> times when that row matches its source in 3 or more places, <b>2 of 43</b> when it doesn&#39;t</li>
+<li>when row B is reused, its quad comes along <b>51 of 51</b> times, but the X??X before it only <b>8</b></li>
+</ul><ul lang="ja" class="jp">
+<li>再利用された最後のブロックの直後にあるクアッドは、<b>150回中148回</b>（99%）一緒にコピーされる</li>
+<li>再利用された最初のブロックの直前にあるクアッドは149回中108回コピーされるが、そのクアッドが閉じる行もコピーされた場合に限られる：その行が再利用元と3か所以上一致する場合は<b>106回中106回</b>、そうでない場合は<b>43回中2回</b></li>
+<li>B行が再利用されるとき、そのクアッドは<b>51回中51回</b>一緒にコピーされるが、直前のX??Xは<b>8回</b>だけ</li>
+</ul></div>
+<div class="bi bi-p"><p class="en">A quad that wasn&#39;t copied would match only about 3% of the time. So each quad closes the block that comes before
+it, and the X??X at 21–24 closes row A.</p><p lang="ja" class="jp">コピーされていないクアッドが偶然一致するのは約3%です。つまり、各クアッドはその前のブロックを閉じ、21〜24文字目のX??XはA行を閉じています。</p></div>
+<div class="bi bi-p"><p class="en">Positions 3–16 of row A match their source only at chance level: 45 of 1,392
+(3.2%). The end of row A sometimes comes along with row B: in the 58 matches that take
+row B, positions 17, 20, 21 and 24 match 19, 18, 18 and 15 times.</p><p lang="ja" class="jp">A行の3〜16文字目が再利用元と一致する割合は、偶然と変わりません：1,392中45（3.2%）。A行の末尾はB行と一緒にコピーされることがあり、B行を取る58件の一致では、17・20・21・24文字目がそれぞれ19・18・18・15回一致します。</p></div>
+<div class="bi bi-h2"><h2 class="en">Length families <small>199 of 203 at 100+ characters fit</small></h2><h2 lang="ja" class="jp">長さの系統 <small>100文字以上の203件中199件が該当</small></h2></div>
+<div class="bi bi-p"><p class="en">Each variant adds a fixed number of characters to 54 + 22n. 199 of the 203 messages of 100+
+characters fit one of these; 4 don&#39;t. The 38 under 100 are just listed by length, since
+most of them have no quads.</p><p lang="ja" class="jp">それぞれの変形は、54 + 22nに決まった文字数を加えます。100文字以上の203件のうち199件がいずれかの系統に当てはまり、4件は当てはまりません。100文字未満の38件は、ほとんどにクアッドがないため、長さだけで並べています。</p></div>
+<div class="bi bi-tablewrap"><div class="en tablewrap"><table><tr><th>Form</th><th>Extra</th><th>Lengths seen (×count)</th><th class="n">Messages</th></tr><tr><td class="m">54 + 22n</td><td class="d">plain</td><td class="lens">120×39, 142×40, 164×23, 186×5</td><td class="n">107</td></tr><tr><td class="m">70 + 22n</td><td class="d">one 16-character insert</td><td class="lens">158×3, 180×2, 202×3, 224×4, 246×8, 268×8, 290×2</td><td class="n">30</td></tr><tr><td class="m">56 + 22n</td><td class="d">last two blocks replaced by 17 + a 29-character run (most 166s, the 188), or head 46 longer (one 166, the 210)</td><td class="lens">166×12, 188, 210</td><td class="n">14</td></tr><tr><td class="m">72 + 22n</td><td class="d">head 40 longer (one 160, the 182s, the 204), or 18 extra further on (the other 160s, the 292)</td><td class="lens">160×4, 182×2, 204, 292</td><td class="n">8</td></tr><tr><td class="m">62 + 22n</td><td class="d">52 extra: in the head for some 216s, at the end for the rest</td><td class="lens">172×8, 194×3, 216×14</td><td class="n">25</td></tr><tr><td class="m">68 + 22n</td><td class="d">head 40 longer and 18 more at the end (the 222s)</td><td class="lens">222×2</td><td class="n">2</td></tr><tr><td class="m">66 + 22n</td><td class="d">12 extra</td><td class="lens">176, 198, 220, 286×2</td><td class="n">5</td></tr><tr><td class="m">64 + 22n</td><td class="d">two inserts</td><td class="lens">108×5, 152, 196, 218</td><td class="n">8</td></tr><tr class="dim"><td class="m">—</td><td>none of these</td><td class="lens">102×2, 118×2</td><td class="n">4</td></tr><tr class="dim"><td class="m">under 100</td><td>by length only</td><td class="lens">60×3, 62×10, 66, 68×11, 70, 76, 84, 92×9, 94</td><td class="n">38</td></tr></table></div><div lang="ja" class="jp tablewrap"><table><tr><th>形</th><th>追加分</th><th>観測された長さ（×件数）</th><th class="n">件数</th></tr><tr><td class="m">54 + 22n</td><td class="d">基本形</td><td class="lens">120×39, 142×40, 164×23, 186×5</td><td class="n">107</td></tr><tr><td class="m">70 + 22n</td><td class="d">16文字の挿入が1つ</td><td class="lens">158×3, 180×2, 202×3, 224×4, 246×8, 268×8, 290×2</td><td class="n">30</td></tr><tr><td class="m">56 + 22n</td><td class="d">最後の2ブロックが17＋29文字の連なりに置き換わる（166文字の大半、188）、または頭部が46文字長い（166文字の1件、210）</td><td class="lens">166×12, 188, 210</td><td class="n">14</td></tr><tr><td class="m">72 + 22n</td><td class="d">頭部が40文字長い（160文字の1件、182、204）、または後方に18文字追加（残りの160、292）</td><td class="lens">160×4, 182×2, 204, 292</td><td class="n">8</td></tr><tr><td class="m">62 + 22n</td><td class="d">52文字追加：一部の216では頭部、それ以外は末尾</td><td class="lens">172×8, 194×3, 216×14</td><td class="n">25</td></tr><tr><td class="m">68 + 22n</td><td class="d">頭部が40文字長く、末尾にも18文字（222）</td><td class="lens">222×2</td><td class="n">2</td></tr><tr><td class="m">66 + 22n</td><td class="d">12文字追加</td><td class="lens">176, 198, 220, 286×2</td><td class="n">5</td></tr><tr><td class="m">64 + 22n</td><td class="d">挿入が2つ</td><td class="lens">108×5, 152, 196, 218</td><td class="n">8</td></tr><tr class="dim"><td class="m">—</td><td>いずれにも該当しない</td><td class="lens">102×2, 118×2</td><td class="n">4</td></tr><tr class="dim"><td class="m">100未満</td><td>長さのみ</td><td class="lens">60×3, 62×10, 66, 68×11, 70, 76, 84, 92×9, 94</td><td class="n">38</td></tr></table></div></div>
+<div class="bi bi-h2" id="kept"><h2 class="en">Kept and changed positions <small>385 reused blocks</small></h2><h2 lang="ja" class="jp">保持される位置と変わる位置 <small>再利用されたブロック385個</small></h2></div>
+<div class="bi bi-p"><p class="en">Here&#39;s how often each position of a reused block matches its source, over the 385 blocks reused in
+direct matches (a block counts as reused when at least 6 of its 22 characters match):</p><p lang="ja" class="jp">直接一致で再利用された385個のブロック（22文字中6文字以上が一致すれば再利用とみなす）について、各位置が再利用元と一致する割合です。</p></div>
+<div class="bi bi-bars"><div class="en bars"><div class="bar" title="1: 79%"><i style="height:79%"></i><b>1</b></div><div class="bar" title="2: 86%"><i style="height:86%"></i><b>2</b></div><div class="bar" title="3: 91%"><i style="height:91%"></i><b>3</b></div><div class="bar" title="4: 100%"><i style="height:100%"></i><b>4</b></div><div class="bar" title="5: 75%"><i style="height:75%"></i><b>5</b></div><div class="bar rk" title="6: 22%"><i style="height:22%"></i><b>6</b></div><div class="bar rk" title="7: 17%"><i style="height:17%"></i><b>7</b></div><div class="bar rk" title="8: 8%"><i style="height:8%"></i><b>8</b></div><div class="bar rk" title="9: 19%"><i style="height:19%"></i><b>9</b></div><div class="bar rk" title="10: 12%"><i style="height:12%"></i><b>10</b></div><div class="bar" title="11: 100%"><i style="height:100%"></i><b>11</b></div><div class="bar" title="12: 70%"><i style="height:70%"></i><b>12</b></div><div class="bar" title="13: 60%"><i style="height:60%"></i><b>13</b></div><div class="bar rk" title="14: 20%"><i style="height:20%"></i><b>14</b></div><div class="bar rk" title="15: 23%"><i style="height:23%"></i><b>15</b></div><div class="bar rk" title="16: 13%"><i style="height:13%"></i><b>16</b></div><div class="bar rk" title="17: 16%"><i style="height:16%"></i><b>17</b></div><div class="bar rk" title="18: 11%"><i style="height:11%"></i><b>18</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div></div><div lang="ja" class="jp bars"><div class="bar" title="1: 79%"><i style="height:79%"></i><b>1</b></div><div class="bar" title="2: 86%"><i style="height:86%"></i><b>2</b></div><div class="bar" title="3: 91%"><i style="height:91%"></i><b>3</b></div><div class="bar" title="4: 100%"><i style="height:100%"></i><b>4</b></div><div class="bar" title="5: 75%"><i style="height:75%"></i><b>5</b></div><div class="bar rk" title="6: 22%"><i style="height:22%"></i><b>6</b></div><div class="bar rk" title="7: 17%"><i style="height:17%"></i><b>7</b></div><div class="bar rk" title="8: 8%"><i style="height:8%"></i><b>8</b></div><div class="bar rk" title="9: 19%"><i style="height:19%"></i><b>9</b></div><div class="bar rk" title="10: 12%"><i style="height:12%"></i><b>10</b></div><div class="bar" title="11: 100%"><i style="height:100%"></i><b>11</b></div><div class="bar" title="12: 70%"><i style="height:70%"></i><b>12</b></div><div class="bar" title="13: 60%"><i style="height:60%"></i><b>13</b></div><div class="bar rk" title="14: 20%"><i style="height:20%"></i><b>14</b></div><div class="bar rk" title="15: 23%"><i style="height:23%"></i><b>15</b></div><div class="bar rk" title="16: 13%"><i style="height:13%"></i><b>16</b></div><div class="bar rk" title="17: 16%"><i style="height:16%"></i><b>17</b></div><div class="bar rk" title="18: 11%"><i style="height:11%"></i><b>18</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div><div class="bar" title="Q: 100%"><i style="height:100%"></i><b>Q</b></div></div></div>
+<div class="bi bi-p"><p class="en barcap">1–18 are the block&#39;s characters and Q its closing quad. Pink = kept (1–5, 11–13 and the quad,
+88% match). Grey = changed (6–10 and 14–18, 16%). Chance is
+3.2%.</p><p lang="ja" class="jp barcap">1〜18はブロックの文字、Qは閉じるクアッド。ピンク＝保持（1〜5、11〜13とクアッド、一致率88%）。グレー＝変わる位置（6〜10と14〜18、16%）。偶然の一致率は3.2%。</p></div>
+<div class="bi bi-p"><p class="en">Position 4 and the quad matched in all 385, and position 11 in 384. The changed positions still match about 5 times as often as chance
+(16% against 3.2%), so some of their characters carry over too. The
+<a href="block_vocabulary.html#families">block families</a> show it with the copies stacked up.</p><p lang="ja" class="jp">4文字目とクアッドは385個すべてで一致し、11文字目は384個で一致しました。変わる位置でも偶然の約5倍（16%対3.2%）一致するので、一部の文字は引き継がれています。コピーを積み重ねた様子は<a href="block_vocabulary.html#families">ブロックの系統</a>で見られます。</p></div>
+<div class="bi bi-h2"><h2 class="en">Reused blocks or a repeating key?</h2><h2 lang="ja" class="jp">ブロックの再利用か、繰り返しの鍵か</h2></div>
+<div class="bi bi-p"><p class="en">If this were a key repeating every 22 or 44 characters, two aligned messages would match at a steady rate all the way
+along. They don&#39;t:</p><p lang="ja" class="jp">もし22文字か44文字ごとに繰り返す鍵なら、揃えた2つのメッセージは全体にわたって一定の割合で一致するはずです。実際はそうなっていません。</p></div>
+<div class="bi bi-ul"><ul class="en">
+<li>matching characters come in runs of whole blocks: 94 of the 149 direct matches that carry a whole block take 3 or 4 in a row</li>
+<li>inside a reused block 56% of characters match, but in the blocks just outside the run only 13.2% (chance is 3.2%)</li>
+<li>73 of the 167 matches sit at offsets that aren&#39;t multiples of 22, where a key repeating every 22 or 44 characters wouldn&#39;t line up</li>
+</ul><ul lang="ja" class="jp">
+<li>一致する文字はブロック単位のまとまりで現れる：ブロックを丸ごと含む直接一致149件のうち94件が、3つか4つのブロックを連続して取っている</li>
+<li>再利用されたブロックの中では56%の文字が一致するが、そのまとまりのすぐ外側のブロックでは13.2%だけ（偶然は3.2%）</li>
+<li>167件中73件の一致は22の倍数でないオフセットにあり、22文字や44文字周期の鍵では揃わない</li>
+</ul></div>
+<div class="bi bi-h2"><h2 class="en">Examples</h2><h2 lang="ja" class="jp">例</h2></div>
+<div class="bi bi-p"><p class="en">Each card shows the later message row by row, with the earlier one lined up underneath (at +44, position p of the
+earlier message sits under position p + 44 of the later one). The right column says which row of the earlier message
+each reused stretch came from.</p><p lang="ja" class="jp">各カードは後のメッセージを1行ずつ示し、その下に前のメッセージを一致のオフセットで揃えて並べています（+44なら、前のメッセージの位置pが後のメッセージの位置p + 44の下に来ます）。右の列は、再利用された部分が前のメッセージのどの行から来たかを示します。</p></div>
+<div class="bi bi-legend"><div class="en legend"><span><i class="sw" style="background:var(--g4)"></i>same character</span><span><i class="sw" style="background:var(--mk)"></i>quad</span><span>left number = row start in the later message</span></div><div lang="ja" class="jp legend"><span><i class="sw" style="background:var(--g4)"></i>同じ文字</span><span><i class="sw" style="background:var(--mk)"></i>クアッド</span><span>左の数字＝後のメッセージでの行の開始位置</span></div></div>
+<div class="bi bi-section"><section class="en msg"><div class="tag"><b>260902 21:07z MM-180 → 261004 21:38z MM-164</b> · offset +44 · z 23.5 · row B and blocks 1–3, two slots further on</div><div class="stack"><div class="pos">3</div><div class="chars pair"><span class="c">V</span><span class="c">4</span><span class="c">M</span><span class="c">N</span><span class="c">S</span><span class="c">R</span><span class="c">J</span><span class="c">I</span><span class="c">S</span><span class="c">B</span><span class="c">S</span><span class="c">I</span><span class="c">6</span><span class="c">L</span><span class="c">5</span><span class="c">Y</span><span class="c">P</span><span class="c">H</span><span class="c">J</span><span class="c">T</span><span class="c">A</span><span class="c">J</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>row A</div><div class="pos">25</div><div class="chars pair"><span class="c">I</span><span class="c">G</span><span class="c">T</span><span class="c">J</span><span class="c">I</span><span class="c">L</span><span class="c">N</span><span class="c">I</span><span class="c">N</span><span class="c">D</span><span class="c">I</span><span class="c">2</span><span class="c">X</span><span class="c">2</span><span class="c">A</span><span class="c">A</span><span class="c">Q</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">M</span></div><div class="kind"><i>21</i>row B</div><div class="pos">46</div><div class="chars pair"><span class="c">S</span><span class="c">N</span><span class="c">D</span><span class="c">N</span><span class="c">S</span><span class="c">H</span><span class="c">H</span><span class="c">S</span><span class="c">G</span><span class="hit">S</span><span class="c">X</span><span class="c">K</span><span class="c">P</span><span class="c">G</span><span class="c">P</span><span class="c">G</span><span class="c">N</span><span class="c">G</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span><br><span class="e">M</span><span class="e">2</span><span class="e">K</span><span class="e">7</span><span class="e">B</span><span class="e">4</span><span class="e">M</span><span class="e">A</span><span class="e">7</span><span class="hit">S</span><span class="e">Z</span><span class="e">7</span><span class="e">K</span><span class="e">Z</span><span class="e">Q</span><span class="e">X</span><span class="e">D</span><span class="e">X</span><span class="e">Q</span><span class="e">L</span><span class="e">I</span><span class="e">S</span></div><div class="kind"><i>22</i>block 1</div><div class="pos">68</div><div class="chars pair"><span class="c">7</span><span class="c">N</span><span class="c">I</span><span class="hit">L</span><span class="hit">Z</span><span class="c">I</span><span class="hit">I</span><span class="c">T</span><span class="c">3</span><span class="hit">A</span><span class="hit">S</span><span class="c">P</span><span class="c">O</span><span class="c">R</span><span class="hit">R</span><span class="c">L</span><span class="c">R</span><span class="c">N</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span><br><span class="e">L</span><span class="e">4</span><span class="e">6</span><span class="hit">L</span><span class="hit">Z</span><span class="e">Y</span><span class="hit">I</span><span class="e">A</span><span class="e">6</span><span class="hit">A</span><span class="hit">S</span><span class="e">R</span><span class="e">B</span><span class="e">A</span><span class="hit">R</span><span class="e">B</span><span class="e">B</span><span class="e">A</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span></div><div class="kind"><i>22</i>block 2 · <em>from its row B</em></div><div class="pos">90</div><div class="chars pair"><span class="hit">C</span><span class="hit">P</span><span class="hit">P</span><span class="hit">C</span><span class="hit">S</span><span class="c">O</span><span class="hit">O</span><span class="c">K</span><span class="c">I</span><span class="c">V</span><span class="hit">A</span><span class="c">C</span><span class="c">B</span><span class="c">H</span><span class="hit">H</span><span class="c">H</span><span class="hit">H</span><span class="c">H</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span><br><span class="hit">C</span><span class="hit">P</span><span class="hit">P</span><span class="hit">C</span><span class="hit">S</span><span class="e">F</span><span class="hit">O</span><span class="e">I</span><span class="e">S</span><span class="e">T</span><span class="hit">A</span><span class="e">H</span><span class="e">M</span><span class="e">3</span><span class="hit">H</span><span class="e">G</span><span class="hit">H</span><span class="e">G</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span></div><div class="kind"><i>22</i>block 3 · <em>from its block 1</em></div><div class="pos">112</div><div class="chars pair"><span class="hit">S</span><span class="hit">G</span><span class="hit">7</span><span class="hit">F</span><span class="hit">2</span><span class="c">D</span><span class="hit">D</span><span class="c">3</span><span class="c">B</span><span class="hit">I</span><span class="hit">O</span><span class="c">G</span><span class="c">S</span><span class="c">J</span><span class="c">G</span><span class="c">W</span><span class="c">H</span><span class="c">J</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span><br><span class="hit">S</span><span class="hit">G</span><span class="hit">7</span><span class="hit">F</span><span class="hit">2</span><span class="e">A</span><span class="hit">D</span><span class="e">D</span><span class="e">2</span><span class="hit">I</span><span class="hit">O</span><span class="e">J</span><span class="e">H</span><span class="e">I</span><span class="e">J</span><span class="e">I</span><span class="e">G</span><span class="e">6</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span></div><div class="kind"><i>22</i>block 4 · <em>from its block 2</em></div><div class="pos">134</div><div class="chars pair"><span class="hit">X</span><span class="hit">7</span><span class="hit">5</span><span class="hit">B</span><span class="hit">7</span><span class="c">2</span><span class="hit">2</span><span class="c">2</span><span class="c">Q</span><span class="c">W</span><span class="hit">E</span><span class="c">H</span><span class="c">S</span><span class="c">D</span><span class="c">H</span><span class="c">S</span><span class="c">Q</span><span class="c">2</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span><br><span class="hit">X</span><span class="hit">7</span><span class="hit">5</span><span class="hit">B</span><span class="hit">7</span><span class="e">P</span><span class="hit">2</span><span class="e">M</span><span class="e">2</span><span class="e">A</span><span class="hit">E</span><span class="e">D</span><span class="e">2</span><span class="e">V</span><span class="e">D</span><span class="e">V</span><span class="e">2</span><span class="e">W</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span></div><div class="kind"><i>22</i>block 5 · <em>from its block 3</em></div><div class="pos">156</div><div class="chars pair"><span class="hit">2</span><span class="hit">S</span><span class="c">Y</span><span class="c">L</span><span class="c">5</span><span class="c">K</span><span class="c">T</span><span class="c">F</span><span class="c">H</span><br><span class="hit">2</span><span class="hit">S</span><span class="e">N</span><span class="e">C</span><span class="e">T</span><span class="e">P</span><span class="e">M</span><span class="e">4</span><span class="e">3</span></div><div class="kind"><i>9</i>trailer</div></div></section><section lang="ja" class="jp msg"><div class="tag"><b>260902 21:07z MM-180 → 261004 21:38z MM-164</b> · オフセット +44 · z 23.5 · B行とブロック1〜3、2スロット後ろへ</div><div class="stack"><div class="pos">3</div><div class="chars pair"><span class="c">V</span><span class="c">4</span><span class="c">M</span><span class="c">N</span><span class="c">S</span><span class="c">R</span><span class="c">J</span><span class="c">I</span><span class="c">S</span><span class="c">B</span><span class="c">S</span><span class="c">I</span><span class="c">6</span><span class="c">L</span><span class="c">5</span><span class="c">Y</span><span class="c">P</span><span class="c">H</span><span class="c">J</span><span class="c">T</span><span class="c">A</span><span class="c">J</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>A行</div><div class="pos">25</div><div class="chars pair"><span class="c">I</span><span class="c">G</span><span class="c">T</span><span class="c">J</span><span class="c">I</span><span class="c">L</span><span class="c">N</span><span class="c">I</span><span class="c">N</span><span class="c">D</span><span class="c">I</span><span class="c">2</span><span class="c">X</span><span class="c">2</span><span class="c">A</span><span class="c">A</span><span class="c">Q</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span><span class="mk">E</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">M</span></div><div class="kind"><i>21</i>B行</div><div class="pos">46</div><div class="chars pair"><span class="c">S</span><span class="c">N</span><span class="c">D</span><span class="c">N</span><span class="c">S</span><span class="c">H</span><span class="c">H</span><span class="c">S</span><span class="c">G</span><span class="hit">S</span><span class="c">X</span><span class="c">K</span><span class="c">P</span><span class="c">G</span><span class="c">P</span><span class="c">G</span><span class="c">N</span><span class="c">G</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span><span class="mk">U</span><br><span class="e">M</span><span class="e">2</span><span class="e">K</span><span class="e">7</span><span class="e">B</span><span class="e">4</span><span class="e">M</span><span class="e">A</span><span class="e">7</span><span class="hit">S</span><span class="e">Z</span><span class="e">7</span><span class="e">K</span><span class="e">Z</span><span class="e">Q</span><span class="e">X</span><span class="e">D</span><span class="e">X</span><span class="e">Q</span><span class="e">L</span><span class="e">I</span><span class="e">S</span></div><div class="kind"><i>22</i>ブロック1</div><div class="pos">68</div><div class="chars pair"><span class="c">7</span><span class="c">N</span><span class="c">I</span><span class="hit">L</span><span class="hit">Z</span><span class="c">I</span><span class="hit">I</span><span class="c">T</span><span class="c">3</span><span class="hit">A</span><span class="hit">S</span><span class="c">P</span><span class="c">O</span><span class="c">R</span><span class="hit">R</span><span class="c">L</span><span class="c">R</span><span class="c">N</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span><br><span class="e">L</span><span class="e">4</span><span class="e">6</span><span class="hit">L</span><span class="hit">Z</span><span class="e">Y</span><span class="hit">I</span><span class="e">A</span><span class="e">6</span><span class="hit">A</span><span class="hit">S</span><span class="e">R</span><span class="e">B</span><span class="e">A</span><span class="hit">R</span><span class="e">B</span><span class="e">B</span><span class="e">A</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span><span class="hit">L</span></div><div class="kind"><i>22</i>ブロック2 · <em>元のB行から</em></div><div class="pos">90</div><div class="chars pair"><span class="hit">C</span><span class="hit">P</span><span class="hit">P</span><span class="hit">C</span><span class="hit">S</span><span class="c">O</span><span class="hit">O</span><span class="c">K</span><span class="c">I</span><span class="c">V</span><span class="hit">A</span><span class="c">C</span><span class="c">B</span><span class="c">H</span><span class="hit">H</span><span class="c">H</span><span class="hit">H</span><span class="c">H</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span><br><span class="hit">C</span><span class="hit">P</span><span class="hit">P</span><span class="hit">C</span><span class="hit">S</span><span class="e">F</span><span class="hit">O</span><span class="e">I</span><span class="e">S</span><span class="e">T</span><span class="hit">A</span><span class="e">H</span><span class="e">M</span><span class="e">3</span><span class="hit">H</span><span class="e">G</span><span class="hit">H</span><span class="e">G</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span><span class="hit">W</span></div><div class="kind"><i>22</i>ブロック3 · <em>元のブロック1から</em></div><div class="pos">112</div><div class="chars pair"><span class="hit">S</span><span class="hit">G</span><span class="hit">7</span><span class="hit">F</span><span class="hit">2</span><span class="c">D</span><span class="hit">D</span><span class="c">3</span><span class="c">B</span><span class="hit">I</span><span class="hit">O</span><span class="c">G</span><span class="c">S</span><span class="c">J</span><span class="c">G</span><span class="c">W</span><span class="c">H</span><span class="c">J</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span><br><span class="hit">S</span><span class="hit">G</span><span class="hit">7</span><span class="hit">F</span><span class="hit">2</span><span class="e">A</span><span class="hit">D</span><span class="e">D</span><span class="e">2</span><span class="hit">I</span><span class="hit">O</span><span class="e">J</span><span class="e">H</span><span class="e">I</span><span class="e">J</span><span class="e">I</span><span class="e">G</span><span class="e">6</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span><span class="hit">G</span></div><div class="kind"><i>22</i>ブロック4 · <em>元のブロック2から</em></div><div class="pos">134</div><div class="chars pair"><span class="hit">X</span><span class="hit">7</span><span class="hit">5</span><span class="hit">B</span><span class="hit">7</span><span class="c">2</span><span class="hit">2</span><span class="c">2</span><span class="c">Q</span><span class="c">W</span><span class="hit">E</span><span class="c">H</span><span class="c">S</span><span class="c">D</span><span class="c">H</span><span class="c">S</span><span class="c">Q</span><span class="c">2</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span><br><span class="hit">X</span><span class="hit">7</span><span class="hit">5</span><span class="hit">B</span><span class="hit">7</span><span class="e">P</span><span class="hit">2</span><span class="e">M</span><span class="e">2</span><span class="e">A</span><span class="hit">E</span><span class="e">D</span><span class="e">2</span><span class="e">V</span><span class="e">D</span><span class="e">V</span><span class="e">2</span><span class="e">W</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span><span class="hit">7</span></div><div class="kind"><i>22</i>ブロック5 · <em>元のブロック3から</em></div><div class="pos">156</div><div class="chars pair"><span class="hit">2</span><span class="hit">S</span><span class="c">Y</span><span class="c">L</span><span class="c">5</span><span class="c">K</span><span class="c">T</span><span class="c">F</span><span class="c">H</span><br><span class="hit">2</span><span class="hit">S</span><span class="e">N</span><span class="e">C</span><span class="e">T</span><span class="e">P</span><span class="e">M</span><span class="e">4</span><span class="e">3</span></div><div class="kind"><i>9</i>トレーラー</div></div></section></div>
+<div class="bi bi-section"><section class="en msg"><div class="tag"><b>260909 21:23z MM-120 → 261005 21:50z MM-180</b> · offset +44 · z 17.8 · row B and blocks 1–2, two slots further on</div><div class="stack"><div class="pos">3</div><div class="chars pair"><span class="c">G</span><span class="c">H</span><span class="c">P</span><span class="c">Q</span><span class="c">2</span><span class="c">3</span><span class="c">X</span><span class="c">H</span><span class="c">E</span><span class="c">D</span><span class="c">I</span><span class="c">T</span><span class="c">5</span><span class="c">A</span><span class="c">X</span><span class="c">D</span><span class="c">H</span><span class="c">R</span><span class="c">I</span><span class="c">Y</span><span class="c">C</span><span class="c">I</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>row A</div><div class="pos">25</div><div class="chars pair"><span class="c">J</span><span class="c">Q</span><span class="c">C</span><span class="c">T</span><span class="c">4</span><span class="c">M</span><span class="c">K</span><span class="c">M</span><span class="c">T</span><span class="c">C</span><span class="c">L</span><span class="c">F</span><span class="c">F</span><span class="c">3</span><span class="c">F</span><span class="c">L</span><span class="c">F</span><span class="mk">X</span><span class="mk">X</span><span class="mk">X</span><span class="mk">X</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">M</span></div><div class="kind"><i>21</i>row B</div><div class="pos">46</div><div class="chars pair"><span class="c">F</span><span class="c">R</span><span class="c">Z</span><span class="c">C</span><span class="c">O</span><span class="c">X</span><span class="c">Q</span><span class="c">H</span><span class="hit">O</span><span class="c">Q</span><span class="c">J</span><span class="c">4</span><span class="c">T</span><span class="c">T</span><span class="c">6</span><span class="c">Y</span><span class="c">N</span><span class="c">P</span><span class="mk">I</span><span class="mk">I</span><span class="mk">I</span><span class="mk">I</span><br><span class="e">M</span><span class="e">N</span><span class="e">G</span><span class="e">P</span><span class="e">C</span><span class="e">O</span><span class="e">H</span><span class="e">D</span><span class="hit">O</span><span class="e">H</span><span class="e">S</span><span class="e">E</span><span class="e">F</span><span class="e">A</span><span class="e">B</span><span class="e">7</span><span class="e">F</span><span class="e">Y</span><span class="e">X</span><span class="e">O</span><span class="e">R</span><span class="e">W</span></div><div class="kind"><i>22</i>block 1</div><div class="pos">68</div><div class="chars pair"><span class="c">L</span><span class="c">Q</span><span class="c">R</span><span class="hit">O</span><span class="c">6</span><span class="c">M</span><span class="c">6</span><span class="c">A</span><span class="c">W</span><span class="c">A</span><span class="hit">7</span><span class="hit">X</span><span class="hit">G</span><span class="c">G</span><span class="hit">H</span><span class="c">S</span><span class="c">G</span><span class="c">Y</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span><br><span class="e">O</span><span class="e">X</span><span class="e">T</span><span class="hit">O</span><span class="e">A</span><span class="e">A</span><span class="e">T</span><span class="e">D</span><span class="e">V</span><span class="e">X</span><span class="hit">7</span><span class="hit">X</span><span class="hit">G</span><span class="e">X</span><span class="hit">H</span><span class="e">G</span><span class="e">Y</span><span class="e">B</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span></div><div class="kind"><i>22</i>block 2 · <em>from its row B</em></div><div class="pos">90</div><div class="chars pair"><span class="hit">V</span><span class="hit">I</span><span class="hit">L</span><span class="hit">N</span><span class="c">O</span><span class="c">R</span><span class="c">O</span><span class="c">R</span><span class="c">L</span><span class="c">G</span><span class="hit">3</span><span class="hit">Q</span><span class="hit">7</span><span class="c">7</span><span class="c">Q</span><span class="c">7</span><span class="c">6</span><span class="c">7</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span><br><span class="hit">V</span><span class="hit">I</span><span class="hit">L</span><span class="hit">N</span><span class="e">L</span><span class="e">L</span><span class="e">H</span><span class="e">B</span><span class="e">J</span><span class="e">O</span><span class="hit">3</span><span class="hit">Q</span><span class="hit">7</span><span class="e">Q</span><span class="e">E</span><span class="e">B</span><span class="e">B</span><span class="e">Q</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span></div><div class="kind"><i>22</i>block 3 · <em>from its block 1</em></div><div class="pos">112</div><div class="chars pair"><span class="hit">7</span><span class="hit">P</span><span class="hit">N</span><span class="hit">E</span><span class="c">2</span><span class="c">X</span><span class="c">U</span><span class="c">F</span><span class="c">G</span><span class="c">2</span><span class="hit">2</span><span class="hit">6</span><span class="hit">Q</span><span class="c">Q</span><span class="hit">I</span><span class="c">Z</span><span class="hit">W</span><span class="c">Q</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span><br><span class="hit">7</span><span class="hit">P</span><span class="hit">N</span><span class="hit">E</span><span class="e">U</span><span class="e">U</span><span class="e">7</span><span class="e">Z</span><span class="e">Z</span><span class="e">7</span><span class="hit">2</span><span class="hit">6</span><span class="hit">Q</span><span class="e">6</span><span class="hit">I</span><span class="e">I</span><span class="hit">W</span><span class="e">B</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span></div><div class="kind"><i>22</i>block 4 · <em>from its block 2</em></div><div class="pos">134</div><div class="chars pair"><span class="hit">W</span><span class="hit">O</span><span class="c">L</span><span class="c">O</span><span class="c">Y</span><span class="c">3</span><span class="c">B</span><span class="c">N</span><span class="c">J</span><span class="c">3</span><span class="c">G</span><span class="c">2</span><span class="hit">N</span><span class="c">T</span><span class="c">A</span><span class="c">H</span><span class="c">T</span><span class="c">K</span><span class="c">J</span><span class="c">3</span><span class="c">O</span><span class="c">E</span><span class="c">C</span><span class="hit">I</span><span class="c">C</span><span class="c">I</span><span class="c">H</span><span class="c">R</span><span class="c">N</span><span class="c">C</span><span class="c">N</span><span class="c">R</span><span class="c">K</span><span class="c">Q</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span><br><span class="hit">W</span><span class="hit">O</span><span class="e">V</span><span class="e">3</span><span class="e">N</span><span class="e">N</span><span class="e">Y</span><span class="e">S</span><span class="e">Y</span><span class="e">N</span><span class="e">H</span><span class="e">R</span><span class="hit">N</span><span class="e">R</span><span class="e">O</span><span class="e">O</span><span class="e">N</span><span class="e">R</span><span class="e">L</span><span class="e">L</span><span class="e">L</span><span class="e">L</span><span class="e">D</span><span class="hit">I</span><span class="e">W</span><span class="e">H</span><span class="e">L</span><span class="e">L</span><span class="e">L</span><span class="e">E</span><span class="e">Q</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>38</i>block 5</div><div class="pos">172</div><div class="chars pair"><span class="c">D</span><span class="c">I</span><span class="c">W</span><span class="c">H</span><span class="c">L</span><span class="c">7</span><span class="c">P</span><span class="c">T</span><span class="c">Q</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>9</i>trailer</div></div></section><section lang="ja" class="jp msg"><div class="tag"><b>260909 21:23z MM-120 → 261005 21:50z MM-180</b> · オフセット +44 · z 17.8 · B行とブロック1〜2、2スロット後ろへ</div><div class="stack"><div class="pos">3</div><div class="chars pair"><span class="c">G</span><span class="c">H</span><span class="c">P</span><span class="c">Q</span><span class="c">2</span><span class="c">3</span><span class="c">X</span><span class="c">H</span><span class="c">E</span><span class="c">D</span><span class="c">I</span><span class="c">T</span><span class="c">5</span><span class="c">A</span><span class="c">X</span><span class="c">D</span><span class="c">H</span><span class="c">R</span><span class="c">I</span><span class="c">Y</span><span class="c">C</span><span class="c">I</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>A行</div><div class="pos">25</div><div class="chars pair"><span class="c">J</span><span class="c">Q</span><span class="c">C</span><span class="c">T</span><span class="c">4</span><span class="c">M</span><span class="c">K</span><span class="c">M</span><span class="c">T</span><span class="c">C</span><span class="c">L</span><span class="c">F</span><span class="c">F</span><span class="c">3</span><span class="c">F</span><span class="c">L</span><span class="c">F</span><span class="mk">X</span><span class="mk">X</span><span class="mk">X</span><span class="mk">X</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">M</span></div><div class="kind"><i>21</i>B行</div><div class="pos">46</div><div class="chars pair"><span class="c">F</span><span class="c">R</span><span class="c">Z</span><span class="c">C</span><span class="c">O</span><span class="c">X</span><span class="c">Q</span><span class="c">H</span><span class="hit">O</span><span class="c">Q</span><span class="c">J</span><span class="c">4</span><span class="c">T</span><span class="c">T</span><span class="c">6</span><span class="c">Y</span><span class="c">N</span><span class="c">P</span><span class="mk">I</span><span class="mk">I</span><span class="mk">I</span><span class="mk">I</span><br><span class="e">M</span><span class="e">N</span><span class="e">G</span><span class="e">P</span><span class="e">C</span><span class="e">O</span><span class="e">H</span><span class="e">D</span><span class="hit">O</span><span class="e">H</span><span class="e">S</span><span class="e">E</span><span class="e">F</span><span class="e">A</span><span class="e">B</span><span class="e">7</span><span class="e">F</span><span class="e">Y</span><span class="e">X</span><span class="e">O</span><span class="e">R</span><span class="e">W</span></div><div class="kind"><i>22</i>ブロック1</div><div class="pos">68</div><div class="chars pair"><span class="c">L</span><span class="c">Q</span><span class="c">R</span><span class="hit">O</span><span class="c">6</span><span class="c">M</span><span class="c">6</span><span class="c">A</span><span class="c">W</span><span class="c">A</span><span class="hit">7</span><span class="hit">X</span><span class="hit">G</span><span class="c">G</span><span class="hit">H</span><span class="c">S</span><span class="c">G</span><span class="c">Y</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span><br><span class="e">O</span><span class="e">X</span><span class="e">T</span><span class="hit">O</span><span class="e">A</span><span class="e">A</span><span class="e">T</span><span class="e">D</span><span class="e">V</span><span class="e">X</span><span class="hit">7</span><span class="hit">X</span><span class="hit">G</span><span class="e">X</span><span class="hit">H</span><span class="e">G</span><span class="e">Y</span><span class="e">B</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span><span class="hit">4</span></div><div class="kind"><i>22</i>ブロック2 · <em>元のB行から</em></div><div class="pos">90</div><div class="chars pair"><span class="hit">V</span><span class="hit">I</span><span class="hit">L</span><span class="hit">N</span><span class="c">O</span><span class="c">R</span><span class="c">O</span><span class="c">R</span><span class="c">L</span><span class="c">G</span><span class="hit">3</span><span class="hit">Q</span><span class="hit">7</span><span class="c">7</span><span class="c">Q</span><span class="c">7</span><span class="c">6</span><span class="c">7</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span><br><span class="hit">V</span><span class="hit">I</span><span class="hit">L</span><span class="hit">N</span><span class="e">L</span><span class="e">L</span><span class="e">H</span><span class="e">B</span><span class="e">J</span><span class="e">O</span><span class="hit">3</span><span class="hit">Q</span><span class="hit">7</span><span class="e">Q</span><span class="e">E</span><span class="e">B</span><span class="e">B</span><span class="e">Q</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span><span class="hit">Y</span></div><div class="kind"><i>22</i>ブロック3 · <em>元のブロック1から</em></div><div class="pos">112</div><div class="chars pair"><span class="hit">7</span><span class="hit">P</span><span class="hit">N</span><span class="hit">E</span><span class="c">2</span><span class="c">X</span><span class="c">U</span><span class="c">F</span><span class="c">G</span><span class="c">2</span><span class="hit">2</span><span class="hit">6</span><span class="hit">Q</span><span class="c">Q</span><span class="hit">I</span><span class="c">Z</span><span class="hit">W</span><span class="c">Q</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span><br><span class="hit">7</span><span class="hit">P</span><span class="hit">N</span><span class="hit">E</span><span class="e">U</span><span class="e">U</span><span class="e">7</span><span class="e">Z</span><span class="e">Z</span><span class="e">7</span><span class="hit">2</span><span class="hit">6</span><span class="hit">Q</span><span class="e">6</span><span class="hit">I</span><span class="e">I</span><span class="hit">W</span><span class="e">B</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span><span class="hit">J</span></div><div class="kind"><i>22</i>ブロック4 · <em>元のブロック2から</em></div><div class="pos">134</div><div class="chars pair"><span class="hit">W</span><span class="hit">O</span><span class="c">L</span><span class="c">O</span><span class="c">Y</span><span class="c">3</span><span class="c">B</span><span class="c">N</span><span class="c">J</span><span class="c">3</span><span class="c">G</span><span class="c">2</span><span class="hit">N</span><span class="c">T</span><span class="c">A</span><span class="c">H</span><span class="c">T</span><span class="c">K</span><span class="c">J</span><span class="c">3</span><span class="c">O</span><span class="c">E</span><span class="c">C</span><span class="hit">I</span><span class="c">C</span><span class="c">I</span><span class="c">H</span><span class="c">R</span><span class="c">N</span><span class="c">C</span><span class="c">N</span><span class="c">R</span><span class="c">K</span><span class="c">Q</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span><span class="mk">L</span><br><span class="hit">W</span><span class="hit">O</span><span class="e">V</span><span class="e">3</span><span class="e">N</span><span class="e">N</span><span class="e">Y</span><span class="e">S</span><span class="e">Y</span><span class="e">N</span><span class="e">H</span><span class="e">R</span><span class="hit">N</span><span class="e">R</span><span class="e">O</span><span class="e">O</span><span class="e">N</span><span class="e">R</span><span class="e">L</span><span class="e">L</span><span class="e">L</span><span class="e">L</span><span class="e">D</span><span class="hit">I</span><span class="e">W</span><span class="e">H</span><span class="e">L</span><span class="e">L</span><span class="e">L</span><span class="e">E</span><span class="e">Q</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>38</i>ブロック5</div><div class="pos">172</div><div class="chars pair"><span class="c">D</span><span class="c">I</span><span class="c">W</span><span class="c">H</span><span class="c">L</span><span class="c">7</span><span class="c">P</span><span class="c">T</span><span class="c">Q</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>9</i>トレーラー</div></div></section></div>
+<div class="bi bi-section"><section class="en msg"><div class="tag"><b>260901 21:08z MM-186 → 260912 16:51z MM-224</b> · offset +82 · z 26.5 · blocks 1–4, three slots further on plus the 16-character insert (66 + 16 = 82)</div><div class="stack"><div class="pos">3</div><div class="chars pair"><span class="c">U</span><span class="c">A</span><span class="c">L</span><span class="c">Z</span><span class="c">Q</span><span class="c">E</span><span class="c">I</span><span class="c">C</span><span class="c">E</span><span class="c">R</span><span class="c">Q</span><span class="c">W</span><span class="c">U</span><span class="c">F</span><span class="c">2</span><span class="c">C</span><span class="c">G</span><span class="c">P</span><span class="c">Q</span><span class="c">X</span><span class="c">7</span><span class="c">Q</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>row A</div><div class="pos">25</div><div class="chars pair"><span class="c">E</span><span class="c">Y</span><span class="c">T</span><span class="c">A</span><span class="c">I</span><span class="c">4</span><span class="c">Q</span><span class="c">B</span><span class="c">M</span><span class="c">P</span><span class="c">2</span><span class="c">O</span><span class="c">4</span><span class="c">6</span><span class="c">6</span><span class="c">T</span><span class="c">B</span><span class="mk">O</span><span class="mk">O</span><span class="mk">O</span><span class="mk">O</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>21</i>row B</div><div class="pos">46</div><div class="chars pair"><span class="c">P</span><span class="c">F</span><span class="c">G</span><span class="c">B</span><span class="c">C</span><span class="c">V</span><span class="c">H</span><span class="c">O</span><span class="c">H</span><span class="c">A</span><span class="c">3</span><span class="c">6</span><span class="c">Q</span><span class="c">G</span><span class="c">2</span><span class="c">6</span><span class="c">2</span><span class="c">J</span><span class="mk">A</span><span class="mk">A</span><span class="mk">A</span><span class="mk">A</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>block 1</div><div class="pos">68</div><div class="chars pair"><span class="c">7</span><span class="c">4</span><span class="c">Z</span><span class="c">L</span><span class="c">M</span><span class="c">E</span><span class="c">J</span><span class="c">J</span><span class="c">M</span><span class="c">K</span><span class="c">7</span><span class="c">J</span><span class="c">Q</span><span class="c">M</span><span class="c">J</span><span class="c">N</span><span class="c">J</span><span class="c">A</span><span class="mk">K</span><span class="mk">K</span><span class="mk">K</span><span class="mk">K</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">M</span><span class="e">M</span><span class="e">6</span><span class="e">O</span><span class="e">B</span><span class="e">F</span><span class="e">4</span></div><div class="kind"><i>22</i>block 2</div><div class="pos">90</div><div class="chars pair"><span class="c">B</span><span class="c">L</span><span class="c">C</span><span class="c">O</span><span class="c">P</span><span class="c">D</span><span class="c">A</span><span class="c">A</span><span class="c">D</span><span class="c">P</span><span class="c">Q</span><span class="c">V</span><span class="c">U</span><span class="c">K</span><span class="c">7</span><span class="c">7</span><span class="c">U</span><span class="hit">I</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span><br><span class="e">2</span><span class="e">B</span><span class="e">L</span><span class="e">A</span><span class="e">Y</span><span class="e">H</span><span class="e">R</span><span class="e">V</span><span class="e">A</span><span class="e">A</span><span class="e">R</span><span class="e">E</span><span class="e">Y</span><span class="e">Z</span><span class="e">U</span><span class="e">4</span><span class="e">Z</span><span class="hit">I</span><span class="e">H</span><span class="e">O</span><span class="e">P</span><span class="e">Y</span></div><div class="kind"><i>22</i>block 3</div><div class="pos">112</div><div class="chars pair"><span class="c">2</span><span class="c">N</span><span class="c">F</span><span class="c">6</span><span class="c">H</span><span class="c">X</span><span class="c">Z</span><span class="c">D</span><span class="c">2</span><span class="c">R</span><span class="c">3</span><span class="c">6</span><span class="c">D</span><span class="c">I</span><span class="c">K</span><span class="c">7</span><span class="c">I</span><span class="c">3</span><span class="c">E</span><span class="hit">G</span><span class="hit">S</span><span class="c">Q</span><span class="c">X</span><span class="c">7</span><span class="c">X</span><span class="hit">D</span><span class="hit">P</span><span class="hit">B</span><span class="hit">G</span><span class="hit">W</span><span class="c">W</span><span class="hit">B</span><span class="c">B</span><span class="hit">B</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span><br><span class="e">A</span><span class="e">D</span><span class="e">7</span><span class="e">A</span><span class="e">Q</span><span class="e">V</span><span class="e">U</span><span class="e">7</span><span class="e">4</span><span class="e">I</span><span class="e">I</span><span class="e">Z</span><span class="e">G</span><span class="e">G</span><span class="e">G</span><span class="e">G</span><span class="e">2</span><span class="e">N</span><span class="e">V</span><span class="hit">G</span><span class="hit">S</span><span class="e">7</span><span class="e">3</span><span class="e">S</span><span class="e">S</span><span class="hit">D</span><span class="hit">P</span><span class="hit">B</span><span class="hit">G</span><span class="hit">W</span><span class="e">C</span><span class="hit">B</span><span class="e">T</span><span class="hit">B</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span></div><div class="kind"><i>38</i>block 4 · <em>from its block 1</em></div><div class="pos">150</div><div class="chars pair"><span class="hit">V</span><span class="hit">M</span><span class="hit">V</span><span class="hit">4</span><span class="hit">O</span><span class="c">7</span><span class="c">Z</span><span class="hit">Z</span><span class="c">H</span><span class="c">E</span><span class="hit">3</span><span class="hit">U</span><span class="hit">X</span><span class="hit">6</span><span class="c">6</span><span class="c">4</span><span class="c">A</span><span class="c">W</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span><br><span class="hit">V</span><span class="hit">M</span><span class="hit">V</span><span class="hit">4</span><span class="hit">O</span><span class="e">D</span><span class="e">E</span><span class="hit">Z</span><span class="e">M</span><span class="e">7</span><span class="hit">3</span><span class="hit">U</span><span class="hit">X</span><span class="hit">6</span><span class="e">A</span><span class="e">O</span><span class="e">6</span><span class="e">U</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span></div><div class="kind"><i>22</i>block 5 · <em>from its block 2</em></div><div class="pos">172</div><div class="chars pair"><span class="hit">D</span><span class="hit">S</span><span class="hit">Q</span><span class="hit">4</span><span class="hit">I</span><span class="c">N</span><span class="c">U</span><span class="hit">B</span><span class="c">B</span><span class="c">N</span><span class="hit">5</span><span class="hit">S</span><span class="hit">W</span><span class="hit">O</span><span class="c">O</span><span class="hit">P</span><span class="c">W</span><span class="hit">W</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span><br><span class="hit">D</span><span class="hit">S</span><span class="hit">Q</span><span class="hit">4</span><span class="hit">I</span><span class="e">2</span><span class="e">B</span><span class="hit">B</span><span class="e">N</span><span class="e">B</span><span class="hit">5</span><span class="hit">S</span><span class="hit">W</span><span class="hit">O</span><span class="e">6</span><span class="hit">P</span><span class="e">O</span><span class="hit">W</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span></div><div class="kind"><i>22</i>block 6 · <em>from its block 3</em></div><div class="pos">194</div><div class="chars pair"><span class="hit">Z</span><span class="hit">V</span><span class="hit">Z</span><span class="hit">W</span><span class="hit">7</span><span class="c">O</span><span class="c">T</span><span class="c">T</span><span class="hit">C</span><span class="c">R</span><span class="hit">D</span><span class="hit">X</span><span class="hit">Q</span><span class="hit">5</span><span class="c">5</span><span class="c">3</span><span class="c">X</span><span class="c">S</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span><br><span class="hit">Z</span><span class="hit">V</span><span class="hit">Z</span><span class="hit">W</span><span class="hit">7</span><span class="e">Q</span><span class="e">D</span><span class="e">O</span><span class="hit">C</span><span class="e">H</span><span class="hit">D</span><span class="hit">X</span><span class="hit">Q</span><span class="hit">5</span><span class="e">A</span><span class="e">S</span><span class="e">3</span><span class="e">L</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span></div><div class="kind"><i>22</i>block 7 · <em>from its block 4</em></div><div class="pos">216</div><div class="chars pair"><span class="hit">E</span><span class="hit">7</span><span class="c">C</span><span class="c">I</span><span class="c">W</span><span class="c">O</span><span class="c">6</span><span class="c">N</span><span class="c">3</span><br><span class="hit">E</span><span class="hit">7</span><span class="e">Y</span><span class="e">T</span><span class="e">J</span><span class="e">B</span><span class="e">N</span><span class="e">5</span><span class="e">D</span></div><div class="kind"><i>9</i>trailer</div></div></section><section lang="ja" class="jp msg"><div class="tag"><b>260901 21:08z MM-186 → 260912 16:51z MM-224</b> · オフセット +82 · z 26.5 · ブロック1〜4、3スロット後ろへ＋16文字の挿入（66 + 16 = 82）</div><div class="stack"><div class="pos">3</div><div class="chars pair"><span class="c">U</span><span class="c">A</span><span class="c">L</span><span class="c">Z</span><span class="c">Q</span><span class="c">E</span><span class="c">I</span><span class="c">C</span><span class="c">E</span><span class="c">R</span><span class="c">Q</span><span class="c">W</span><span class="c">U</span><span class="c">F</span><span class="c">2</span><span class="c">C</span><span class="c">G</span><span class="c">P</span><span class="c">Q</span><span class="c">X</span><span class="c">7</span><span class="c">Q</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>A行</div><div class="pos">25</div><div class="chars pair"><span class="c">E</span><span class="c">Y</span><span class="c">T</span><span class="c">A</span><span class="c">I</span><span class="c">4</span><span class="c">Q</span><span class="c">B</span><span class="c">M</span><span class="c">P</span><span class="c">2</span><span class="c">O</span><span class="c">4</span><span class="c">6</span><span class="c">6</span><span class="c">T</span><span class="c">B</span><span class="mk">O</span><span class="mk">O</span><span class="mk">O</span><span class="mk">O</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>21</i>B行</div><div class="pos">46</div><div class="chars pair"><span class="c">P</span><span class="c">F</span><span class="c">G</span><span class="c">B</span><span class="c">C</span><span class="c">V</span><span class="c">H</span><span class="c">O</span><span class="c">H</span><span class="c">A</span><span class="c">3</span><span class="c">6</span><span class="c">Q</span><span class="c">G</span><span class="c">2</span><span class="c">6</span><span class="c">2</span><span class="c">J</span><span class="mk">A</span><span class="mk">A</span><span class="mk">A</span><span class="mk">A</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span></div><div class="kind"><i>22</i>ブロック1</div><div class="pos">68</div><div class="chars pair"><span class="c">7</span><span class="c">4</span><span class="c">Z</span><span class="c">L</span><span class="c">M</span><span class="c">E</span><span class="c">J</span><span class="c">J</span><span class="c">M</span><span class="c">K</span><span class="c">7</span><span class="c">J</span><span class="c">Q</span><span class="c">M</span><span class="c">J</span><span class="c">N</span><span class="c">J</span><span class="c">A</span><span class="mk">K</span><span class="mk">K</span><span class="mk">K</span><span class="mk">K</span><br><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">&nbsp;</span><span class="e">M</span><span class="e">M</span><span class="e">6</span><span class="e">O</span><span class="e">B</span><span class="e">F</span><span class="e">4</span></div><div class="kind"><i>22</i>ブロック2</div><div class="pos">90</div><div class="chars pair"><span class="c">B</span><span class="c">L</span><span class="c">C</span><span class="c">O</span><span class="c">P</span><span class="c">D</span><span class="c">A</span><span class="c">A</span><span class="c">D</span><span class="c">P</span><span class="c">Q</span><span class="c">V</span><span class="c">U</span><span class="c">K</span><span class="c">7</span><span class="c">7</span><span class="c">U</span><span class="hit">I</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span><span class="mk">G</span><br><span class="e">2</span><span class="e">B</span><span class="e">L</span><span class="e">A</span><span class="e">Y</span><span class="e">H</span><span class="e">R</span><span class="e">V</span><span class="e">A</span><span class="e">A</span><span class="e">R</span><span class="e">E</span><span class="e">Y</span><span class="e">Z</span><span class="e">U</span><span class="e">4</span><span class="e">Z</span><span class="hit">I</span><span class="e">H</span><span class="e">O</span><span class="e">P</span><span class="e">Y</span></div><div class="kind"><i>22</i>ブロック3</div><div class="pos">112</div><div class="chars pair"><span class="c">2</span><span class="c">N</span><span class="c">F</span><span class="c">6</span><span class="c">H</span><span class="c">X</span><span class="c">Z</span><span class="c">D</span><span class="c">2</span><span class="c">R</span><span class="c">3</span><span class="c">6</span><span class="c">D</span><span class="c">I</span><span class="c">K</span><span class="c">7</span><span class="c">I</span><span class="c">3</span><span class="c">E</span><span class="hit">G</span><span class="hit">S</span><span class="c">Q</span><span class="c">X</span><span class="c">7</span><span class="c">X</span><span class="hit">D</span><span class="hit">P</span><span class="hit">B</span><span class="hit">G</span><span class="hit">W</span><span class="c">W</span><span class="hit">B</span><span class="c">B</span><span class="hit">B</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span><br><span class="e">A</span><span class="e">D</span><span class="e">7</span><span class="e">A</span><span class="e">Q</span><span class="e">V</span><span class="e">U</span><span class="e">7</span><span class="e">4</span><span class="e">I</span><span class="e">I</span><span class="e">Z</span><span class="e">G</span><span class="e">G</span><span class="e">G</span><span class="e">G</span><span class="e">2</span><span class="e">N</span><span class="e">V</span><span class="hit">G</span><span class="hit">S</span><span class="e">7</span><span class="e">3</span><span class="e">S</span><span class="e">S</span><span class="hit">D</span><span class="hit">P</span><span class="hit">B</span><span class="hit">G</span><span class="hit">W</span><span class="e">C</span><span class="hit">B</span><span class="e">T</span><span class="hit">B</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span><span class="hit">T</span></div><div class="kind"><i>38</i>ブロック4 · <em>元のブロック1から</em></div><div class="pos">150</div><div class="chars pair"><span class="hit">V</span><span class="hit">M</span><span class="hit">V</span><span class="hit">4</span><span class="hit">O</span><span class="c">7</span><span class="c">Z</span><span class="hit">Z</span><span class="c">H</span><span class="c">E</span><span class="hit">3</span><span class="hit">U</span><span class="hit">X</span><span class="hit">6</span><span class="c">6</span><span class="c">4</span><span class="c">A</span><span class="c">W</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span><br><span class="hit">V</span><span class="hit">M</span><span class="hit">V</span><span class="hit">4</span><span class="hit">O</span><span class="e">D</span><span class="e">E</span><span class="hit">Z</span><span class="e">M</span><span class="e">7</span><span class="hit">3</span><span class="hit">U</span><span class="hit">X</span><span class="hit">6</span><span class="e">A</span><span class="e">O</span><span class="e">6</span><span class="e">U</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span><span class="hit">Q</span></div><div class="kind"><i>22</i>ブロック5 · <em>元のブロック2から</em></div><div class="pos">172</div><div class="chars pair"><span class="hit">D</span><span class="hit">S</span><span class="hit">Q</span><span class="hit">4</span><span class="hit">I</span><span class="c">N</span><span class="c">U</span><span class="hit">B</span><span class="c">B</span><span class="c">N</span><span class="hit">5</span><span class="hit">S</span><span class="hit">W</span><span class="hit">O</span><span class="c">O</span><span class="hit">P</span><span class="c">W</span><span class="hit">W</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span><br><span class="hit">D</span><span class="hit">S</span><span class="hit">Q</span><span class="hit">4</span><span class="hit">I</span><span class="e">2</span><span class="e">B</span><span class="hit">B</span><span class="e">N</span><span class="e">B</span><span class="hit">5</span><span class="hit">S</span><span class="hit">W</span><span class="hit">O</span><span class="e">6</span><span class="hit">P</span><span class="e">O</span><span class="hit">W</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span><span class="hit">P</span></div><div class="kind"><i>22</i>ブロック6 · <em>元のブロック3から</em></div><div class="pos">194</div><div class="chars pair"><span class="hit">Z</span><span class="hit">V</span><span class="hit">Z</span><span class="hit">W</span><span class="hit">7</span><span class="c">O</span><span class="c">T</span><span class="c">T</span><span class="hit">C</span><span class="c">R</span><span class="hit">D</span><span class="hit">X</span><span class="hit">Q</span><span class="hit">5</span><span class="c">5</span><span class="c">3</span><span class="c">X</span><span class="c">S</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span><br><span class="hit">Z</span><span class="hit">V</span><span class="hit">Z</span><span class="hit">W</span><span class="hit">7</span><span class="e">Q</span><span class="e">D</span><span class="e">O</span><span class="hit">C</span><span class="e">H</span><span class="hit">D</span><span class="hit">X</span><span class="hit">Q</span><span class="hit">5</span><span class="e">A</span><span class="e">S</span><span class="e">3</span><span class="e">L</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span><span class="hit">F</span></div><div class="kind"><i>22</i>ブロック7 · <em>元のブロック4から</em></div><div class="pos">216</div><div class="chars pair"><span class="hit">E</span><span class="hit">7</span><span class="c">C</span><span class="c">I</span><span class="c">W</span><span class="c">O</span><span class="c">6</span><span class="c">N</span><span class="c">3</span><br><span class="hit">E</span><span class="hit">7</span><span class="e">Y</span><span class="e">T</span><span class="e">J</span><span class="e">B</span><span class="e">N</span><span class="e">5</span><span class="e">D</span></div><div class="kind"><i>9</i>トレーラー</div></div></section></div>
+<p class="foot"><span class="bi-i"><span class="en">Built 261005 from SHORTWAVES. A long G4 is a Group 4 message of 60 characters or more, first airing only, without partial captures or disregarded reads. Positions count from 1. Generated by eam_block_pages_.py.</span><span class="jp" lang="ja">261005にSHORTWAVESから作成。長文G4は60文字以上のグループ4メッセージ（初回の放送のみ。部分的な受信と無効とした読み取りは除く）。位置は1から数える。生成：eam_block_pages_.py</span></span></p>
 </div>
-
-<h1>44-Character Block Structure</h1>
-<div class="subtitle">
-  Discrete blocks, not a periodic cipher &mdash; block-by-block alignment evidence from five prefix groups &mdash; NEET INTEL, 2026
-</div>
-
-<!-- ============================================================ -->
-<h2>1. The question</h2>
-
-<p>
-  The alignment analysis
-  established that best-fit pairwise offsets between same-prefix EAM messages cluster at multiples of 44.
-  But <em>why</em> multiples of 44? Two hypotheses:
-</p>
-
-<ol>
-  <li><strong>Periodic cipher:</strong> A repeating key or mask with period 44. Position <em>i</em>
-    and position <em>i</em>+44 are always governed by the same key element.
-    Shifting by 44 re-aligns the key, so <em>all</em> overlapping blocks should match at
-    similar rates.</li>
-  <li><strong>Discrete block structure:</strong> Messages are composed of independent 44-character
-    blocks. Two messages share some blocks in common; a shift of &plusmn;44 brings a shared block
-    into alignment. Only the shared block pair matches well &mdash; the adjacent block pairs
-    are unrelated and match at near-random rates.</li>
-</ol>
-
-<p>
-  The discriminating test: when two messages align at offset &plusmn;44, <strong>do all block pairs
-  match at similar rates, or does one block pair dominate?</strong>
-</p>
-
-<div class="separator"></div>
-
-<!-- ============================================================ -->
-<h2>2. Five examples, five prefix groups</h2>
-
-<p>
-  Each example shows a message pair whose best sliding alignment is at a multiple of 44. The
-  overlapping region is broken into 44-character blocks and compared block-by-block. Green
-  highlighting marks shared blocks (high match rate); dimmed blocks are unrelated content
-  that happens to be adjacent.
-</p>
-
-<!-- ===== EXAMPLE 1: JC ===== -->
-<div class="example-box" id="ex-jc">
-  <div class="example-header">
-    <strong>JC</strong> &mdash;
-    194 chars (2023-08-19) vs 142 chars (2023-07-23) &mdash;
-    <span class="offset-badge">offset &minus;44</span>
-    <span class="match-badge">46 matches</span>
-  </div>
-
-  <div class="msg-layout">
-    <div class="msg-label">Msg A (JC7GEW&hellip;) &mdash; 194 chars, 4.4 blocks:</div>
-    <div class="block-row" id="jc-blocks-a"></div>
-    <div class="msg-label" style="margin-top:4px;">Msg B (JCP3HW&hellip;) &mdash; 142 chars, 3.2 blocks:</div>
-    <div class="block-row" id="jc-blocks-b"></div>
-  </div>
-</div>
-
-<!-- ===== EXAMPLE 2: BV ===== -->
-<div class="example-box" id="ex-bv">
-  <div class="example-header">
-    <strong>BV</strong> &mdash;
-    216 chars (2024-11-20) vs 142 chars (2024-12-22) &mdash;
-    <span class="offset-badge">offset &minus;44</span>
-    <span class="match-badge">42 matches</span>
-  </div>
-
-  <div class="msg-layout">
-    <div class="msg-label">Msg A (BVREUD&hellip;) &mdash; 216 chars, 4.9 blocks:</div>
-    <div class="block-row" id="bv-blocks-a"></div>
-    <div class="msg-label" style="margin-top:4px;">Msg B (BVXGWN&hellip;) &mdash; 142 chars, 3.2 blocks:</div>
-    <div class="block-row" id="bv-blocks-b"></div>
-  </div>
-</div>
-
-<!-- ===== EXAMPLE 3: YP ===== -->
-<div class="example-box" id="ex-yp">
-  <div class="example-header">
-    <strong>YP</strong> &mdash;
-    246 chars (2025-06-14) vs 216 chars (2025-07-15) &mdash;
-    <span class="offset-badge">offset &minus;44</span>
-    <span class="match-badge">49 matches</span>
-    &mdash; <em style="color:var(--text-dim);">1 month apart</em>
-  </div>
-
-  <div class="msg-layout">
-    <div class="msg-label">Msg A (YPNIX3&hellip;) &mdash; 246 chars, 5.6 blocks:</div>
-    <div class="block-row" id="yp-blocks-a"></div>
-    <div class="msg-label" style="margin-top:4px;">Msg B (YPXVAZ&hellip;) &mdash; 216 chars, 4.9 blocks:</div>
-    <div class="block-row" id="yp-blocks-b"></div>
-  </div>
-</div>
-
-<!-- ===== EXAMPLE 4: N2 ===== -->
-<div class="example-box" id="ex-n2">
-  <div class="example-header">
-    <strong>N2</strong> &mdash;
-    268 chars (2025-02-16) vs 164 chars (2025-02-04) &mdash;
-    <span class="offset-badge">offset +44</span>
-    <span class="match-badge">47 matches</span>
-  </div>
-
-  <div class="msg-layout">
-    <div class="msg-label">Msg A (N2ETDU&hellip;) &mdash; 268 chars, 6.1 blocks:</div>
-    <div class="block-row" id="n2-blocks-a"></div>
-    <div class="msg-label" style="margin-top:4px;">Msg B (N2HEFP&hellip;) &mdash; 164 chars, 3.7 blocks:</div>
-    <div class="block-row" id="n2-blocks-b"></div>
-  </div>
-</div>
-
-<!-- ===== EXAMPLE 5: LO ===== -->
-<div class="example-box" id="ex-lo">
-  <div class="example-header">
-    <strong>LO</strong> &mdash;
-    172 chars (2024-01-31) vs 142 chars (2024-02-14) &mdash;
-    <span class="offset-badge">offset +44</span>
-    <span class="match-badge">33 matches</span>
-  </div>
-
-  <div class="msg-layout">
-    <div class="msg-label">Msg A (LOEIVY&hellip;) &mdash; 172 chars, 3.9 blocks:</div>
-    <div class="block-row" id="lo-blocks-a"></div>
-    <div class="msg-label" style="margin-top:4px;">Msg B (LOX7XZ&hellip;) &mdash; 142 chars, 3.2 blocks:</div>
-    <div class="block-row" id="lo-blocks-b"></div>
-  </div>
-</div>
-
-<div class="separator"></div>
-
-<!-- ============================================================ -->
-<h2>3. Summary across all five examples</h2>
-
-<p>
-  In every case, the match rate is concentrated in one or two block pairs; the rest fall to
-  near-random levels (~3% expected for a 32-character alphabet). A periodic cipher would
-  produce roughly uniform match rates across all block pairs.
-</p>
-
-<table class="compare-table" id="summary-table">
-  <thead>
-    <tr>
-      <th>Prefix</th>
-      <th>Offset</th>
-      <th>Block pair</th>
-      <th>Match rate</th>
-      <th>Shared?</th>
-    </tr>
-  </thead>
-  <tbody id="summary-body">
-  </tbody>
-</table>
-
-<div class="separator"></div>
-
-<!-- ============================================================ -->
-<h2>4. Conclusion</h2>
-
-<div class="verdict-box">
-  <div class="v-label">Verdict</div>
-  <div class="v-text">Discrete 44-character block structure, not a periodic cipher.</div>
-</div>
-
-<p>
-  The evidence shows that EAM messages are composed of sequences of 44-character blocks.
-  Messages with the same prefix share some blocks in common, but these shared blocks can appear
-  at different positions within each message. A shift of &plusmn;44 brings a shared block into
-  alignment, producing a spike in the match count &mdash; but only for that specific block pair.
-</p>
-
-<p>
-  This rules out a simple periodic cipher with period 44: such a cipher would re-align its key
-  at every &plusmn;44 shift, making <em>all</em> overlapping positions equally likely to match, not
-  just one block-sized region.
-</p>
-
-<p>
-  The picture that emerges: messages are built from a vocabulary of 44-character blocks, with
-  block insertion or deletion shifting shared blocks to different positions across messages.
-</p>
-
-<div class="separator"></div>
-
-<div style="font-size:0.72rem; color:var(--text-dim); margin-top:2rem; font-family:-apple-system,sans-serif;">
-  Analysis: NEET INTEL, 2026. Data: publicly intercepted HFGCS EAM broadcasts, 2022&ndash;2026.
-  Block-by-block decomposition of pairwise alignment at multiples of 44.
-  See also: <a href="block_vocabulary.html" style="color:var(--offset-color);">block vocabulary</a>.
-</div>
-
 <script>
-// ── Example data ──────────────────────────────────────────────────────────────
-const examples = [
-  {
-    id: 'jc', prefix: 'JC', offset: -44,
-    msgA: 'JC7GEWUH755N4GPJ6CZEP4JPQWZV5NOW5JHI663IWAAAAPLR7BL2NBLX7W33YVVHHHHZE7SPTMVEUTZGXGZHYGGGGOBPNST63T4NEXBXSX4XXXXNJDLUQYOQUWBZUZ7AARRRR7QQRU4KHW4B7GMFJMB6DFVSHBC6YRJTXJCYQRFPTIXLGIYBPA7S4OYOBW2VVA',
-    msgB: 'JCP3HWKYEHEAV7A64IUN3JU3IA6TSKAKKG4BBE42OOOOO6MBYPS4PSO3HG6BSGRQQQQIJZZV5WQY5JHI65WI5AAAAPLR7BLN2N3X7W3V7VZHHHHZE7SPTVIMUTZGXLDZEGGGGOBGDTUCU7',
-  },
-  {
-    id: 'bv', prefix: 'BV', offset: -44,
-    msgA: 'BVREUDXKG25JSQGPIPVZ3GV3OC7II6TOETNIAI2ACXXXX3YHNXXDOEEN2L33RR37777NFF3DDTWTWB4T7TMT4DDDD63BAGGDGRLPU2S232SCCCCF4ZL222XW2IHVTTTTOTTTT2D2DKKBJVK6XSJJJXJJJJJFZVPOQJQIIJLQGDIGMUBNKZJJO3GJACEGLVC2Z4HRF6PYZXGSB2ARPWNZRPNA',
-    msgB: 'BVXGWN2GYUM2B7KRMX3ORMVRPU7PPDDBPZNRRRB44ZZZZYNTJTTVSVRMXRRR4XE7777OCS7II6Z63TNIIICGHXXXX3YHNXXDBDYN2LLL72E7777NFF3DDTUU6B4TT77YMDDDD63JR6RBZY',
-  },
-  {
-    id: 'yp', prefix: 'YP', offset: -44,
-    msgA: 'YPNIX3WH4PRJDNATO6QCJHVJMCQFHISI73S656QSQRRRR7JQR5JFQSIFLJSJ3SXYYYYRHSRKCUVBZHBKCFFS4JJJJVAYKOJ4YFFYTRXKOLQNNNNK4E4ZPAGFQDU52XI2G6GFMMLI4ZL33OG3ETTTT3ATZTXX2XXS7JP22JE2222DNGZSCCYSYWCURPCRPGGGG2FJF2D5TW5SA43RBEBKKKKNVXUHPPOVNFA47T2762IUUW56WICIY6',
-    msgB: 'YPXVAZUQQUVORF7KTJGVSJISLFDB7BJSUJK22MYEKVVVV5YP6U2WXPBR7EESBQESSSSEQYQFGDDFI3GWWWSUGRRRR7JQR5QI5IXFCAAAKKPYYYYRHSRKBZBL4HTSSS4K2JJJJVAYKO7FOOHYLOOOQKTNNNNK4E4FIF5FQYA52XA2GO72TZNXB2ASLZ46W2CSNCFVL4IURE5B3PG3HFKX6GWI',
-  },
-  {
-    id: 'n2', prefix: 'N2', offset: 44,
-    msgA: 'N2ETDU3XZWJHSXR3FNXRNZWNICJVSKRVYONTZRENPVVVVJKBUSZPZPZETZIFWFZPPPPNBMZP6KJUKA6KRURVVOOOOJUA53QWOBY3EZYWGVWTTTT45GONTEEWBY3OZD33A5555PN36HZ4OXI6T2GNOVTUUUUOFSBPCIPTBKZAK7LKI6JV234SS3YHVH5FVCCCCLZPJ47PNONDHR6RFTH6666TF3ED5F6UY3GC7CIFUVVVV2DKGULKZTKZKXJXGKXEEEEYXCPGYLQX',
-    msgB: 'N2HEFPRKBKN7YB6EK4X3SC5SGLZPKJKUSA6RWUQKROOOOJUA53WBBWO3EYGVLCVTTTT45GONENYITY3O33DE35555PN36HXHH4V6T2TGTGGUUUUOFNJVSVK3I3Y2YHFH5CCCCLZPJ4D4ZPPDH7HRFHT6666TFHVACPSO',
-  },
-  {
-    id: 'lo', prefix: 'LO', offset: 44,
-    msgA: 'LOEIVYAGPOPDEXLRVXPYH4WHQO6UTNDDQIUQWCDQTSSSS5WNMLBVWF2YXV2JPJCVVVV67RR47XZNOLB7K7CG4PPPPWJHB4O5DPITF2O2VCVVVVVDNCUVVCFDMO7KPGBP6FNECYD7UQSE2ZFD4ZRJU6JWQ7ILDSW7U3OMRBUV7OUJ',
-    msgB: 'LOX7XZP6QJA2LC3BIKTGGVLGDNR47XOOHLB7KG47CPPPPWJHB4O5PC7TF2OZ5Z6VVVVDN4YZSOPFM5T6S6H2KTTTTSJ3VT26QPAZNQLQY2Y6666CEJO77NGEOETVML2M42FDDARPDX6XNE',
-  },
-];
-
-// ── Render functions ──────────────────────────────────────────────────────────
-
-function chunkMessage(msg, size) {
-  const blocks = [];
-  for (let i = 0; i < msg.length; i += size) {
-    blocks.push(msg.slice(i, i + size));
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
+(function () {
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
   }
-  return blocks;
-}
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
 
-function renderBlockChips(containerId, msg) {
-  const container = document.getElementById(containerId);
-  const blocks = chunkMessage(msg, 44);
-  blocks.forEach((blk, i) => {
-    const chip = document.createElement('span');
-    chip.className = 'block-chip';
-    const num = document.createElement('span');
-    num.className = 'block-num';
-    num.textContent = i + ':';
-    chip.appendChild(num);
-    chip.appendChild(document.createTextNode(blk));
-    container.appendChild(chip);
-  });
-}
-
-function computeBlockComparisons(ex) {
-  const a = ex.msgA, b = ex.msgB, off = ex.offset;
-  let aStart, bStart;
-  if (off >= 0) { aStart = off; bStart = 0; }
-  else { aStart = 0; bStart = -off; }
-  const overlapLen = Math.min(a.length - aStart, b.length - bStart);
-
-  const comparisons = [];
-  for (let blkOff = 0; blkOff < overlapLen; blkOff += 44) {
-    const blkEnd = Math.min(blkOff + 44, overlapLen);
-    const chunkA = a.slice(aStart + blkOff, aStart + blkEnd);
-    const chunkB = b.slice(bStart + blkOff, bStart + blkEnd);
-    let matches = 0;
-    for (let k = 0; k < chunkA.length; k++) {
-      if (chunkA[k] === chunkB[k]) matches++;
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
     }
-    const pct = matches / chunkA.length;
-    comparisons.push({
-      aBlock: Math.floor((aStart + blkOff) / 44),
-      bBlock: Math.floor((bStart + blkOff) / 44),
-      chunkA, chunkB, matches,
-      total: chunkA.length, pct,
-      shared: pct > 0.35,
-    });
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
   }
-  return comparisons;
-}
-
-function renderBlockComparison(parentEl, comp) {
-  const div = document.createElement('div');
-  div.className = 'block-compare ' + (comp.shared ? 'shared' : 'unshared');
-
-  const header = document.createElement('div');
-  header.className = 'block-compare-header';
-  const pctStr = Math.round(comp.pct * 100) + '%';
-  header.innerHTML =
-    'A-block ' + comp.aBlock + ' vs B-block ' + comp.bBlock + ': ' +
-    '<span class="pct ' + (comp.shared ? 'high' : 'low') + '">' +
-    comp.matches + '/' + comp.total + ' (' + pctStr + ')</span>' +
-    (comp.shared ? '<span class="shared-tag">SHARED BLOCK</span>' : '');
-  div.appendChild(header);
-
-  // Row A
-  const lineA = document.createElement('div');
-  lineA.className = 'align-line';
-  lineA.innerHTML = '<span class="lbl">A</span>';
-  for (let k = 0; k < comp.chunkA.length; k++) {
-    const hit = comp.chunkA[k] === comp.chunkB[k];
-    lineA.innerHTML += '<span class="ch' + (hit ? ' hit' : '') + '">' + comp.chunkA[k] + '</span>';
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
   }
-  div.appendChild(lineA);
 
-  // Match row
-  const lineM = document.createElement('div');
-  lineM.className = 'align-line';
-  lineM.innerHTML = '<span class="lbl"></span>';
-  for (let k = 0; k < comp.chunkA.length; k++) {
-    const hit = comp.chunkA[k] === comp.chunkB[k];
-    lineM.innerHTML += '<span class="ch bar' + (hit ? ' hit' : '') + '">' + (hit ? '|' : '\u00b7') + '</span>';
-  }
-  div.appendChild(lineM);
-
-  // Row B
-  const lineB = document.createElement('div');
-  lineB.className = 'align-line';
-  lineB.innerHTML = '<span class="lbl">B</span>';
-  for (let k = 0; k < comp.chunkB.length; k++) {
-    const hit = comp.chunkA[k] === comp.chunkB[k];
-    lineB.innerHTML += '<span class="ch' + (hit ? ' hit' : '') + '">' + comp.chunkB[k] + '</span>';
-  }
-  div.appendChild(lineB);
-
-  parentEl.appendChild(div);
-}
-
-function renderExample(ex) {
-  const box = document.getElementById('ex-' + ex.id);
-  renderBlockChips(ex.id + '-blocks-a', ex.msgA);
-  renderBlockChips(ex.id + '-blocks-b', ex.msgB);
-
-  const comps = computeBlockComparisons(ex);
-
-  // Insert comparison cards into the example box
-  const compSection = document.createElement('div');
-  compSection.style.marginTop = '0.8rem';
-
-  const compLabel = document.createElement('div');
-  compLabel.style.cssText = 'font-size:0.72rem; color:var(--text-dim); margin-bottom:0.4rem; font-family:-apple-system,sans-serif;';
-  compLabel.textContent = 'Block-by-block comparison at offset ' + ex.offset + ':';
-  compSection.appendChild(compLabel);
-
-  comps.forEach(c => renderBlockComparison(compSection, c));
-  box.appendChild(compSection);
-
-  return comps; // for summary table
-}
-
-// ── Summary table ─────────────────────────────────────────────────────────────
-const tbody = document.getElementById('summary-body');
-const allComps = [];
-
-examples.forEach(ex => {
-  const comps = renderExample(ex);
-  comps.forEach(c => {
-    allComps.push({ prefix: ex.prefix, offset: ex.offset, ...c });
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
   });
-});
-
-allComps.forEach(c => {
-  const tr = document.createElement('tr');
-  const pctStr = Math.round(c.pct * 100) + '%';
-  tr.innerHTML =
-    '<td class="lbl">' + c.prefix + '</td>' +
-    '<td>' + (c.offset > 0 ? '+' : '') + c.offset + '</td>' +
-    '<td>A' + c.aBlock + ' vs B' + c.bBlock + '</td>' +
-    '<td class="' + (c.shared ? 'high' : 'low') + '">' + pctStr + '</td>' +
-    '<td>' + (c.shared ? '&#x2714;' : '&mdash;') + '</td>';
-  tbody.appendChild(tr);
-});
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
+  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j') { e.preventDefault(); lb.click(); }
+    else if (k === 'n') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
 </script>
-
-<div style="text-align:center;margin:50px 0 20px 0;">
-  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="color:#555;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:0.8em;text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">&uarr; RETURN</a>
-</div>
-
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
+  function inHorizontalScroller(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 1) return true;
+    }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
+    e.preventDefault();
+    flip();
+  });
+  var MIN_PX = 45, MAX_MS = 800, origin = null;
+  document.addEventListener('touchstart', function (e) {
+    var t = e.target;
+    if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
+    var p = e.touches[0];
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
+  document.addEventListener('touchend', function (e) {
+    var o = origin; origin = null;
+    if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
+    var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
+    if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    flip();
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
+})();
+</script>
 </body>
 </html>
