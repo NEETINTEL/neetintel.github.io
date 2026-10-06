@@ -375,15 +375,16 @@ html:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;
     document.dispatchEvent(new Event('themechange'));
   });
   up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
-  // j flips the language and n the theme, as the two buttons do. Left alone: keys typed into a field, held keys, keys
-  // with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search, say).
+  // j, n or e flips the language and a or d the light / dark theme, as the two buttons do. Left alone: keys typed into
+  // a field, held keys, keys with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search,
+  // or the A of the index's Konami code).
   document.addEventListener('keydown', function (e) {
     if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
     var t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
     var k = (e.key || '').toLowerCase();
-    if (k === 'j') { e.preventDefault(); lb.click(); }
-    else if (k === 'n') { e.preventDefault(); tb.click(); }
+    if (k === 'j' || k === 'n' || k === 'e') { e.preventDefault(); lb.click(); }
+    else if (k === 'a' || k === 'd') { e.preventDefault(); tb.click(); }
   });
   function sc() { up.classList.toggle('on', window.scrollY > 400); }
   window.addEventListener('scroll', sc, {passive: true}); sc();
