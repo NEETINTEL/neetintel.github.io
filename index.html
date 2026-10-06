@@ -149,6 +149,21 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
 
     /* DTCP: a link to each gallery */
     .golink { margin: 0 0 6px; text-align: center; }
+    /* DTCP: the three galleries in one list; ↑ / ↓ bring one into focus, Enter opens it */
+    .yt-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 24px;
+               border: 1px solid transparent; border-radius: 6px; padding: 11px 16px; }
+    .yt-item + .yt-item { margin-top: 4px; }
+    .yt-item.sel { background: var(--panel); border-color: var(--line2); }
+    .yt-item h2 { text-align: left; font-size: 16px; margin: 0 0 3px; }
+    .yt-item .youtube-intro { text-align: left; font-size: 13px; line-height: 1.6; margin: 0; }
+    .yt-go { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px 8px 12px; border: 1px solid var(--line2);
+             border-radius: 999px; color: var(--ink); }
+    .yt-go svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+    .yt-go .yt-ico { width: 40px; height: 40px; stroke-width: 1.1; }
+    .yt-go .yt-ico .solid { fill: currentColor; stroke: none; }
+    .yt-go .yt-arrow { width: 18px; height: 18px; stroke-width: 1.4; color: var(--dim); }
+    .yt-go:hover, .yt-item.sel .yt-go { color: var(--mk); border-color: var(--mk); }
+    .yt-go:hover .yt-arrow, .yt-item.sel .yt-go .yt-arrow { color: var(--mk); }
     .golink a { display: inline-flex; align-items: center; gap: 10px; font-family: var(--cond); font-size: 15px; font-weight: 600;
                 border: 1px solid var(--line2); border-radius: 3px; padding: 8px 14px; color: var(--ink); }
     .golink a:hover { background: var(--panel); color: var(--ink); }
@@ -351,12 +366,12 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
         <a class="st-tile" href="https://neetintel.substack.com/" target="_blank"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg><span class="st-name">Substack</span><span class="bi st-sub"><span class="en">NEET INTEL Substack</span><span class="jp" lang="ja">NEET INTELのSubstack</span></span></a>
         <a class="st-tile" href="?heatmaps" onclick="showTab('heatmaps'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.25" y="5" width="4" height="4" rx=".8" class="dim"/><rect x="7.75" y="5" width="4" height="4" rx=".8" class="solid"/><rect x="13.25" y="5" width="4" height="4" rx=".8" class="dim"/><rect x="18.75" y="5" width="4" height="4" rx=".8" class="dim"/><rect x="2.25" y="10.5" width="4" height="4" rx=".8" class="dim"/><rect x="7.75" y="10.5" width="4" height="4" rx=".8" class="solid"/><rect x="13.25" y="10.5" width="4" height="4" rx=".8" class="dim"/><rect x="18.75" y="10.5" width="4" height="4" rx=".8" class="solid"/><rect x="2.25" y="16" width="4" height="4" rx=".8" class="dim"/><rect x="7.75" y="16" width="4" height="4" rx=".8" class="solid"/><rect x="13.25" y="16" width="4" height="4" rx=".8" class="dim"/><rect x="18.75" y="16" width="4" height="4" rx=".8" class="dim"/></svg><span class="st-name"><span class="bi-i"><span class="en">Structures</span><span class="jp" lang="ja">構造</span></span></span><span class="bi st-sub"><span class="en">Heatmaps of EAMs by length</span><span class="jp" lang="ja">文字数別のEAMヒートマップ</span></span></a>
         <a class="st-tile" href="?skymasters" onclick="showTab('skymasters'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8c.7 0 1.2.8 1.2 2v4.5l7.3 4.3v1.8l-7.3-2.2v4.9l2.4 1.8v1.4L12 20.4l-3.6.9v-1.4l2.4-1.8v-4.9l-7.3 2.2v-1.8l7.3-4.3V4.8c0-1.2.5-2 1.2-2z"/></svg><span class="st-name"><span class="bi-i"><span class="en">SKYMASTER</span><span class="jp" lang="ja">スカイマスター</span></span></span><span class="bi st-sub"><span class="en">Events since 2023, and forecasts</span><span class="jp" lang="ja">2023年以降のイベントと予測</span></span></a>
-        <a class="st-tile" href="?youtube" onclick="showTab('youtube'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.6"/><path d="M12.00 5.60L12.00 3.00M13.97 4.66L14.33 3.31M15.80 5.42L16.50 4.21M17.37 6.63L18.36 5.64M18.58 8.20L19.79 7.50M19.34 10.03L20.69 9.67M18.40 12.00L21.00 12.00M19.34 13.97L20.69 14.33M18.58 15.80L19.79 16.50M17.37 17.37L18.36 18.36M15.80 18.58L16.50 19.79M13.97 19.34L14.33 20.69M12.00 18.40L12.00 21.00M10.03 19.34L9.67 20.69M8.20 18.58L7.50 19.79M6.63 17.37L5.64 18.36M5.42 15.80L4.21 16.50M4.66 13.97L3.31 14.33M5.60 12.00L3.00 12.00M4.66 10.03L3.31 9.67M5.42 8.20L4.21 7.50M6.63 6.63L5.64 5.64M8.20 5.42L7.50 4.21M10.03 4.66L9.67 3.31"/><path d="M12 12 15.4 8.6"/><circle class="solid" cx="12" cy="12" r="1"/></svg><span class="st-name">DTCP</span><span class="bi st-sub"><span class="en">Timecards, recordings and livestreams</span><span class="jp" lang="ja">タイムカード、録音、ライブ配信</span></span></a>
+        <a class="st-tile" href="?youtube" onclick="showTab('youtube'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="9" width="19" height="12" rx="2"/><path d="M6.5 9 17.5 3"/><circle cx="16" cy="15" r="3"/><path d="M5.5 12.8h5M5.5 15.3h5M5.5 17.8h5"/></svg><span class="st-name">DTCP</span><span class="bi st-sub"><span class="en">Timecards, recordings and livestreams</span><span class="jp" lang="ja">タイムカード、録音、ライブ配信</span></span></a>
         <a class="st-tile" href="?misc" onclick="showTab('misc'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6V4.5A1.5 1.5 0 0 1 9.5 3h9A1.5 1.5 0 0 1 20 4.5v12a1.5 1.5 0 0 1-1.5 1.5H17"/><rect x="4" y="6" width="13" height="15" rx="1.5"/><path d="M7 10.5h7M7 14h7M7 17.5h4"/></svg><span class="st-name"><span class="bi-i"><span class="en">Extra</span><span class="jp" lang="ja">その他</span></span></span><span class="bi st-sub"><span class="en">Analyses and references</span><span class="jp" lang="ja">分析と参考資料</span></span></a>
         <a class="st-tile" href="?wiki" onclick="showTab('wiki'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.8C10 5.3 7 4.8 3.5 5.2v13.4c3.5-.4 6.5.1 8.5 1.6 2-1.5 5-2 8.5-1.6V5.2C17 4.8 14 5.3 12 6.8zM12 6.8v13.4"/></svg><span class="st-name"><span class="bi-i"><span class="en">Wiki</span><span class="jp" lang="ja">ウィキ</span></span></span><span class="bi st-sub"><span class="en">The pilot HFGCS Wiki</span><span class="jp" lang="ja">試験版HFGCSウィキ</span></span></a>
         <a class="st-tile" href="?support" onclick="showTab('support'); return false;"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.8 6.6 12 12.8l8.2-6.2"/></svg><span class="st-name"><span class="bi-i"><span class="en">Contact</span><span class="jp" lang="ja">連絡先</span></span></span><span class="bi st-sub"><span class="en">Reach and support NEET INTEL</span><span class="jp" lang="ja">連絡先と支援の方法</span></span></a>
       </nav>
-      <div class="st-more"><a class="st-mini" href="https://www.youtube.com/@neetintel/live" target="_blank"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8"/></svg><span class="st-name"><span class="bi-i"><span class="en">Livestream</span><span class="jp" lang="ja">ライブ配信</span></span></span></a><a class="st-mini" href="notam_mapper.html" target="_blank"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5 8.5 4l7 2.5L21 4v13.5L15.5 20l-7-2.5L3 20z"/><path d="M8.5 4v13.5M15.5 6.5V20"/></svg><span class="st-name"><span class="bi-i"><span class="en">NOTAM Mapper</span><span class="jp" lang="ja">NOTAMマッパー</span></span></span></a></div>
+      <div class="st-more"><a class="st-mini" href="https://www.youtube.com/@neetintel/live" target="_blank"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.2c.1-1.4 1.1-2.4 2.5-2.5C7.6 5.5 9.8 5.4 12 5.4s4.4.1 6.5.3c1.4.1 2.4 1.1 2.5 2.5.2 2.5.2 5.1 0 7.6-.1 1.4-1.1 2.4-2.5 2.5-2.1.2-4.3.3-6.5.3s-4.4-.1-6.5-.3c-1.4-.1-2.4-1.1-2.5-2.5-.2-2.5-.2-5.1 0-7.6z"/><path class="solid" d="m10.2 9.4 4.6 2.6-4.6 2.6z"/></svg><span class="st-name"><span class="bi-i"><span class="en">Livestream</span><span class="jp" lang="ja">ライブ配信</span></span></span></a><a class="st-mini" href="notam_mapper.html" target="_blank"><svg class="st-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5 8.5 4l7 2.5L21 4v13.5L15.5 20l-7-2.5L3 20z"/><path d="M8.5 4v13.5M15.5 6.5V20"/></svg><span class="st-name"><span class="bi-i"><span class="en">NOTAM Mapper</span><span class="jp" lang="ja">NOTAMマッパー</span></span></span></a></div>
     </div>
     <div id="heatmaps" class="tab-content">
       <div class="heatmap-intro bi">
@@ -1831,28 +1846,19 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
     </div>
 
     <div id="youtube" class="tab-content">
-      <div class="subtabs">
-        <button class="subtab" onclick="showSubtab('yt-dcrp')"><span class="lbl">DCRP</span></button>
-        <button class="subtab active" onclick="showSubtab('yt-dtcp')"><span class="lbl">DTCP</span></button>
-        <button class="subtab" onclick="showSubtab('yt-live')"><span class="bi-i"><span class="en">Livestream</span><span class="jp" lang="ja">ライブ配信</span></span></button>
-      </div>
-
-      <div id="yt-dcrp" class="subtab-content">
+      <div class="yt-list">
+      <section class="yt-item" id="yt-dcrp"><div class="yt-text">
         <h2>HFGCS EAM DAILY COMPILATION RECORDINGS PROJECT</h2>
-        <div class="bi youtube-intro"><p class="en">The HFGCS EAM DAILY COMPILATION RECORDINGS PROJECT (DCRP) is the first attempt by NEET INTEL to collect recordings of EAMs broadcast on the HFGCS and share them with a wider audience. Unlike the later NEET INTEL DAILY TIMECARD PROJECT (DTCP), this series does not necessarily reflect comprehensive 24/7 HFGCS monitoring, and many of the videos represent a “whatever I happened to hear that day” effort, though the series does become more ambitious by its end (setting up for the more ambitious DTCP). Originally 100+1 videos (owing to 23022 being split into two parts), an additional 7 videos (after the series concluded) that are functionally similar have been classified as part of this project.</p><p class="jp" lang="ja">HFGCS EAM DAILY COMPILATION RECORDINGS PROJECT（DCRP）は、HFGCSで放送されたEAMの録音を集めて広く共有しようとした、NEET INTELの最初の試みです。のちのNEET INTEL DAILY TIMECARD PROJECT（DTCP）とは違い、このシリーズは必ずしも24時間365日の網羅的なHFGCS監視を反映しておらず、多くの動画は「その日たまたま聞こえたもの」をまとめたものです。ただし終盤になるにつれて本格的になり、より本格的なDTCPへの準備となりました。もともとは100+1本（23022が2部に分かれたため）で、シリーズ終了後に作った機能的に同様の7本も、このプロジェクトの一部としています。</p></div>
-      <p class="golink"><a href="dcrp_gallery.html" target="_blank"><span class="bi-i"><span class="en">DCRP Gallery</span><span class="jp" lang="ja">DCRPギャラリー</span></span></a></p>
-      </div>
-
-      <div id="yt-dtcp" class="subtab-content active">
+        <div class="bi youtube-intro"><p class="en">The HFGCS EAM DAILY COMPILATION RECORDINGS PROJECT (DCRP) is the first attempt by NEET INTEL to collect recordings of EAMs broadcast on the HFGCS and share them with a wider audience. Unlike the later NEET INTEL DAILY TIMECARD PROJECT (DTCP), this series does not necessarily reflect comprehensive 24/7 HFGCS monitoring, and many of the videos represent a “whatever I happened to hear that day” effort, though the series does become more ambitious by its end (setting up for the more ambitious DTCP).</p><p class="jp" lang="ja">HFGCS EAM DAILY COMPILATION RECORDINGS PROJECT（DCRP）は、HFGCSで放送されたEAMの録音を集めて広く共有しようとした、NEET INTELの最初の試みです。のちのNEET INTEL DAILY TIMECARD PROJECT（DTCP）とは違い、このシリーズは必ずしも24時間365日の網羅的なHFGCS監視を反映しておらず、多くの動画は「その日たまたま聞こえたもの」をまとめたものです。ただし終盤になるにつれて本格的になり、より本格的なDTCPへの準備となりました。</p></div>
+      </div><a class="yt-go" href="dcrp_gallery.html" target="_blank" title="DCRP Gallery" data-tip-ja="DCRPギャラリー" aria-label="DCRP Gallery"><svg class="yt-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M5.2 12h1.6l1.2-3.2 2 6.4 2-8.6 2 9.6 1.6-4.2h3.2"/></svg><svg class="yt-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></section>
+      <section class="yt-item" id="yt-dtcp"><div class="yt-text">
         <h2>NEET INTEL DAILY TIMECARD PROJECT</h2>
         <div class="bi youtube-intro"><p class="en">The NEET INTEL DAILY TIMECARD PROJECT (DTCP) is the successor to the HFGCS EAM DAILY COMPILATION RECORDINGS PROJECT. The project generates daily timecards of transcribed Emergency Action Messages (EAMs) and/or Force Direction Messages (FDMs) broadcast by the US military over the High Frequency Global Communications System (HFGCS), paired with jpop, kpop, and occasionally cpop. Part 1 is comprehensive, starting 230623 and ending 240201, representing a 7-month period of continuous and near-comprehensive HFGCS coverage. The remainder of the project covers mostly non-consecutive dates, with several shorter periods of continuous coverage included.</p><p class="jp" lang="ja">NEET INTEL DAILY TIMECARD PROJECT（DTCP）は、HFGCS EAM DAILY COMPILATION RECORDINGS PROJECTの後継です。このプロジェクトでは、米軍が高周波グローバル通信システム（HFGCS）で放送した緊急行動メッセージ（EAM）や部隊指示メッセージ（FDM）を書き起こした日ごとのタイムカードを作り、J-POP、K-POP、ときにはC-POPと組み合わせています。パート1は230623から240201までの網羅的な記録で、7か月にわたってHFGCSを継続的に、ほぼ漏れなく監視した期間です。残りは主に連続しない日付で、継続して監視した短い期間もいくつか含まれます。</p></div>
-      <p class="golink"><a href="dtcp_gallery.html" target="_blank"><span class="bi-i"><span class="en">DTCP Gallery</span><span class="jp" lang="ja">DTCPギャラリー</span></span></a></p>
-      </div>
-
-      <div id="yt-live" class="subtab-content">
-        <h2>HFGCS LIVESTREAMS</h2>
+      </div><a class="yt-go" href="dtcp_gallery.html" target="_blank" title="DTCP Gallery" data-tip-ja="DTCPギャラリー" aria-label="DTCP Gallery"><svg class="yt-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="5" width="21" height="14" rx="1.6"/><circle cx="6" cy="9.8" r="2.9"/><circle cx="6" cy="9.8" r="1.9"/><path d="M3.4 14.9h5.2M3.4 16.8h3.6"/><path d="M11 8.1h9.5" stroke-width="1.5"/><path d="M11 10.7h9.5M11 12.7h9.5M11 14.7h9.5M11 16.7h7" stroke-dasharray="1 .95"/></svg><svg class="yt-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></section>
+      <section class="yt-item" id="yt-live"><div class="yt-text">
+        <h2><span class="bi-i"><span class="en">HFGCS LIVESTREAM GALLERY</span><span class="jp" lang="ja">HFGCSライブ配信ギャラリー</span></span></h2>
         <div class="bi youtube-intro"><p class="en">This gallery lists the HFGCS livestreams from the NEET INTEL YouTube channel by UTC day. Each day is split into two streams: A for the first half and B for the second. Until August 2025 the split was at midnight and noon US Eastern time, and since September 2025 it has been at midnight and noon UTC. Other streams, such as other frequencies, other regions, events and commentary, are listed under the day they aired. Days with a DTCP timecard have been reviewed, and days without one have not.</p><p class="jp" lang="ja">このギャラリーでは、NEET INTELのYouTubeチャンネルのHFGCSライブ配信を、UTCの日付ごとに並べています。1日は2本の配信に分かれていて、Aが前半、Bが後半です。2025年8月までは米国東部時間の午前0時と正午で、2025年9月からはUTCの午前0時と正午で区切っています。ほかの周波数や地域、イベント、解説などの配信は、配信した日の欄に載せています。DTCPのタイムカードがある日は確認済みで、ない日はまだ確認していません。</p></div>
-      <p class="golink"><a href="livestream_gallery.html" target="_blank"><span class="bi-i"><span class="en">HFGCS Livestream Gallery</span><span class="jp" lang="ja">HFGCSライブ配信ギャラリー</span></span></a></p>
+      </div><a class="yt-go" href="livestream_gallery.html" target="_blank" title="HFGCS Livestream Gallery" data-tip-ja="HFGCSライブ配信ギャラリー" aria-label="HFGCS Livestream Gallery"><svg class="yt-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.2c.1-1.4 1.1-2.4 2.5-2.5C7.6 5.5 9.8 5.4 12 5.4s4.4.1 6.5.3c1.4.1 2.4 1.1 2.5 2.5.2 2.5.2 5.1 0 7.6-.1 1.4-1.1 2.4-2.5 2.5-2.1.2-4.3.3-6.5.3s-4.4-.1-6.5-.3c-1.4-.1-2.4-1.1-2.5-2.5-.2-2.5-.2-5.1 0-7.6z"/><path class="solid" d="m10.2 9.4 4.6 2.6-4.6 2.6z"/></svg><svg class="yt-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></section>
       </div>
     </div>
 
@@ -2124,7 +2130,7 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
     </div>
   </main>
 
-  <div class="kc" id="keys" hidden role="dialog" aria-modal="true" aria-labelledby="keys-h"><div class="kc-box"><button type="button" class="kc-x" aria-label="Close">&times;</button><h2 id="keys-h"><span class="bi-i"><span class="en">Keyboard shortcuts</span><span class="jp" lang="ja">キーボードショートカット</span></span></h2><dl><dt><kbd>J</kbd><kbd>N</kbd><kbd>E</kbd></dt><dd><span class="bi-i"><span class="en">English / 日本語</span><span class="jp" lang="ja">英語 / 日本語</span></span></dd><dt><kbd>A</kbd><kbd>D</kbd></dt><dd><span class="bi-i"><span class="en">Day / night</span><span class="jp" lang="ja">昼 / 夜</span></span></dd><dt><kbd>&larr;</kbd><kbd>&rarr;</kbd></dt><dd><span class="bi-i"><span class="en">Switch tabs</span><span class="jp" lang="ja">タブを切り替え</span></span></dd><dt><kbd>&uarr;</kbd><kbd>&darr;</kbd></dt><dd><span class="bi-i"><span class="en">Switch subtabs; on Structures, step through the lengths</span><span class="jp" lang="ja">サブタブを切り替え。構造タブでは長さを順に移動</span></span></dd><dt><kbd>0</kbd>&ndash;<kbd>9</kbd></dt><dd><span class="bi-i"><span class="en">On Structures, jump to a length</span><span class="jp" lang="ja">構造タブで長さへ移動</span></span></dd><dt><kbd>Enter</kbd></dt><dd><span class="bi-i"><span class="en">On Structures, open the length in focus</span><span class="jp" lang="ja">構造タブで選んだ長さを開く</span></span></dd><dt><kbd>Esc</kbd></dt><dd><span class="bi-i"><span class="en">Close this; on Structures, let go of the length</span><span class="jp" lang="ja">これを閉じる。構造タブでは選択を解除</span></span></dd></dl></div></div>
+  <div class="kc" id="keys" hidden role="dialog" aria-modal="true" aria-labelledby="keys-h"><div class="kc-box"><button type="button" class="kc-x" aria-label="Close">&times;</button><h2 id="keys-h"><span class="bi-i"><span class="en">Keyboard shortcuts</span><span class="jp" lang="ja">キーボードショートカット</span></span></h2><dl><dt><kbd>J</kbd><kbd>N</kbd><kbd>E</kbd></dt><dd><span class="bi-i"><span class="en">English / 日本語</span><span class="jp" lang="ja">英語 / 日本語</span></span></dd><dt><kbd>A</kbd><kbd>D</kbd></dt><dd><span class="bi-i"><span class="en">Day / night</span><span class="jp" lang="ja">昼 / 夜</span></span></dd><dt><kbd>&larr;</kbd><kbd>&rarr;</kbd></dt><dd><span class="bi-i"><span class="en">Switch tabs</span><span class="jp" lang="ja">タブを切り替え</span></span></dd><dt><kbd>&uarr;</kbd><kbd>&darr;</kbd></dt><dd><span class="bi-i"><span class="en">Switch subtabs; on Structures and DTCP, move the focus</span><span class="jp" lang="ja">サブタブを切り替え。構造タブとDTCPタブでは選択を移動</span></span></dd><dt><kbd>0</kbd>&ndash;<kbd>9</kbd></dt><dd><span class="bi-i"><span class="en">On Structures, jump to a length</span><span class="jp" lang="ja">構造タブで長さへ移動</span></span></dd><dt><kbd>Enter</kbd></dt><dd><span class="bi-i"><span class="en">Open what is in focus (Structures, DTCP)</span><span class="jp" lang="ja">選んだものを開く（構造、DTCP）</span></span></dd><dt><kbd>Esc</kbd></dt><dd><span class="bi-i"><span class="en">Close this; on Structures and DTCP, let go of the focus</span><span class="jp" lang="ja">これを閉じる。構造タブとDTCPタブでは選択を解除</span></span></dd></dl></div></div>
   <script>
     // Handle URL parameters for direct tab navigation
     (function() {
@@ -2211,9 +2217,11 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
                 subtab.classList.remove('active');
               });
 
-              // Show selected subtab content
+              // Show selected subtab content (on the DTCP tab, bring that gallery into focus instead)
               const subtabContent = document.getElementById(targetSubtab);
-              if (subtabContent) {
+              if (subtabContent && subtabContent.classList.contains('yt-item')) {
+                pickYt(0, false, ytItems().indexOf(subtabContent));
+              } else if (subtabContent) {
                 subtabContent.classList.add('active');
               }
 
@@ -2403,6 +2411,7 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
       // Show selected tab content
       document.getElementById(tabName).classList.add('active');
       if (tabName !== 'heatmaps' && picked >= 0) pickRow(0, true);
+      if (tabName !== 'youtube' && ytPick >= 0) pickYt(0, true);
 
       // Activate the corresponding tab button
       const tabButtons = document.querySelectorAll('.tab');
@@ -2476,6 +2485,18 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
       document.documentElement.classList.toggle('sakamichi', rows[picked].id === 'len-46');   // 46: the page turns purple
     }
 
+    // DTCP: ↑ / ↓ bring one of the three galleries into focus (the first press takes the top or bottom one, then it
+    // wraps); Enter opens it; Esc or leaving the tab lets go.
+    let ytPick = -1;
+    const ytItems = () => Array.from(document.querySelectorAll('#youtube .yt-item'));
+    function pickYt(delta, clear, to) {
+      const items = ytItems(); if (!items.length) return;
+      ytPick = clear ? -1 : to !== undefined ? to : ytPick < 0 ? (delta > 0 ? 0 : items.length - 1) : (ytPick + delta + items.length) % items.length;
+      items.forEach((el, i) => el.classList.toggle('sel', i === ytPick));
+      if (ytPick < 0) return;
+      try { items[ytPick].scrollIntoView({ block: 'nearest', behavior: 'instant' }); } catch (_) {}
+    }
+
     // Digits jump: each one extends the number (a pause of 1.5 s, an arrow, Enter or Esc starts a new one) and the slot
     // shows that length, else the shortest length beginning with those digits, else the nearest length.
     let typed = '', typedTimer = 0;
@@ -2506,6 +2527,11 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
         e.preventDefault();
       }
 
+      if (document.getElementById('youtube').classList.contains('active')) {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { pickYt(e.key === 'ArrowUp' ? -1 : 1); e.preventDefault(); return; }
+        if (e.key === 'Enter' && ytPick >= 0) { ytItems()[ytPick].querySelector('.yt-go').click(); e.preventDefault(); return; }
+        if (e.key === 'Escape' && ytPick >= 0) { pickYt(0, true); return; }
+      }
       if (document.getElementById('heatmaps').classList.contains('active')) {
         if (/^[0-9]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey) { typeJump(e.key); e.preventDefault(); return; }
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { typed = ''; pickRow(e.key === 'ArrowUp' ? -1 : 1); e.preventDefault(); return; }
