@@ -440,7 +440,7 @@ html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
 
 
     </style>
-</head>
+<style id="anc-css">h2 a.anc,h3 a.anc{color:inherit!important;text-decoration:none;border:0;position:relative}h2 a.anc::before,h3 a.anc::before{content:"#";position:absolute;right:100%;margin-right:8px;color:var(--mut,var(--muted,#8b93a7));font-weight:400;opacity:0;transition:opacity .15s}h2 a.anc:hover::before,h3 a.anc:hover::before,h2 a.anc:focus-visible::before,h3 a.anc:focus-visible::before{opacity:1}[id]{scroll-margin-top:12px}</style></head>
 <body>
 <!-- hfgcs controls -->
 <div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
@@ -458,7 +458,7 @@ html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
         <p><span class="bi"><span class="en">YOKOTA is a Pacific Theater station on the <strong>High Frequency Global Communications System</strong> (HFGCS), based at <strong>Yokota Air Base</strong> in Tokyo, Japan.</span><span class="jp">YOKOTAは、東京都の<strong>横田基地</strong>に所在する<strong>高周波グローバル通信システム</strong>（HFGCS）の太平洋戦域局です。</span></span></p>
 
         <!-- Station Identity -->
-        <h2 id="identity"><span class="bi"><span class="en">Station Identity</span><span class="jp">基地情報</span></span></h2>
+        <h2 id="identity"><a class="anc" href="#identity"><span class="bi"><span class="en">Station Identity</span><span class="jp">基地情報</span></span></a></h2>
 
         <div class="site-layout">
             <div class="site-info">
@@ -483,14 +483,14 @@ html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
         </div>
 
         <!-- Map -->
-        <h2 id="sites"><span class="bi"><span class="en">Site Locations</span><span class="jp">施設配置</span></span></h2>
+        <h2 id="sites"><a class="anc" href="#sites"><span class="bi"><span class="en">Site Locations</span><span class="jp">施設配置</span></span></a></h2>
 
         <p><span class="bi"><span class="en">Like most HFGCS stations, Yokota uses separate sites for transmission and reception, located 10&ndash;20 km (6&ndash;12 mi) from the base itself. The geographic separation prevents high-power transmitters (rated up to 25 kW) from desensitizing the sensitive HF receivers. For comparison, Offutt&rsquo;s transmission and reception sites are separated by 45 km.</span><span class="jp">他の多くのHFGCS基地と同様に、横田は送信と受信に別々の施設を使用しており、基地本体から10〜20 km離れた場所に位置しています。この地理的分離により、高出力送信機（最大25 kW）が高感度HF受信機に干渉することを防いでいます。参考として、オファット基地の送受信施設は45 km離れています。</span></span></p>
 
         <div id="map"></div>
 
         <!-- Tokorozawa -->
-        <h2 id="tokorozawa"><span class="bi"><span class="en">Tokorozawa Transmitter Site</span><span class="jp">所沢通信基地（送信施設）</span></span></h2>
+        <h2 id="tokorozawa"><a class="anc" href="#tokorozawa"><span class="bi"><span class="en">Tokorozawa Transmitter Site</span><span class="jp">所沢通信基地（送信施設）</span></span></a></h2>
 
         <div class="site-layout">
             <div class="site-info">
@@ -520,7 +520,7 @@ html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
         </div>
 
         <!-- Owada -->
-        <h2 id="owada"><span class="bi"><span class="en">Owada Communications Site</span><span class="jp">大和田通信所（受信施設）</span></span></h2>
+        <h2 id="owada"><a class="anc" href="#owada"><span class="bi"><span class="en">Owada Communications Site</span><span class="jp">大和田通信所（受信施設）</span></span></a></h2>
 
         <div class="site-layout">
             <div class="site-info">
@@ -550,7 +550,7 @@ html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
 
         <!-- Momote -->
         <div class="momote-section">
-        <h2 id="momote"><span class="bi"><span class="en">Momote</span><span class="jp">元百村</span></span></h2>
+        <h2 id="momote"><a class="anc" href="#momote"><span class="bi"><span class="en">Momote</span><span class="jp">元百村</span></span></a></h2>
 
         <div class="site-layout">
             <div class="site-info">
@@ -571,7 +571,7 @@ html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
         </div>
 
         <!-- Commentary -->
-        <h2 id="monitoring"><span class="bi"><span class="en">Monitoring Interest</span><span class="jp">モニタリングの関心</span></span></h2>
+        <h2 id="monitoring"><a class="anc" href="#monitoring"><span class="bi"><span class="en">Monitoring Interest</span><span class="jp">モニタリングの関心</span></span></a></h2>
 
         <div class="commentary">
             <p><span class="bi"><span class="en">SKYMASTER events on the HFGCS, which are part of large U.S. nuclear exercises run by STRATCOM, have included international elements: activity in Greenland, near the Faroe Islands in the GIUK gap, Norway, and broader European/NATO involvement. However, no exercises have been confirmed to involve Japanese activity.</span><span class="jp">HFGCSにおけるSKYMASTERイベントは、STRATCOMが実施する大規模な米国核演習の一環であり、国際的な要素を含んでいます。グリーンランド、GIUK海峡付近のフェロー諸島、ノルウェー、そしてより広範な欧州/NATO関与が確認されています。しかし、日本の活動が関与した演習は確認されていません。</span></span></p>

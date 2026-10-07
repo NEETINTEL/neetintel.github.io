@@ -731,7 +731,7 @@ html:root{--fab-bg:rgba(22,22,25,.92);--fab-line:#2b2b30;--fab-ink:#c8c8cc;--fab
 html:root[data-theme="light"]{--fab-bg:rgba(252,251,249,.94);--fab-line:#dbd8d1;--fab-ink:#444;--fab-dim:#777;--fab-hover:#eeebe5;--fab-focus:#2563a8}
 html .fab button,html .totop{font-family:'Noto Sans JP',sans-serif}
 </style>
-</head>
+<style id="anc-css">h2 a.anc,h3 a.anc{color:inherit!important;text-decoration:none;border:0;position:relative}h2 a.anc::before,h3 a.anc::before{content:"#";position:absolute;right:100%;margin-right:8px;color:var(--mut,var(--muted,#8b93a7));font-weight:400;opacity:0;transition:opacity .15s}h2 a.anc:hover::before,h3 a.anc:hover::before,h2 a.anc:focus-visible::before,h3 a.anc:focus-visible::before{opacity:1}[id]{scroll-margin-top:12px}</style></head>
 <body>
 <!-- hfgcs controls -->
 <div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
@@ -750,7 +750,7 @@ html .fab button,html .totop{font-family:'Noto Sans JP',sans-serif}
 
         <nav class="toc">
             <div class="toc-header">
-                <h2><span class="bi-i"><span class="en">Contents</span><span class="jp" lang="ja">目次</span></span></h2>
+                <h2 id="contents"><a class="anc" href="#contents"><span class="bi-i"><span class="en">Contents</span><span class="jp" lang="ja">目次</span></span></a></h2>
                 <span class="expand-toggle" id="expand-toggle"><span class="bi-i"><span class="en">Expand all</span><span class="jp" lang="ja">すべて開く</span></span></span>
             </div>
             <ul>
@@ -1578,7 +1578,7 @@ html .fab button,html .totop{font-family:'Noto Sans JP',sans-serif}
 
         <!-- References -->
         <div class="references">
-            <h2><span class="bi-i"><span class="en">References</span><span class="jp" lang="ja">参考文献</span></span></h2>
+            <h2 id="references"><a class="anc" href="#references"><span class="bi-i"><span class="en">References</span><span class="jp" lang="ja">参考文献</span></span></a></h2>
             <ol>
                 <li id="fn-1">Larry Van Horn&rsquo;s 2006 writeups are the foundation most HFGCS information online still rests on, this FAQ included &mdash; he did first-rate work. If some of it has dated in the two decades since, that is just what happens to documentation; the real gap is that nobody has given it a comprehensive update.</li>
                 <li id="fn-2"><a href="http://mt-milcom.blogspot.com" target="_blank">Larry Van Horn&rsquo;s milcom blog</a>. mt-milcom.blogspot.com; maintained until 2023.</li>
