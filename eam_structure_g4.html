@@ -96,11 +96,14 @@ td.f{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;whit
 td.n a.hm{font-family:"IBM Plex Mono",monospace}
 /* a section still being worked out: collapsed, with the same BETA badge as the DTCP gallery's compare view */
 details.beta-sec{margin:38px 0 0}
-details.beta-sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px}
+details.beta-sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);transition:background-color .15s ease,border-color .15s ease}
 details.beta-sec>summary::-webkit-details-marker{display:none}
 details.beta-sec .beta-h2{margin:0}
 details.beta-sec .hint{margin-left:auto;font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:11px;color:var(--mut);letter-spacing:.06em;text-transform:uppercase}
+details.beta-sec>summary:hover{background:var(--panel);border-color:var(--mut)}   /* a soft row that lights up: it opens */
 details.beta-sec>summary:hover .hint{color:var(--ink)}
+details.beta-sec>summary:focus-visible{outline:none;border-color:var(--dim)}
+@media (prefers-reduced-motion:reduce){details.beta-sec>summary{transition:none}}
 details.beta-sec:not([open]) .when-open,details.beta-sec[open] .when-closed{display:none}
 details.beta-sec[open]>summary{margin-bottom:8px}
 .beta{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP",sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#141728;background:#ffd60a;border-radius:3px;padding:1px 7px;line-height:1.5}
