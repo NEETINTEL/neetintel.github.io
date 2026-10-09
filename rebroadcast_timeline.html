@@ -137,25 +137,25 @@ html[data-theme="light"] #tip{box-shadow:0 4px 14px rgba(20,30,40,.18)}
   <a href="index.html"><span class="bi-i"><span class="en">&larr; Index</span><span class="jp" lang="ja">&larr; 戻る</span></span></a>
 </div>
 <header>
-<h1><span class="bi-i"><span class="en">HFGCS rebroadcast timeline</span><span class="jp" lang="ja">HFGCS 再放送タイムライン</span></span></h1>
+<h1><span class="bi-i"><span class="en">HFGCS rebroadcast timeline</span><span class="jp" lang="ja">HFGCS 再放送時系列</span></span></h1>
 <p class="sub">
 <span class="en">About 1 in 3 EAMs broadcast on the HFGCS are rebroadcast. Whether by the ground station through an E6B message relay, there appear to be rules governing how often or within what time limit these broadcasts may take place, and most messages are not rebroadcast after about 2 hours. Special attention should be paid to those rebroadcasts that take place outside the typical constraints. For the below log-scale chart, each horizontal track is one message that was rebroadcast, aligned to its own first airing (t&nbsp;=&nbsp;0); dots to the right mark each rebroadcast at its elapsed time.</span>
-<span class="jp" lang="ja">HFGCSで放送されるEAMのおよそ3つに1つは再放送されます。地上局によるものであれ、E-6Bを介したメッセージ中継によるものであれ、再放送の頻度や時間的な制限には一定の規則があるようで、ほとんどのメッセージはおよそ2時間を過ぎると再放送されません。通常の制約から外れて行われる再放送には特に注意が必要です。以下の対数軸のチャートでは、各横ラインは再放送された1つのメッセージを表し、最初の放送（t&nbsp;=&nbsp;0）を基準に揃えてあります。右側の点は各再放送の経過時間を示します。</span>
+<span class="jp" lang="ja">HFGCSで放送されるEAMのおよそ3つに1つは再放送されます。地上局によるものであれ、E-6Bを介したメッセージ中継によるものであれ、再放送の頻度や時間的な制限には一定の規則があるようで、ほとんどのメッセージはおよそ2時間を過ぎると再放送されません。通常の制約から外れて行われる再放送には特に注意が必要です。以下の対数軸の図では、各横線は再放送された1つのメッセージを表し、最初の放送（t&nbsp;=&nbsp;0）を基準に揃えてあります。右側の点は各再放送の経過時間を示します。</span>
 </p>
 <p class="genstamp"><span class="bi-i"><span class="en">Last updated 260924.</span><span class="jp" lang="ja">最終更新 260924。</span></span></p>
 </header>
 <div class="controls">
   <div class="seg">
     <button class="sort-btn active" data-mode="chrono" onclick="setSort('chrono')"><span class="en">Chronological</span><span class="jp" lang="ja">時系列順</span></button>
-    <button class="sort-btn" data-mode="group" onclick="setSort('group')"><span class="en">By group</span><span class="jp" lang="ja">グループ順</span></button>
+    <button class="sort-btn" data-mode="group" onclick="setSort('group')"><span class="en">By group</span><span class="jp" lang="ja">群の順</span></button>
   </div>
 </div>
 <div class="legend">
-<span class="item"><i class="dot" style="background:#06b050"></i><span class="bi-i"><span class="en">Group 1</span><span class="jp" lang="ja">グループ1</span></span></span>
-<span class="item"><i class="dot" style="background:#ed7d32"></i><span class="bi-i"><span class="en">Group 2</span><span class="jp" lang="ja">グループ2</span></span></span>
-<span class="item"><i class="dot g3" style="background:#ffcc00"></i><span class="bi-i"><span class="en">Group 3</span><span class="jp" lang="ja">グループ3</span></span></span>
-<span class="item"><i class="dot" style="background:#ff0467"></i><span class="bi-i"><span class="en">Group 4</span><span class="jp" lang="ja">グループ4</span></span></span>
-<span class="item"><i class="dot" style="background:#9063cd"></i><span class="bi-i"><span class="en">Group 5</span><span class="jp" lang="ja">グループ5</span></span></span>
+<span class="item"><i class="dot" style="background:#06b050"></i><span class="bi-i"><span class="en">Group 1</span><span class="jp" lang="ja">第1群</span></span></span>
+<span class="item"><i class="dot" style="background:#ed7d32"></i><span class="bi-i"><span class="en">Group 2</span><span class="jp" lang="ja">第2群</span></span></span>
+<span class="item"><i class="dot g3" style="background:#ffcc00"></i><span class="bi-i"><span class="en">Group 3</span><span class="jp" lang="ja">第3群</span></span></span>
+<span class="item"><i class="dot" style="background:#ff0467"></i><span class="bi-i"><span class="en">Group 4</span><span class="jp" lang="ja">第4群</span></span></span>
+<span class="item"><i class="dot" style="background:#9063cd"></i><span class="bi-i"><span class="en">Group 5</span><span class="jp" lang="ja">第5群</span></span></span>
 <span class="item" style="margin-left:12px"><i class="dot" style="background:#888"></i><span class="bi-i"><span class="en">broadcast</span><span class="jp" lang="ja">放送</span></span></span>
 <span class="item"><i class="ring"></i><span class="bi-i"><span class="en">E-6B-flagged airing</span><span class="jp" lang="ja">E-6B該当の放送</span></span></span>
 </div>
@@ -268,7 +268,7 @@ function clearSel(){ highlight(-1); tip.style.display='none'; }
 function showRow(i){
   highlight(i);
   const r=DATA[i], e6=r.e.filter(e=>e[1]).length, gc='g'+(COL[r.g]?r.g:0);   // gc: group colour class, set per theme in CSS
-  const grp=bi('Group '+r.g, 'グループ'+r.g);
+  const grp=bi('Group '+r.g, '第'+r.g+'群');
   const spanEn = r.s<1 ? (Math.round(r.s*60)+' min') : (r.s.toFixed(2)+' h');
   const spanJp = r.s<1 ? (Math.round(r.s*60)+' 分') : (r.s.toFixed(2)+' 時間');
   const runEn = r.n+' airings'+' · '+'span '+spanEn+(e6 ? ' · '+e6+' E-6B' : '');

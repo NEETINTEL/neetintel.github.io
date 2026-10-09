@@ -580,15 +580,15 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
         <div class="jp" lang="ja" style="font-family:'IBM Plex Sans JP','IBM Plex Sans',sans-serif;">
             8888メッセージ&mdash;<strong>クアッド8</strong>または<strong>オクトパスメッセージ</strong>とも呼ばれる&mdash;は、
             おそらく標準的なEAMではなく、HFGCSで放送されるべきでもないと考えられる。
-            その異常さは一目瞭然だ：EAMは0も8も使用しない32文字セット（アルファベット26文字と9種の数字で構成されるが、
-            0と8の両方を除外している&mdash;エンコード上で重要な特性である）を採用している。
+            その異常さは一目瞭然だ：EAMは0も8も使用しない32文字集合（アルファベット26文字と9種の数字で構成されるが、
+            0と8の両方を除外している&mdash;符号化上で重要な特性である）を採用している。
             そのため、<code>888800</code>で始まるメッセージは即座に異常と判断される。
-            構造は一貫しており、<code>888800</code>のプレフィックスの後に、多くの場合タイムスタンプと
+            構造は一貫しており、<code>888800</code>の接頭辞の後に、多くの場合タイムスタンプと
             <code>8888</code>で終わる標準的な文字列が続く。
             <br><br>
             2023年、NEET INTELは約20年分の記録において8888メッセージがわずか11件しか確認されていないことをまとめた
             <a href="https://www.youtube.com/watch?v=V3-1gwg0m-g" target="_blank" rel="noopener">動画</a>を公開した。
-            この動画では、モニタリングに大きな空白と欠陥があるという疑念、および改善策についても論じられている。
+            この動画では、監視に大きな空白と欠陥があるという疑念、および改善策についても論じられている。
             それ以降、記録件数は倍以上に増加した。VLFでは8888メッセージが比較的定期的に確認されるが、
             HFではずっと稀であり、HFでの放送のほとんどは送信後に取り消し宣言（disregarded）が出されている。
             それらが何を表すのかは依然として不明確だ。もし誤りであれば送信したオペレーターは気づくはずだと考えるのが自然だが、
@@ -600,7 +600,7 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
 
     <!-- Timeline -->
     <div class="tl-section">
-        <h3><span class="bi-i"><span class="en">Observation Timeline</span><span class="jp" lang="ja">観測タイムライン</span></span></h3>
+        <h3><span class="bi-i"><span class="en">Observation Timeline</span><span class="jp" lang="ja">観測時系列</span></span></h3>
         <div class="tl-subtitle"><span class="bi-i"><span class="en">HF &amp; VLF &middot; 1999&ndash;present</span><span class="jp" lang="ja">HF・VLF・1999年〜現在</span></span></div>
         <div class="tl-body">
             <div class="tl-label-col" id="tlLabelCol"></div>
@@ -1036,7 +1036,7 @@ if(l==='ja'){d.classList.add('show-jp');}})();</script>
             { date:'2023-03-12', medium:'HF',  dis:true,  cs:'STOCKYARD', msg:'8888000',                              notes:'' },
             { date:'2023-06-13', medium:'HF',  dis:true,  cs:'SYMBOLIC',  msg:'888800',                               notes:'the disregarded "oh I see" 8888', notes_jp:'取り消し宣言を受けた「oh I see」8888',
               anecdote:'Before disregarding this message, the operator reading it could be heard saying "oh I see" in response to something a second voice said in the background.',
-              anecdote_jp:'このメッセージの取り消しを宣言する前に、読み上げていたオペレーターがバックグラウンドの別の声に応じて「oh I see」と発するのが聞こえた。' },
+              anecdote_jp:'このメッセージの取り消しを宣言する前に、読み上げていたオペレーターが背後の別の声に応じて「oh I see」と発するのが聞こえた。' },
             { date:'2023-08-21', medium:'HF',  dis:true,  cs:'BAG FEED',  msg:'888800',                               notes:'' },
             { date:'2023-12-21', medium:'VLF', dis:false, cs:'\u2014',    msg:'888800211852AAEEGGKKNNXXZZ8888',       notes:'E4 ADFEB3' },
             { date:'2024-03-13', medium:'HF',  dis:true,  cs:'MUSCULAR',  msg:'8888',                                 notes:'' },
