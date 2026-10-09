@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html data-lang="en" data-title-en="HFGCS STATION PUERTO RICO" data-title-ja="HFGCS基地 プエルトリコ">
+<head>
+    <meta charset="UTF-8">
+    <!-- hfgcs controls -->
+<script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script>
+<!-- /hfgcs controls -->
+    <script>
+    // This page keys its heading styles to html[data-lang]; keep that in step with the shared language
+    // choice before first paint. With no saved choice the page opens in English.
+    (function () {
+        var d = document.documentElement;
+        d.setAttribute('data-lang', d.classList.contains('show-jp') ? 'ja' : 'en');
+    })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HFGCS STATION PUERTO RICO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #0d0d0d;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 40px 40px, 40px 40px;
+            background-attachment: fixed;
+            color: #ccc;
+            margin: 0;
+            padding: 30px 20px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .nav-bar a { color: #e53935; text-decoration: none; }
+        .nav-bar a:hover { color: #ff5252; text-decoration: underline; }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        html[data-lang="ja"] h1,
+        html[data-lang="ja"] h2,
+        html[data-lang="ja"] h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #e53935;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.15rem;
+            margin-top: 45px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        h3 {
+            color: #ddd;
+            font-size: 1rem;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+
+        p { margin: 12px 0; }
+
+        a { color: #e53935; text-decoration: none; }
+        a:hover { color: #ff5252; text-decoration: underline; }
+
+        html { scroll-behavior: smooth; }
+        html[data-lang="ja"] .lang-en { display: none; }
+        html[data-lang="en"] .lang-ja { display: none; }
+
+
+        strong { color: #e0e0e0; }
+        em { color: #ddd; }
+
+        ol, ul {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        li { margin-bottom: 8px; }
+
+        code {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: #1a1a1a;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 0.92em;
+            color: #e0e0e0;
+        }
+
+        pre {
+            background-color: rgba(17, 17, 17, 0.5);
+            border-left: 3px solid rgba(51, 51, 51, 0.5);
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            color: #aaa;
+            border-radius: 0 4px 4px 0;
+        }
+
+        pre .key { color: #e53935; }
+        pre .str { color: #ffb74d; }
+        pre .comment { color: #666; }
+
+        .note {
+            background-color: rgba(255, 193, 7, 0.08);
+            border-left: 3px solid #ffc107;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .note strong { color: #ffc107; }
+
+        .info-box {
+            background-color: rgba(74, 158, 255, 0.08);
+            border-left: 3px solid #4a9eff;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .station-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0px 0;
+            font-size: 0.92em;
+        }
+
+        .station-table td {
+            padding: 1px 12px;
+            border-bottom: none;
+            vertical-align: top;
+        }
+
+        .station-table td:first-child {
+            color: #888;
+            white-space: nowrap;
+            width: 140px;
+            font-weight: 500;
+        }
+
+        #map, .site-map {
+            height: 400px;
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #2a2a2a;
+            margin: 14px 0;
+        }
+
+        #map .leaflet-tile-pane,
+        .site-map .leaflet-tile-pane {
+            filter: brightness(1.6) contrast(0.95);
+        }
+
+        .map-label {
+            background: rgba(13,13,13,0.85) !important;
+            border: 1px solid #333 !important;
+            color: #ddd !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            font-size: 11px !important;
+            padding: 2px 6px !important;
+            box-shadow: none !important;
+        }
+        .map-label-secondary {
+            opacity: 0.6 !important;
+        }
+        .map-label::before {
+            display: none !important;
+        }
+        .world-label {
+            font-size: 9px !important;
+            padding: 1px 4px !important;
+        }
+        .station-label {
+            color: #e53935 !important;
+            font-weight: bold !important;
+            font-size: 10px !important;
+        }
+
+        /* Site Locations: glow on hover */
+        #map .map-label {
+            transition: box-shadow 0.3s ease;
+        }
+        #map:hover .map-label {
+            box-shadow: 0 0 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.5) !important;
+        }
+        #map:hover .map-label-secondary {
+            box-shadow: 0 0 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.5) !important;
+            opacity: 0.85 !important;
+        }
+        #map .custom-marker div {
+            transition: box-shadow 0.3s ease;
+        }
+        #map:hover .custom-marker:not(.secondary-marker) div {
+            box-shadow: 0 0 14px rgba(229,57,53,0.8), 0 0 35px rgba(229,57,53,0.4) !important;
+        }
+        #map:hover .secondary-marker div {
+            box-shadow: 0 0 14px rgba(92,154,219,0.8), 0 0 35px rgba(92,154,219,0.4) !important;
+        }
+        #map .leaflet-overlay-pane path {
+            transition: filter 0.3s ease;
+        }
+        #map:hover .leaflet-overlay-pane path {
+            filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
+        }
+
+        /* Individual site maps: glow on hover (exclude world map) */
+        .custom-marker { cursor: pointer; }
+        .site-map:not(#map-world) .custom-marker div {
+            transition: box-shadow 0.3s ease;
+        }
+        .site-map:not(#map-world):hover .custom-marker:not(.secondary-marker) div {
+            box-shadow: 0 0 14px rgba(229,57,53,0.8), 0 0 35px rgba(229,57,53,0.4) !important;
+        }
+        .site-map:not(#map-world):hover .secondary-marker div {
+            box-shadow: 0 0 14px rgba(92,154,219,0.8), 0 0 35px rgba(92,154,219,0.4) !important;
+        }
+        .site-map:not(#map-world) .leaflet-popup-pane {
+            transition: filter 0.3s ease;
+        }
+        .site-map:not(#map-world):hover .leaflet-popup-pane {
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+        }
+
+        .dist-label {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .dist-label span {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+            white-space: nowrap;
+            text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
+        }
+
+        .site-map {
+            height: 280px;
+        }
+
+        .site-layout {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            margin: 14px 0;
+        }
+        .site-layout .site-info { flex: 1; min-width: 0; }
+        .site-layout .site-map {
+            flex: 0 0 400px;
+            height: 320px;
+            margin: 0;
+        }
+        @media (max-width: 800px) {
+            .site-layout { flex-direction: column; }
+            .site-layout .site-map { flex: none !important; width: 100% !important; }
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #1a1a1a;
+            color: #ccc;
+            border-radius: 6px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 13px;
+        }
+
+        .leaflet-popup-tip {
+            background: #1a1a1a;
+        }
+
+        .leaflet-popup-content {
+            margin: 10px 14px;
+            line-height: 1.6;
+        }
+
+        .leaflet-popup-content strong {
+            color: #fff;
+        }
+
+        .commentary {
+            background-color: rgba(74, 158, 255, 0.04);
+            border-left: 3px solid #333;
+            padding: 12px 16px;
+            margin: 18px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.95em;
+            color: #aaa;
+        }
+
+        /* light mode (dark mode is the rules above, unchanged; the maps keep their dark tiles) */
+        [data-theme="light"] body {
+            background-color: #f5f6f7;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px);
+            color: #2b3036;
+        }
+        [data-theme="light"] body::before {
+            background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.05) 100%);
+        }
+        [data-theme="light"] .nav-bar,
+        [data-theme="light"] h2 { border-bottom-color: #d5d9de; }
+        [data-theme="light"] h1,
+        [data-theme="light"] h2 { color: #111; }
+        [data-theme="light"] h3 { color: #222; }
+        [data-theme="light"] :where(a),
+        [data-theme="light"] .nav-bar a { color: #c62828; }
+        [data-theme="light"] :where(a):hover,
+        [data-theme="light"] .nav-bar a:hover { color: #9f1d1d; }
+        [data-theme="light"] :where(strong) { color: #111; }
+        [data-theme="light"] :where(em) { color: #333; }
+        [data-theme="light"] code { background-color: #e9ecef; color: #1d232a; }
+        [data-theme="light"] pre {
+            background-color: rgba(0,0,0,0.035);
+            border-left-color: #c5cbd2;
+            color: #444b53;
+        }
+        [data-theme="light"] pre .key { color: #c62828; }
+        [data-theme="light"] pre .str { color: #a55a00; }
+        [data-theme="light"] pre .comment { color: #6b7280; }
+        [data-theme="light"] .station-table td:first-child { color: #5d6670; }
+        [data-theme="light"] #map,
+        [data-theme="light"] .site-map { border-color: #c9ced4 !important; }
+        [data-theme="light"] .commentary { border-left-color: #c5cbd2; color: #474e56; }
+        /* light mode: the map labels and hover tooltips are this page's own label plate (above) in its light colours: the
+           page ground at 85%, the map-frame rule, flat, Plex Mono, 3px corners; popups are its own card (above), raised
+           off the light ground as #1a1a1a is off the dark one, with Leaflet's shadow. Dark mode is the rules above. */
+        [data-theme="light"] .map-label {
+            background: rgba(245,246,247,0.85) !important;
+            border-color: #c9ced4 !important;
+            color: #222 !important;
+        }
+        [data-theme="light"] .station-label { color: #c62828 !important; }
+        [data-theme="light"] .leaflet-popup-content-wrapper { background: #fff; color: #2b3036; }
+        [data-theme="light"] .leaflet-popup-tip { background: #fff; }
+        [data-theme="light"] .leaflet-popup-content strong { color: #111; }
+
+        /* EN/JP pairs (.bi / .bi-i): each twin keeps its text's own minimum width (table labels and map labels size to
+           their text, as before); each language keeps its own heading letter-spacing whichever one is showing, so a
+           switch changes no size; the index link keeps its hover underline inside the pair */
+        .content .bi > *, .content .bi-i > * { min-width: auto; }
+        h1 .en, h2 .en, h3 .en { letter-spacing: 0.02em; }
+        h1 .jp, h2 .jp, h3 .jp { letter-spacing: 0.05em; }
+        .nav-bar a:hover .bi-i > * { text-decoration: underline; }
+/* hfgcs controls */
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* /hfgcs controls */
+/* floating controls: the shared segmented bar in this page's own look (flat Plex Mono, red accent) */
+html:root,html:root[data-theme="dark"]{--fab-bg:rgba(13,13,13,.92);--fab-line:#2a2a2a;--fab-ink:#bbbbbb;--fab-dim:#555555;--fab-hover:rgba(229,57,53,.08);--fab-focus:#e53935;--fab-radius:3px;--fab-shadow:none}
+html:root[data-theme="light"]{--fab-bg:rgba(245,246,247,.94);--fab-line:#d5d9de;--fab-ink:#2b3036;--fab-dim:#6b7480;--fab-hover:rgba(198,40,40,.08);--fab-focus:#c62828;--fab-radius:3px;--fab-shadow:none}
+html .fab button,html .totop{font-family:'IBM Plex Mono',monospace;font-size:12px}
+html .fab button:hover,html .totop:hover{color:var(--fab-focus)}
+
+
+    </style>
+<style id="anc-css">h2 a.anc,h3 a.anc{color:inherit!important;text-decoration:none;border:0;position:relative}h2 a.anc::before,h3 a.anc::before{content:"#";position:absolute;right:100%;margin-right:8px;color:var(--mut,var(--muted,#8b93a7));font-weight:400;opacity:0;transition:opacity .15s}h2 a.anc:hover::before,h3 a.anc:hover::before,h2 a.anc:focus-visible::before,h3 a.anc:focus-visible::before{opacity:1}[id]{scroll-margin-top:12px}</style></head>
+<body>
+<!-- hfgcs controls -->
+<div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">日本語</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">☀</span><span class="tb-moon">☾</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">↑</button>
+<!-- /hfgcs controls -->
+    <div id="grad-red" style="position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%, rgba(229,57,53,0.04) 0%, transparent 60%);pointer-events:none;z-index:0;"></div>
+    <div class="content">
+        <div class="nav-bar">
+            <a href="index.html"><span class="bi-i"><span class="en">&larr; Back to Index</span><span class="jp">&larr; インデックスに戻る</span></span></a>
+        </div>
+
+        <h1><span class="bi"><span class="en">HFGCS STATION PUERTO RICO</span><span class="jp">HFGCS基地 プエルトリコ</span></span></h1>
+
+        <p><span class="bi"><span class="en">PUERTO RICO is an American Theater station on the <strong>High Frequency Global Communications System</strong> (HFGCS). It has no base of its own: it is a <strong>transmitter site at Isabela</strong> on the northwest coast and a <strong>receiver/control site at Salinas</strong> on the south coast, run remotely around the clock by the network control stations at Andrews and Grand Forks.</span><span class="jp">PUERTO RICOは、<strong>高周波グローバル通信システム</strong>（HFGCS）のアメリカ戦域局です。独自の基地はなく、北西海岸の<strong>イサベラ送信施設</strong>と南海岸の<strong>サリナス受信・制御施設</strong>から成り、アンドルーズとグランドフォークスのネットワーク管制局（NCS）から24時間遠隔運用されています。</span></span></p>
+
+        <!-- Station Identity -->
+        <h2 id="identity"><a class="anc" href="#identity"><span class="bi"><span class="en">Station Identity</span><span class="jp">基地情報</span></span></a></h2>
+
+        <div class="site-layout">
+            <div class="site-info">
+                <table class="station-table">
+                    <tr><td><span class="bi"><span class="en">HFGCS Callsign</span><span class="jp">HFGCSコールサイン</span></span></td><td><strong>PUERTO RICO</strong></td></tr>
+                    <tr><td><span class="bi"><span class="en">ALE Callsign</span><span class="jp">ALEコールサイン</span></span></td><td><strong>JNR</strong></td></tr>
+                    <tr><td><span class="bi"><span class="en">Theater</span><span class="jp">戦域</span></span></td><td><span class="bi"><span class="en">American Theater</span><span class="jp">アメリカ戦域</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">NCS Role</span><span class="jp">NCS役割</span></span></td><td><span class="bi"><span class="en">GFNCS (associated with GRAND FORKS)</span><span class="jp">GFNCS（GRAND FORKSに関連）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Operator</span><span class="jp">運用</span></span></td><td><span class="bi"><span class="en">Air Combat Command (since October 2007), contractor-maintained</span><span class="jp">航空戦闘軍団（2007年10月から）、保守は契約業者</span></span></td></tr>
+                </table>
+
+                <p><span class="bi"><span class="en">Station data from <a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js#L143" target="_blank">hfgcs-msl</a>:</span><span class="jp">基地データ出典 <a href="https://github.com/leighton-tidwell/hfgcs-msl/blob/bb63ed458f1ca578a8d2f6bcb3ed7fb95b7d3877/src/api/getStations.js#L143" target="_blank">hfgcs-msl</a>:</span></span></p>
+
+                <pre>  <span class="key">Id</span>: <span class="str">"9lllee2e"</span>,
+  <span class="key">station</span>: <span class="str">"JNR"</span>,
+  <span class="key">name</span>: <span class="str">"PUERTO RICO"</span>,
+  <span class="key">ncs</span>: <span class="str">"GFNCS"</span>,
+  <span class="key">observation</span>: <span class="str">"STN FVRS"</span>,
+  <span class="key">theater</span>: <span class="str">"American Theater"</span></pre>
+
+                <p><span class="bi"><span class="en">JNR is the last three letters of TJNR, the ICAO code of <a href="https://en.wikipedia.org/wiki/Roosevelt_Roads_Naval_Station" target="_blank">Naval Station Roosevelt Roads</a>, which the Navy closed on March 31, 2004. The other stations' ALE callsigns follow the same rule (RJTY &rarr; JTY, PGUA &rarr; GUA, LICZ &rarr; ICZ).</span><span class="jp">JNRは、2004年3月31日に閉鎖された<a href="https://en.wikipedia.org/wiki/Roosevelt_Roads_Naval_Station" target="_blank">ルーズベルト・ローズ海軍基地</a>のICAOコードTJNRの末尾3文字です。他の局のALEコールサインも同じ規則に従っています（RJTY &rarr; JTY、PGUA &rarr; GUA、LICZ &rarr; ICZ）。</span></span></p>
+            </div>
+            <div id="map-world" class="site-map" style="height:300px;flex:0 0 520px;border:1px solid #333;border-radius:6px;"></div>
+        </div>
+
+        <!-- Map -->
+        <h2 id="sites"><a class="anc" href="#sites"><span class="bi"><span class="en">Site Locations</span><span class="jp">施設配置</span></span></a></h2>
+
+        <p><span class="bi"><span class="en">Like most HFGCS stations, Puerto Rico transmits and receives from separate sites, so the high-power transmitters don't desensitize the HF receivers. Here the two sites are <strong>97 km (60 mi) apart</strong>, on opposite coasts of the island &mdash; about twice the 45 km between Offutt&rsquo;s sites.</span><span class="jp">他の多くのHFGCS基地と同様に、プエルトリコは送信と受信に別々の施設を使用しており、高出力送信機がHF受信機の感度を下げないようになっています。ここでは2つの施設が島の反対側の海岸にあり、<strong>97 km（60マイル）離れています</strong>。オファット基地の送受信施設の間隔45 kmの約2倍です。</span></span></p>
+
+        <p><span class="bi"><span class="en">Both are former Navy radio sites. The Navy ran the station until September 2005; the mission and sites passed to the Air Force in October 2005, and Air Combat Command took over operations and maintenance of Isabela and Salinas in October 2007 (<a href="https://sam.gov/opp/f4b0c20ef3dc496386619e1faf3c4321/view" target="_blank">FA4890-24-R-0009</a> work statement). Wikipedia&rsquo;s article on the Navy&rsquo;s <a href="https://en.wikipedia.org/wiki/Naval_Radio_Transmitter_Facility_Aguada" target="_blank">NRTF Aguada</a> lists a 408-acre transmitter site in Isabela and a 242-acre receiver site at Campamento Santiago, Salinas, alongside the Aguada VLF mast (NAU).</span><span class="jp">どちらも元は米海軍の無線施設です。海軍は2005年9月までこの局を運用し、2005年10月に任務と施設が空軍に移管され、2007年10月に航空戦闘軍団がイサベラとサリナスの運用・保守を引き継ぎました（<a href="https://sam.gov/opp/f4b0c20ef3dc496386619e1faf3c4321/view" target="_blank">FA4890-24-R-0009</a>業務記述書）。海軍の<a href="https://en.wikipedia.org/wiki/Naval_Radio_Transmitter_Facility_Aguada" target="_blank">NRTFアグアダ</a>に関するWikipediaの記事には、アグアダのVLFマスト（NAU）と並んで、イサベラの408エーカーの送信施設と、サリナスのキャンプ・サンティアゴにある242エーカーの受信施設が記載されています。</span></span></p>
+
+        <div id="map"></div>
+
+        <!-- Isabela -->
+        <h2 id="isabela"><a class="anc" href="#isabela"><span class="bi"><span class="en">Isabela Transmitter Site</span><span class="jp">イサベラ送信施設</span></span></a></h2>
+
+        <div class="site-layout">
+            <div class="site-info">
+                <table class="station-table">
+                    <tr><td><span class="bi"><span class="en">Function</span><span class="jp">機能</span></span></td><td><span class="bi"><span class="en">HF transmission</span><span class="jp">HF送信</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Location</span><span class="jp">所在地</span></span></td><td><span class="bi"><span class="en">Isabela, on PR-2 at km 116.5 (Aguadilla mailing address)</span><span class="jp">イサベラ、国道PR-2の116.5 km地点（郵便住所はアグアディヤ）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Coordinates</span><span class="jp">座標</span></span></td><td><a href="https://google.com/maps?q=18.463767,-67.065889" target="_blank">18.463767, -67.065889</a></td></tr>
+                    <tr><td><span class="bi"><span class="en">Area</span><span class="jp">面積</span></span></td><td><span class="bi"><span class="en">413.18 acres (~1,672,000 m&sup2;)</span><span class="jp">413.18エーカー（約1,672,000 m&sup2;）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Transmitter building</span><span class="jp">送信棟</span></span></td><td><span class="bi"><span class="en">Facility 3001, 28,434 sq ft (2,642 m&sup2;)</span><span class="jp">施設3001、28,434平方フィート（2,642 m&sup2;）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Power</span><span class="jp">電源</span></span></td><td><span class="bi"><span class="en">Facility 3002 power plant, 1,000 kW; 10,000 gal diesel</span><span class="jp">施設3002発電所、1,000 kW、ディーゼル燃料10,000ガロン</span></span></td></tr>
+                    <tr><td>OpenStreetMap</td><td><a href="https://www.openstreetmap.org/way/506154129" target="_blank">Isabela N00207-Air Base</a></td></tr>
+                </table>
+
+                <h3><span class="bi"><span class="en">Antennas</span><span class="jp">アンテナ設備</span></span></h3>
+                <ul>
+                    <li><span class="bi-i"><span class="en">2 RLPA rotatable log-periodic antennas (RLPA-2, RLPA-3)</span><span class="jp">回転式対数周期アンテナ（RLPA） 2基（RLPA-2、RLPA-3）</span></span></li>
+                    <li><span class="bi-i"><span class="en">5 VOBA (VOBA-2 to VOBA-6)</span><span class="jp">VOBA 5基（VOBA-2〜VOBA-6）</span></span></li>
+                    <li><span class="bi-i"><span class="en">4 SC (SC-1 to SC-4)</span><span class="jp">SC 4基（SC-1〜SC-4）</span></span></li>
+                    <li><span class="bi-i"><span class="en">3 HOBA (HOBA-1, HOBA-2, HOBA-6)</span><span class="jp">HOBA 3基（HOBA-1、HOBA-2、HOBA-6）</span></span></li>
+                    <li><span class="bi-i"><span class="en">2 M (M-1, M-5), 2 C (C-1, C-2), 1 S5</span><span class="jp">M 2基（M-1、M-5）、C 2基（C-1、C-2）、S5 1基</span></span></li>
+                    <li><span class="bi-i"><span class="en">HF Aircom microwave relay building (facility 3003, 677 sq ft)</span><span class="jp">HFエアコム・マイクロ波中継棟（施設3003、677平方フィート）</span></span></li>
+                </ul>
+
+                <p><span class="bi"><span class="en">Antenna designators are as listed in the real-property appendix of the 2024 re-compete work statement, which lists antennas on 21 numbered facilities at Isabela. The two RLPAs are the rotatable log-periodic type used across HFGCS transmitter sites. Antenna maintenance at Isabela and Salinas is covered under <a href="https://longwaveinc.com/?p=1525" target="_blank">Long Wave Inc.&rsquo;s HFGCS antenna contract</a> ($112.6M, through 2030), and a 2025 task order under it, <a href="https://www.muckrock.com/foi/united-states-of-america-10/fa814225f0017-antenna-program-support-aps-iii-puerto-rico-transmit-site-antenna-replacement-205488/" target="_blank">FA814225F0017</a>, is titled &ldquo;Puerto Rico Transmit Site Antenna Replacement.&rdquo;</span><span class="jp">アンテナの名称は、2024年の再入札業務記述書の不動産付録の記載どおりで、同付録はイサベラの21の施設番号にアンテナを記載しています。2基のRLPAは、HFGCSの送信施設で広く使われている回転式対数周期アンテナです。イサベラとサリナスのアンテナ保守は<a href="https://longwaveinc.com/?p=1525" target="_blank">Long Wave Inc.のHFGCSアンテナ契約</a>（1億1260万ドル、2030年まで）でカバーされており、その下の2025年のタスクオーダー<a href="https://www.muckrock.com/foi/united-states-of-america-10/fa814225f0017-antenna-program-support-aps-iii-puerto-rico-transmit-site-antenna-replacement-205488/" target="_blank">FA814225F0017</a>の件名は「Puerto Rico Transmit Site Antenna Replacement」（プエルトリコ送信施設アンテナ交換）です。</span></span></p>
+
+                <p><span class="bi"><span class="en">The Air Force parcel measures 413 acres, against the 408 acres Wikipedia gives for the Navy&rsquo;s Isabela transmitter site.</span><span class="jp">空軍の敷地は413エーカーで、Wikipediaが海軍のイサベラ送信施設として記載する408エーカーとほぼ一致します。</span></span></p>
+            </div>
+            <div id="map-isabela" class="site-map"></div>
+        </div>
+
+        <!-- Salinas -->
+        <h2 id="salinas"><a class="anc" href="#salinas"><span class="bi"><span class="en">Salinas Receiver Site</span><span class="jp">サリナス受信施設</span></span></a></h2>
+
+        <div class="site-layout">
+            <div class="site-info">
+                <table class="station-table">
+                    <tr><td><span class="bi"><span class="en">Function</span><span class="jp">機能</span></span></td><td><span class="bi"><span class="en">HF reception and site control (paired with Isabela for TX)</span><span class="jp">HF受信・制御（イサベラと送信ペア）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Location</span><span class="jp">所在地</span></span></td><td><span class="bi"><span class="en">Camp Santiago (Puerto Rico Army National Guard training area), Salinas</span><span class="jp">サリナス、キャンプ・サンティアゴ（プエルトリコ陸軍州兵訓練場）内</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Coordinates</span><span class="jp">座標</span></span></td><td><a href="https://google.com/maps?q=18.004801,-66.278186" target="_blank">18.004801, -66.278186</a></td></tr>
+                    <tr><td><span class="bi"><span class="en">Area</span><span class="jp">面積</span></span></td><td><span class="bi"><span class="en">249.4 acres (~1,009,000 m&sup2;)</span><span class="jp">249.4エーカー（約1,009,000 m&sup2;）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Receiver building</span><span class="jp">受信棟</span></span></td><td><span class="bi"><span class="en">Building 600, 6,387 sq ft (593 m&sup2;)</span><span class="jp">600号棟、6,387平方フィート（593 m&sup2;）</span></span></td></tr>
+                    <tr><td><span class="bi"><span class="en">Power</span><span class="jp">電源</span></span></td><td><span class="bi"><span class="en">Facility 601 generator plant, 300 kW; 5,000 gal diesel</span><span class="jp">施設601発電設備、300 kW、ディーゼル燃料5,000ガロン</span></span></td></tr>
+                    <tr><td>OpenStreetMap</td><td><a href="https://www.openstreetmap.org/way/509478472" target="_blank">Salinas N00207-JA</a></td></tr>
+                </table>
+
+                <h3><span class="bi"><span class="en">Equipment</span><span class="jp">設備</span></span></h3>
+                <ul>
+                    <li><span class="bi-i"><span class="en">5 receive antennas (facilities 636, 638, 639, 5201, 5501)</span><span class="jp">受信アンテナ 5基（施設636、638、639、5201、5501）</span></span></li>
+                    <li><span class="bi-i"><span class="en">NSA Camp Santiago antenna array, in a 680 &times; 500 ft area east of Building 600</span><span class="jp">NSAキャンプ・サンティアゴ・アンテナアレイ（600号棟の東、680 &times; 500フィートの区域）</span></span></li>
+                </ul>
+
+                <p><span class="bi"><span class="en">OpenStreetMap shows five masts on the parcel, the same number as the receive antennas in the work statement. The same work statement has the contractor keep the vegetation down around the NSA array next door and house the array&rsquo;s UPS and equipment inside Building 600; the NSA antennas themselves are maintained separately.</span><span class="jp">OpenStreetMapでは敷地内に5本のマストが表示されており、業務記述書の受信アンテナの数と一致します。同じ業務記述書は、隣接するNSAアレイ周辺の草木の管理と、アレイのUPSおよび機器を600号棟内に収容することを契約業者に求めています。NSAのアンテナ自体の保守は別扱いです。</span></span></p>
+
+                <p><span class="bi"><span class="en">The Air Force parcel measures 249.4 acres, against the 242 acres Wikipedia gives for the Navy&rsquo;s receiver site at Campamento Santiago.</span><span class="jp">空軍の敷地は249.4エーカーで、Wikipediaが海軍のキャンプ・サンティアゴ受信施設として記載する242エーカーとほぼ一致します。</span></span></p>
+            </div>
+            <div id="map-salinas" class="site-map"></div>
+        </div>
+
+        <!-- Maintenance -->
+        <h2 id="maintenance"><a class="anc" href="#maintenance"><span class="bi"><span class="en">Maintenance</span><span class="jp">保守</span></span></a></h2>
+
+        <ul>
+            <li><span class="bi"><span class="en">Operators at Andrews and Grand Forks run the station 24/7; on-site contractor staff work core hours of 08:00&ndash;15:00 local (12:00&ndash;19:00 UTC) and are on call after hours for outages.</span><span class="jp">運用はアンドルーズとグランドフォークスのオペレーターが24時間行い、現地の契約業者スタッフはコアタイム08:00〜15:00（現地時間、12:00〜19:00 UTC）に勤務し、時間外は障害対応のため待機します。</span></span></li>
+            <li><span class="bi"><span class="en">2016: <a href="https://govtribe.com/opportunity/federal-contract-opportunity/high-frequency-global-communications-system-puerto-rico-station-fa489016r0009" target="_blank">FA4890-16-R-0009</a> went to Delta Solutions &amp; Strategies, effective September 1, 2016, with PAR Technology&rsquo;s Rome Research Corp. as subcontractor (<a href="https://executivebiz.com/tag/hfgcs-prs/" target="_blank">$5.2M subcontract</a>).</span><span class="jp">2016年：<a href="https://govtribe.com/opportunity/federal-contract-opportunity/high-frequency-global-communications-system-puerto-rico-station-fa489016r0009" target="_blank">FA4890-16-R-0009</a>はDelta Solutions &amp; Strategiesが受注し（2016年9月1日発効）、PAR Technology傘下のRome Research Corp.が下請けとなりました（<a href="https://executivebiz.com/tag/hfgcs-prs/" target="_blank">下請け額520万ドル</a>）。</span></span></li>
+            <li><span class="bi"><span class="en">2024: re-compete <a href="https://www.highergov.com/contract-opportunity/high-frequency-global-communication-systems-hfgcs-fa489024r0009-o-55835/" target="_blank">FA4890-24-R-0009</a>, a base year plus seven option years and a six-month extension, September 2024 to February 2033. The site visit was set for May 1&ndash;2, 2024, meeting at the Isabela gate.</span><span class="jp">2024年：再入札<a href="https://www.highergov.com/contract-opportunity/high-frequency-global-communication-systems-hfgcs-fa489024r0009-o-55835/" target="_blank">FA4890-24-R-0009</a>。基本1年、オプション7年、延長6か月で、2024年9月から2033年2月まで。現地説明会は2024年5月1〜2日に予定され、集合場所はイサベラのゲートでした。</span></span></li>
+            <li><span class="bi"><span class="en">Contractor staff drive from Isabela to the 141st Air Control Squadron (Puerto Rico Air National Guard) to use its SIPRNet terminals; Collins Aerospace supplies repair parts for the SCOPE Command equipment.</span><span class="jp">契約業者スタッフは、SIPRNet端末を使うためにイサベラから第141航空管制中隊（プエルトリコ空軍州兵）へ移動します。SCOPE Command機器の修理部品はCollins Aerospaceが供給しています。</span></span></li>
+        </ul>
+
+    </div>
+
+    <script>
+        // ====== LANGUAGE TOGGLE ======
+        // Map labels carry both languages stacked in one cell (.bi-i); a switch only changes which one is visible, so no
+        // label changes size or position.
+        const bi = (en, ja) => '<span class="bi-i"><span class="en">' + en + '</span><span class="jp">' + ja + '</span></span>';
+
+        function setLang(lang) {
+            document.documentElement.dataset.lang = lang;
+            document.title = lang === 'ja' ? 'HFGCS基地 プエルトリコ' : 'HFGCS STATION PUERTO RICO';
+        }
+
+        // The floating language button calls this after each switch ('en' | 'jp').
+        window.hfgcsSetLang = function (lang) { setLang(lang === 'jp' ? 'ja' : 'en'); };
+
+        const TILES = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png?key=cb1_2al4_1_6bbbfd739055187f5dbf08e7';
+        const ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
+        const gmaps = (lat, lng) => function () { window.open('https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng, '_blank'); };
+
+        // ====== WORLD HFGCS MAP ======
+        const worldMap = L.map('map-world', {
+            scrollWheelZoom: false,
+            zoomControl: false,
+            attributionControl: false,
+            dragging: false,
+            doubleClickZoom: false,
+            touchZoom: false,
+            boxZoom: false,
+            keyboard: false,
+            worldCopyJump: true,
+            zoomSnap: 0.1
+        }).setView([15, -5], 1.1);
+
+        L.tileLayer(TILES, { maxZoom: 19, subdomains: 'abcd' }).addTo(worldMap);
+
+        const hfgcsStations = [
+            { name: 'ANDREWS', lat: 38.97, lng: -76.68 },
+            { name: 'OFFUTT', lat: 41.346, lng: -96.24 },
+            { name: 'CROUGHTON', lat: 52.00, lng: -1.36 },
+            { name: 'LAJES', lat: 38.76, lng: -27.09 },
+            { name: 'SIGONELLA', lat: 37.12, lng: 14.44 },
+            { name: 'DIEGO GARCIA', lat: -7.43, lng: 72.44 },
+            { name: 'ASCENSION', lat: -7.917, lng: -14.391 },
+            { name: 'SOUTH ATLANTIC', lat: -51.810, lng: -58.295 },
+            { name: 'GUAM', lat: 13.48, lng: 144.84 },
+            { name: 'HICKAM', lat: 21.43, lng: -158.15 },
+            { name: 'ELMENDORF', lat: 61.25, lng: -149.72 },
+            { name: 'WEST COAST', lat: 38.37, lng: -121.78 },
+            { name: 'YOKOTA', lat: 35.81, lng: 139.47 },
+        ];
+
+        const otherIcon = L.divIcon({
+            className: 'custom-marker',
+            html: '<div style="width:8px;height:8px;background:#222;border:1.5px solid #888;border-radius:50%;"></div>',
+            iconSize: [8, 8], iconAnchor: [4, 4]
+        });
+        const stationWorldIcon = L.divIcon({
+            className: 'custom-marker',
+            html: '<div style="width:12px;height:12px;background:#e53935;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(229,57,53,0.6);"></div>',
+            iconSize: [12, 12], iconAnchor: [6, 6]
+        });
+
+        hfgcsStations.forEach(s => {
+            L.marker([s.lat, s.lng], { icon: otherIcon }).addTo(worldMap)
+                .bindTooltip(s.name, { permanent: true, direction: 'top', className: 'map-label world-label', offset: [0, -6] })
+                .on('click', gmaps(s.lat, s.lng));
+        });
+
+        L.marker([18.46, -67.07], { icon: stationWorldIcon }).addTo(worldMap)
+            .bindTooltip('PUERTO RICO', { permanent: true, direction: 'top', className: 'map-label world-label station-label', offset: [0, -8] })
+            .on('click', gmaps(18.46, -67.07));
+
+        // ====== SITE LOCATIONS MAP ======
+        const isabela = [18.463767, -67.065889];
+        const salinas = [18.004801, -66.278186];
+        const aguada = [18.39861, -67.17722];
+
+        const map = L.map('map', { scrollWheelZoom: false }).setView([18.23, -66.67], 9);
+        L.tileLayer(TILES, { attribution: ATTR, maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+
+        const siteIcon = L.divIcon({
+            className: 'custom-marker',
+            html: '<div style="width:14px;height:14px;background:#e53935;border:2px solid #fff;border-radius:50%;box-shadow:0 0 6px rgba(229,57,53,0.5);"></div>',
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+        const secondaryIcon = L.divIcon({
+            className: 'custom-marker secondary-marker',
+            html: '<div style="width:12px;height:12px;background:#5c9adb;border:2px solid #fff;border-radius:50%;opacity:0.6;"></div>',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
+
+        L.marker(isabela, { icon: siteIcon }).addTo(map)
+            .bindTooltip(bi('Isabela<br>Transmitter Site', 'イサベラ<br>送信施設'), { permanent: true, direction: 'top', className: 'map-label', offset: [0, -10] })
+            .on('click', gmaps(isabela[0], isabela[1]));
+
+        L.marker(salinas, { icon: siteIcon }).addTo(map)
+            .bindTooltip(bi('Salinas<br>Receiver Site', 'サリナス<br>受信施設'), { permanent: true, direction: 'bottom', className: 'map-label', offset: [0, 10] })
+            .on('click', gmaps(salinas[0], salinas[1]));
+
+        L.marker(aguada, { icon: secondaryIcon }).addTo(map)
+            .bindTooltip(bi('Aguada<br>Navy VLF (NAU)', 'アグアダ<br>海軍VLF（NAU）'), { permanent: true, direction: 'left', className: 'map-label map-label-secondary', offset: [-10, 0] })
+            .on('click', gmaps(aguada[0], aguada[1]));
+
+        L.polyline([isabela, salinas], { color: '#fff', weight: 1, opacity: 0.5, dashArray: '2,3' }).addTo(map);
+
+        L.marker([(isabela[0] + salinas[0]) / 2 + 0.06, (isabela[1] + salinas[1]) / 2 + 0.10], {
+            icon: L.divIcon({ className: 'dist-label', html: '<span>~97 km</span>', iconSize: [70, 20], iconAnchor: [35, 10] })
+        }).addTo(map);
+
+        const bounds = L.latLngBounds([isabela, salinas, aguada]);
+        function fitOverview() {
+            var pad = document.getElementById('map').offsetWidth < 600 ? 40 : 120;
+            map.fitBounds(bounds, { paddingTopLeft: [pad, 50], paddingBottomRight: [pad, 50] });
+        }
+        fitOverview();
+
+        // ====== SITE DETAIL MAPS ======
+        function detailMap(id, ll, en, ja) {
+            const m = L.map(id, { scrollWheelZoom: false }).setView(ll, 14);
+            L.tileLayer(TILES, { attribution: ATTR, maxZoom: 19, subdomains: 'abcd' }).addTo(m);
+            L.marker(ll, { icon: siteIcon }).addTo(m)
+                .bindTooltip(bi(en, ja), { direction: 'top', className: 'map-label', offset: [0, -10] })
+                .on('click', gmaps(ll[0], ll[1]));
+            return m;
+        }
+        const mapIsabela = detailMap('map-isabela', isabela, 'Isabela Transmitter Site<br>413 acres', 'イサベラ送信施設<br>413エーカー');
+        const mapSalinas = detailMap('map-salinas', salinas, 'Salinas Receiver Site<br>Camp Santiago', 'サリナス受信施設<br>キャンプ・サンティアゴ');
+
+        // A page opened in a hidden or zero-width tab lays its maps out at size 0; redo them the first time they get a size.
+        (function () {
+            const el = document.getElementById('map');
+            let lastW = el.offsetWidth;
+            if (!window.ResizeObserver) return;
+            new ResizeObserver(function () {
+                const w = el.offsetWidth;
+                if (w && !lastW) {
+                    [worldMap, map, mapIsabela, mapSalinas].forEach(m => m.invalidateSize());
+                    worldMap.setView([15, -5], 1.1);
+                    mapIsabela.setView(isabela, 14);
+                    mapSalinas.setView(salinas, 14);
+                    fitOverview();
+                }
+                lastW = w;
+            }).observe(el);
+        })();
+    </script>
+
+<!-- hfgcs controls -->
+<script>
+// floating controls: language (EN / 日本語), light / dark, back to top. Choices are kept across the HFGCS pages.
+(function () {
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '日本語で表示';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? 'ダークモード' : 'ライトモード') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? 'ページの先頭へ' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
+
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
+
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j, n or e flips the language and a or d the light / dark theme, as the two buttons do. Left alone: keys typed into
+  // a field, held keys, keys with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search,
+  // or the A of the index's Konami code).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j' || k === 'n' || k === 'e') { e.preventDefault(); lb.click(); }
+    else if (k === 'a' || k === 'd') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
+</script>
+<script>
+// ← / → and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
+  function inHorizontalScroller(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 1) return true;
+    }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
+    e.preventDefault();
+    flip();
+  });
+  var MIN_PX = 45, MAX_MS = 800, origin = null;
+  document.addEventListener('touchstart', function (e) {
+    var t = e.target;
+    if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
+    var p = e.touches[0];
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
+  document.addEventListener('touchend', function (e) {
+    var o = origin; origin = null;
+    if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
+    var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
+    if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    flip();
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
+})();
+</script>
+<!-- /hfgcs controls -->
+</body>
+</html>
