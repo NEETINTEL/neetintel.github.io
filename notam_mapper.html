@@ -664,7 +664,12 @@ function dmsTokenToDecimal(tok, hemi) {
     min = parseFloat(tok.slice(dotIdx - 2));
   } else {
     const L = tok.length;
+    const isLat = (hemi === 'N' || hemi === 'S');
     if (L === 4)      { deg = +tok.slice(0,2); min = +tok.slice(2,4); }
+    // A 5-digit latitude can't be DDDMM (lat <= 90). Treat it as a DDMMSS
+    // token with one dropped digit, e.g. FAA CARF "33020N" -> 33 02 0(0).
+    else if (L === 5 && isLat) { deg = +tok.slice(0,2); min = +tok.slice(2,4); sec = +tok.slice(4,5) * 10;
+      console.warn('notam_mapper: repaired 5-digit latitude token', tok + hemi); }
     else if (L === 5) { deg = +tok.slice(0,3); min = +tok.slice(3,5); }
     else if (L === 6) { deg = +tok.slice(0,2); min = +tok.slice(2,4); sec = +tok.slice(4,6); }
     else if (L === 7) { deg = +tok.slice(0,3); min = +tok.slice(3,5); sec = +tok.slice(5,7); }
@@ -672,6 +677,7 @@ function dmsTokenToDecimal(tok, hemi) {
   }
   if (!Number.isFinite(deg) || !Number.isFinite(min) || !Number.isFinite(sec)) return null;
   let val = deg + min/60 + sec/3600;
+  if (val > ((hemi === 'N' || hemi === 'S') ? 90 : 180)) return null;
   if (hemi === 'S' || hemi === 'W') val = -val;
   return val;
 }
