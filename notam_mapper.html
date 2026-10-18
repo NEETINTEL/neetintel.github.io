@@ -163,7 +163,7 @@
   }
   .notam-list-header {
     background: rgba(255,255,255,0.04);
-    padding: 4px 10px; display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 10px; display: flex; align-items: baseline; gap: 8px;
     border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
     cursor: pointer;
   }
@@ -171,7 +171,7 @@
   .list-collapse-toggle {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px; color: rgba(255,255,255,0.5);
-    margin-left: 6px; user-select: none;
+    margin-left: auto; user-select: none;
   }
   .notam-list-panel.collapsed .notam-list-body { display: none; }
   .notam-list-panel.collapsed .notam-list-header { border-bottom: none; }
@@ -201,7 +201,7 @@
   }
   .notam-list-count {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px; font-weight: 700; color: #FFFFFF;
+    font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.6);
     font-variant-numeric: tabular-nums;
   }
   .notam-list-body { overflow-y: auto; flex: 1; padding: 4px; }
@@ -214,10 +214,11 @@
     border: none;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     padding: 5px 8px;
-    cursor: pointer; transition: background 0.1s;
+    cursor: pointer; transition: background 0.1s, opacity 0.1s;
   }
   .notam-card:hover { background: rgba(255,255,255,0.03); }
   .notam-card.dimmed { opacity: 0.2; }
+  .notam-card.dimmed:hover { opacity: 0.6; }
   .notam-card-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
   .notam-card-id {
     font-family: 'Barlow Semi Condensed', sans-serif;
@@ -239,7 +240,9 @@
     cursor: pointer; font-size: 10px; padding: 0 3px;
     font-family: 'JetBrains Mono', monospace; font-weight: 700;
   }
-  .notam-card-remove:hover { color: var(--nerv-red); }
+  .notam-card:hover .notam-card-remove { color: rgba(255,255,255,0.7); }
+  .notam-card-remove:hover,
+  .notam-card:hover .notam-card-remove:hover { color: var(--nerv-red); }
   .notam-card-details {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px; font-weight: 400; line-height: 1.4; color: rgba(255,255,255,0.45);
@@ -422,7 +425,7 @@
   }
   .status-bar .s-cyan { color: rgba(255,255,255,0.5); }
 
-  /* ON-MAP LABELS — ID only */
+  /* ON-MAP LABELS — codename over ID when the NOTAM has one, else ID only */
   .notam-map-label {
     display: inline-block;
     background: rgba(0,0,0,0.85);
@@ -432,10 +435,16 @@
     transition: opacity 0.3s;
     white-space: nowrap;
     transform: translateX(-50%);
+    text-align: center;
   }
-  .notam-map-label .label-id {
+  .notam-map-label .label-main {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+  }
+  .notam-map-label .label-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px; font-weight: 500; letter-spacing: 0.04em;
+    opacity: 0.8; margin-top: 1px;
   }
 
   /* Popups */
@@ -551,8 +560,8 @@
 
   <div class="notam-list-panel" id="listPanel">
     <div class="notam-list-header" onclick="toggleListPanel()">
-      <h3>Active</h3>
-      <span class="notam-list-count" id="listCount">00</span>
+      <h3>NOTAMs</h3>
+      <span class="notam-list-count" id="listCount"></span>
       <span class="list-collapse-toggle" id="listCollapseToggle">−</span>
     </div>
     <div class="notam-list-body" id="listBody">
@@ -1034,10 +1043,12 @@ function fmtTimeline(d) {
   return `${yr}${mo}${dy} ${hr}:${mn} UTC`;
 }
 
-// Simple on-map ID label — just the NOTAM ID, placed at center
+// On-map label — codename with the NOTAM ID underneath when it has one, else just the ID; placed at center
 function labelIcon(e) {
+  const codename = extractCodename(e.text);
   const html = `<div class="notam-map-label" style="border-color:${e.color};">
-    <div class="label-id" style="color:${e.color};">${esc(e.id)}</div>
+    <div class="label-main" style="color:${e.color};">${esc(codename || e.id)}</div>
+    ${codename ? `<div class="label-sub" style="color:${e.color};">${esc(e.id)}</div>` : ''}
   </div>`;
   return L.divIcon({ html, className: 'notam-tooltip', iconSize: [0, 0], iconAnchor: [0, 10] });
 }
@@ -1551,6 +1562,13 @@ function onTimelineChange() {
   });
 
   document.getElementById('timelineActive').textContent = `${activeCount}/${allNotams.length} ACTIVE`;
+  setListCount(activeCount);
+}
+
+// List header: how many of the plotted NOTAMs are active at the timeline's time
+function setListCount(activeCount) {
+  const ct = allNotams.length;
+  document.getElementById('listCount').textContent = ct ? `${activeCount} OF ${ct} ACTIVE` : '';
 }
 
 function toggleShowAll() {
@@ -1562,6 +1580,7 @@ function toggleShowAll() {
   if (showAll) {
     document.getElementById('timelineCurrent').textContent = 'ALL';
     document.getElementById('timelineActive').textContent = `${allNotams.length}/${allNotams.length} ACTIVE`;
+    setListCount(allNotams.length);
     allNotams.forEach(n => {
       n.layers.forEach(l => {
         if (l.setOpacity) l.setOpacity(1);
@@ -1765,13 +1784,13 @@ function extractCodename(text) {
   if (dcc) return dcc[1] + ' THREE';
 
   // Generic DCC <name> followed by STNR (catches things like "DCC TRAILING WIRE")
-  const dcc2 = /DCC\s+([A-Z][A-Z0-9 ]*?)\s+STNR/.exec(t);
+  const dcc2 = /DCC\s+([A-Z][A-Z0-9 \-]*?)\s+STNR/.exec(t);
   if (dcc2) return dcc2[1].trim();
 
   // Named reservations with aircraft in parens — collect all distinct aircraft identifiers
   // Operation name: first word after "RESERVATION" (may include a trailing number).
   // Tolerate punctuation (e.g. "RESERVATION, SHADO4 (...)") and digits inside the op name.
-  const opMatch = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)[\s,]*\(/.exec(t);
+  const opMatch = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+(?:-\d+)?)?)[\s,]*\(/.exec(t);
   if (opMatch) {
     const op = opMatch[1].trim();
     // Collect every (AIRCRAFT) group that follows
@@ -1789,7 +1808,7 @@ function extractCodename(text) {
   }
 
   // RESERVATION <NAME> with no aircraft parens (e.g. "RESERVATION CGULL WI ...")
-  const opOnly = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+)?)\s+(WI|W\/I)\b/.exec(t);
+  const opOnly = /RESERVATION[\s,]+([A-Z][A-Z0-9]*(?:\s+\d+(?:-\d+)?)?)\s+(WI|W\/I)\b/.exec(t);
   if (opOnly) return opOnly[1].trim();
 
   return null;
@@ -1824,7 +1843,7 @@ function notamSortKey(e) {
 function updateList() {
   const body = document.getElementById('listBody');
   const ct = allNotams.length;
-  document.getElementById('listCount').textContent = String(ct).padStart(2,'0');
+  setListCount(ct);
   document.getElementById('plotCount').textContent = `Plots: ${String(ct).padStart(2,'0')}`;
 
   if (!ct) {
