@@ -855,14 +855,19 @@ function parseComplexActivations(text, baseDate) {
 //      AND (IBEX) WI AN AREA DEFINED AS ... POINT OF ORIGIN."
 // The label slot is constrained to 1–4 chars to avoid greedily swallowing
 // "DEFINED" when no label is present; the negative lookahead is belt-and-
-// suspenders. Unlabeled blocks borrow a label from the nearest preceding
-// (CALLSIGN) token in parens (e.g. "(OAK ALPHA)", "(IBEX)").
+// suspenders. Unlabeled blocks take a (CALLSIGN) in parens that opens the
+// block body ("AREA DEFINED AS (HAWKEYE 1) 3700..."), else borrow one from the
+// nearest preceding parens token (e.g. "(OAK ALPHA)", "(IBEX)").
 function splitIntoAreas(text) {
   const re = /AREA(?:\s+(?!DEFINED\b)([A-Z0-9]{1,4}))?\s+DEFINED\s+AS\s+([\s\S]*?)(?:POINT\s+OF\s+ORIGIN|(?=AREA(?:\s+(?!DEFINED\b)[A-Z0-9]{1,4})?\s+DEFINED\s+AS)|$)/gi;
   const areas = []; let m; let idx = 0;
   while ((m = re.exec(text)) !== null) {
     idx++;
     let label = m[1];
+    if (!label) {
+      const lead = /^\s*\(([A-Z][A-Z0-9 ]+?)\)/i.exec(m[2]);
+      if (lead) label = lead[1].replace(/\s+/g, ' ').trim();
+    }
     if (!label) {
       const preceding = text.slice(0, m.index);
       const cb = /\(([A-Z][A-Z0-9 ]+?)\)/g;
