@@ -729,22 +729,19 @@ function parseCoords(str) {
   return deg;
 }
 
-// Built-in known waypoint dictionary. NOTAM E-fields often reference named
-// ICAO fixes by 5-letter identifier (e.g. RATSU on the Reykjavik/Shanwick
-// FIR boundary). Add entries here as you encounter new fixes; entries are
-// stored as decimal degrees (S/W negative).
+// Hand-entered fixes, stored as decimal degrees (S/W negative). They win over
+// the FAA fix table and map layers (see NAMED FIXES), so add one only when those
+// lack a fix or have it in the wrong place. build_notam_waypoints_json.py reports any
+// that drift from the FAA table.
 const KNOWN_WAYPOINTS = {
-  RATSU: { lat: 61.0,    lng: -10.0   }   // Reykjavik / Shanwick boundary
+  RATSU: { lat: 61.0,    lng: -10.0   },  // Reykjavik / Shanwick boundary
+  // Offshore Atlantic, San Juan Center. Not in the FAA map layers; position
+  // from the FAA NASR fix file effective 2026-10-01 (20-42-38.02N 068-07-31.01W)
+  DONQU: { lat: 20.71056111, lng: -68.12528055 }
 };
 
-// Walk the geometry segment of an E-field (text after WITHIN / BOUNDED BY /
-// DEFINED AS, up to the next period) in reading order. Each whitespace- or
-// comma-separated token is either a coordinate (DegOnly / DMS) or a named
-// waypoint resolvable via KNOWN_WAYPOINTS. Returns the vertices in the order
-// they appear PLUS any waypoint names we couldn't resolve so the UI can flag
-// them.
 // 5-letter all-caps words that commonly appear in NOTAM prose but are not
-// ICAO fixes. Used to suppress false "unresolved fix" warnings.
+// ICAO fixes.
 const NON_WAYPOINT_5LETTER = new Set([
   'POINT','ABOVE','BELOW','UPPER','LOWER','INNER','OUTER','NORTH','SOUTH',
   'AREAS','LIMIT','BOUND','FIRST','THIRD','TOTAL','RANGE','UNTIL','ROUTE',
@@ -753,61 +750,22 @@ const NON_WAYPOINT_5LETTER = new Set([
   'BTWEN','APRX','APRCH','RWAYS','FIELD','NAVAL','RANGE','UNDER'
 ]);
 
-function parseEFieldVertices(text) {
-  const m = /\b(?:WITHIN|BOUNDED\s+BY|DEFINED\s+AS)\b\s*([^.]+)/i.exec(text);
-  if (!m) return null;
-  // Stop at the canonical polygon closer so "POINT OF ORIGIN" isn't tokenized
-  // as a vertex (a single-area NOTAM with a closer would otherwise produce a
-  // spurious "UNRESOLVED FIX: POINT").
-  let segment = m[1];
-  const closerIdx = segment.search(/\bPOINT\s+OF\s+ORIGIN\b/i);
-  if (closerIdx > -1) segment = segment.slice(0, closerIdx);
-  const tokens = segment.split(/[\s,]+/).filter(Boolean);
-  const vertices = [];
-  const unresolved = [];
-  for (const t of tokens) {
-    // DegOnly: 63N015W, 6N15W, etc.
-    const dg = /^(\d{1,3})([NS])(\d{1,3})([EW])$/.exec(t);
-    if (dg) {
-      let lat = parseInt(dg[1], 10);
-      let lng = parseInt(dg[3], 10);
-      if (dg[2] === 'S') lat = -lat;
-      if (dg[4] === 'W') lng = -lng;
-      vertices.push({ lat, lng, raw: t });
-      continue;
-    }
-    // DMS: 6300N01500W, 600000N0150000W, etc.
-    const ds = /^([\d\-\.]{4,9})([NS])([\d\-\.]{4,10})([EW])$/.exec(t);
-    if (ds) {
-      const lat = dmsTokenToDecimal(ds[1], ds[2]);
-      const lng = dmsTokenToDecimal(ds[3], ds[4]);
-      if (lat !== null && lng !== null) {
-        vertices.push({ lat, lng, raw: t });
-        continue;
-      }
-    }
-    // Named waypoint — 5-letter all-caps ICAO fix. Skip common prose words.
-    if (/^[A-Z]{5}$/.test(t) && !NON_WAYPOINT_5LETTER.has(t)) {
-      const known = KNOWN_WAYPOINTS[t];
-      if (known) {
-        vertices.push({ lat: known.lat, lng: known.lng, raw: t, isWaypoint: true });
-      } else {
-        unresolved.push(t);
-      }
-    }
-  }
-  return { vertices, unresolved };
-}
-
-// === ORGANIZED TRACK NOTAMS (TDM TRK) ===
-// Pacific track NOTAMs give the route as named fixes and lat/longs in flight
-// order, e.g. "TDM TRK C 261021190001 2610211900 2610220800 JOWEN LOHNE ARCAL
-// 60N160W NOLTI ... NIPPI RTS/... RMK/0". The route starts after the leading
-// digit groups (track ID and validity) and stops at the RTS/ connecting routes,
-// the RMK/ remark, or the closing paren of the E) field. Named fixes come from
-// the FAA designated-point layers.
+// === NAMED FIXES ===
+// Named fixes come from, in order: the hand entries in KNOWN_WAYPOINTS, the FAA
+// fix table next to this page (notam_mapper_waypoints.json, rebuilt each 28-day NASR
+// cycle by build_notam_waypoints_json.py), then the FAA map layers below for anything
+// the table lacks, mostly foreign fixes. Many ordinary
+// NOTAM words are also fix names somewhere in the world (BRAVO, KELLY, ALPHA,
+// SCORE, SPACE), so a 5-letter word only counts as a fix when its place in the
+// E) field says so:
+//   - after VIA / BTN / DCT / FIX / WPT / WAYPOINT, "N OF", "RADIUS OF", "50NM SE"
+//   - before STAR / SID / DP / TRANSITION / FIX / WPT / WAYPOINT or "(NEXT FIX)"
+//   - next to an airway (Q87, R220) or a lat/long
+//   - next to another fix, directly or across TO / AND / - / slash / comma
+// Short labels in parens like "(OAK ALPHA)" or "(IBEX)" are never fixes, and
+// neither is a reservation name with a number after it ("BUSKA 26-2").
 const FIX_LAYERS = [
-  // Current FAA fix layer
+  // FAA map layer: about a quarter of the FAA's fixes, plus some foreign ones
   { url: 'https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/DesignatedPoints/FeatureServer/0/query', field: 'IDENT' },
   // 2016 snapshot that also carries foreign fixes (JOWEN, NANAC). Used only
   // for idents the current layer lacks, since some positions have moved since.
@@ -815,6 +773,64 @@ const FIX_LAYERS = [
 ];
 const fixCache = new Map();   // IDENT -> [{lat, lng}, ...]; [] = in neither layer
 
+const FIX_BEFORE = new Set(['VIA','BTN','DCT','DIRECT','FIX','WPT','WAYPOINT']);
+const FIX_AFTER  = new Set(['STAR','SID','DP','TRANSITION','FIX','WPT','WAYPOINT']);
+const FIX_LINK   = new Set(['TO','AND','-','/',',']);
+const COMPASS_RE = /^(?:N|S|E|W|NE|NW|SE|SW|NNE|ENE|ESE|SSE|SSW|WSW|WNW|NNW)$/;
+const NM_RE      = /^\d+(?:\.\d+)?NM$/;
+const isFixWord  = t => /^[A-Z]{5}$/.test(t) && !NON_WAYPOINT_5LETTER.has(t);
+const isLatLng   = t => /^\d{1,7}(?:\.\d+)?[NS]\d{1,8}(?:\.\d+)?[EW]$/.test(t);
+// Airway designators: ICAO letters, U- upper routes, AR/BR Atlantic and Bahama
+const isAirway   = t => /^(?:U?[ABGHJKLMNPQRSTVWYZ]|AR|BR)\d{1,4}[A-Z]?$/.test(t);
+
+// Join "3700N 07200W" into one token so a lat/long reads the same either way
+function joinSplitLatLngs(s) {
+  return s.replace(/(\d{2,6}(?:\.\d+)?[NS])\s+(\d{3,7}(?:\.\d+)?[EW])\b/g, '$1$2');
+}
+
+// E) field text: ICAO "E) ... F)/G)", FAA "!XXX nn/nnnn ... CREATED:", else all
+function eFieldText(flat) {
+  const icao = /\bE\)\s*([\s\S]*?)(?=\s[FG]\)\s|\sCREATED:|$)/.exec(flat);
+  if (icao) return icao[1];
+  const faa = /^![A-Z]{3,4}\s+\d{1,2}\/\d{1,4}\s+([\s\S]*?)(?=\sCREATED:|$)/.exec(flat);
+  return faa ? faa[1] : flat;
+}
+
+// 5-letter words the E) field uses as fixes, in order of first appearance
+function findTextFixes(text) {
+  const t = joinSplitLatLngs(text.toUpperCase())
+    .replace(/\(\s*NEXT\s+FIX\s*\)/g, ' FIX ')
+    .replace(/\([A-Z0-9 ]{1,24}\)/g, ' | ')
+    .match(/[A-Z0-9]+(?:\.\d+)?|[^\sA-Z0-9]/g) || [];
+  const named = (w, i) => /^\d+$/.test(t[i + 1] || '') && t[i + 2] === '-' && /^\d+$/.test(t[i + 3] || '');
+  const fixes = new Set();
+  t.forEach((w, i) => {
+    if (!isFixWord(w) || named(w, i)) return;
+    const p1 = t[i - 1] || '', p2 = t[i - 2] || '', n1 = t[i + 1] || '';
+    if (FIX_BEFORE.has(p1) || FIX_AFTER.has(n1) ||
+        isAirway(p1) || isAirway(n1) || isLatLng(p1) || isLatLng(n1) ||
+        (p1 === 'OF' && (COMPASS_RE.test(p2) || NM_RE.test(p2) || p2 === 'NM' || p2 === 'RADIUS')) ||
+        (COMPASS_RE.test(p1) && NM_RE.test(p2))) fixes.add(w);
+  });
+  // Fixes listed together: grow from the anchored ones until nothing changes
+  for (let grew = true; grew; ) {
+    grew = false;
+    t.forEach((w, i) => {
+      if (!isFixWord(w) || fixes.has(w) || named(w, i)) return;
+      const near = [t[i - 1], t[i + 1]];
+      if (FIX_LINK.has(t[i - 1])) near.push(t[i - 2]);
+      if (FIX_LINK.has(t[i + 1])) near.push(t[i + 2]);
+      if (near.some(x => x && (fixes.has(x) || isLatLng(x)))) { fixes.add(w); grew = true; }
+    });
+  }
+  return t.filter((w, i) => fixes.has(w) && t.indexOf(w) === i);
+}
+
+// Pacific track NOTAMs give the route as named fixes and lat/longs in flight
+// order, e.g. "TDM TRK C 261021190001 2610211900 2610220800 JOWEN LOHNE ARCAL
+// 60N160W NOLTI ... NIPPI RTS/... RMK/0". The route starts after the leading
+// digit groups (track ID and validity) and stops at the RTS/ connecting routes,
+// the RMK/ remark, or the closing paren of the E) field.
 function parseTrackRoute(text) {
   const m = /\bTDM\s+TRK\s+[A-Z0-9]{1,3}\s+([\s\S]*)/i.exec(text);
   if (!m) return null;
@@ -860,10 +876,43 @@ async function queryFixLayer(layer, idents) {
   }
 }
 
-// Look up 5-letter fixes, current layer first. A failed request leaves the
-// remaining idents uncached so the next add tries again.
+// FAA fix table next to this page, fetched once on the first lookup. Values are
+// flat [lat, lng] lists, with two pairs if the FAA lists a name twice. If it
+// can't load (offline, or the page opened from disk) the map layers cover, and
+// the next lookup tries again.
+const FIX_TABLE_URL = 'notam_mapper_waypoints.json';
+let fixTablePromise = null;
+function loadFixTable() {
+  if (!fixTablePromise) {
+    fixTablePromise = fetch(FIX_TABLE_URL)
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(d => d && d.fixes ? d.fixes : Promise.reject(new Error('no fixes in table')))
+      .catch(e => {
+        console.warn('FAA fix table not loaded; using the map layers only.', e);
+        fixTablePromise = null;
+        return null;
+      });
+  }
+  return fixTablePromise;
+}
+
+// Look up 5-letter fixes: the FAA fix table first, then the map layers for the
+// rest, current layer first. A failed request leaves the remaining idents
+// uncached so the next add tries again.
 async function lookupFixes(idents) {
   let need = [...new Set(idents)].filter(id => /^[A-Z]{5}$/.test(id) && !fixCache.has(id));
+  if (!need.length) return;
+  const table = await loadFixTable();
+  if (table) {
+    need = need.filter(id => {
+      const v = table[id];
+      if (!Array.isArray(v)) return true;
+      const pts = [];
+      for (let i = 0; i + 1 < v.length; i += 2) pts.push({ lat: v[i], lng: v[i + 1] });
+      fixCache.set(id, pts);
+      return false;
+    });
+  }
   for (const layer of FIX_LAYERS) {
     if (!need.length) return;
     const found = await queryFixLayer(layer, need);
@@ -874,6 +923,11 @@ async function lookupFixes(idents) {
   need.forEach(id => fixCache.set(id, []));
 }
 
+// Positions for a fix. A hand entry in KNOWN_WAYPOINTS wins over the FAA layers.
+function fixCandidates(name) {
+  return KNOWN_WAYPOINTS[name] ? [KNOWN_WAYPOINTS[name]] : (fixCache.get(name) || []);
+}
+
 // Great-circle angle between two points, in radians
 function gcDist(a, b) {
   const r = Math.PI / 180;
@@ -882,12 +936,21 @@ function gcDist(a, b) {
   return 2 * Math.asin(Math.min(1, Math.sqrt(s)));
 }
 
-// Turn route tokens into vertices in flight order. Lat/longs are read directly,
-// 5-letter fixes are looked up, airways (R220, A590) and DCT are skipped since
-// the fixes on either side carry the line. Anything else is reported unresolved.
-async function resolveTrackRoute(route) {
+// The candidate position closest to any point in `refs` (first one if no refs)
+function nearestTo(cands, refs) {
+  if (cands.length === 1 || !refs.length) return cands[0];
+  const d = p => Math.min(...refs.map(r => gcDist(p, r)));
+  return cands.reduce((best, c) => d(c) < d(best) ? c : best);
+}
+
+// Route or polygon tokens -> steps in reading order. Lat/longs are read
+// directly. With `names` (a Set from findTextFixes) only those words count as
+// fixes and anything else is ignored, which suits polygon prose. Without it
+// (track routes) airways and DCT are skipped, since the fixes on either side
+// carry the line, and every other token is a fix that gets reported if unknown.
+function routeSteps(tokens, names) {
   const steps = [];
-  for (const t of route) {
+  for (const t of tokens) {
     const dg = /^(\d{1,3})([NS])(\d{1,3})([EW])$/.exec(t);
     if (dg) {
       let lat = parseInt(dg[1], 10), lng = parseInt(dg[3], 10);
@@ -902,32 +965,75 @@ async function resolveTrackRoute(route) {
       const lng = dmsTokenToDecimal(ds[3], ds[4]);
       if (lat !== null && lng !== null) { steps.push({ raw: t, cands: [{ lat, lng }] }); continue; }
     }
-    if (t === 'DCT' || /^[A-Z]{1,2}\d{1,4}$/.test(t)) continue;
+    if (names) { if (names.has(t)) steps.push({ raw: t, name: t, cands: [] }); continue; }
+    if (t === 'DCT' || isAirway(t)) continue;
     steps.push({ raw: t, name: t, cands: [] });
   }
+  return steps;
+}
 
+// Look up the named steps and place them. A name used in more than one place
+// takes the copy nearest the closest already-placed neighbor.
+async function placeSteps(steps) {
   await lookupFixes(steps.filter(s => s.name && !KNOWN_WAYPOINTS[s.name]).map(s => s.name));
-  steps.forEach(s => {
-    if (!s.name) return;
-    s.cands = KNOWN_WAYPOINTS[s.name] ? [KNOWN_WAYPOINTS[s.name]] : (fixCache.get(s.name) || []);
-  });
-
+  steps.forEach(s => { if (s.name) s.cands = fixCandidates(s.name); });
   const unresolved = steps.filter(s => !s.cands.length).map(s => s.raw);
   const placed = steps.filter(s => s.cands.length);
   placed.forEach(s => { if (s.cands.length === 1) s.pos = s.cands[0]; });
-  // An ident used in more than one country: take the copy nearest the closest
-  // already-placed neighbor on the route.
   placed.forEach((s, i) => {
     if (s.pos) return;
     let ref = null;
     for (let d = 1; d < placed.length && !ref; d++) {
       ref = (placed[i - d] && placed[i - d].pos) || (placed[i + d] && placed[i + d].pos) || null;
     }
-    s.pos = ref ? s.cands.reduce((best, c) => gcDist(c, ref) < gcDist(best, ref) ? c : best) : s.cands[0];
+    s.pos = nearestTo(s.cands, ref ? [ref] : []);
   });
-
   const vertices = placed.map(s => ({ lat: s.pos.lat, lng: s.pos.lng, raw: s.raw, isWaypoint: !!s.name }));
   return { vertices, unresolved };
+}
+
+async function resolveTrackRoute(route) {
+  return placeSteps(routeSteps(route, null));
+}
+
+// Geometry segment of an E-field: the text after WITHIN / BOUNDED BY / DEFINED
+// AS, up to the next period or the POINT OF ORIGIN closer
+function eFieldGeomSegment(text) {
+  const m = /\b(?:WITHIN|BOUNDED\s+BY|DEFINED\s+AS)\b\s*([^.]+)/i.exec(text);
+  if (!m) return null;
+  let segment = m[1];
+  const closerIdx = segment.search(/\bPOINT\s+OF\s+ORIGIN\b/i);
+  if (closerIdx > -1) segment = segment.slice(0, closerIdx);
+  return segment;
+}
+
+// Polygon vertices in reading order: lat/longs plus the named fixes in `names`
+async function walkVertices(segment, names) {
+  const tokens = joinSplitLatLngs(segment.toUpperCase()).split(/[\s,]+/)
+    .map(t => t.replace(/^[(\[]+|[)\].;:]+$/g, '')).filter(Boolean);
+  return placeSteps(routeSteps(tokens, names));
+}
+
+// Named fixes in the text that aren't part of the drawn shape. A name found in
+// more than one place takes the copy nearest the NOTAM's own geometry.
+async function textFixPoints(names, used, refs) {
+  const rest = names.filter(n => !used.has(n));
+  await lookupFixes(rest.filter(n => !KNOWN_WAYPOINTS[n]));
+  const anchors = refs.concat(rest.map(fixCandidates).filter(c => c.length === 1).map(c => c[0]));
+  const points = [], unresolved = [];
+  for (const n of rest) {
+    const cands = fixCandidates(n);
+    if (!cands.length) { unresolved.push(n); continue; }
+    const pos = nearestTo(cands, anchors);
+    points.push({ lat: pos.lat, lng: pos.lng, raw: n, isWaypoint: true });
+  }
+  return { points, unresolved };
+}
+
+// "30NM RADIUS OF NYMPH" or "WI 30NM OF NYMPH": a circle centered on a fix
+function namedCircle(text) {
+  const m = /(\d+(?:\.\d+)?)\s*NM\s+(?:RADIUS\s+)?OF\s+([A-Z]{5})\b/i.exec(text);
+  return m ? { radiusNM: parseFloat(m[1]), name: m[2].toUpperCase() } : null;
 }
 
 // ICAO Q-line trailer: ".../<lat><N|S><lng><E|W><RRR>" where RRR is radius in NM.
@@ -1207,7 +1313,7 @@ let LNG_BASE = -180;
 function normLng(lng) { return ((lng + 180) % 360 + 360) % 360 - 180; }
 function computeLngBase() {
   const lngs = [];
-  allNotams.forEach(e => (e.coords || []).forEach(c => {
+  allNotams.forEach(e => (e.coords || []).concat(e.fixPoints || []).forEach(c => {
     if (Number.isFinite(c.lng)) lngs.push(normLng(c.lng));
   }));
   if (lngs.length < 2) { LNG_BASE = -180; return; }
@@ -1236,8 +1342,22 @@ function unplotEntry(entry) {
   entry._labelMarker = null;
 }
 
-// Hover target for track waypoints: invisible, 14 px across, centered on the dot
+// Hover target for named fixes: invisible, 14 px across, centered on the dot
 const WPT_HIT_ICON = L.divIcon({ className: 'wpt-hit', html: '', iconSize: [14, 14], iconAnchor: [7, 7], tooltipAnchor: [0, -6] });
+
+// Hovering a fix shows its name. The hover target is a transparent marker a bit
+// wider than the dot; a vector circle would turn visible when timeline dimming
+// restyles the entry's layers. Clicking it opens the NOTAM popup.
+function addFixHover(entry, ll, name, color) {
+  const hit = L.marker(ll, { icon: WPT_HIT_ICON, keyboard: false }).addTo(map);
+  hit.bindTooltip(
+    `<div class="notam-map-label" style="border-color:${color};transform:none;">
+      <div class="label-main" style="color:${color};">${esc(name)}</div>
+    </div>`,
+    { className: 'notam-tooltip', direction: 'top' });
+  hit.bindPopup(makePopup(entry));
+  entry.layers.push(hit);
+}
 
 // Draw one entry using its assigned color and the current longitude frame.
 function plotEntry(entry) {
@@ -1264,18 +1384,7 @@ function plotEntry(entry) {
     ll.forEach((p, i) => {
       const mk = L.circleMarker(p, { radius: 2.5, color, fillColor: color, fillOpacity: 0.9, weight: 1 }).addTo(map);
       entry.layers.push(mk);
-      // Hovering a waypoint shows its name. The hover target is a transparent
-      // marker a bit wider than the dot; a vector circle would turn visible when
-      // timeline dimming restyles the entry's layers. Clicking it opens the
-      // NOTAM popup like the line does.
-      const hit = L.marker(p, { icon: WPT_HIT_ICON, keyboard: false }).addTo(map);
-      hit.bindTooltip(
-        `<div class="notam-map-label" style="border-color:${color};transform:none;">
-          <div class="label-main" style="color:${color};">${esc(norm[i].raw)}</div>
-        </div>`,
-        { className: 'notam-tooltip', direction: 'top' });
-      hit.bindPopup(makePopup(entry));
-      entry.layers.push(hit);
+      addFixHover(entry, p, norm[i].raw, color);
     });
     labelLL = ll[Math.floor(ll.length / 2)];
     entry.type = 'track';
@@ -1290,6 +1399,7 @@ function plotEntry(entry) {
     const popup = makePopup(entry);
     circle.bindPopup(popup); dot.bindPopup(popup);
     entry.layers.push(circle, dot);
+    if (entry.coords[0].isWaypoint) addFixHover(entry, c, entry.coords[0].raw, color);
     entry.type = 'circle';
 
   } else if (entry.coords.length >= 3) {
@@ -1300,10 +1410,17 @@ function plotEntry(entry) {
     poly.bindPopup(makePopup(entry));
     entry.layers.push(poly);
     entry.type = 'polygon';
-    ll.forEach(p => {
+    ll.forEach((p, i) => {
       const mk = L.circleMarker(p, { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
       entry.layers.push(mk);
+      if (entry.coords[i].isWaypoint) addFixHover(entry, p, entry.coords[i].raw, color);
     });
+
+  } else if (!entry.coords.length) {
+    // Only named fixes from the text; they're drawn below
+    const f = entry.fixPoints[Math.floor(entry.fixPoints.length / 2)];
+    labelLL = [f.lat, dl(f.lng)];
+    entry.type = 'fixes';
 
   } else {
     labelLL = [entry.coords[0].lat, dl(entry.coords[0].lng)];
@@ -1311,9 +1428,18 @@ function plotEntry(entry) {
       const mk = L.circleMarker([c.lat, dl(c.lng)], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 2 }).addTo(map);
       mk.bindPopup(makePopup(entry));
       entry.layers.push(mk);
+      if (c.isWaypoint) addFixHover(entry, [c.lat, dl(c.lng)], c.raw, color);
     });
     entry.type = 'point';
   }
+
+  // Named fixes from the text that aren't part of the shape
+  (entry.fixPoints || []).forEach(f => {
+    const p = [f.lat, dl(f.lng)];
+    const mk = L.circleMarker(p, { radius: 3, color, fillColor: color, fillOpacity: 0.9, weight: 1 }).addTo(map);
+    entry.layers.push(mk);
+    addFixHover(entry, p, f.raw, color);
+  });
 
   if (!entry._skipLabel) entry.layers.push(makeLabel(labelLL, entry));
 }
@@ -1388,8 +1514,14 @@ function makePopup(e, group, idx) {
   const geomField = e.suaFeature
     ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">AIRSPACE: </span>${esc(e.suaFeature.properties.NAME || '')}</div>`
     : e.isTrack
-      ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">WAYPOINTS: </span>${e.coords.map(c=>c.raw).join(' ')}</div>`
-      : `<div class="popup-field"><span class="f-label" style="color:${e.color}">CENTER: </span>${e.coords.map(c=>c.raw).join(', ')}</div>`;
+      ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">WAYPOINTS: </span>${e.coords.concat(e.fixPoints || []).map(c=>esc(c.raw)).join(' ')}</div>`
+      : e.coords.length
+        ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">CENTER: </span>${e.coords.map(c=>c.raw).join(', ')}</div>`
+        : '';
+  // Named waypoints from the text. A track already lists them on its WAYPOINTS line.
+  const fixField = !e.isTrack && e.fixPoints && e.fixPoints.length
+    ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">WAYPOINTS: </span>${e.fixPoints.map(f => esc(f.raw)).join(' ')}</div>`
+    : '';
   // Mirror the sidebar badge: show whenever extractCodename or track/airspace types fire,
   // using the same text fallback.
   const codename = extractCodename(e.text);
@@ -1398,6 +1530,7 @@ function makePopup(e, group, idx) {
   const badge = showBadge ? `<span class="popup-badge" style="color:${e.color};border-color:${e.color}">${esc(badgeText)}</span>` : '';
   return `${nav}<div class="popup-title" style="color:${e.color}"><span class="popup-id">${esc(e.id)}</span>${badge}</div>
     ${geomField}
+    ${fixField}
     ${e.radiusNM ? `<div class="popup-field"><span class="f-label" style="color:${e.color}">RADIUS: </span>${e.radiusNM} NM</div>` : ''}
     ${e.alt ? `<div class="popup-field"><span class="f-label" style="color:#FFAA00">ALT: </span>${esc(e.alt)}</div>` : ''}
     ${e.time ? `<div class="popup-field"><span class="f-label" style="color:#888880">TIME: </span>${e.time.from} — ${e.time.to}${e.time.dailyWindows && e.time.dailyWindows.length > 1 ? ` (${e.time.dailyWindows.length} windows)` : ''}</div>` : ''}
@@ -1783,13 +1916,27 @@ async function ingestNotams(notams) {
       const alt = parseAlt(flat);
       const time = parseTime(flat);
       const id = parseId(flat);
+      const qInfo = parseQLine(flat);
+
+      // Named fixes the E) field uses (see findTextFixes), looked up in one go
+      const fixNames = findTextFixes(eFieldText(flat));
+      const fixNameSet = new Set(fixNames);
+      await lookupFixes(fixNames.filter(n => !KNOWN_WAYPOINTS[n]));
 
       // Multi-area NOTAMs define each polygon separately (AREA D / AREA E / ...)
       const areas = splitIntoAreas(flat);
       if (areas.length >= 2) {
+        const areaEntries = [];
+        const used = new Set();
         for (const area of areas) {
-          const areaCoords = parseCoords(area.text);
+          let areaCoords = parseCoords(area.text);
+          // The ordered walk also places named fixes, which parseCoords skips
+          const walked = await walkVertices(area.text, fixNameSet);
+          if (walked.vertices.length >= 3 && walked.vertices.length > areaCoords.length) {
+            areaCoords = walked.vertices;
+          }
           if (areaCoords.length < 3) continue;
+          areaCoords.forEach(c => { if (c.isWaypoint) used.add(c.raw); });
           // Per-area altitude tag (e.g. "SFC-FL210" or "SFC-FL200") — splitIntoAreas
           // captures it from the text following each POINT OF ORIGIN closer.
           const areaAlt = area.trailingAlt || alt;
@@ -1798,11 +1945,19 @@ async function ingestNotams(notams) {
           if (existingIds.has(areaId)) { skipped++; continue; }
           existingIds.add(areaId);
           const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8) + '_' + safeLabel;
-          parsed.push({
+          const areaEntry = {
             id: areaId, uid, color: '#FFFFFF',
             coords: areaCoords, radiusNM: null, alt: areaAlt, time,
             isTrack: false, suaFeature: null, text: flat, layers: []
-          });
+          };
+          parsed.push(areaEntry);
+          areaEntries.push(areaEntry);
+        }
+        // Named fixes outside the polygons ride on the first area
+        if (areaEntries.length) {
+          const extra = await textFixPoints(fixNames, used, areaEntries.flatMap(e => e.coords));
+          areaEntries[0].fixPoints = extra.points;
+          areaEntries[0].unresolvedWaypoints = extra.unresolved;
         }
         continue;
       }
@@ -1811,7 +1966,6 @@ async function ingestNotams(notams) {
       // listing many <EGD323A> <HHMM>-<HHMM> <FL___>-<FL___> rows). Expand into one
       // entry per sub-airspace, all sharing the Q-line geometry, each carrying its
       // own activation windows on the timeline.
-      const qInfo = parseQLine(flat);
       const baseDate = time && time.startTs;
       const activations = parseComplexActivations(flat, baseDate);
       if (activations) {
@@ -1822,6 +1976,7 @@ async function ingestNotams(notams) {
         const subRadius = (qInfo && qInfo.radiusNM) || parseRadius(flat) || null;
         if (centerCoords.length && subRadius) {
           let labelPlaced = false;
+          const extra = await textFixPoints(fixNames, new Set(), centerCoords);
           for (const act of activations) {
             const subId = `${id} ${act.designator}`;
             if (existingIds.has(subId)) { skipped++; continue; }
@@ -1838,7 +1993,10 @@ async function ingestNotams(notams) {
               coords: centerCoords, radiusNM: subRadius,
               alt: act.altBand, time: subTime,
               isTrack: false, suaFeature: null, text: flat, layers: [],
-              _skipLabel: labelPlaced
+              _skipLabel: labelPlaced,
+              // Named fixes from the text ride on the first sub-airspace
+              fixPoints: labelPlaced ? [] : extra.points,
+              unresolvedWaypoints: labelPlaced ? [] : extra.unresolved
             });
             labelPlaced = true;
           }
@@ -1850,15 +2008,15 @@ async function ingestNotams(notams) {
       let suaFeature = null;
       let unresolvedWaypoints = [];
 
-      // Ordered E-field polygon walk — preserves vertex order and resolves
-      // named ICAO fixes (e.g. RATSU). Use whenever it yields more vertices
-      // than parseCoords (which silently drops named waypoints).
-      const eGeom = parseEFieldVertices(flat);
-      if (eGeom && eGeom.vertices.length >= 3 && eGeom.vertices.length > coords.length) {
-        coords = eGeom.vertices;
-      }
-      if (eGeom && eGeom.unresolved.length) {
-        unresolvedWaypoints = eGeom.unresolved;
+      // Ordered E-field polygon walk — preserves vertex order and places named
+      // fixes. Use whenever it yields more vertices than parseCoords (which
+      // skips named fixes).
+      const eSeg = eFieldGeomSegment(flat);
+      if (eSeg) {
+        const eGeom = await walkVertices(eSeg, fixNameSet);
+        if (eGeom.vertices.length >= 3 && eGeom.vertices.length > coords.length) {
+          coords = eGeom.vertices;
+        }
       }
 
       // Organized-track NOTAMs: walk the route in flight order and look up the
@@ -1870,6 +2028,17 @@ async function ingestNotams(notams) {
         unresolvedWaypoints = res.unresolved;
       }
 
+      // Circle centered on a named fix ("30NM RADIUS OF NYMPH")
+      if (!coords.length) {
+        const nc = namedCircle(eFieldText(flat));
+        const cands = nc && fixNameSet.has(nc.name) ? fixCandidates(nc.name) : [];
+        if (cands.length) {
+          const c = nearestTo(cands, qInfo && qInfo.radiusNM < 999 ? [qInfo] : []);
+          coords = [{ lat: c.lat, lng: c.lng, raw: nc.name, isWaypoint: true }];
+          radiusNM = radiusNM || nc.radiusNM;
+        }
+      }
+
       // ICAO Q-line radius fallback: standard NOTAMs encode the affected area
       // as a circle in the Q-line trailer (e.g. ".../5914N02556E013" → 13 NM).
       // If no explicit "NM RADIUS" was given and we have a single center, use it.
@@ -1877,20 +2046,26 @@ async function ingestNotams(notams) {
         radiusNM = qInfo.radiusNM;
       }
 
+      // Named fixes in the text that aren't part of the shape get their own dots
+      const usedFixes = new Set(coords.filter(c => c.isWaypoint).map(c => c.raw));
+      const fixRefs = coords.concat(qInfo && qInfo.radiusNM < 999 ? [qInfo] : []);
+      const extra = await textFixPoints(fixNames, usedFixes, fixRefs);
+      unresolvedWaypoints = [...new Set(unresolvedWaypoints.concat(extra.unresolved))];
+
       if (!coords.length) {
         const refs = extractAirspaceRefs(flat);
         for (const ref of refs) {
           const feat = await fetchSuaFeature(ref);
           if (feat) { suaFeature = feat; break; }
         }
-        if (!suaFeature) continue;
+        if (!suaFeature && !extra.points.length) continue;
       }
 
       if (existingIds.has(id)) { skipped++; continue; }
       existingIds.add(id);
       const isTrack = !radiusNM && !suaFeature && coords.length >= 2 && (/\bTDM\s+TRK\b/i.test(flat) || /\bTRK\s+[A-Z]\b/i.test(flat));
       const uid = Date.now() + '_' + Math.random().toString(36).slice(2,8);
-      parsed.push({ id, uid, color: '#FFFFFF', coords, radiusNM, alt, time, isTrack, suaFeature, text: flat, layers: [], unresolvedWaypoints });
+      parsed.push({ id, uid, color: '#FFFFFF', coords, radiusNM, alt, time, isTrack, suaFeature, text: flat, layers: [], unresolvedWaypoints, fixPoints: extra.points });
     } catch(err) { console.error('Parse error:', err, nt.slice(0,60)); }
   }
 
@@ -2034,7 +2209,7 @@ function updateList() {
         <button class="notam-card-remove" onclick="event.stopPropagation();removeNotam('${e.uid}')" title="Remove">X</button>
       </div>
       <div class="notam-card-details">
-        ${e.coords.map(c=>c.raw).join(', ')}${e.radiusNM ? ` / ${e.radiusNM}NM` : ''}${e.alt ? ` / ${esc(e.alt)}` : ''}
+        ${e.coords.concat(e.fixPoints || []).map(c=>c.raw).join(', ')}${e.radiusNM ? ` / ${e.radiusNM}NM` : ''}${e.alt ? ` / ${esc(e.alt)}` : ''}
         ${e.time ? `<br>${e.time.from} — ${e.time.to}` : ''}
         ${e.unresolvedWaypoints && e.unresolvedWaypoints.length ? `<br><span style="color:var(--nerv-red)">UNRESOLVED FIX: ${esc(e.unresolvedWaypoints.join(', '))}</span>` : ''}
       </div>
@@ -2114,9 +2289,13 @@ function exportKml() {
       const c = e.coords[0];
       geom = `<Point><coordinates>${c.lng},${c.lat},0</coordinates></Point>`;
     }
-    if (!geom) return '';
     const start = e.time && e.time.startTs ? `<TimeSpan><begin>${e.time.startTs.toISOString()}</begin>${e.time.endTs?`<end>${e.time.endTs.toISOString()}</end>`:''}</TimeSpan>` : '';
-    return `<Placemark><name>${xe(e.id || 'NOTAM')}</name><description><![CDATA[${(e.text || '').slice(0, 1500)}]]></description>${start}<styleUrl>#notamStyle</styleUrl>${geom}</Placemark>`;
+    // Named fixes from the text: one point each, named after the fix
+    const fixes = (e.fixPoints || []).map(f =>
+      `<Placemark><name>${xe(f.raw)}</name><description>${xe(e.id || 'NOTAM')}</description>${start}<styleUrl>#notamStyle</styleUrl><Point><coordinates>${f.lng},${f.lat},0</coordinates></Point></Placemark>`
+    ).join('\n');
+    if (!geom) return fixes;
+    return `<Placemark><name>${xe(e.id || 'NOTAM')}</name><description><![CDATA[${(e.text || '').slice(0, 1500)}]]></description>${start}<styleUrl>#notamStyle</styleUrl>${geom}</Placemark>` + (fixes ? '\n' + fixes : '');
   }).filter(Boolean).join('\n');
   const kml = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
