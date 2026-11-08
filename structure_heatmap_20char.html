@@ -346,11 +346,11 @@
             cursor: pointer;
         }
 
-        .char-exact { background-color: #37be7f; color: #000000; }
-        .char-gapped { background-color: #37be7f; color: #000000; }
-        .char-hot_k1 { background-color: #7aabf0; color: #000000; }
-        .char-quad_repeat { background-color: #d17061; color: #000000; }
-        .char-partial_quad { background-color: #e8915e; color: #000000; }
+        .char-exact { background-color: #4a9eff; color: #000000; }
+        .char-gapped { background-color: #51cf66; color: #000000; }
+        .char-hot_k1 { background-color: #cc5de8; color: #000000; }
+        .char-quad_repeat { background-color: #ff69b4; color: #000000; }
+        .char-partial_quad { background-color: #ed727f; color: #000000; }
 
         .char-selected {
             outline: 3px solid #ffffff;
@@ -392,11 +392,11 @@
             border-right: 1px solid #0d0d0d;
         }
 
-        .timeline-exact { background-color: #37be7f; }
-        .timeline-gapped { background-color: #37be7f; }
-        .timeline-hot_k1 { background-color: #7aabf0; }
-        .timeline-quad_repeat { background-color: #d17061; }
-        .timeline-partial_quad { background-color: #e8915e; }
+        .timeline-exact { background-color: #4a9eff; }
+        .timeline-gapped { background-color: #51cf66; }
+        .timeline-hot_k1 { background-color: #cc5de8; }
+        .timeline-quad_repeat { background-color: #ff69b4; }
+        .timeline-partial_quad { background-color: #ed727f; }
 
         /* Use timeline view when content is too wide */
         body.use-timeline .message-display {
@@ -462,14 +462,13 @@
                 flex: 1;
             }
         }
-            .sort-controls { flex: 0 1 auto; }
     </style>
 </head>
 <body>
     <div class="nav-box">
         <a href="structure_heatmap_19char.html" class="nav-link">← 19</a>
         <div class="nav-center">
-            <a href="../index.html">Index</a>
+            <a href="index.html">Index</a>
             <span>|</span>
             <div class="nav-jump">
                 <label for="length-jump">Go to:</label>
@@ -587,16 +586,8 @@
     <h1>Structural Heatmap for 20 Character EAMs</h1>
     <div class="stats-section">
         <div class="info-box">
-            <strong>Significance:</strong> &alpha; = 0.05, dataset-wide Bonferroni per pattern class<br>
-            <strong>Patterns:</strong>
-            <span style="color: #d17061; font-weight: bold;" title="runs of 4+ identical chars (XXXX)">runs</span> &middot;
-            <span style="color: #e8915e; font-weight: bold;" title="partial runs (XXX, XX)">partials</span> &middot;
-            <span style="color: #deba73; font-weight: bold;" title="echo markers (X??X)">echoes</span> &nbsp;|&nbsp;
-            <span style="color: #37be7f; font-weight: bold;" title="verbatim repeats paint solid; inexact repeats leave holes at the mismatched positions">repeats</span> &nbsp;|&nbsp;
-            <span style="color: #7aabf0; font-weight: bold;" title="same position matches across many messages">cross-message</span> &middot;
-            <span style="color: #d4b9f4; font-weight: bold;" title="click a chip to see member messages">sub-formats</span> &nbsp;|&nbsp;
-            <span style="color: #b98fd6; font-weight: bold;" title="accent hues separate interleaved same-family pairs sharing one segment; the accent changes the shade only, not the pattern class">accents</span> &middot;
-            <span style="color: #b98fd6; font-weight: bold;" title="minority alternative form living in the complement of a certified structure (e.g. ??XX where X??X is standard)">alt-forms</span>
+            <strong>Hot Pairs Threshold:</strong> &ge;30% of messages<br>
+            <strong>Patterns:</strong> <span style="color: #ff69b4; font-weight: bold;">Quadruple Repeats</span>, <span style="color: #51cf66; font-weight: bold;">Gapped</span>, <span style="color: #4a9eff; font-weight: bold;">Exact k≥2</span>, <span style="color: #cc5de8; font-weight: bold;">Hot k=1</span>
         </div>
         <div class="stat-card">
             <div class="stat-label">Messages</div>
@@ -606,26 +597,26 @@
     </div>
     <div class="heatmap-container">
         <div class="heatmap-bar">
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 1: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 2: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 3: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 4: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 5: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 6: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 7: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 8: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 9: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 10: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 11: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 12: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 13: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 14: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 15: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 16: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 17: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 18: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 19: display weight 0.00"></div>
-            <div class="heatmap-cell" style="background-color: rgba(230,126,34,0.00);" title="Position 20: display weight 0.00"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 1: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 2: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 3: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 4: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 5: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 6: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 7: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 8: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 9: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 10: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 11: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 12: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 13: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 14: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 15: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 16: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 17: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 18: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 19: 0.0 messages"></div>
+            <div class="heatmap-cell" style="background-color: #1a1a1a;" title="Position 20: 0.0 messages"></div>
         </div>
         <div class="position-ruler">
             <div class="position-label">01</div>
@@ -1317,35 +1308,6 @@
             }
         }
     </script>
-<script>
-(function() {
-  function rebuildBarFromChips() {
-    var blocks = Array.prototype.filter.call(
-      document.querySelectorAll('.message-block'),
-      function(b) { return !b.classList.contains('hidden'); });
-    var cells = document.querySelectorAll('.heatmap-cell');
-    var counts = new Array(cells.length).fill(0);
-    blocks.forEach(function(b) {
-      b.querySelectorAll('.message-display .char').forEach(function(c) {
-        var m = (c.getAttribute('style') || '').match(/rgba\([^,]+,[^,]+,[^,]+,([\d.]+)\)/);
-        var a = m ? parseFloat(m[1]) : 0;
-        var pos = parseInt(c.getAttribute('data-position'));
-        if (a > 0 && pos < counts.length) counts[pos] += a;
-      });
-    });
-    var n = Math.max(1, blocks.length);
-    cells.forEach(function(cell, i) {
-      var v = Math.min(1, counts[i] / n);
-      cell.style.backgroundColor = 'rgba(230,126,34,' + v.toFixed(2) + ')';
-      cell.title = 'Position ' + (i + 1) + ': display weight ' + v.toFixed(2);
-    });
-  }
-  document.querySelectorAll('.filter-checkbox input[type="checkbox"]').forEach(function(cb) {
-    cb.addEventListener('change', rebuildBarFromChips);
-  });
-  window.addEventListener('load', rebuildBarFromChips);
-})();
-</script>
     <script>
         // Up/Down flips to the other rendering (production <-> next-gen)
         // of this same length, preserving scroll and filter state.
@@ -1366,7 +1328,7 @@
                     if (b && b.checked === k.baseV) st.f[id] = k.v;
                 });
                 try { sessionStorage.setItem('hmFlipState', JSON.stringify(st)); } catch (_) {}
-                window.location.replace('../structure_heatmap_20char.html');
+                window.location.replace('test/structure_heatmap_20char.html');
             }
         });
         window.addEventListener('load', function() {
