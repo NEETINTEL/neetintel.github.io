@@ -582,7 +582,7 @@
   <div class="page-intro">
     <p>Every HFGCS livestream on the <a href="https://www.youtube.com/@neetintel/streams" target="_blank" rel="noopener">NEET INTEL</a> channel, one panel per UTC day. <strong>A</strong> is the first half of the day and <strong>B</strong> the second &mdash; cut on US Eastern midnight and noon until August 2025, on UTC since September 2025. Auxiliary streams &mdash; other frequencies, other regions, event and commentary coverage &mdash; sit beside them. Each window is the stream's own go-live time and run length; a faded rail is a window inferred from that month's habit because the recording's metadata is missing.</p>
     <p>Bars are that day's logged EAM traffic in 20-minute periods, coloured by group; the rail underneath is what was on tape. Click a bar to open the stream that was on air 20 seconds before the first message in that period. Left and right arrows step the whole calendar through the A and B halves of every day, wrapping round; with a day open they run through that day's own streams in turn &mdash; A, B, then any auxiliary &mdash; before moving to the next day.</p>
-    <p>The timeline field says whether its bars are the whole story. <strong>Flat</strong>: the recording has been reviewed &mdash; a DTCP timecard exists, or a certified-zero marker &mdash; so the bars are complete and an empty stretch is real silence. <strong>Hatched, dashed frame</strong>: no timecard, so the bars are a floor and a gap in them is an absence of notes rather than of traffic. 864 days on tape: 534 reviewed, 330 to go (124 of them with nothing logged). <button class="todo-btn" onclick="setQuery('r')">TO-DO</button> lists the days still to review, and <code>rn</code> narrows that to the ones with nothing logged at all.</p>
+    <p>The timeline field says whether its bars are the whole story. <strong>Flat</strong>: the recording has been reviewed &mdash; a DTCP timecard exists, or a certified-zero marker &mdash; so the bars are complete and an empty stretch is real silence. <strong>Hatched, dashed frame</strong>: no timecard, so the bars are a floor and a gap in them is an absence of notes rather than of traffic. 876 days on tape: 539 reviewed, 337 to go (131 of them with nothing logged). <button class="todo-btn" onclick="setQuery('r')">TO-DO</button> lists the days still to review, and <code>rn</code> narrows that to the ones with nothing logged at all.</p>
   </div>
 
   <div class="calendar-wrap">
@@ -13698,110 +13698,292 @@
       </div>
       <div class="day-slot empty"></div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261101" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;GNcUhGdvsJY&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261101A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:3917,&quot;e&quot;:43004,&quot;b&quot;:3917,&quot;x&quot;:true},{&quot;id&quot;:&quot;Tgm-hLIM4HM&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261101B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43207,&quot;e&quot;:86107,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="">
+        <div class="ls-panel" data-date="261101" data-groups="" data-lens="" data-labels="TA,TB" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;GNcUhGdvsJY&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261101TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:3917,&quot;e&quot;:43004,&quot;b&quot;:3917,&quot;x&quot;:true},{&quot;id&quot;:&quot;Tgm-hLIM4HM&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261101TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43207,&quot;e&quot;:86107,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/GNcUhGdvsJY/mqdefault.jpg" alt="261101A" loading="lazy">
+            <img src="https://img.youtube.com/vi/GNcUhGdvsJY/mqdefault.jpg" alt="261101TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261101</span>
               <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261101A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261101B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="none" title="261101 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:4.534%;width:45.240%" title="A  01:05-11:56 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:49.653%" title="B  12:00-23:55 UTC"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261101TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261101TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="none" title="261101 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:4.534%;width:45.240%" title="TA  01:05-11:56 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:49.653%" title="TB  12:00-23:55 UTC"></span></div></div>
           </div>
         </div>
       </div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261102" data-groups="1,3,4" data-lens="27,30,164" data-labels="A,B" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;KqgUMeyOxQE&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261102A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42902,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;7eS_EJlWcus&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261102B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86043,&quot;b&quot;:43208,&quot;x&quot;:true}]" data-eams="9180:1:30,10200:1:30,12000:1:30,54240:3:27,76080:1:30,77040:1:30,81240:4:164">
+        <div class="ls-panel" data-date="261102" data-groups="1,3,4" data-lens="27,30,164" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;KqgUMeyOxQE&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261102TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:10,&quot;e&quot;:42902,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;7eS_EJlWcus&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261102TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43208,&quot;e&quot;:86043,&quot;b&quot;:43208,&quot;x&quot;:true}]" data-eams="9180:1:30,10200:1:30,12000:1:30,54240:3:27,76080:1:30,77040:1:30,81240:4:164">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/KqgUMeyOxQE/mqdefault.jpg" alt="261102A" loading="lazy">
+            <img src="https://img.youtube.com/vi/KqgUMeyOxQE/mqdefault.jpg" alt="261102TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261102</span>
               <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 " data-group="3" title="4S"></span><span class="gi gi-4 " data-group="4" title="MM"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261102A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261102B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="card" title="261102 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||100.0;9180;02:33;1:100.0:9180|100.0;10200;02:50;1:100.0:10200||100.0;12000;03:20;1:100.0:12000|||||||||||||||||||||||||||||||||||100.0;54240;15:04;3:100.0:54240||||||||||||||||||100.0;76080;21:08;1:100.0:76080|100.0;77040;21:24;1:100.0:77040|||100.0;81240;22:34;4:100.0:81240||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.644%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.009%;width:49.578%" title="B  12:00-23:54 UTC"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261102TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261102TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261102 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||100.0;9180;02:33;1:100.0:9180|100.0;10200;02:50;1:100.0:10200||100.0;12000;03:20;1:100.0:12000|||||||||||||||||||||||||||||||||||100.0;54240;15:04;3:100.0:54240||||||||||||||||||100.0;76080;21:08;1:100.0:76080|100.0;77040;21:24;1:100.0:77040|||100.0;81240;22:34;4:100.0:81240||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.644%" title="TA  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.009%;width:49.578%" title="TB  12:00-23:54 UTC"></span></div></div>
           </div>
         </div>
       </div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261103" data-groups="1,2,3" data-lens="30,42,43" data-labels="A,B" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;4EzOLPmDewk&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261103A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42899,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;NOxN0GmHI58&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261103B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43207,&quot;e&quot;:86104,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="53280:3:42,57480:2:30,59340:1:30,59580:1:30,60360:2:43,61080:2:30,61560:1:30,62040:1:30">
+        <div class="ls-panel" data-date="261103" data-groups="1,2,3" data-lens="30,42,43" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;4EzOLPmDewk&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261103TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:10,&quot;e&quot;:42899,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;NOxN0GmHI58&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261103TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43207,&quot;e&quot;:86104,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="53280:3:42,57480:2:30,59340:1:30,59580:1:30,60360:2:43,61080:2:30,61560:1:30,62040:1:30">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/4EzOLPmDewk/mqdefault.jpg" alt="261103A" loading="lazy">
+            <img src="https://img.youtube.com/vi/4EzOLPmDewk/mqdefault.jpg" alt="261103TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261103</span>
               <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 " data-group="3" title="4S"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261103A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261103B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="card" title="261103 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||||||||||||||||||||||||||||||||||||||50.0;53280;14:48;3:100.0:53280|||50.0;57480;15:58;2:100.0:57480||100.0;59340;16:29, 16:33;1:100.0:59340|100.0;60360;16:46, 16:58;2:100.0:60360|100.0;61560;17:06, 17:14;1:100.0:61560||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.640%" title="A  00:00-11:54 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:49.649%" title="B  12:00-23:55 UTC"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261103TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261103TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261103 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||||||||||||||||||||||||||||||||||||||50.0;53280;14:48;3:100.0:53280|||50.0;57480;15:58;2:100.0:57480||100.0;59340;16:29, 16:33;1:100.0:59340|100.0;60360;16:46, 16:58;2:100.0:60360|100.0;61560;17:06, 17:14;1:100.0:61560||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.640%" title="TA  00:00-11:54 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:49.649%" title="TB  12:00-23:55 UTC"></span></div></div>
           </div>
         </div>
       </div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261104" data-groups="1,2,3,4" data-lens="30,35,37,42,172" data-labels="A,B" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;FvaKU1XkaVk&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261104A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:9,&quot;e&quot;:43008,&quot;b&quot;:9,&quot;x&quot;:true},{&quot;id&quot;:&quot;LIgBqiFcmno&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261104B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86106,&quot;b&quot;:43208,&quot;x&quot;:false}]" data-eams="58260:3:42,59220:2:35,59640:2:37,60000:1:30,62880:1:30,63120:1:30,63240:1:30,63480:1:30,64860:1:30,64860:1:30,64860:1:30,66180:2:35,76800:1:30,80280:1:30,80400:1:30,80580:1:30,80820:4:172,81540:1:30">
+        <div class="ls-panel" data-date="261104" data-groups="1,2,3,4" data-lens="30,35,37,42,172" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;FvaKU1XkaVk&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261104TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:9,&quot;e&quot;:43008,&quot;b&quot;:9,&quot;x&quot;:true},{&quot;id&quot;:&quot;LIgBqiFcmno&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261104TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43208,&quot;e&quot;:86106,&quot;b&quot;:43208,&quot;x&quot;:false}]" data-eams="58260:3:42,59220:2:35,59640:2:37,60000:1:30,62880:1:30,63120:1:30,63240:1:30,63480:1:30,64860:1:30,64860:1:30,64860:1:30,66180:2:35,76800:1:30,80280:1:30,80400:1:30,80580:1:30,80820:4:172,81540:1:30">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/FvaKU1XkaVk/mqdefault.jpg" alt="261104A" loading="lazy">
+            <img src="https://img.youtube.com/vi/FvaKU1XkaVk/mqdefault.jpg" alt="261104TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261104</span>
               <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 " data-group="3" title="4S"></span><span class="gi gi-4 " data-group="4" title="MM"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261104A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261104B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="card" title="261104 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||||||||||||||||||||||||||||||||||||||||||25.0;58260;16:11;3:100.0:58260|50.0;59220;16:27, 16:34;2:100.0:59220|25.0;60000;16:40;1:100.0:60000||100.0;62880;17:28, 17:32, 17:34, 17:38;1:100.0:62880||75.0;64860;18:01, 18:01, 18:01;1:100.0:64860|25.0;66180;18:23;2:100.0:66180|||||||||25.0;76800;21:20;1:100.0:76800||25.0;80280;22:18;1:100.0:80280|100.0;80400;22:20, 22:23, 22:27, 22:39;1:75.0:80400,4:25.0:80820||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.010%;width:49.767%" title="A  00:00-11:56 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="0" style="left:50.009%;width:49.650%" title="B  12:00-23:55 UTC  (inferred)"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261104TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261104TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261104 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||||||||||||||||||||||||||||||||||||||||||25.0;58260;16:11;3:100.0:58260|50.0;59220;16:27, 16:34;2:100.0:59220|25.0;60000;16:40;1:100.0:60000||100.0;62880;17:28, 17:32, 17:34, 17:38;1:100.0:62880||75.0;64860;18:01, 18:01, 18:01;1:100.0:64860|25.0;66180;18:23;2:100.0:66180|||||||||25.0;76800;21:20;1:100.0:76800||25.0;80280;22:18;1:100.0:80280|100.0;80400;22:20, 22:23, 22:27, 22:39;1:75.0:80400,4:25.0:80820||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.010%;width:49.767%" title="TA  00:00-11:56 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="0" style="left:50.009%;width:49.650%" title="TB  12:00-23:55 UTC  (inferred)"></span></div></div>
           </div>
         </div>
       </div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261105" data-groups="1,2" data-lens="30" data-labels="A,B" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;3Gr8wQZzYnw&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261105A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:8,&quot;e&quot;:42907,&quot;b&quot;:8,&quot;x&quot;:true},{&quot;id&quot;:&quot;li3V8ywWNMY&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261105B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43211,&quot;e&quot;:86109,&quot;b&quot;:43211,&quot;x&quot;:true}]" data-eams="9180:1:30,54300:2:30,66840:1:30,82920:2:30,83760:2:30,84600:1:30">
+        <div class="ls-panel" data-date="261105" data-groups="1,2" data-lens="30" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;3Gr8wQZzYnw&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261105TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:8,&quot;e&quot;:42907,&quot;b&quot;:8,&quot;x&quot;:true},{&quot;id&quot;:&quot;li3V8ywWNMY&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261105TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43211,&quot;e&quot;:86109,&quot;b&quot;:43211,&quot;x&quot;:true}]" data-eams="9180:1:30,54300:2:30,66840:1:30,82920:2:30,83760:2:30,84600:1:30">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/3Gr8wQZzYnw/mqdefault.jpg" alt="261105A" loading="lazy">
+            <img src="https://img.youtube.com/vi/3Gr8wQZzYnw/mqdefault.jpg" alt="261105TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261105</span>
               <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261105A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261105B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="card" title="261105 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||50.0;9180;02:33;1:100.0:9180||||||||||||||||||||||||||||||||||||||50.0;54300;15:05;2:100.0:54300||||||||||50.0;66840;18:34;1:100.0:66840||||||||||||||100.0;82920;23:02, 23:16;2:100.0:82920|50.0;84600;23:30;1:100.0:84600|"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.009%;width:49.652%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.013%;width:49.650%" title="B  12:00-23:55 UTC"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261105TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261105TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261105 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||50.0;9180;02:33;1:100.0:9180||||||||||||||||||||||||||||||||||||||50.0;54300;15:05;2:100.0:54300||||||||||50.0;66840;18:34;1:100.0:66840||||||||||||||100.0;82920;23:02, 23:16;2:100.0:82920|50.0;84600;23:30;1:100.0:84600|"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.009%;width:49.652%" title="TA  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.013%;width:49.650%" title="TB  12:00-23:55 UTC"></span></div></div>
           </div>
         </div>
       </div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261106" data-groups="1,2" data-lens="30" data-labels="A,B" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;0_HOSjRx6O0&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261106A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42907,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;l2jAglepQQE&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261106B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43209,&quot;e&quot;:86109,&quot;b&quot;:43209,&quot;x&quot;:true}]" data-eams="9660:1:30,56460:2:30,58380:1:30,58500:1:30,58740:1:30,59400:1:30,59400:1:30,59400:1:30,59940:2:30,60420:1:30,61260:1:30,61440:1:30,61440:1:30,61440:1:30,63060:1:30,63060:1:30,63060:1:30,63360:1:30,63360:1:30,63360:1:30,64260:1:30,65520:2:30,66720:1:30,68400:1:30,70200:1:30,72000:1:30,72720:2:30,73800:1:30,76320:2:30,83940:1:30">
+        <div class="ls-panel" data-date="261106" data-groups="1,2" data-lens="30" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;0_HOSjRx6O0&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261106TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:10,&quot;e&quot;:42907,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;l2jAglepQQE&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261106TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43209,&quot;e&quot;:86109,&quot;b&quot;:43209,&quot;x&quot;:true}]" data-eams="9660:1:30,56460:2:30,58380:1:30,58500:1:30,58740:1:30,59400:1:30,59400:1:30,59400:1:30,59940:2:30,60420:1:30,61260:1:30,61440:1:30,61440:1:30,61440:1:30,63060:1:30,63060:1:30,63060:1:30,63360:1:30,63360:1:30,63360:1:30,64260:1:30,65520:2:30,66720:1:30,68400:1:30,70200:1:30,72000:1:30,72720:2:30,73800:1:30,76320:2:30,83940:1:30">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/0_HOSjRx6O0/mqdefault.jpg" alt="261106A" loading="lazy">
+            <img src="https://img.youtube.com/vi/0_HOSjRx6O0/mqdefault.jpg" alt="261106TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261106</span>
               <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261106A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261106B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="card" title="261106 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||16.7;9660;02:41;1:100.0:9660|||||||||||||||||||||||||||||||||||||||16.7;56460;15:41;2:100.0:56460|50.0;58380;16:13, 16:15, 16:19;1:100.0:58380|66.7;59400;16:30, 16:30, 16:30, 16:39;1:75.0:59400,2:25.0:59940|16.7;60420;16:47;1:100.0:60420|66.7;61260;17:01, 17:04, 17:04, 17:04;1:100.0:61260|100.0;63060;17:31, 17:31, 17:31, 17:36, 17:36, 17:36;1:100.0:63060|16.7;64260;17:51;1:100.0:64260|16.7;65520;18:12;2:100.0:65520|16.7;66720;18:32;1:100.0:66720||16.7;68400;19:00;1:100.0:68400|16.7;70200;19:30;1:100.0:70200||33.3;72000;20:00, 20:12;1:50.0:72000,2:50.0:72720|16.7;73800;20:30;1:100.0:73800||16.7;76320;21:12;2:100.0:76320||||||16.7;83940;23:19;1:100.0:83940||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.649%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.010%;width:49.653%" title="B  12:00-23:55 UTC"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261106TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261106TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261106 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||16.7;9660;02:41;1:100.0:9660|||||||||||||||||||||||||||||||||||||||16.7;56460;15:41;2:100.0:56460|50.0;58380;16:13, 16:15, 16:19;1:100.0:58380|66.7;59400;16:30, 16:30, 16:30, 16:39;1:75.0:59400,2:25.0:59940|16.7;60420;16:47;1:100.0:60420|66.7;61260;17:01, 17:04, 17:04, 17:04;1:100.0:61260|100.0;63060;17:31, 17:31, 17:31, 17:36, 17:36, 17:36;1:100.0:63060|16.7;64260;17:51;1:100.0:64260|16.7;65520;18:12;2:100.0:65520|16.7;66720;18:32;1:100.0:66720||16.7;68400;19:00;1:100.0:68400|16.7;70200;19:30;1:100.0:70200||33.3;72000;20:00, 20:12;1:50.0:72000,2:50.0:72720|16.7;73800;20:30;1:100.0:73800||16.7;76320;21:12;2:100.0:76320||||||16.7;83940;23:19;1:100.0:83940||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.649%" title="TA  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.010%;width:49.653%" title="TB  12:00-23:55 UTC"></span></div></div>
           </div>
         </div>
       </div>
       <div class="day-slot">
-        <div class="ls-panel" data-date="261107" data-groups="1,2" data-lens="30,35,55" data-labels="A,B" data-review="part" data-shown="0" data-streams="[{&quot;id&quot;:&quot;V09zUTvObII&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261107A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:12,&quot;e&quot;:42912,&quot;b&quot;:12,&quot;x&quot;:true},{&quot;id&quot;:&quot;QTMaRWCWa2w&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261107B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86106,&quot;b&quot;:43208,&quot;x&quot;:false}]" data-eams="33420:2:55,34080:2:55,36780:2:35,40620:1:30,74520:1:30">
+        <div class="ls-panel" data-date="261107" data-groups="1,2" data-lens="30,35,55" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;V09zUTvObII&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261107TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:12,&quot;e&quot;:42912,&quot;b&quot;:12,&quot;x&quot;:true},{&quot;id&quot;:&quot;QTMaRWCWa2w&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261107TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43208,&quot;e&quot;:86106,&quot;b&quot;:43208,&quot;x&quot;:false}]" data-eams="33420:2:55,34080:2:55,36780:2:35,40620:1:30,74520:1:30,79200:2:35,80640:2:35,83160:2:35,83520:2:35,84360:1:30">
           <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
-            <img src="https://img.youtube.com/vi/V09zUTvObII/mqdefault.jpg" alt="261107A" loading="lazy">
+            <img src="https://img.youtube.com/vi/V09zUTvObII/mqdefault.jpg" alt="261107TA" loading="lazy">
           </div>
           <div class="card-body">
             <div class="card-header">
               <span class="card-date">261107</span>
               <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
             </div>
-            <div class="chips"><button class="chip chip-aux sel" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261107A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="Shortwave Radio &amp; Doomsday Plane Monitor · Live E-6B Tracking · 261107B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
-            <div class="tl-wrap" data-review="part" title="261107 — 5 message(s) logged, no timecard — more may be unnoted"><div class="timeline" data-tl="|||||||||||||||||||||||||||100.0;33420;09:17;2:100.0:33420|100.0;34080;09:28;2:100.0:34080||100.0;36780;10:13;2:100.0:36780|||100.0;40620;11:17;1:100.0:40620|||||||||||||||||||||||||||||100.0;74520;20:42;1:100.0:74520|||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.014%;width:49.653%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="0" style="left:50.009%;width:49.650%" title="B  12:00-23:55 UTC  (inferred)"></span></div></div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261107TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261107TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261107 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||||||||||||||||||||||50.0;33420;09:17;2:100.0:33420|50.0;34080;09:28;2:100.0:34080||50.0;36780;10:13;2:100.0:36780|||50.0;40620;11:17;1:100.0:40620|||||||||||||||||||||||||||||50.0;74520;20:42;1:100.0:74520||||50.0;79200;22:00;2:100.0:79200|50.0;80640;22:24;2:100.0:80640||100.0;83160;23:06, 23:12;2:100.0:83160|50.0;84360;23:26;1:100.0:84360|"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.014%;width:49.653%" title="TA  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="0" style="left:50.009%;width:49.650%" title="TB  12:00-23:55 UTC  (inferred)"></span></div></div>
           </div>
         </div>
       </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261108" data-groups="1,2" data-lens="30" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;BHGniThlv1s&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261108TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:10,&quot;e&quot;:42907,&quot;b&quot;:10,&quot;x&quot;:false},{&quot;id&quot;:&quot;FlPMeWRzmxw&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261108TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43207,&quot;e&quot;:80187,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="11220:1:30,12480:1:30,36180:2:30,37320:2:30,38520:2:30,64080:1:30,65640:1:30,70080:1:30,76200:1:30">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/BHGniThlv1s/mqdefault.jpg" alt="261108TA" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261108</span>
+              <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261108TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261108TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261108 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||||100.0;11220;03:07;1:100.0:11220|100.0;12480;03:28;1:100.0:12480||||||||||||||||||||100.0;36180;10:03;2:100.0:36180|100.0;37320;10:22;2:100.0:37320|100.0;38520;10:42;2:100.0:38520|||||||||||||||||||||100.0;64080;17:48;1:100.0:64080|100.0;65640;18:14;1:100.0:65640||||100.0;70080;19:28;1:100.0:70080|||||100.0;76200;21:10;1:100.0:76200||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="0" style="left:0.012%;width:49.649%" title="TA  00:00-11:55 UTC  (inferred)"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:42.801%" title="TB  12:00-22:16 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261109" data-groups="1,2,3" data-lens="22,30" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;rTX7g-w8V8o&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261109TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:11,&quot;e&quot;:38266,&quot;b&quot;:11,&quot;x&quot;:true},{&quot;id&quot;:&quot;tjAeaSXJwEo&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261109TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43209,&quot;e&quot;:86105,&quot;b&quot;:43209,&quot;x&quot;:true}]" data-eams="16860:3:22,18120:1:30,18300:1:30,49320:2:30,77760:2:30,79560:1:30">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/rTX7g-w8V8o/mqdefault.jpg" alt="261109TA" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261109</span>
+              <span class="card-groups"><span class="gi gi-1 " data-group="1" title="56, YA"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 " data-group="3" title="4S"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261109TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261109TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261109 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||||||||50.0;16860;04:41;3:100.0:16860|100.0;18120;05:02, 05:05;1:100.0:18120||||||||||||||||||||||||||50.0;49320;13:42;2:100.0:49320|||||||||||||||||||||||50.0;77760;21:36;2:100.0:77760||50.0;79560;22:06;1:100.0:79560|||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.013%;width:44.277%" title="TA  00:00-10:37 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.010%;width:49.648%" title="TB  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261110" data-groups="3" data-lens="25,71" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;V34AVoB_b3I&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261110TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:7,&quot;e&quot;:42904,&quot;b&quot;:7,&quot;x&quot;:true},{&quot;id&quot;:&quot;Mv8XlOrLcr4&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261110TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43207,&quot;e&quot;:86107,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="57540:3:25,58140:3:25,58500:3:71">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/V34AVoB_b3I/mqdefault.jpg" alt="261110TA" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261110</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 " data-group="3" title="4S"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261110TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261110TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261110 — DTCP timecard — reviewed"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||50.0;57540;15:59;3:100.0:57540|100.0;58140;16:09, 16:15;3:100.0:58140|||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.008%;width:49.649%" title="TA  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:49.653%" title="TB  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261111" data-groups="1,2,4" data-lens="30,40,158" data-labels="TA,TB" data-review="card" data-shown="0" data-streams="[{&quot;id&quot;:&quot;Q9CbvbGbNNo&quot;,&quot;l&quot;:&quot;TA&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261111TA&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:7,&quot;e&quot;:42907,&quot;b&quot;:7,&quot;x&quot;:true},{&quot;id&quot;:&quot;BN-fpvlctjA&quot;,&quot;l&quot;:&quot;TB&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;HFGCS LIVESTREAM 261111TB&quot;,&quot;n&quot;:&quot;&quot;,&quot;s&quot;:43210,&quot;e&quot;:86110,&quot;b&quot;:43210,&quot;x&quot;:true}]" data-eams="50580:2:40,50700:2:30,52680:1:30,52860:1:30,53040:1:30,63840:4:158">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/Q9CbvbGbNNo/mqdefault.jpg" alt="261111TA" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261111</span>
+              <span class="card-groups"><span class="gi gi-1 " data-group="1" title="YA"></span><span class="gi gi-2 " data-group="2" title="WE"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 " data-group="4" title="MM"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="HFGCS LIVESTREAM 261111TA" onclick="openModal(event,this.closest('.ls-panel'),0,0)">TA</button><button class="chip chip-aux" title="HFGCS LIVESTREAM 261111TB" onclick="openModal(event,this.closest('.ls-panel'),1,0)">TB</button></div>
+            <div class="tl-wrap" data-review="card" title="261111 — DTCP timecard — reviewed"><div class="timeline" data-tl="||||||||||||||||||||||||||||||||||||||||||100.0;50580;14:03, 14:05;2:100.0:50580|50.0;52680;14:38;1:100.0:52680|100.0;52860;14:41, 14:44;1:100.0:52860|||||||||50.0;63840;17:44;4:100.0:63840||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.008%;width:49.653%" title="TA  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.012%;width:49.653%" title="TB  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261112" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;0UPEScC2880&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261112A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:9,&quot;e&quot;:42909,&quot;b&quot;:9,&quot;x&quot;:true},{&quot;id&quot;:&quot;Xj5zibUMVDA&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261112B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86104,&quot;b&quot;:43208,&quot;x&quot;:true}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/0UPEScC2880/mqdefault.jpg" alt="261112A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261112</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261112A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261112B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261112 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.010%;width:49.653%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.009%;width:49.648%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261113" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;1QHC_GBtvus&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261113A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42907,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;iz3O4eLI95I&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261113B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43211,&quot;e&quot;:86111,&quot;b&quot;:43211,&quot;x&quot;:true}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/1QHC_GBtvus/mqdefault.jpg" alt="261113A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261113</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261113A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261113B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261113 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.649%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.013%;width:49.653%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261114" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;oswoLYPSAkQ&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261114A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42910,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;y7aoTnwtYGQ&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261114B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86108,&quot;b&quot;:43208,&quot;x&quot;:true}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/oswoLYPSAkQ/mqdefault.jpg" alt="261114A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261114</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261114A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261114B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261114 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.653%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.009%;width:49.653%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261115" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;a61F4WtDBR0&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261115A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:7,&quot;e&quot;:42907,&quot;b&quot;:7,&quot;x&quot;:true},{&quot;id&quot;:&quot;4_DSAxifLRs&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261115B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43210,&quot;e&quot;:86106,&quot;b&quot;:43210,&quot;x&quot;:true}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/a61F4WtDBR0/mqdefault.jpg" alt="261115A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261115</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261115A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261115B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261115 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.008%;width:49.653%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.012%;width:49.648%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261116" data-groups="3" data-lens="27,42" data-labels="A,B" data-review="part" data-shown="0" data-streams="[{&quot;id&quot;:&quot;pFnZ-Papx8k&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261116A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42906,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;eNs00DP0SaY&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261116B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43211,&quot;e&quot;:86107,&quot;b&quot;:43211,&quot;x&quot;:true}]" data-eams="57720:3:42,58020:3:27,81120:3:42">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/pFnZ-Papx8k/mqdefault.jpg" alt="261116A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261116</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 " data-group="3" title="JQ"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261116A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261116B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="part" title="261116 — 3 message(s) logged, no timecard — more may be unnoted"><div class="timeline" data-tl="||||||||||||||||||||||||||||||||||||||||||||||||100.0;57720;16:02, 16:07;3:100.0:57720|||||||||||||||||||50.0;81120;22:32;3:100.0:81120||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.648%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.013%;width:49.648%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261117" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;xuWypUhkcYs&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261117A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:10,&quot;e&quot;:42907,&quot;b&quot;:10,&quot;x&quot;:true},{&quot;id&quot;:&quot;avN6eKMaYjc&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261117B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86108,&quot;b&quot;:43208,&quot;x&quot;:true}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/xuWypUhkcYs/mqdefault.jpg" alt="261117A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261117</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261117A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261117B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261117 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.012%;width:49.649%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.009%;width:49.653%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261118" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;EmX-9dfUwQI&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261118A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:12,&quot;e&quot;:42886,&quot;b&quot;:12,&quot;x&quot;:true},{&quot;id&quot;:&quot;1iKMu8RoF9A&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261118B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43207,&quot;e&quot;:86107,&quot;b&quot;:43207,&quot;x&quot;:true}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/EmX-9dfUwQI/mqdefault.jpg" alt="261118A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261118</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261118A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261118B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261118 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.014%;width:49.623%" title="A  00:00-11:54 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:50.008%;width:49.653%" title="B  12:00-23:55 UTC"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot">
+        <div class="ls-panel" data-date="261119" data-groups="" data-lens="" data-labels="A,B" data-review="none" data-shown="0" data-streams="[{&quot;id&quot;:&quot;dM2t4ZuPQ9g&quot;,&quot;l&quot;:&quot;A&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261119A&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:7,&quot;e&quot;:42907,&quot;b&quot;:7,&quot;x&quot;:true},{&quot;id&quot;:&quot;vzKP8956cDs&quot;,&quot;l&quot;:&quot;B&quot;,&quot;k&quot;:&quot;aux&quot;,&quot;t&quot;:&quot;CHINESE MILITARY RADIO MONITOR 261119B&quot;,&quot;n&quot;:&quot;OTHER&quot;,&quot;s&quot;:43208,&quot;e&quot;:86108,&quot;b&quot;:43208,&quot;x&quot;:false}]" data-eams="">
+          <div class="panel-thumb" onclick="openShown(event,this.closest('.ls-panel'))">
+            <img src="https://img.youtube.com/vi/dM2t4ZuPQ9g/mqdefault.jpg" alt="261119A" loading="lazy">
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-date">261119</span>
+              <span class="card-groups"><span class="gi gi-1 inactive" data-group="1" title="Group 1"></span><span class="gi gi-2 inactive" data-group="2" title="Group 2"></span><span class="gi gi-3 inactive" data-group="3" title="Group 3"></span><span class="gi gi-4 inactive" data-group="4" title="Group 4"></span><span class="gi gi-5 inactive" data-group="5" title="Group 5"></span><span class="gi gi-u inactive" data-group="unclassified" title="Unknown"></span></span>
+            </div>
+            <div class="chips"><button class="chip chip-aux sel" title="CHINESE MILITARY RADIO MONITOR 261119A" onclick="openModal(event,this.closest('.ls-panel'),0,0)">A</button><button class="chip chip-aux" title="CHINESE MILITARY RADIO MONITOR 261119B" onclick="openModal(event,this.closest('.ls-panel'),1,0)">B</button></div>
+            <div class="tl-wrap" data-review="none" title="261119 — not reviewed — no timecard, nothing logged"><div class="timeline" data-tl="|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"><canvas></canvas></div><div class="cov"><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="1" style="left:0.008%;width:49.653%" title="A  00:00-11:55 UTC"></span><span class="cov-seg" data-kind="aux" data-lane="0" data-exact="0" style="left:50.009%;width:49.653%" title="B  12:00-23:55 UTC  (inferred)"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="day-slot empty"></div>
+      <div class="day-slot empty"></div>
       <div class="day-slot empty"></div>
     </div><!-- .ls-grid -->
   </div><!-- .calendar-wrap -->
@@ -14332,11 +14514,14 @@
      Left and right step the whole calendar through each day's halves, wrapping
      round, so a press always moves. A day with only one half keeps it;
      auxiliaries stay off this switch (they are one-off feeds, not the other
-     side of a day) and are reached by their chip. */
+     side of a day) and are reached by their chip. A day with no A/B pair but a
+     T-A/T-B pair (250831 TA/TB, 261101-261111 T-A/T-B) switches between those. */
+  const T_HALVES = ['TA', 'TB', 'T-A', 'T-B'];
   function stepHalf(panel, dir) {
     const streams = streamsOf(panel);
-    const halves = streams.reduce((acc, s, i) =>
-      (s.k === 'a' || s.k === 'b') ? acc.concat(i) : acc, []);
+    const pick = test => streams.reduce((acc, s, i) => test(s) ? acc.concat(i) : acc, []);
+    let halves = pick(s => s.k === 'a' || s.k === 'b');
+    if (halves.length < 2) halves = pick(s => T_HALVES.includes(s.l));
     if (halves.length < 2) return false;
     const at = halves.indexOf(+(panel.dataset.shown || 0));
     const want = halves[((at < 0 ? 0 : at) + dir + halves.length) % halves.length];
