@@ -14512,16 +14512,23 @@
 
   /* ── Half switching ──
      Left and right step the whole calendar through each day's halves, wrapping
-     round, so a press always moves. A day with only one half keeps it;
-     auxiliaries stay off this switch (they are one-off feeds, not the other
-     side of a day) and are reached by their chip. A day with no A/B pair but a
-     T-A/T-B pair (250831 TA/TB, 261101-261111 T-A/T-B) switches between those. */
-  const T_HALVES = ['TA', 'TB', 'T-A', 'T-B'];
+     round, so a press always moves. A day with an HFGCS A/B pair switches
+     between those two, and its auxiliaries are reached by their chip. Any other
+     day steps through the streams that ran one after another (TA/TB, the
+     Chinese Military Radio Monitor's A/B, B + EU-A, A + T, ...). A stream that
+     overlaps another that day, or has no known window, stays off the switch:
+     concurrent feeds (240816 B + a live Q&A) are not two sides of a day. */
+  const OVERLAP_SLACK = 300;   // seconds of overlap still counted as one-after-another
   function stepHalf(panel, dir) {
     const streams = streamsOf(panel);
-    const pick = test => streams.reduce((acc, s, i) => test(s) ? acc.concat(i) : acc, []);
-    let halves = pick(s => s.k === 'a' || s.k === 'b');
-    if (halves.length < 2) halves = pick(s => T_HALVES.includes(s.l));
+    let halves = streams.reduce((acc, s, i) =>
+      (s.k === 'a' || s.k === 'b') ? acc.concat(i) : acc, []);
+    if (halves.length < 2) {
+      const known = streams.reduce((acc, s, i) =>
+        (s.s != null && s.e != null) ? acc.concat(i) : acc, []);
+      const apart = (p, q) => p.e <= q.s + OVERLAP_SLACK || q.e <= p.s + OVERLAP_SLACK;
+      halves = known.filter(i => known.every(j => j === i || apart(streams[i], streams[j])));
+    }
     if (halves.length < 2) return false;
     const at = halves.indexOf(+(panel.dataset.shown || 0));
     const want = halves[((at < 0 ? 0 : at) + dir + halves.length) % halves.length];
