@@ -75,6 +75,10 @@ button.chip b{color:var(--series)}
 #map .trk.ghost{stroke:var(--ink-2);stroke-width:1;opacity:.35}
 #map .resp.off{opacity:.2}
 #map .nowp{stroke:var(--surface);stroke-width:1.5}
+#map .nowp.g{fill:var(--ground)}
+#map .nowp.picked{stroke:var(--ink-strong);stroke-width:2}
+#map .pickring{fill:none;stroke:var(--series);stroke-width:2.5}
+#map .tagl.picked{fill:var(--series)}
 #map .nowp.stale{fill:var(--panel)!important;stroke:var(--ink-strong);stroke-width:1.5;stroke-dasharray:2 2}
 #map .nowp.b0{fill:var(--b0)} #map .nowp.b1{fill:var(--b1)} #map .nowp.b2{fill:var(--b2)}
 #map .nowp.b3{fill:var(--b3)} #map .nowp.b4{fill:var(--b4)} #map .nowp.b5{fill:var(--b5)}
@@ -291,7 +295,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
   // g-geo (land, reservations, tracks, loop rings) is drawn once in the map's own pixels and moved by zoom and drag as one;
   // g-lab (labels, dots, aircraft) is redrawn on top in screen pixels so it keeps its size. tNow: null = the whole day, else
   // seconds from the day's start (the time slider)
-  var Z = {k: 1, x: 0, y: 0}, ZMAX = 16, tNow = null, narrow = false, T0 = 0, resEls = [];
+  var Z = {k: 1, x: 0, y: 0}, ZMAX = 16, tNow = null, narrow = false, T0 = 0, resEls = [], allPts = [], picked = null;
   function scr(p) { return [Z.x + Z.k * p[0], Z.y + Z.k * p[1]]; }
   function drawMap() {
     W = Math.max(300, Math.round(svg.getBoundingClientRect().width) || 1000); H = Math.round(W * (W < 600 ? 0.85 : 0.6));
@@ -312,6 +316,8 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
       var rings = resRings(r); if (!rings.length) return null;
       return el('path', {'class': 'resp', d: rings.map(function (ring) { return pathOf(ring, true); }).join('')}, $('g-res'));
     });
+    allPts = [];
+    cur.planes.forEach(function (p) { p.track.forEach(function (q) { var xy = px(q[1], q[0]); allPts.push({x: xy[0], y: xy[1], p: p, t: q[3]}); }); });
     Z = {k: 1, x: 0, y: 0}; applyZoom();
     drawTime();
   }
@@ -371,7 +377,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
   // labels where they don't cover another: reservations, loops, their bases, then the aircraft (each tries its spots in turn)
   function drawLabels() {
     var glab = $('g-lab'); glab.textContent = '';
-    var tc = tNow == null ? Infinity : tNow, resL = [], tags = [], loopLabels = [], baseLabels = [], named = {};
+    var tc = tNow == null ? Infinity : tNow, resL = [], tags = [], pickTag = [], loopLabels = [], baseLabels = [], named = {};
     function inside(s, m) { return s[0] >= -m && s[0] <= W + m && s[1] >= -m && s[1] <= H + m; }
     cur.reservations.forEach(function (r, i) {
       if (!resEls[i] || (tNow != null && !inForce(r, T0 + tNow))) return;
@@ -385,11 +391,13 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
         e = scr(px(last[1], last[0])); if (!inside(e, 0)) return;
         el('circle', {'class': 'endp', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 2.6}, glab);
       } else {
-        var q = posAt(p, tNow); if (!q || q.alt == null || q.alt <= 0) return;   // (airborne then)
+        var mine = p.hex === picked, q = posAt(p, tNow);
+        if (!q || !mine && (q.alt == null || q.alt <= 0)) return;   // (airborne then; the picked one wherever it was)
         e = scr(px(q.lon, q.lat)); if (!inside(e, 0)) return;
-        el('circle', {'class': 'nowp b' + band(q.alt) + (q.stale ? ' stale' : ''), cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 5}, glab);
+        if (mine) el('circle', {'class': 'pickring', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 11}, glab);
+        el('circle', {'class': 'nowp ' + (q.alt > 0 ? 'b' + band(q.alt) : 'g') + (q.stale ? ' stale' : '') + (mine ? ' picked' : ''), cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: mine ? 6.5 : 5}, glab);
       }
-      tags.push({from: e, cls: 'tagl', en: name, w: 7, at: [[e[0] + 7, e[1] - 6, 'start'], [e[0] + 7, e[1] + 15, 'start'], [e[0] - 7, e[1] - 6, 'end'], [e[0] - 7, e[1] + 15, 'end'], [e[0], e[1] - 11, 'middle'], [e[0], e[1] + 20, 'middle']]});
+      (p.hex === picked && tNow != null ? pickTag : tags).push({from: e, cls: 'tagl' + (p.hex === picked && tNow != null ? ' picked' : ''), en: name, w: 7, at: [[e[0] + 7, e[1] - 6, 'start'], [e[0] + 7, e[1] + 15, 'start'], [e[0] - 7, e[1] - 6, 'end'], [e[0] - 7, e[1] + 15, 'end'], [e[0], e[1] - 11, 'middle'], [e[0], e[1] + 20, 'middle']]});
     });
     cur.planes.forEach(function (p) {
       p.loops.forEach(function (l) {
@@ -407,7 +415,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
       });
     });
     var taken = [];
-    resL.concat(loopLabels, baseLabels, tags).forEach(function (L) {
+    pickTag.concat(resL, loopLabels, baseLabels, tags).forEach(function (L) {
       var w = Math.max(L.en.length * L.w, L.jp ? L.jp.length * 11.5 : 0) + 6, pick = null, f = L.at[0];
       if (!L.fixed) {
         [16, -16, 32, -32, 48, -48, 64, -64].forEach(function (dy) { L.at.push([f[0], f[1] + dy, f[2]]); });
@@ -455,18 +463,32 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     var p = svgPt(ev); zoomAt(p.x, p.y, Math.exp(-ev.deltaY * (ev.ctrlKey ? 0.01 : 0.0025)));
   }, {passive: false});
   svg.addEventListener('dblclick', function (ev) { var p = svgPt(ev); zoomAt(p.x, p.y, ev.shiftKey ? 0.5 : 2); });
+  var down = null;
+  function pickAt(ev, touch) {
+    var v = svgPt(ev), best = null, bd = Math.pow(touch ? 22 : 12, 2);
+    for (var i = 0; i < allPts.length; i++) {
+      var q = allPts[i], dx = Z.x + Z.k * q.x - v.x, dy = Z.y + Z.k * q.y - v.y, dd = dx * dx + dy * dy;
+      if (dd < bd) { bd = dd; best = q; }
+    }
+    if (!best) return;
+    picked = best.p.hex; stopPlay(); setTs(best.t);
+  }
   svg.addEventListener('pointerdown', function (ev) {
     active = true;
+    down = {id: ev.pointerId, x: ev.clientX, y: ev.clientY, at: Date.now(), touch: ev.pointerType === 'touch', multi: Object.keys(touches).length > 0};
     if (ev.pointerType === 'touch') {
       touches[ev.pointerId] = svgPt(ev);
       var ids = Object.keys(touches);
-      if (ids.length === 2) { var a = touches[ids[0]], b = touches[ids[1]]; pinch = {d: Math.hypot(a.x - b.x, a.y - b.y), m: {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}}; drag = null; return; }
+      if (ids.length === 2) { if (down) down.multi = true; var a = touches[ids[0]], b = touches[ids[1]]; pinch = {d: Math.hypot(a.x - b.x, a.y - b.y), m: {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}}; drag = null; return; }
       if (Z.k <= 1) return;
     } else if (ev.button !== 0) return;
     drag = {x: ev.clientX, y: ev.clientY, zx: Z.x, zy: Z.y};
     try { svg.setPointerCapture(ev.pointerId); } catch (e) {}
   });
   function endPointer(ev) {
+    if (ev.type === 'pointerup' && down && down.id === ev.pointerId && !down.multi && !pinch && Date.now() - down.at < 700 &&
+        Math.hypot(ev.clientX - down.x, ev.clientY - down.y) < (down.touch ? 10 : 4)) pickAt(ev, down.touch);
+    if (down && down.id === ev.pointerId) down = null;
     delete touches[ev.pointerId]; if (Object.keys(touches).length < 2) pinch = null;
     if (drag) { drag = null; svg.classList.remove('drag'); }
   }
@@ -521,6 +543,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     $('tlabel').innerHTML = tNow == null ? bi('WHOLE DAY', '終日') : String(Math.floor(tNow / 3600)).padStart(2, '0') + ':' + String(Math.floor(tNow / 60) % 60).padStart(2, '0') + ' UTC';
     $('play').innerHTML = playT ? '&#x275A;&#x275A;' : '&#x25B6;'; $('play').setAttribute('aria-label', playT ? 'Pause' : 'Play');
   }
+  function setTs(sec) { tNow = sec; slider.value = String(Math.floor(sec / 60)); hide(); drawTime(); tLabel(); }
   function setT(min) {
     tNow = min >= 1440 ? null : min * 60; slider.value = String(Math.min(1440, min)); hide(); drawTime(); tLabel();
   }
@@ -607,7 +630,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     fetch('e6b_tracker/' + d + '.json', {cache: 'no-cache'}).then(function (r) { return r.json(); }).then(function (j) {
       if (day !== d) return;
       cur = j; cur.reservations = cur.reservations || []; cur.eams = cur.eams || []; cur.vlf = cur.vlf || [];
-      hide(); resetTime(); drawMap(); render();
+      hide(); picked = null; resetTime(); drawMap(); render();
     });
   }
   $('daysel').addEventListener('change', function () { show(this.value); });
