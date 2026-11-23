@@ -41,6 +41,9 @@ h1{font:500 18px/1.2 var(--sans);color:var(--ink-strong);margin:0}
 .chip{font:500 12px/1 var(--sans);letter-spacing:.04em;
   border:1px solid var(--hairline);border-radius:3px;padding:8px 11px;color:var(--ink-2)}
 .chip b{color:var(--ink-strong);font:600 12px/1 var(--mono);letter-spacing:.3px}
+button.chip{background:none;cursor:pointer;color:var(--ink-2)}
+button.chip:hover{border-color:var(--series)}
+button.chip b{color:var(--series)}
 .panel{background:var(--panel);border:1px solid var(--hairline);border-radius:4px;
   padding:18px 14px 10px}
 .cap{font:500 12px/1 var(--sans);letter-spacing:.04em;color:var(--ink-2);margin:2px 4px 10px}
@@ -543,11 +546,25 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     cur.planes.forEach(function (p) { if (p.kind === 'E-4B') nE4++; else nE6++; p.loops.forEach(function (l) { loops.push({p: p, l: l}); }); });
     loops.sort(function (a, b) { return a.l.from - b.l.from; });
     var nEam = cur.eams.filter(function (e) { return e.message; }).length;
+    // the most E-6Bs airborne at once: each flight from its first fix to its last, swept in time order (a landing before a
+    // takeoff in the same second); the first stretch at that most
+    var ev = [], n = 0, most = 0, mFrom = null, mTo = null;
+    cur.planes.forEach(function (p) { if (p.kind === 'E-6B') p.flights.forEach(function (f) { ev.push([f.first, 1], [f.last, -1]); }); });
+    ev.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+    ev.forEach(function (e) { n += e[1]; if (n > most) { most = n; mFrom = e[0]; mTo = null; } else if (mTo === null && mFrom !== null && n < most) mTo = e[0]; });
     $('chips').innerHTML = [
-      [bi('E-6Bs', 'E-6B'), nE6], [bi('E-4Bs', 'E-4B'), nE4], [bi('LOOPS', '旋回'), loops.length],
-      [bi('RESERVATIONS', '空域予約'), cur.reservations.length], [bi('EAMs', 'EAM'), nEam],
+      [bi('E-6Bs', 'E-6B'), nE6], [bi('E-4Bs', 'E-4B'), nE4],
+      [bi('MOST E-6Bs AT ONCE', 'E-6B最大同時'), most ? most + ' · ' + hm(mFrom) + '–' + (mTo ? hm(mTo) : '') : 0, most ? 'peak' : ''],
+      [bi('LOOPS', '旋回'), loops.length], [bi('RESERVATIONS', '空域予約'), cur.reservations.length], [bi('EAMs', 'EAM'), nEam],
       [bi('UPDATED', '更新'), hm(cur.made) + ' UTC']
-    ].map(function (c) { return '<span class="chip">' + c[0] + ' <b>' + c[1] + '</b></span>'; }).join('');
+    ].map(function (c) {
+      return c[2] ? '<button type="button" class="chip" id="' + c[2] + '" title="Show on the map">' + c[0] + ' <b>' + c[1] + '</b></button>'
+        : '<span class="chip">' + c[0] + ' <b>' + c[1] + '</b></span>';
+    }).join('');
+    if (most) $('peak').addEventListener('click', function () {   // the slider to that moment
+      stopPlay(); setT(Math.min(1439, Math.ceil((mFrom - t0()) / 60)));
+      svg.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    });
 
     var flights = [];
     cur.planes.forEach(function (p) { p.flights.forEach(function (f) { flights.push({p: p, f: f}); }); });
