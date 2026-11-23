@@ -75,9 +75,15 @@ button.chip b{color:var(--series)}
 #map .trk.ghost{stroke:var(--ink-2);stroke-width:1;opacity:.35}
 #map .resp.off{opacity:.2}
 #map .nowp{stroke:var(--surface);stroke-width:1.5}
+#map .plane path,#map .plane ellipse{stroke:var(--surface);stroke-width:3px;paint-order:stroke fill;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+#map .plane.b0{fill:var(--b0)} #map .plane.b1{fill:var(--b1)} #map .plane.b2{fill:var(--b2)}
+#map .plane.b3{fill:var(--b3)} #map .plane.b4{fill:var(--b4)} #map .plane.b5{fill:var(--b5)} #map .plane.g{fill:var(--ground)}
+#map .plane.stale{fill:var(--panel)}
+#map .plane.stale path,#map .plane.stale ellipse{stroke:var(--ink-strong);stroke-width:1.2px;stroke-dasharray:2 2}
+#map .plane.picked path,#map .plane.picked ellipse{stroke:var(--ink-strong);stroke-width:3px}
 #map .nowp.g{fill:var(--ground)}
 #map .nowp.picked{stroke:var(--ink-strong);stroke-width:2}
-#map .pickring{fill:none;stroke:var(--series);stroke-width:2.5}
+#map .pickring{fill:var(--surface);fill-opacity:.55;stroke:var(--series);stroke-width:2.5}
 #map .tagl.picked{fill:var(--series)}
 #map .nowp.stale{fill:var(--panel)!important;stroke:var(--ink-strong);stroke-width:1.5;stroke-dasharray:2 2}
 #map .nowp.b0{fill:var(--b0)} #map .nowp.b1{fill:var(--b1)} #map .nowp.b2{fill:var(--b2)}
@@ -188,7 +194,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     <svg id="map" viewBox="0 0 1000 600" role="img" aria-label="Tracks map">
       <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <rect width="6" height="6" style="fill:var(--res-fill)"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--res);stroke-width:1;opacity:.55"/></pattern></defs>
-      <g id="g-geo"><g id="g-land"></g><g id="g-res"></g><g id="g-trk"></g><g id="g-loop"></g></g><g id="g-lab"></g><circle id="hov" class="hov" r="6" style="display:none"/>
+      <g id="g-geo"><g id="g-land"></g><g id="g-res"></g><g id="g-trk"></g><g id="g-loop"></g></g><g id="g-lab"></g><g id="g-icons"></g><circle id="hov" class="hov" r="6" style="display:none"/>
     </svg>
     <div class="seg zoomctl"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">&minus;</button><button type="button" id="zreset"><span class="bi-i"><span class="en">RESET</span><span class="jp" lang="ja">リセット</span></span></button></div>
     </div>
@@ -322,7 +328,12 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     drawTime();
   }
   function inForce(r, t) { return (r.start_epoch || 0) <= t && t < (r.end_epoch || 0); }
-  // where an aircraft was at t (s from the day's start): {lat, lon, alt}, between two fixes under 15 minutes apart; in a
+  function bearing(a, b) { return Math.atan2((b[1] - a[1]) * Math.cos(a[0] * Math.PI / 180), b[0] - a[0]) * 180 / Math.PI; }
+  function hdgAt(tr, i) {   // the heading arriving at fix i
+    for (var j = i - 1; j >= 0 && i - j < 6; j--) if (tr[j][0] !== tr[i][0] || tr[j][1] !== tr[i][1]) return bearing(tr[j], tr[i]);
+    return i + 1 < tr.length ? bearing(tr[i], tr[i + 1]) : 0;
+  }
+  // where an aircraft was at t (s from the day's start): {lat, lon, alt, hd}, between two fixes under 15 minutes apart; in a
   // longer gap inside a flight (out of range), its last fix with stale: true; otherwise null
   function posAt(p, t) {
     var tr = p.track;
@@ -332,12 +343,29 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
       if (a[3] > t) return null;
       if (b[3] - a[3] > 900) {
         var te = T0 + t, inFlight = p.flights.some(function (f) { return f.first <= te && te <= f.last; });
-        return inFlight ? {lat: a[0], lon: a[1], alt: a[2], stale: true} : null;
+        return inFlight ? {lat: a[0], lon: a[1], alt: a[2], hd: hdgAt(tr, i - 1), stale: true} : null;
       }
       var f = b[3] === a[3] ? 0 : (t - a[3]) / (b[3] - a[3]);
-      return {lat: a[0] + (b[0] - a[0]) * f, lon: a[1] + (b[1] - a[1]) * f, alt: f < 0.5 ? a[2] : b[2]};
+      return {lat: a[0] + (b[0] - a[0]) * f, lon: a[1] + (b[1] - a[1]) * f, alt: f < 0.5 ? a[2] : b[2],
+        hd: a[0] === b[0] && a[1] === b[1] ? hdgAt(tr, i - 1) : bearing(a, b)};
     }
     return null;
+  }
+  var ICONS = {
+    'E-6B': {half: [[1, 0], [0.9, 0.06], [0.25, 0.07], [-0.3, 0.95], [-0.42, 0.95], [-0.12, 0.07], [-0.7, 0.07], [-0.92, 0.38], [-1, 0.38], [-0.92, 0.05], [-1, 0]],
+      pods: [[0.1, 0.34, 0.2, 0.08], [-0.1, 0.62, 0.18, 0.08]]},
+    'E-4B': {half: [[1, 0], [0.86, 0.1], [0.2, 0.11], [-0.34, 0.86], [-0.48, 0.86], [-0.1, 0.11], [-0.72, 0.1], [-0.9, 0.42], [-1, 0.42], [-0.92, 0.06], [-1, 0]],
+      pods: [[0.06, 0.34, 0.2, 0.1], [-0.14, 0.6, 0.18, 0.1]]}
+  };
+  Object.keys(ICONS).forEach(function (k) {
+    var I = ICONS[k], pts2 = I.half.concat(I.half.slice(1, -1).reverse().map(function (q) { return [q[0], -q[1]]; }));
+    I.d = pts2.map(function (q, i) { return (i ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join('') + 'Z';
+  });
+  function drawIcon(parent, kind, x, y, hd, size, cls) {
+    var I = ICONS[kind] || ICONS['E-6B'];
+    var g = el('g', {'class': 'plane ' + cls, transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (hd - 90).toFixed(1) + ') scale(' + size + ')'}, parent);
+    el('path', {d: I.d}, g);
+    I.pods.forEach(function (q) { [q[1], -q[1]].forEach(function (sy) { el('ellipse', {cx: q[0], cy: sy, rx: q[2] / 2, ry: q[3] / 2}, g); }); });
   }
   function loopR(l) { return Math.max(14, (l.miles / 2 + 6) / 69 * view.sc / view.kx); }
   // the tracks up to tNow (the rest faint), the loops begun by then, the reservations in effect then
@@ -376,7 +404,8 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
   }
   // labels where they don't cover another: reservations, loops, their bases, then the aircraft (each tries its spots in turn)
   function drawLabels() {
-    var glab = $('g-lab'); glab.textContent = '';
+    var glab = $('g-lab'), gi = $('g-icons'); glab.textContent = ''; gi.textContent = '';
+    var SZ = narrow ? 12 : 15, icons = [];
     var tc = tNow == null ? Infinity : tNow, resL = [], tags = [], pickTag = [], loopLabels = [], baseLabels = [], named = {};
     function inside(s, m) { return s[0] >= -m && s[0] <= W + m && s[1] >= -m && s[1] <= H + m; }
     cur.reservations.forEach(function (r, i) {
@@ -385,19 +414,22 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
       if (inside(c, 0)) resL.push({cls: 'resl', en: r.id, w: 7, fixed: true, at: [[c[0], c[1] + 4, 'middle']]});
     });
     cur.planes.forEach(function (p) {
-      var name = (p.kind === 'E-4B' ? 'E-4B ' : '') + (p.callsign || p.hex), e;
-      if (tNow == null) {
-        var last = p.track[p.track.length - 1]; if (!last) return;
+      var name = (p.kind === 'E-4B' ? 'E-4B ' : '') + (p.callsign || p.hex), e, sz = SZ, mine = false;
+      if (tNow == null) {   // the whole day: an icon where those still up are now; a dot where the others were last
+        var tr = p.track, last = tr[tr.length - 1]; if (!last) return;
         e = scr(px(last[1], last[0])); if (!inside(e, 0)) return;
-        el('circle', {'class': 'endp', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 2.6}, glab);
+        if (p.flights.some(function (f) { return f.up_at_end; }) && last[2] > 0)
+          icons.push({e: e, kind: p.kind, hd: hdgAt(tr, tr.length - 1), sz: sz, cls: 'b' + band(last[2])});
+        else { el('circle', {'class': 'endp', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 2.6}, glab); sz = 3; }
       } else {
-        var mine = p.hex === picked, q = posAt(p, tNow);
+        var q = posAt(p, tNow); mine = p.hex === picked;
         if (!q || !mine && (q.alt == null || q.alt <= 0)) return;   // (airborne then; the picked one wherever it was)
         e = scr(px(q.lon, q.lat)); if (!inside(e, 0)) return;
-        if (mine) el('circle', {'class': 'pickring', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 11}, glab);
-        el('circle', {'class': 'nowp ' + (q.alt > 0 ? 'b' + band(q.alt) : 'g') + (q.stale ? ' stale' : '') + (mine ? ' picked' : ''), cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: mine ? 6.5 : 5}, glab);
+        if (mine) sz = Math.round(SZ * 1.25);
+        icons.push({e: e, kind: p.kind, hd: q.hd, sz: sz, mine: mine, cls: (q.alt > 0 ? 'b' + band(q.alt) : 'g') + (q.stale ? ' stale' : '') + (mine ? ' picked' : '')});
       }
-      (p.hex === picked && tNow != null ? pickTag : tags).push({from: e, cls: 'tagl' + (p.hex === picked && tNow != null ? ' picked' : ''), en: name, w: 7, at: [[e[0] + 7, e[1] - 6, 'start'], [e[0] + 7, e[1] + 15, 'start'], [e[0] - 7, e[1] - 6, 'end'], [e[0] - 7, e[1] + 15, 'end'], [e[0], e[1] - 11, 'middle'], [e[0], e[1] + 20, 'middle']]});
+      var o = sz + 4;   // (its name clear of its icon)
+      (mine ? pickTag : tags).push({from: e, cls: 'tagl' + (mine ? ' picked' : ''), en: name, w: 7, at: [[e[0] + o, e[1] - 4, 'start'], [e[0] + o, e[1] + 14, 'start'], [e[0] - o, e[1] - 4, 'end'], [e[0] - o, e[1] + 14, 'end'], [e[0], e[1] - o - 3, 'middle'], [e[0], e[1] + o + 12, 'middle']]});
     });
     cur.planes.forEach(function (p) {
       p.loops.forEach(function (l) {
@@ -414,7 +446,8 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
         }
       });
     });
-    var taken = [];
+    // every icon's box is taken before any label goes down
+    var taken = icons.map(function (c) { var r = c.sz * 1.05 + (c.mine ? 6 : 1); return [c.e[0] - r, c.e[1] - r, c.e[0] + r, c.e[1] + r]; });
     pickTag.concat(resL, loopLabels, baseLabels, tags).forEach(function (L) {
       var w = Math.max(L.en.length * L.w, L.jp ? L.jp.length * 11.5 : 0) + 6, pick = null, f = L.at[0];
       if (!L.fixed) {
@@ -434,6 +467,15 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
       }
       var attrs = {'class': L.cls, x: pick.a[0].toFixed(1), y: Math.max(13, pick.a[1]).toFixed(1), 'text-anchor': pick.a[2]};
       if (L.jp) twin(glab, attrs, L.en, L.jp); else el('text', attrs, glab, L.en);
+    });
+    icons.forEach(function (c) {   // last, over everything: the picked one ringed, on top of the others
+      if (c.mine) return;
+      drawIcon(gi, c.kind, c.e[0], c.e[1], c.hd || 0, c.sz, c.cls);
+    });
+    icons.forEach(function (c) {
+      if (!c.mine) return;
+      el('circle', {'class': 'pickring', cx: c.e[0].toFixed(1), cy: c.e[1].toFixed(1), r: c.sz + 5}, gi);
+      drawIcon(gi, c.kind, c.e[0], c.e[1], c.hd || 0, c.sz, c.cls);
     });
     if (!cur.planes.length) twin(glab, {'class': 'empty', x: W / 2, y: H / 2, 'text-anchor': 'middle'}, 'NO FLIGHTS', '飛行なし');
   }
