@@ -75,12 +75,12 @@ button.chip b{color:var(--series)}
 #map .trk.ghost{stroke:var(--ink-2);stroke-width:1;opacity:.35}
 #map .resp.off{opacity:.2}
 #map .nowp{stroke:var(--surface);stroke-width:1.5}
-#map .plane path,#map .plane ellipse{stroke:var(--surface);stroke-width:3px;paint-order:stroke fill;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+#map .plane path{stroke:var(--surface);stroke-width:3px;paint-order:stroke fill;vector-effect:non-scaling-stroke;stroke-linejoin:round}
 #map .plane.b0{fill:var(--b0)} #map .plane.b1{fill:var(--b1)} #map .plane.b2{fill:var(--b2)}
 #map .plane.b3{fill:var(--b3)} #map .plane.b4{fill:var(--b4)} #map .plane.b5{fill:var(--b5)} #map .plane.g{fill:var(--ground)}
 #map .plane.stale{fill:var(--panel)}
-#map .plane.stale path,#map .plane.stale ellipse{stroke:var(--ink-strong);stroke-width:1.2px;stroke-dasharray:2 2}
-#map .plane.picked path,#map .plane.picked ellipse{stroke:var(--ink-strong);stroke-width:3px}
+#map .plane.stale path{stroke:var(--ink-strong);stroke-width:1.2px;stroke-dasharray:2 2}
+#map .plane.picked path{stroke:var(--ink-strong);stroke-width:3px}
 #map .nowp.g{fill:var(--ground)}
 #map .nowp.picked{stroke:var(--ink-strong);stroke-width:2}
 #map .pickring{fill:var(--surface);fill-opacity:.55;stroke:var(--series);stroke-width:2.5}
@@ -282,15 +282,33 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     view = {w: w, e: e, s: s, n: n, kx: kx, sc: W / (e - w)};
   }
   function px(lon, lat) { return [(lon - view.w) * view.sc, (view.n - lat) * view.sc / view.kx]; }
-  function pathOf(ring, close) {   // ring: [[lon, lat], ...]
-    var d = '';
-    for (var i = 0; i < ring.length; i++) { var p = px(ring[i][0], ring[i][1]); d += (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }
+  function pathOf(ring, close, off) {   // ring: [[lon, lat], ...], shifted off degrees of longitude
+    var d = ''; off = off || 0;
+    for (var i = 0; i < ring.length; i++) { var p = px(ring[i][0] + off, ring[i][1]); d += (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }
     return d + (close ? 'Z' : '');
   }
-  function onView(ring) {
-    var w = Infinity, e = -Infinity, s = Infinity, n = -Infinity;
+  function onView(ring, off) {
+    var w = Infinity, e = -Infinity, s = Infinity, n = -Infinity; off = off || 0;
     for (var i = 0; i < ring.length; i++) { var p = ring[i]; if (p[0] < w) w = p[0]; if (p[0] > e) e = p[0]; if (p[1] < s) s = p[1]; if (p[1] > n) n = p[1]; }
-    return !(e < view.w || w > view.e || n < view.s || s > view.n);
+    return !(e + off < view.w || w + off > view.e || n < view.s || s > view.n);
+  }
+  // a day's longitudes all within half a turn of where its aircraft were (LON0), so a flight across the dateline (Hawaii,
+  // Guam, Japan) is one line, not two ends of the map
+  var LON0 = -96;
+  function wrap(lon) { return lon + 360 * Math.round((LON0 - lon) / 360); }
+  function centreDay(j) {
+    var sx = 0, sy = 0, n = 0;
+    j.planes.forEach(function (p) { p.track.forEach(function (q) { var a = q[1] * Math.PI / 180; sx += Math.cos(a); sy += Math.sin(a); n++; }); });
+    LON0 = n && Math.hypot(sx, sy) > 1e-6 ? Math.atan2(sy, sx) * 180 / Math.PI : -96;
+    j.planes.forEach(function (p) {
+      p.track.forEach(function (q) { q[1] = wrap(q[1]); });
+      p.loops.forEach(function (l) { l.lon = wrap(l.lon); });
+    });
+    j.reservations.forEach(function (r) {
+      if (r.centre) r.centre = [r.centre[0], wrap(r.centre[1])];
+      ['shape'].forEach(function (k) { if (r[k]) r[k] = r[k].map(function (q) { return [q[0], wrap(q[1])]; }); });
+      if (r.shapes) r.shapes = r.shapes.map(function (sh) { return sh && sh.map(function (q) { return [q[0], wrap(q[1])]; }); });
+    });
   }
   function resRings(r) {   // a reservation's outlines as [[lon, lat]] rings (its shapes are [lat, lon])
     var shapes = r.shapes || (r.shape ? [r.shape] : []);
@@ -311,13 +329,26 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     cur.reservations.forEach(function (r) { resRings(r).forEach(function (ring) { ring.forEach(function (q) { lons.push(q[0]); lats.push(q[1]); }); }); });
     fit(lons, lats);
     ['g-land', 'g-res'].forEach(function (id) { $(id).textContent = ''; });
-    var gl = $('g-land'), d = '';
-    world.land.forEach(function (r) { if (onView(r)) d += pathOf(r, true); });
-    el('path', {'class': 'landp', d: d, 'fill-rule': 'evenodd'}, gl);
-    d = ''; world.lakes.forEach(function (r) { if (onView(r)) d += pathOf(r, true); });
-    if (d) el('path', {'class': 'lakep', d: d}, gl);
-    d = ''; world.borders.forEach(function (r) { if (onView(r)) d += pathOf(r, false); });
-    if (d) el('path', {'class': 'borderp', d: d}, gl);
+    // the world's land (110 m) everywhere but North America's box, where the detailed coast is drawn instead
+    var gl = $('g-land'), OFFS = [-360, 0, 360], d = '', box = world.na_box, cut = 'M-99999 -99999H99999V99999H-99999Z';
+    OFFS.forEach(function (o) {
+      var a = px(box[0] + o, box[3]), b = px(box[1] + o, box[2]);
+      cut += 'M' + a[0].toFixed(1) + ' ' + a[1].toFixed(1) + 'H' + b[0].toFixed(1) + 'V' + b[1].toFixed(1) + 'H' + a[0].toFixed(1) + 'Z';
+      (world.world || []).forEach(function (r) { if (onView(r, o)) d += pathOf(r, true, o); });
+    });
+    var old = $('notna'); if (old) old.remove();
+    var cp = el('clipPath', {id: 'notna', clipPathUnits: 'userSpaceOnUse'}, svg.querySelector('defs'));
+    el('path', {d: cut, 'clip-rule': 'evenodd'}, cp);
+    if (d) el('path', {'class': 'landp', d: d, 'clip-path': 'url(#notna)'}, gl);
+    var dl = '', dk = '', db = '';
+    OFFS.forEach(function (o) {
+      world.land.forEach(function (r) { if (onView(r, o)) dl += pathOf(r, true, o); });
+      world.lakes.forEach(function (r) { if (onView(r, o)) dk += pathOf(r, true, o); });
+      world.borders.forEach(function (r) { if (onView(r, o)) db += pathOf(r, false, o); });
+    });
+    if (dl) el('path', {'class': 'landp', d: dl, 'fill-rule': 'evenodd'}, gl);
+    if (dk) el('path', {'class': 'lakep', d: dk}, gl);
+    if (db) el('path', {'class': 'borderp', d: db}, gl);
     resEls = cur.reservations.map(function (r) {
       var rings = resRings(r); if (!rings.length) return null;
       return el('path', {'class': 'resp', d: rings.map(function (ring) { return pathOf(ring, true); }).join('')}, $('g-res'));
@@ -327,7 +358,10 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     Z = {k: 1, x: 0, y: 0}; applyZoom();
     drawTime();
   }
-  function inForce(r, t) { return (r.start_epoch || 0) <= t && t < (r.end_epoch || 0); }
+  function inForce(r, t) {   // (a block schedule: in effect only in its blocks)
+    if (r.segments && r.segments.length) return r.segments.some(function (g) { return g[0] <= t && t < g[1]; });
+    return (r.start_epoch || 0) <= t && t < (r.end_epoch || 0);
+  }
   function bearing(a, b) { return Math.atan2((b[1] - a[1]) * Math.cos(a[0] * Math.PI / 180), b[0] - a[0]) * 180 / Math.PI; }
   function hdgAt(tr, i) {   // the heading arriving at fix i
     for (var j = i - 1; j >= 0 && i - j < 6; j--) if (tr[j][0] !== tr[i][0] || tr[j][1] !== tr[i][1]) return bearing(tr[j], tr[i]);
@@ -351,21 +385,12 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     }
     return null;
   }
-  var ICONS = {
-    'E-6B': {half: [[1, 0], [0.9, 0.06], [0.25, 0.07], [-0.3, 0.95], [-0.42, 0.95], [-0.12, 0.07], [-0.7, 0.07], [-0.92, 0.38], [-1, 0.38], [-0.92, 0.05], [-1, 0]],
-      pods: [[0.1, 0.34, 0.2, 0.08], [-0.1, 0.62, 0.18, 0.08]]},
-    'E-4B': {half: [[1, 0], [0.86, 0.1], [0.2, 0.11], [-0.34, 0.86], [-0.48, 0.86], [-0.1, 0.11], [-0.72, 0.1], [-0.9, 0.42], [-1, 0.42], [-0.92, 0.06], [-1, 0]],
-      pods: [[0.06, 0.34, 0.2, 0.1], [-0.14, 0.6, 0.18, 0.1]]}
-  };
-  Object.keys(ICONS).forEach(function (k) {
-    var I = ICONS[k], pts2 = I.half.concat(I.half.slice(1, -1).reverse().map(function (q) { return [q[0], -q[1]]; }));
-    I.d = pts2.map(function (q, i) { return (i ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join('') + 'Z';
-  });
+  // the aircraft as arrows (user, 11-23: "i think arrows would be better"): the stream's own arrowhead (BRS.html drawPlane's
+  // fallback), nose +x
+  var ARROW = 'M1 0L-0.75 0.62L-0.35 0L-0.75 -0.62Z';
   function drawIcon(parent, kind, x, y, hd, size, cls) {
-    var I = ICONS[kind] || ICONS['E-6B'];
     var g = el('g', {'class': 'plane ' + cls, transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (hd - 90).toFixed(1) + ') scale(' + size + ')'}, parent);
-    el('path', {d: I.d}, g);
-    I.pods.forEach(function (q) { [q[1], -q[1]].forEach(function (sy) { el('ellipse', {cx: q[0], cy: sy, rx: q[2] / 2, ry: q[3] / 2}, g); }); });
+    el('path', {d: ARROW}, g);
   }
   function loopR(l) { return Math.max(14, (l.miles / 2 + 6) / 69 * view.sc / view.kx); }
   // the tracks up to tNow (the rest faint), the loops begun by then, the reservations in effect then
@@ -405,7 +430,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
   // labels where they don't cover another: reservations, loops, their bases, then the aircraft (each tries its spots in turn)
   function drawLabels() {
     var glab = $('g-lab'), gi = $('g-icons'); glab.textContent = ''; gi.textContent = '';
-    var SZ = narrow ? 12 : 15, icons = [];
+    var SZ = narrow ? 7 : 8, icons = [];
     var tc = tNow == null ? Infinity : tNow, resL = [], tags = [], pickTag = [], loopLabels = [], baseLabels = [], named = {};
     function inside(s, m) { return s[0] >= -m && s[0] <= W + m && s[1] >= -m && s[1] <= H + m; }
     cur.reservations.forEach(function (r, i) {
@@ -425,7 +450,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
         var q = posAt(p, tNow); mine = p.hex === picked;
         if (!q || !mine && (q.alt == null || q.alt <= 0)) return;   // (airborne then; the picked one wherever it was)
         e = scr(px(q.lon, q.lat)); if (!inside(e, 0)) return;
-        if (mine) sz = Math.round(SZ * 1.25);
+        if (mine) sz = Math.round(SZ * 1.3);
         icons.push({e: e, kind: p.kind, hd: q.hd, sz: sz, mine: mine, cls: (q.alt > 0 ? 'b' + band(q.alt) : 'g') + (q.stale ? ' stale' : '') + (mine ? ' picked' : '')});
       }
       var o = sz + 4;   // (its name clear of its icon)
@@ -440,7 +465,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
         if (l.base && !named[l.base.id]) {   // the map shows the nearest base, as the stream's loop close-ups do
           named[l.base.id] = 1;
           var bp = world.bases && world.bases[l.base.id]; if (!bp) return;
-          var b = scr(px(bp[1], bp[0])); if (!inside(b, 0)) return;
+          var b = scr(px(wrap(bp[1]), bp[0])); if (!inside(b, 0)) return;
           el('circle', {'class': 'based', cx: b[0].toFixed(1), cy: b[1].toFixed(1), r: 3.2}, glab);
           baseLabels.push({from: b, cls: 'basel', en: narrow ? l.base.id : l.base.name + ' ' + l.base.id, w: 6.6, at: [[b[0] + 7, b[1] + 4, 'start'], [b[0] - 7, b[1] + 4, 'end'], [b[0], b[1] - 8, 'middle'], [b[0], b[1] + 17, 'middle']]});
         }
@@ -653,7 +678,8 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     });
     rows('t-res', cur.reservations, function (r) {
       return '<tr><td class="mono">' + esc(r.id) + '</td><td class="l">' + esc(r.fir || '') + '</td><td class="mono">' + esc(r.alt_block || '') + '</td>' +
-        '<td>' + (r.start_epoch ? hm(r.start_epoch) : '') + '</td><td>' + (r.end_epoch ? hm(r.end_epoch) : '') + '</td></tr>';
+        '<td>' + (r.start_epoch ? hm(r.segments && r.segments.length ? r.segments[0][0] : r.start_epoch) : '') + '</td><td>' +
+        (r.end_epoch ? hm(r.segments && r.segments.length ? r.segments[r.segments.length - 1][1] : r.end_epoch) : '') + '</td></tr>';
     });
   }
 
@@ -671,7 +697,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     if (location.hash.slice(1) !== d) history.replaceState(null, '', '#' + d);
     fetch('e6b_tracker/' + d + '.json', {cache: 'no-cache'}).then(function (r) { return r.json(); }).then(function (j) {
       if (day !== d) return;
-      cur = j; cur.reservations = cur.reservations || []; cur.eams = cur.eams || []; cur.vlf = cur.vlf || [];
+      cur = j; cur.reservations = cur.reservations || []; cur.eams = cur.eams || []; cur.vlf = cur.vlf || []; centreDay(cur);
       hide(); picked = null; resetTime(); drawMap(); render();
     });
   }
