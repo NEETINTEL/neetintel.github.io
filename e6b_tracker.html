@@ -1,0 +1,610 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E6B TRACKER</title>
+<!-- hfgcs controls --><script>(function(){var d=document.documentElement,t=null,l=null;try{t=localStorage.getItem('hfgcs-theme');l=localStorage.getItem('hfgcs-lang');}catch(e){}
+d.setAttribute('data-theme',t||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
+if(l==='ja'){d.classList.add('show-jp');}})();</script><!-- /hfgcs controls -->
+<style>
+:root{
+  color-scheme:dark;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,Menlo,monospace;
+  --surface:#01060b; --panel:#161b22; --ink:#c9d1d9; --ink-strong:#f0f6fc;
+  --ink-2:#7d8590;
+  --hairline:#222a35; --series:#ffcc77; --wash:rgba(255,204,119,.10);
+  --tip:#161b22; --tip-line:#3a4452; --seg-on:#2b3340;
+  /* the map: the stream's own altitude bands (BRS.html LOOK_ALT_BANDS), its land and reservations */
+  --land:#0e1620; --coast:#2c3846; --lake:#161b22; --border:#3a4655; --res:#e8c547; --res-fill:rgba(232,197,71,.08);
+  --ground:#5b6570; --ring:#f0f6fc;
+  --b0:#ff5c40; --b1:#f4a434; --b2:#f0e054; --b3:#3cbeff; --b4:#a864ff; --b5:#ff40c4;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);
+  font:14px/1.5 var(--sans);padding:36px 20px 48px}
+.wrap{max-width:1040px;margin:0 auto}
+h1{font:500 18px/1.2 var(--sans);color:var(--ink-strong);margin:0}
+.navback{font:12px/1.5 var(--sans);margin:0 0 14px}
+.navback a{color:var(--series);text-decoration:none}
+.navback a:hover .bi-i>span{text-decoration:underline}
+.standfirst{color:var(--ink-2);margin:8px 0 0}
+.daybar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 0;
+  font:12.5px/1 var(--sans);color:var(--ink-2);letter-spacing:.04em}
+.seg{display:inline-flex;border:1px solid var(--hairline);border-radius:6px;overflow:hidden}
+.seg button,.seg select{font:inherit;color:var(--ink);background:none;border:0;
+  padding:6px 13px;cursor:pointer;letter-spacing:.05em}
+.seg select{font-family:var(--mono);letter-spacing:.3px;appearance:none;-webkit-appearance:none;padding:6px 12px;
+  background:var(--panel);color:var(--ink-strong)}
+.seg>*+*{border-left:1px solid var(--hairline)}
+.seg button:hover{background:var(--seg-on)}
+.seg button:disabled{color:var(--ink-2);opacity:.45;cursor:default;background:none}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 22px}
+.chip{font:500 12px/1 var(--sans);letter-spacing:.04em;
+  border:1px solid var(--hairline);border-radius:3px;padding:8px 11px;color:var(--ink-2)}
+.chip b{color:var(--ink-strong);font:600 12px/1 var(--mono);letter-spacing:.3px}
+.panel{background:var(--panel);border:1px solid var(--hairline);border-radius:4px;
+  padding:18px 14px 10px}
+.cap{font:500 12px/1 var(--sans);letter-spacing:.04em;color:var(--ink-2);margin:2px 4px 10px}
+#map{display:block;width:100%;height:auto;touch-action:pan-y;border-radius:2px}
+#map .landp{fill:var(--land);stroke:var(--coast);stroke-width:.8}
+#map .lakep{fill:var(--lake);stroke:var(--coast);stroke-width:.6}
+#map .borderp{fill:none;stroke:var(--border);stroke-width:.7;stroke-dasharray:3 3}
+#map .resp{fill:url(#hatch);stroke:var(--res);stroke-width:1.2}
+#map .resl{fill:var(--res);font:600 11px var(--mono);letter-spacing:.3px}
+#map .trk{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+#map .trk.g{stroke:var(--ground);stroke-width:1.2}
+#map .b0{stroke:var(--b0)} #map .b1{stroke:var(--b1)} #map .b2{stroke:var(--b2)}
+#map .b3{stroke:var(--b3)} #map .b4{stroke:var(--b4)} #map .b5{stroke:var(--b5)}
+#map .endp{fill:var(--ink-strong)}
+#map .tagl{fill:var(--ink-strong);font:600 11px var(--mono);letter-spacing:.3px;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+#map .loopc{fill:none;stroke:var(--ring);stroke-width:1.3;stroke-dasharray:5 4}
+#map .loopl{fill:var(--ring);font:600 11px var(--sans);letter-spacing:.05em;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+#map .based{fill:var(--series)}
+#map .basel{fill:var(--series);font:500 11px var(--sans);letter-spacing:.04em;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+#map .empty{fill:var(--ink-2);font:500 14px var(--sans);letter-spacing:.05em}
+#map .lead{stroke:var(--ink-2);stroke-width:.8}
+#map .hov{fill:none;stroke:var(--ink-strong);stroke-width:1.5}
+.legendline{display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap;margin:10px 4px 2px;
+  font:12px/1 var(--sans);color:var(--ink-2);letter-spacing:.04em}
+.legendline .sw{display:inline-block;width:18px;height:4px;vertical-align:middle;margin-right:6px}
+.legendline .lt{margin-right:4px}
+.legendline .hatchk{display:inline-block;width:14px;height:10px;vertical-align:middle;margin-right:6px;
+  border:1px solid var(--res);background:repeating-linear-gradient(135deg,var(--res) 0 1px,transparent 1px 4px)}
+.legendline .ringk{display:inline-block;width:14px;height:14px;vertical-align:middle;margin-right:6px;
+  border:1.3px dashed var(--ring);border-radius:50%}
+#tip{position:fixed;pointer-events:none;display:none;background:var(--tip);
+  border:1px solid var(--tip-line);border-radius:8px;padding:8px 10px;
+  font:12px/1.6 var(--sans);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.45);z-index:5}
+#tip b{color:var(--ink-strong);font-weight:500}
+#tip code{font:600 12px/1 var(--mono);color:var(--series);letter-spacing:.5px}
+#tip .t2{color:var(--ink-2)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;margin-top:26px;width:100%;
+  font:13px/1.5 var(--sans);font-variant-numeric:tabular-nums}
+caption{text-align:left;font:500 13px/1 var(--sans);letter-spacing:.05em;color:var(--ink-2);padding-bottom:10px}
+th{color:var(--ink-2);font-weight:500;text-align:right;padding:6px 12px;white-space:nowrap;
+  border-bottom:1px solid var(--hairline)}
+th:first-child,td:first-child{text-align:left;padding-left:2px}
+td{text-align:right;padding:6px 12px;border-bottom:1px solid var(--hairline);white-space:nowrap}
+td.l,th.l{text-align:left}
+td.msg{white-space:normal;text-align:left;font-family:var(--mono);letter-spacing:.3px;color:var(--ink-strong);min-width:16em}
+td.mono{font-family:var(--mono);letter-spacing:.3px}
+td a{color:var(--series);text-decoration:none;border-bottom:1px solid var(--series)}
+td a:hover{opacity:.8}
+td .dim,.dim{color:var(--ink-2)}
+.none{color:var(--ink-2);font-size:13px;margin:10px 2px 0}
+.note{color:var(--ink-2);font-size:13px;margin-top:12px}
+:root[data-theme="light"]{color-scheme:light;
+  --surface:#f3f5f7; --panel:#ffffff; --ink:#17202a; --ink-strong:#0b1016; --ink-2:#4b5765;
+  --hairline:#d6dce2; --series:#a8740a; --wash:rgba(168,116,10,.08);
+  --tip:#ffffff; --tip-line:#c5cdd5; --seg-on:#dfe4ea;
+  --land:#e7ebef; --coast:#b4bec8; --lake:#ffffff; --border:#a3adb8; --res:#9a7a00; --res-fill:rgba(154,122,0,.07);
+  --ground:#9aa3ad; --ring:#0b1016;
+  --b0:#d8401f; --b1:#c4720b; --b2:#9c8a00; --b3:#0b86c6; --b4:#7a3fe0; --b5:#d01c8e}
+[data-theme="light"] #tip{box-shadow:0 4px 14px rgba(20,30,40,.16)}
+p > .bi{display:grid}
+/* hfgcs controls */
+:root{--fab-bg:rgba(1,6,11,.92);--fab-line:#30363d;--fab-ink:#c9d1d9;--fab-dim:#8b949e;--fab-hover:#21262d;--fab-focus:#4a9eff;--fab-shadow:none;--fab-radius:6px}
+:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:#c5cdd5;--fab-ink:#17202a;--fab-dim:#4b5765;--fab-hover:#dfe4ea;--fab-focus:#2b78d6;--fab-shadow:none}
+/* zero specificity: a page's own .en/.jp rules always win over these defaults. Members of a stacked pair are never
+   hidden with display (that would change the pair's size); they keep their own display and only swap visibility. */
+:where(.jp:not(.bi > .jp, .bi-i > .jp)){display:none}
+:where(.show-jp) :where(.jp:not(.bi > .jp, .bi-i > .jp)){display:revert}
+:where(.show-jp) :where(.en:not(.bi > .en, .bi-i > .en)){display:none}
+/* Stacked pairs: an English element and its Japanese twin share one grid cell and only their visibility changes, so a
+   language switch never changes any size and nothing on the page moves. .bi for blocks, .bi-i for inline labels.
+   A block pair may shrink with its container; an inline pair keeps the width of its wider twin, as the label did. */
+.bi{display:grid}
+.bi-i{display:inline-grid}
+.bi>*,.bi-i>*{grid-area:1/1}
+.bi>*{min-width:0}
+.bi>.jp,.bi-i>.jp,.show-jp .bi>.en,.show-jp .bi-i>.en{visibility:hidden}
+.show-jp .bi>.jp,.show-jp .bi-i>.jp{visibility:visible}
+/* the controls: one segmented bar (a single outline, a divider between the buttons), coloured by the --fab-* tokens a
+   page sets from its own palette */
+.fab{position:fixed;top:.9rem;right:.9rem;z-index:900;display:flex;align-items:stretch;gap:0;padding:0;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);overflow:hidden;box-shadow:var(--fab-shadow)}
+.fab button,.totop{font-family:"IBM Plex Sans Condensed","IBM Plex Sans JP","Roboto Condensed",system-ui,sans-serif;font-size:12.5px;line-height:17.5px;color:var(--fab-ink);background:none;border:0;border-radius:0;padding:5px 13px;margin:0;cursor:pointer;float:none;transition:none}
+.fab button+button{border-left:1px solid var(--fab-line)}
+.fab button:hover,.totop:hover{background:var(--fab-hover)}
+.fab button:focus-visible,.totop:focus-visible{outline:2px solid var(--fab-focus);outline-offset:-2px}
+.fab .lang-btn,.fab .theme-btn{display:inline-grid;justify-items:center;align-items:center}
+.fab .lang-btn>span,.fab .theme-btn>span{grid-area:1/1}
+.fab .lang-btn .lb-en,.show-jp .fab .lang-btn .lb-ja{visibility:hidden}
+.show-jp .fab .lang-btn .lb-en{visibility:visible}
+.fab .theme-btn{padding:5px 11px}
+.fab .theme-btn>span{font-size:1.1em;line-height:1}
+.fab .theme-btn .tb-moon,[data-theme="light"] .fab .theme-btn .tb-sun{visibility:hidden}
+[data-theme="light"] .fab .theme-btn .tb-moon{visibility:visible}
+.totop{position:fixed;right:.9rem;bottom:1.1rem;z-index:900;background:var(--fab-bg);border:1px solid var(--fab-line);border-radius:var(--fab-radius);box-shadow:var(--fab-shadow);opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* /hfgcs controls */
+/* the floating bar drawn as this page's own segmented control (.seg) */
+html:root,html:root[data-theme="dark"]{--fab-bg:rgba(1,6,11,.92);--fab-line:var(--hairline);--fab-ink:var(--ink-2);--fab-dim:var(--ink);--fab-hover:transparent;--fab-focus:var(--series);--fab-radius:6px;--fab-shadow:none}
+html:root[data-theme="light"]{--fab-bg:rgba(243,245,247,.94);--fab-line:var(--hairline);--fab-ink:var(--ink-2);--fab-dim:var(--ink);--fab-hover:transparent;--fab-focus:var(--series);--fab-radius:6px;--fab-shadow:none}
+html .fab button,html .totop{font-family:var(--sans);font-size:12.5px;letter-spacing:.05em;padding:6px 13px}
+html .fab button:hover,html .totop:hover{color:var(--ink)}
+
+</style>
+<!-- hfgcs controls --><div class="fab" lang="en" role="group" aria-label="Language and theme"><button type="button" class="lang-btn"><span class="lb-ja" lang="ja">&#x65E5;&#x672C;&#x8A9E;</span><span class="lb-en">EN</span></button><button type="button" class="theme-btn"><span class="tb-sun">&#x2600;</span><span class="tb-moon">&#x263E;</span></button></div>
+<button type="button" class="totop" lang="en" aria-label="Back to top">&#x2191;</button><!-- /hfgcs controls -->
+<div class="wrap">
+  <div class="navback"><a href="index.html"><span class="bi-i"><span class="en">&larr; Index</span><span class="jp" lang="ja">&larr; 戻る</span></span></a></div>
+  <h1><span class="bi-i"><span class="en">E6B TRACKER</span><span class="jp" lang="ja">E6B トラッカー</span></span></h1>
+  <p class="standfirst"><span class="bi"><span class="en">E-6B and E-4B flights by day, from ADS-B Exchange. Track color shows altitude. Updated daily at 23:59 UTC. All times UTC.</span><span class="jp" lang="ja">E-6BとE-4Bの日ごとの飛行。ADS-B Exchangeより。航跡の色は高度。毎日23:59 UTCに更新。時刻はすべてUTC。</span></span></p>
+
+  <div class="daybar">
+    <span class="bi-i"><span class="en">DAY</span><span class="jp" lang="ja">日付</span></span>
+    <div class="seg"><button type="button" id="prev" aria-label="Previous day">&#x25C0;</button><select id="daysel" aria-label="Day"></select><button type="button" id="next" aria-label="Next day">&#x25B6;</button></div>
+  </div>
+  <div class="chips" id="chips"></div>
+
+  <div class="panel">
+    <div class="cap"><span class="bi-i"><span class="en">TRACKS</span><span class="jp" lang="ja">航跡</span></span></div>
+    <svg id="map" viewBox="0 0 1000 600" role="img" aria-label="Tracks map">
+      <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="6" height="6" style="fill:var(--res-fill)"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--res);stroke-width:1;opacity:.55"/></pattern></defs>
+      <g id="g-land"></g><g id="g-res"></g><g id="g-trk"></g><g id="g-loop"></g><g id="g-lab"></g><circle id="hov" class="hov" r="6" style="display:none"/>
+    </svg>
+    <div class="legendline" id="legend"></div>
+  </div>
+
+  <div class="tw"><table id="t-planes">
+    <caption><span class="bi-i"><span class="en">AIRCRAFT</span><span class="jp" lang="ja">機体</span></span></caption>
+    <thead><tr><th scope="col"><span class="bi-i"><span class="en">HEX</span><span class="jp" lang="ja">HEX</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">TYPE</span><span class="jp" lang="ja">機種</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">CALLSIGN</span><span class="jp" lang="ja">コールサイン</span></span></th><th scope="col"><span class="bi-i"><span class="en">TAKEOFF</span><span class="jp" lang="ja">離陸</span></span></th><th scope="col"><span class="bi-i"><span class="en">LANDING</span><span class="jp" lang="ja">着陸</span></span></th><th scope="col"><span class="bi-i"><span class="en">HIGHEST</span><span class="jp" lang="ja">最高高度</span></span></th><th scope="col"><span class="bi-i"><span class="en">LOOPS</span><span class="jp" lang="ja">旋回</span></span></th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="none" id="n-planes" hidden><span class="bi"><span class="en">No flights.</span><span class="jp" lang="ja">飛行なし。</span></span></p>
+
+  <div class="tw"><table id="t-loops">
+    <caption><span class="bi-i"><span class="en">LOOPS</span><span class="jp" lang="ja">旋回</span></span></caption>
+    <thead><tr><th scope="col"><span class="bi-i"><span class="en">AIRCRAFT</span><span class="jp" lang="ja">機体</span></span></th><th scope="col"><span class="bi-i"><span class="en">FROM</span><span class="jp" lang="ja">開始</span></span></th><th scope="col"><span class="bi-i"><span class="en">TO</span><span class="jp" lang="ja">終了</span></span></th><th scope="col"><span class="bi-i"><span class="en">FOR</span><span class="jp" lang="ja">継続時間</span></span></th><th scope="col"><span class="bi-i"><span class="en">ACROSS</span><span class="jp" lang="ja">大きさ</span></span></th><th scope="col"><span class="bi-i"><span class="en">TURNS</span><span class="jp" lang="ja">周回</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">NEAREST BASE</span><span class="jp" lang="ja">最寄りの基地</span></span></th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="none" id="n-loops" hidden><span class="bi"><span class="en">No loops.</span><span class="jp" lang="ja">旋回なし。</span></span></p>
+  <p class="note"><span class="bi"><span class="en">Loop: 320&deg; or more of turn within 45 minutes, ending near where it began, inside 150 miles, above 8,000 ft. Turns under 10 minutes apart count as one.</span><span class="jp" lang="ja">旋回：45分以内に320&deg;以上旋回して始点付近に戻る、範囲150マイル以内、高度8,000 ft以上。間隔10分未満の旋回は一つと数える。</span></span></p>
+
+  <div class="tw"><table id="t-res">
+    <caption><span class="bi-i"><span class="en">AIRSPACE RESERVATIONS</span><span class="jp" lang="ja">空域予約</span></span></caption>
+    <thead><tr><th scope="col"><span class="bi-i"><span class="en">NOTAM</span><span class="jp" lang="ja">NOTAM</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">FIR</span><span class="jp" lang="ja">FIR</span></span></th><th scope="col"><span class="bi-i"><span class="en">ALTITUDES</span><span class="jp" lang="ja">高度</span></span></th><th scope="col"><span class="bi-i"><span class="en">FROM</span><span class="jp" lang="ja">開始</span></span></th><th scope="col"><span class="bi-i"><span class="en">TO</span><span class="jp" lang="ja">終了</span></span></th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="none" id="n-res" hidden><span class="bi"><span class="en">No reservations.</span><span class="jp" lang="ja">空域予約なし。</span></span></p>
+
+  <div class="tw"><table id="t-heard">
+    <caption><span class="bi-i"><span class="en">BROADCASTS HEARD</span><span class="jp" lang="ja">受信した放送</span></span></caption>
+    <thead><tr><th scope="col"><span class="bi-i"><span class="en">AT</span><span class="jp" lang="ja">時刻</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">WHAT</span><span class="jp" lang="ja">内容</span></span></th><th scope="col"><span class="bi-i"><span class="en">kHz</span><span class="jp" lang="ja">kHz</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">MESSAGE</span><span class="jp" lang="ja">メッセージ</span></span></th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="none" id="n-heard" hidden><span class="bi"><span class="en">Nothing heard.</span><span class="jp" lang="ja">受信なし。</span></span></p>
+</div>
+<div id="tip"></div>
+<script>
+(function () {
+  'use strict';
+  var BANDS = [5000, 15000, 25000, 35000, 45000, Infinity];
+  var BAND_EN = ['UNDER 5K', '5–15K', '15–25K', '25–35K', '35–45K', '45K+'];
+  var BAND_JP = ['5千未満', '5千–1.5万', '1.5万–2.5万', '2.5万–3.5万', '3.5万–4.5万', '4.5万以上'];
+  var W = 1000, H = 600, drawnW = 0, NS = 'http://www.w3.org/2000/svg', svg = document.getElementById('map');
+  var days = [], world = null, day = null, cur = null, pts = [];
+  var $ = function (id) { return document.getElementById(id); };
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function bi(en, jp) { return '<span class="bi-i"><span class="en">' + en + '</span><span class="jp" lang="ja">' + (jp == null ? en : jp) + '</span></span>'; }
+  function band(ft) { for (var i = 0; i < BANDS.length; i++) if (ft < BANDS[i]) return i; return 5; }
+  function num(n) { return Math.round(n).toLocaleString('en-US'); }
+  function t0() { return Date.parse(day + 'T00:00:00Z') / 1000; }
+  // a time on the page's day: HH:MM; on another day: MMDD HH:MM (the station's rule)
+  function hm(t) {
+    var d = new Date(t * 1000), iso = d.toISOString();
+    var s = iso.slice(11, 16);
+    return iso.slice(0, 10) === day ? s : iso.slice(5, 7) + iso.slice(8, 10) + ' ' + s;
+  }
+  function dur(s) {
+    var m = Math.round(s / 60), h = Math.floor(m / 60);
+    return h ? bi(h + ' H ' + (m % 60) + ' MIN', h + '時間' + (m % 60) + '分') : bi(m + ' MIN', m + '分');
+  }
+  function durTxt(s, jp) {
+    var m = Math.round(s / 60), h = Math.floor(m / 60);
+    return jp ? (h ? h + '時間' + (m % 60) + '分' : m + '分') : (h ? h + ' H ' + (m % 60) + ' MIN' : m + ' MIN');
+  }
+  function el(name, attrs, parent, text) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function twin(parent, attrs, en, jp) {   // an SVG label in both languages (the page's .en/.jp switch hides one)
+    var a = Object.assign({}, attrs); a['class'] = (attrs['class'] || '') + ' en'; el('text', a, parent, en);
+    var b = Object.assign({}, attrs); b['class'] = (attrs['class'] || '') + ' jp'; b.lang = 'ja'; el('text', b, parent, jp);
+  }
+
+  // ---------------------------------------------------------------- projection
+  var view;
+  function fit(lons, lats) {
+    if (!lons.length) { lons = [-125, -66]; lats = [24, 50]; }
+    var w = Math.min.apply(null, lons), e = Math.max.apply(null, lons), s = Math.min.apply(null, lats), n = Math.max.apply(null, lats);
+    if (n - s < 4) { var c = (n + s) / 2; s = c - 2; n = c + 2; }
+    var kx = Math.cos((s + n) / 2 * Math.PI / 180);
+    if ((e - w) * kx < 4) { var cx = (e + w) / 2; w = cx - 2 / kx; e = cx + 2 / kx; }
+    var pw = (e - w) * 0.08, ph = (n - s) * 0.1; w -= pw; e += pw; s -= ph; n += ph;
+    var aspect = W / H, gw = (e - w) * kx, gh = n - s;
+    if (gw / gh > aspect) { var nh = gw / aspect, m = (s + n) / 2; s = m - nh / 2; n = m + nh / 2; }
+    else { var nw = gh * aspect / kx, mx = (w + e) / 2; w = mx - nw / 2; e = mx + nw / 2; }
+    view = {w: w, e: e, s: s, n: n, kx: kx, sc: W / (e - w)};
+  }
+  function px(lon, lat) { return [(lon - view.w) * view.sc, (view.n - lat) * view.sc / view.kx]; }
+  function pathOf(ring, close) {   // ring: [[lon, lat], ...]
+    var d = '';
+    for (var i = 0; i < ring.length; i++) { var p = px(ring[i][0], ring[i][1]); d += (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }
+    return d + (close ? 'Z' : '');
+  }
+  function onView(ring) {
+    var w = Infinity, e = -Infinity, s = Infinity, n = -Infinity;
+    for (var i = 0; i < ring.length; i++) { var p = ring[i]; if (p[0] < w) w = p[0]; if (p[0] > e) e = p[0]; if (p[1] < s) s = p[1]; if (p[1] > n) n = p[1]; }
+    return !(e < view.w || w > view.e || n < view.s || s > view.n);
+  }
+  function resRings(r) {   // a reservation's outlines as [[lon, lat]] rings (its shapes are [lat, lon])
+    var shapes = r.shapes || (r.shape ? [r.shape] : []);
+    return shapes.filter(function (sh) { return sh && sh.length > 2; }).map(function (sh) { return sh.map(function (p) { return [p[1], p[0]]; }); });
+  }
+
+  // ---------------------------------------------------------------- the map
+  function drawMap() {
+    W = Math.max(300, Math.round(svg.getBoundingClientRect().width) || 1000); H = Math.round(W * (W < 600 ? 0.85 : 0.6));
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); drawnW = W;
+    var narrow = W < 600;   // (a phone: shorter labels)
+    var lons = [], lats = [];
+    cur.planes.forEach(function (p) { p.track.forEach(function (q) { lons.push(q[1]); lats.push(q[0]); }); });
+    cur.reservations.forEach(function (r) { resRings(r).forEach(function (ring) { ring.forEach(function (q) { lons.push(q[0]); lats.push(q[1]); }); }); });
+    fit(lons, lats);
+    ['g-land', 'g-res', 'g-trk', 'g-loop', 'g-lab'].forEach(function (id) { $(id).textContent = ''; });
+    var gl = $('g-land'), d = '';
+    world.land.forEach(function (r) { if (onView(r)) d += pathOf(r, true); });
+    el('path', {'class': 'landp', d: d, 'fill-rule': 'evenodd'}, gl);
+    d = ''; world.lakes.forEach(function (r) { if (onView(r)) d += pathOf(r, true); });
+    if (d) el('path', {'class': 'lakep', d: d}, gl);
+    d = ''; world.borders.forEach(function (r) { if (onView(r)) d += pathOf(r, false); });
+    if (d) el('path', {'class': 'borderp', d: d}, gl);
+
+    var gr = $('g-res');
+    cur.reservations.forEach(function (r) {
+      var rings = resRings(r); if (!rings.length) return;
+      var dd = rings.map(function (ring) { return pathOf(ring, true); }).join('');
+      el('path', {'class': 'resp', d: dd}, gr);
+      var c = r.centre ? px(r.centre[1], r.centre[0]) : px(rings[0][0][0], rings[0][0][1]);
+      el('text', {'class': 'resl', x: c[0].toFixed(1), y: c[1].toFixed(1), 'text-anchor': 'middle'}, gr, r.id);
+    });
+
+    var gt = $('g-trk'), glab = $('g-lab'), tags = [], loopLabels = [], baseLabels = []; pts = [];
+    var T0 = t0();
+    cur.planes.forEach(function (p) {
+      var run = null, prev = null;
+      function flush() { if (run && run.pts.length > 1) el('path', {'class': 'trk ' + (run.b < 0 ? 'g' : 'b' + run.b), d: 'M' + run.pts.join('L')}, gt); }
+      p.track.forEach(function (q) {
+        var xy = px(q[1], q[0]), s = xy[0].toFixed(1) + ' ' + xy[1].toFixed(1);
+        pts.push({x: xy[0], y: xy[1], p: p, alt: q[2], t: T0 + q[3]});
+        var b = q[2] == null || q[2] <= 0 ? -1 : band(q[2]);
+        if (prev && q[3] - prev[3] > 900) { flush(); run = null; }
+        if (!run) run = {b: b, pts: [s]};
+        else if (b !== run.b) { run.pts.push(s); flush(); run = {b: b, pts: [s]}; }
+        else run.pts.push(s);
+        prev = q;
+      });
+      flush();
+      var last = p.track[p.track.length - 1];
+      if (last) {
+        var e = px(last[1], last[0]);
+        el('circle', {'class': 'endp', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 2.6}, glab);
+        tags.push({from: e, cls: 'tagl', en: (p.kind === 'E-4B' ? 'E-4B ' : '') + (p.callsign || p.hex), w: 7, at: [[e[0] + 6, e[1] - 5, 'start'], [e[0] + 6, e[1] + 14, 'start'], [e[0] - 6, e[1] - 5, 'end'], [e[0] - 6, e[1] + 14, 'end'], [e[0], e[1] - 10, 'middle'], [e[0], e[1] + 19, 'middle']]});
+      }
+    });
+
+    var gp = $('g-loop'), named = {};
+    cur.planes.forEach(function (p) {
+      p.loops.forEach(function (l) {
+        var c = px(l.lon, l.lat), r = Math.max(14, (l.miles / 2 + 6) / 69 * view.sc / view.kx);
+        el('circle', {'class': 'loopc', cx: c[0].toFixed(1), cy: c[1].toFixed(1), r: r.toFixed(1)}, gp);
+        loopLabels.push({cls: 'loopl', en: (narrow ? '' : 'LOOP ') + l.miles + ' MI · ' + durTxt(l.to - l.from, false), jp: (narrow ? '' : '旋回 ') + l.miles + 'マイル · ' + durTxt(l.to - l.from, true), w: 7.2,
+          at: [[c[0], c[1] - r - 6, 'middle'], [c[0], c[1] + r + 15, 'middle'], [c[0] + r + 6, c[1] + 4, 'start'], [c[0] - r - 6, c[1] + 4, 'end'], [c[0], c[1] - r - 20, 'middle'], [c[0], c[1] + r + 29, 'middle']]});
+        if (l.base && !named[l.base.id]) {   // the map shows the nearest base, as the stream's loop close-ups do
+          named[l.base.id] = 1;
+          var bp = world.bases && world.bases[l.base.id];
+          if (bp) {
+            var b = px(bp[1], bp[0]);
+            el('circle', {'class': 'based', cx: b[0].toFixed(1), cy: b[1].toFixed(1), r: 3.2}, gp);
+            baseLabels.push({from: b, cls: 'basel', en: narrow ? l.base.id : l.base.name + ' ' + l.base.id, w: 6.6, at: [[b[0] + 7, b[1] + 4, 'start'], [b[0] - 7, b[1] + 4, 'end'], [b[0], b[1] - 8, 'middle'], [b[0], b[1] + 17, 'middle']]});
+          }
+        }
+      });
+    });
+    // labels where they don't cover another: loops first, then their bases, then the aircraft (each tries its spots in turn)
+    var taken = [];
+    loopLabels.concat(baseLabels, tags).forEach(function (L) {
+      var w = Math.max(L.en.length * L.w, L.jp ? L.jp.length * 11.5 : 0) + 6, pick = null, f = L.at[0];
+      [16, -16, 32, -32, 48, -48, 64, -64].forEach(function (dy) { L.at.push([f[0], f[1] + dy, f[2]]); });
+      [[1, 0], [-1, 0], [1, 16], [-1, 16], [1, -16], [-1, -16]].forEach(function (o) { L.at.push([f[0] + o[0] * (w / 2 + 12), f[1] + o[1], o[0] > 0 ? 'start' : 'end']); });
+      for (var i = 0; i < L.at.length && !pick; i++) {
+        var a = L.at[i], x0 = a[2] === 'start' ? a[0] : a[2] === 'end' ? a[0] - w : a[0] - w / 2, box = [x0, a[1] - 12, x0 + w, a[1] + 3];
+        if (box[0] < 2 || box[2] > W - 2 || box[1] < 2 || box[3] > H - 2) continue;
+        if (!taken.some(function (t) { return box[0] < t[2] && box[2] > t[0] && box[1] < t[3] && box[3] > t[1]; })) pick = {a: a, box: box};
+      }
+      if (!pick) return;   // (no room: the tables below have it)
+      taken.push(pick.box);
+      if (pick.a !== L.at[0] && L.from) {   // moved off its spot: a hairline back to what it names
+        var bx = Math.max(pick.box[0], Math.min(L.from[0], pick.box[2])), by = L.from[1] < pick.box[1] ? pick.box[1] : pick.box[3];
+        el('line', {'class': 'lead', x1: L.from[0].toFixed(1), y1: L.from[1].toFixed(1), x2: bx.toFixed(1), y2: by.toFixed(1)}, glab);
+      }
+      var attrs = {'class': L.cls, x: pick.a[0].toFixed(1), y: Math.max(13, pick.a[1]).toFixed(1), 'text-anchor': pick.a[2]};
+      if (L.jp) twin(glab, attrs, L.en, L.jp); else el('text', attrs, glab, L.en);
+    });
+    if (!cur.planes.length) twin(glab, {'class': 'empty', x: W / 2, y: H / 2, 'text-anchor': 'middle'}, 'NO FLIGHTS', '飛行なし');
+  }
+
+  // ---------------------------------------------------------------- hover
+  var tip = $('tip'), hov = $('hov');
+  function hide() { tip.style.display = 'none'; hov.style.display = 'none'; }
+  svg.addEventListener('pointermove', function (ev) {
+    if (!pts.length) return;
+    var m = svg.getScreenCTM(); if (!m) return;
+    var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; var v = pt.matrixTransform(m.inverse());
+    var best = null, bd = 18 * 18;
+    for (var i = 0; i < pts.length; i++) { var q = pts[i], dx = q.x - v.x, dy = q.y - v.y, dd = dx * dx + dy * dy; if (dd < bd) { bd = dd; best = q; } }
+    if (!best) { hide(); return; }
+    hov.setAttribute('cx', best.x.toFixed(1)); hov.setAttribute('cy', best.y.toFixed(1)); hov.style.display = '';
+    var ja = document.documentElement.classList.contains('show-jp');
+    tip.innerHTML = '<b>' + esc(best.p.kind) + '</b> <code>' + esc(best.p.hex) + '</code>' + (best.p.callsign ? ' ' + esc(best.p.callsign) : '') +
+      '<br>' + hm(best.t) + ' UTC · ' + (best.alt == null || best.alt <= 0 ? (ja ? '地上' : 'ON THE GROUND') : num(best.alt) + ' ft');
+    tip.style.display = 'block';
+    var x = ev.clientX + 14, y = ev.clientY + 14, r = tip.getBoundingClientRect();
+    if (x + r.width > window.innerWidth - 8) x = ev.clientX - r.width - 14;
+    if (y + r.height > window.innerHeight - 8) y = ev.clientY - r.height - 14;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  });
+  svg.addEventListener('pointerleave', hide);
+
+  // ---------------------------------------------------------------- tables and chips
+  function rows(id, list, row) {
+    var tb = $(id).querySelector('tbody'); tb.innerHTML = list.map(row).join('');
+    $(id).hidden = !list.length; $('n' + id.slice(1)).hidden = !!list.length;
+  }
+  function render() {
+    var nE6 = 0, nE4 = 0, loops = [];
+    cur.planes.forEach(function (p) { if (p.kind === 'E-4B') nE4++; else nE6++; p.loops.forEach(function (l) { loops.push({p: p, l: l}); }); });
+    loops.sort(function (a, b) { return a.l.from - b.l.from; });
+    var heard = cur.eams.map(function (e) { return {t: e.utc, kind: e.how === 'VLF' ? 'VLF' : e.how === 'HF voice' ? 'VOICE' : 'EAM', kHz: e.kHz, msg: e.message, auto: e.auto}; })
+      .concat(cur.vlf.map(function (v) { return {t: hm(v.t), kind: 'VLFCUE', kHz: v.kHz, area: v.area || v.name}; }))
+      .sort(function (a, b) { return a.t < b.t ? -1 : a.t > b.t ? 1 : 0; });
+    var nEam = cur.eams.filter(function (e) { return e.message; }).length;
+    $('chips').innerHTML = [
+      [bi('E-6Bs', 'E-6B'), nE6], [bi('E-4Bs', 'E-4B'), nE4], [bi('LOOPS', '旋回'), loops.length],
+      [bi('RESERVATIONS', '空域予約'), cur.reservations.length], [bi('EAMs', 'EAM'), nEam],
+      [bi('UPDATED', '更新'), hm(cur.made) + ' UTC']
+    ].map(function (c) { return '<span class="chip">' + c[0] + ' <b>' + c[1] + '</b></span>'; }).join('');
+
+    var flights = [];
+    cur.planes.forEach(function (p) { p.flights.forEach(function (f) { flights.push({p: p, f: f}); }); });
+    flights.sort(function (a, b) { return a.f.first - b.f.first; });
+    rows('t-planes', flights, function (x) {
+      var p = x.p, f = x.f, T0 = t0(), top = 0;
+      p.track.forEach(function (q) { if (T0 + q[3] >= f.first && T0 + q[3] <= f.last && q[2] > top) top = q[2]; });
+      var nl = p.loops.filter(function (l) { return l.from >= f.first && l.from <= f.last; }).length;
+      var up = f.takeoff ? hm(f.takeoff) : f.up_at_start ? bi('UP AT 00:00', '00:00に飛行中') :
+        '<span class="dim">' + bi('FIRST SEEN ' + hm(f.first), '初捕捉 ' + hm(f.first)) + '</span>';
+      var down = f.up_at_end ? bi('STILL UP', '飛行中') : f.landing ? hm(f.landing) :
+        '<span class="dim">' + bi('LAST SEEN ' + hm(f.last), '最終捕捉 ' + hm(f.last)) + '</span>';
+      return '<tr><td class="mono"><a href="https://globe.adsbexchange.com/?icao=' + p.hex.toLowerCase() + '&amp;showTrace=' + day + '" rel="noopener">' + esc(p.hex) + '</a></td>' +
+        '<td class="l">' + esc(p.kind) + '</td><td class="l mono">' + (p.callsign ? esc(p.callsign) : '<span class="dim">—</span>') + '</td>' +
+        '<td>' + up + '</td><td>' + down + '</td><td>' + (top > 0 ? num(top) + ' ft' : '<span class="dim">—</span>') + '</td><td>' + nl + '</td></tr>';
+    });
+    rows('t-loops', loops, function (x) {
+      var l = x.l, b = l.base;
+      return '<tr><td class="mono">' + esc(x.p.callsign || x.p.hex) + '</td><td>' + hm(l.from) + '</td><td>' + hm(l.to) + '</td><td>' + dur(l.to - l.from) + '</td>' +
+        '<td>' + l.miles + ' mi</td><td>' + Math.max(1, Math.round(l.laps)) + '</td><td class="l">' + (b ? esc(b.name) + ' <span class="dim">' + esc(b.id) + ' · ' + b.miles + ' mi</span>' : '<span class="dim">—</span>') + '</td></tr>';
+    });
+    rows('t-res', cur.reservations, function (r) {
+      return '<tr><td class="mono">' + esc(r.id) + '</td><td class="l">' + esc(r.fir || '') + '</td><td class="mono">' + esc(r.alt_block || '') + '</td>' +
+        '<td>' + (r.start_epoch ? hm(r.start_epoch) : '') + '</td><td>' + (r.end_epoch ? hm(r.end_epoch) : '') + '</td></tr>';
+    });
+    rows('t-heard', heard, function (h) {
+      var what = h.kind === 'VLF' ? bi('VLF EAM', 'VLF EAM') : h.kind === 'VOICE' ? bi('HF voice', 'HF音声') : h.kind === 'VLFCUE' ? bi('VLF data', 'VLFデータ') : bi('EAM', 'EAM');
+      var msg = h.msg ? esc(h.msg) : h.kind === 'VLFCUE' ? '<span class="dim">' + esc(h.area || '') + '</span>' :
+        h.kind === 'VOICE' ? '<span class="dim">' + bi('transcript unchecked', '文字起こし未確認') + '</span>' : '';
+      return '<tr><td>' + esc(h.t) + '</td><td class="l">' + what + '</td><td class="mono">' + (h.kHz ? esc(h.kHz) : '') + '</td><td class="msg">' + msg + '</td></tr>';
+    });
+  }
+
+  function legend() {
+    var h = '<span class="lt">' + bi('TRACK ALTITUDE (FT)', '航跡の高度（ft）') + '</span>';
+    for (var i = 0; i < 6; i++) h += '<span><span class="sw" style="background:var(--b' + i + ')"></span>' + bi(BAND_EN[i], BAND_JP[i]) + '</span>';
+    h += '<span><span class="hatchk"></span>' + bi('RESERVATION', '空域予約') + '</span><span><span class="ringk"></span>' + bi('LOOP', '旋回') + '</span>';
+    $('legend').innerHTML = h;
+  }
+
+  // ---------------------------------------------------------------- days
+  function show(d) {
+    var i = days.indexOf(d); if (i < 0) d = days[days.length - 1], i = days.length - 1;
+    day = d; $('daysel').value = d; $('prev').disabled = i <= 0; $('next').disabled = i >= days.length - 1;
+    if (location.hash.slice(1) !== d) history.replaceState(null, '', '#' + d);
+    fetch('e6b_tracker/' + d + '.json', {cache: 'no-cache'}).then(function (r) { return r.json(); }).then(function (j) {
+      if (day !== d) return;
+      cur = j; cur.reservations = cur.reservations || []; cur.eams = cur.eams || []; cur.vlf = cur.vlf || [];
+      hide(); drawMap(); render();
+    });
+  }
+  $('daysel').addEventListener('change', function () { show(this.value); });
+  $('prev').addEventListener('click', function () { show(days[days.indexOf(day) - 1]); });
+  $('next').addEventListener('click', function () { show(days[days.indexOf(day) + 1]); });
+  var rt = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt); rt = setTimeout(function () { if (cur && Math.abs(Math.round(svg.getBoundingClientRect().width) - drawnW) > 8) { hide(); drawMap(); } }, 150);
+  });
+  window.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (h && h !== day && days.indexOf(h) >= 0) show(h); });
+  legend();
+  Promise.all([fetch('e6b_tracker/days.json', {cache: 'no-cache'}).then(function (r) { return r.json(); }), fetch('e6b_tracker/map.json').then(function (r) { return r.json(); })])
+    .then(function (a) {
+      days = a[0].map(function (x) { return x.day; }); world = a[1];
+      $('daysel').innerHTML = days.slice().reverse().map(function (x) { return '<option value="' + x + '">' + x + '</option>'; }).join('');
+      show(location.hash.slice(1));
+    });
+})();
+</script>
+<!-- hfgcs controls --><script>
+// floating controls: language (EN / \u65E5\u672C\u8A9E), light / dark, back to top. Choices are kept across the HFGCS pages.
+(function () {
+  var d = document.documentElement, body = document.body;
+  var lb = document.querySelector('.fab .lang-btn'), tb = document.querySelector('.fab .theme-btn'), up = document.querySelector('.totop');
+  var T = {en: d.getAttribute('data-title-en'), ja: d.getAttribute('data-title-ja')};
+  function ja() { return d.classList.contains('show-jp'); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function paint() {
+    var j = ja(), light = d.getAttribute('data-theme') === 'light';
+    lb.title = j ? 'Show in English' : '\u65E5\u672C\u8A9E\u3067\u8868\u793A';      // both labels live in the button; CSS shows one
+    tb.title = j ? (light ? '\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9' : '\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9') : (light ? 'Dark mode' : 'Light mode');
+    up.title = j ? '\u30DA\u30FC\u30B8\u306E\u5148\u982D\u3078' : 'Back to top';
+    up.setAttribute('aria-label', up.title);
+    if (T.en && T.ja) document.title = j ? T.ja : T.en;
+  }
+  function setLang(j) {
+    // <html lang> is left alone: changing it makes the browser re-pick fonts for untagged text, which shifts things.
+    // Japanese text carries its own lang="ja".
+    d.classList.toggle('show-jp', j); body.classList.toggle('show-jp', j);
+    if (typeof window.hfgcsSetLang === 'function') { try { window.hfgcsSetLang(j ? 'jp' : 'en'); } catch (e) {} }
+    paint();
+    document.dispatchEvent(new Event('langchange'));
+  }
+
+  // Keep the reader's place when the language flips. The element at a line just under the controls stays at the same
+  // height: its other-language twin when it sits in an .en/.jp block (paired child by child when both blocks have the
+  // same structure, by proportion otherwise), or the same element when it is shared by both languages.
+  function clamp(x) { return Math.min(1, Math.max(0, x)); }
+  function twinOf(w, cls) {
+    for (var s = w.nextElementSibling; s; s = s.nextElementSibling) if (s.classList.contains(cls)) return s;
+    for (s = w.previousElementSibling; s; s = s.previousElementSibling) if (s.classList.contains(cls)) return s;
+    return null;
+  }
+  function anchorBefore() {
+    if (window.scrollY < 4) return null;
+    var y0 = 90, main = document.querySelector('.wrap, .content, main') || body;
+    var x = Math.max(4, Math.min(window.innerWidth - 4, main.getBoundingClientRect().left + 40));
+    var el = document.elementFromPoint(x, y0);
+    if (!el || el.closest('.fab, .totop')) return null;
+    var cur = ja() ? 'jp' : 'en', oth = ja() ? 'en' : 'jp';
+    var w = el.closest('.' + cur);
+    while (w && getComputedStyle(w).display.indexOf('inline') === 0) w = w.parentElement && w.parentElement.closest('.' + cur);
+    var w2 = w && twinOf(w, oth);
+    if (w && w2) {
+      var top = el === w ? null : el;
+      while (top && top.parentElement !== w) top = top.parentElement;
+      if (!top) top = Array.prototype.find.call(w.children, function (c) { return c.getBoundingClientRect().bottom >= y0; }) || null;
+      var i = top ? Array.prototype.indexOf.call(w.children, top) : -1;
+      var same = i >= 0 && w.children.length === w2.children.length && w2.children[i].tagName === top.tagName;
+      var node = same ? top : w, r = node.getBoundingClientRect();
+      return {y0: Math.max(y0, r.top), frac: r.height ? clamp((y0 - r.top) / r.height) : 0,
+              find: function () { return same ? w2.children[i] : w2; }};
+    }
+    var n = el.closest('.board') || el.closest('section, .msg, .viewer, p, li, h1, h2, h3, nav, table, figure, div') || el;
+    while (n && n !== body && n.closest('.' + cur)) n = n.parentElement;   // a language-only element: use what holds it
+    if (!n || n === body || n === d) return null;
+    var rr = n.getBoundingClientRect();
+    return {y0: Math.max(y0, rr.top), frac: rr.height ? clamp((y0 - rr.top) / rr.height) : 0, find: function () { return n; }};
+  }
+  function anchorAfter(a) {
+    var t = a && a.find();
+    if (!t || !t.isConnected) return;
+    var r = t.getBoundingClientRect(), dy = r.top + a.frac * r.height - a.y0;
+    if (Math.abs(dy) < 1) return;
+    var sb = d.style.scrollBehavior; d.style.scrollBehavior = 'auto';
+    window.scrollBy(0, dy); d.style.scrollBehavior = sb;
+  }
+
+  lb.addEventListener('click', function () {
+    var j = !ja(), a = anchorBefore();
+    setLang(j); save('hfgcs-lang', j ? 'ja' : 'en');
+    anchorAfter(a);
+  });
+  tb.addEventListener('click', function () {
+    var n = d.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    d.setAttribute('data-theme', n); save('hfgcs-theme', n); paint();
+    document.dispatchEvent(new Event('themechange'));
+  });
+  up.addEventListener('click', function () { window.scrollTo({top: 0, behavior: 'smooth'}); });
+  // j, n or e flips the language and a or d the light / dark theme, as the two buttons do. Left alone: keys typed into
+  // a field, held keys, keys with Cmd / Ctrl / Alt, and keys the page has already used (a gallery's type-to-search,
+  // or the A of the index's Konami code).
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.repeat || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var k = (e.key || '').toLowerCase();
+    if (k === 'j' || k === 'n' || k === 'e') { e.preventDefault(); lb.click(); }
+    else if (k === 'a' || k === 'd') { e.preventDefault(); tb.click(); }
+  });
+  function sc() { up.classList.toggle('on', window.scrollY > 400); }
+  window.addEventListener('scroll', sc, {passive: true}); sc();
+  if (window.matchMedia) matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+    var s = null; try { s = localStorage.getItem('hfgcs-theme'); } catch (x) {}
+    if (!s) { d.setAttribute('data-theme', e.matches ? 'light' : 'dark'); paint(); document.dispatchEvent(new Event('themechange')); }
+  });
+  if (ja()) setLang(true); else { body.classList.remove('show-jp'); paint(); }
+})();
+</script>
+<script>
+// \u2190 / \u2192 and a horizontal swipe flip EN/JP by pressing the language button, as on the other EN/JP pages.
+// A key a page uses itself (it called preventDefault, or focus is inside .viewer / [data-own-arrows]) is left alone.
+(function () {
+  var flip = function () { var b = document.querySelector('.fab .lang-btn'); if (b) b.click(); };
+  var SKIP = 'input, select, textarea, button, label, .viewer, [data-own-arrows], .leaflet-container';
+  function inHorizontalScroller(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 1) return true;
+    }
+    return false;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && t.closest && t.closest('.viewer, [data-own-arrows]')) return;
+    e.preventDefault();
+    flip();
+  });
+  var MIN_PX = 45, MAX_MS = 800, origin = null;
+  document.addEventListener('touchstart', function (e) {
+    var t = e.target;
+    if (e.touches.length !== 1 || (t.closest && t.closest(SKIP)) || inHorizontalScroller(t)) { origin = null; return; }
+    var p = e.touches[0];
+    origin = {x: p.clientX, y: p.clientY, at: Date.now()};
+  }, {passive: true});
+  document.addEventListener('touchend', function (e) {
+    var o = origin; origin = null;
+    if (!o || e.changedTouches.length !== 1 || Date.now() - o.at > MAX_MS) return;
+    var p = e.changedTouches[0], dx = p.clientX - o.x, dy = p.clientY - o.y;
+    if (Math.abs(dx) < MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    flip();
+  }, {passive: true});
+  document.addEventListener('touchcancel', function () { origin = null; }, {passive: true});
+})();
+</script><!-- /hfgcs controls -->
