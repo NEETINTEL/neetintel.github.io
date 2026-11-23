@@ -62,6 +62,23 @@ h1{font:500 18px/1.2 var(--sans);color:var(--ink-strong);margin:0}
 #map .basel{fill:var(--series);font:500 11px var(--sans);letter-spacing:.04em;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
 #map .empty{fill:var(--ink-2);font:500 14px var(--sans);letter-spacing:.05em}
 #map .lead{stroke:var(--ink-2);stroke-width:.8}
+.mapbox{position:relative}
+.zoomctl{position:absolute;top:8px;left:8px;background:var(--panel)}
+.zoomctl button{font:600 13px/1 var(--sans);padding:5px 11px;color:var(--ink)}
+.zoomctl button:disabled{opacity:.4;cursor:default;background:none}
+#map{cursor:grab;user-select:none;-webkit-user-select:none}
+#map.drag{cursor:grabbing}
+#map .landp,#map .lakep,#map .borderp,#map .resp,#map .trk,#map .loopc{vector-effect:non-scaling-stroke}
+#map .trk.ghost{stroke:var(--ink-2);stroke-width:1;opacity:.35}
+#map .resp.off{opacity:.2}
+#map .nowp{stroke:var(--surface);stroke-width:1.5}
+#map .nowp.stale{fill:var(--panel)!important;stroke:var(--ink-strong);stroke-width:1.5;stroke-dasharray:2 2}
+#map .nowp.b0{fill:var(--b0)} #map .nowp.b1{fill:var(--b1)} #map .nowp.b2{fill:var(--b2)}
+#map .nowp.b3{fill:var(--b3)} #map .nowp.b4{fill:var(--b4)} #map .nowp.b5{fill:var(--b5)}
+.scrub{display:flex;align-items:center;gap:10px;margin:10px 4px 0}
+.scrub .seg button{padding:5px 12px;color:var(--ink)}
+.scrub input[type=range]{flex:1;min-width:0;margin:0;accent-color:var(--series)}
+.tlabel{font:600 12px/1 var(--mono);letter-spacing:.3px;color:var(--ink-strong);min-width:8.5em;text-align:right;white-space:nowrap}
 #map .hov{fill:none;stroke:var(--ink-strong);stroke-width:1.5}
 .legendline{display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap;margin:10px 4px 2px;
   font:12px/1 var(--sans);color:var(--ink-2);letter-spacing:.04em}
@@ -160,11 +177,15 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
 
   <div class="panel">
     <div class="cap"><span class="bi-i"><span class="en">TRACKS</span><span class="jp" lang="ja">航跡</span></span></div>
+    <div class="mapbox">
     <svg id="map" viewBox="0 0 1000 600" role="img" aria-label="Tracks map">
       <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <rect width="6" height="6" style="fill:var(--res-fill)"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--res);stroke-width:1;opacity:.55"/></pattern></defs>
-      <g id="g-land"></g><g id="g-res"></g><g id="g-trk"></g><g id="g-loop"></g><g id="g-lab"></g><circle id="hov" class="hov" r="6" style="display:none"/>
+      <g id="g-geo"><g id="g-land"></g><g id="g-res"></g><g id="g-trk"></g><g id="g-loop"></g></g><g id="g-lab"></g><circle id="hov" class="hov" r="6" style="display:none"/>
     </svg>
+    <div class="seg zoomctl"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">&minus;</button><button type="button" id="zreset"><span class="bi-i"><span class="en">RESET</span><span class="jp" lang="ja">リセット</span></span></button></div>
+    </div>
+    <div class="scrub"><div class="seg"><button type="button" id="play" aria-label="Play">&#x25B6;</button></div><input type="range" id="tslider" min="0" max="1440" step="1" value="1440" aria-label="Time"><span class="tlabel" id="tlabel"></span></div>
     <div class="legendline" id="legend"></div>
   </div>
 
@@ -190,12 +211,6 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
   </table></div>
   <p class="none" id="n-res" hidden><span class="bi"><span class="en">No reservations.</span><span class="jp" lang="ja">空域予約なし。</span></span></p>
 
-  <div class="tw"><table id="t-heard">
-    <caption><span class="bi-i"><span class="en">BROADCASTS HEARD</span><span class="jp" lang="ja">受信した放送</span></span></caption>
-    <thead><tr><th scope="col"><span class="bi-i"><span class="en">AT</span><span class="jp" lang="ja">時刻</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">WHAT</span><span class="jp" lang="ja">内容</span></span></th><th scope="col"><span class="bi-i"><span class="en">kHz</span><span class="jp" lang="ja">kHz</span></span></th><th scope="col" class="l"><span class="bi-i"><span class="en">MESSAGE</span><span class="jp" lang="ja">メッセージ</span></span></th></tr></thead>
-    <tbody></tbody>
-  </table></div>
-  <p class="none" id="n-heard" hidden><span class="bi"><span class="en">Nothing heard.</span><span class="jp" lang="ja">受信なし。</span></span></p>
 </div>
 <div id="tip"></div>
 <script>
@@ -270,15 +285,19 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
   }
 
   // ---------------------------------------------------------------- the map
+  // g-geo (land, reservations, tracks, loop rings) is drawn once in the map's own pixels and moved by zoom and drag as one;
+  // g-lab (labels, dots, aircraft) is redrawn on top in screen pixels so it keeps its size. tNow: null = the whole day, else
+  // seconds from the day's start (the time slider)
+  var Z = {k: 1, x: 0, y: 0}, ZMAX = 16, tNow = null, narrow = false, T0 = 0, resEls = [];
+  function scr(p) { return [Z.x + Z.k * p[0], Z.y + Z.k * p[1]]; }
   function drawMap() {
     W = Math.max(300, Math.round(svg.getBoundingClientRect().width) || 1000); H = Math.round(W * (W < 600 ? 0.85 : 0.6));
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); drawnW = W;
-    var narrow = W < 600;   // (a phone: shorter labels)
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); drawnW = W; narrow = W < 600; T0 = t0();
     var lons = [], lats = [];
     cur.planes.forEach(function (p) { p.track.forEach(function (q) { lons.push(q[1]); lats.push(q[0]); }); });
     cur.reservations.forEach(function (r) { resRings(r).forEach(function (ring) { ring.forEach(function (q) { lons.push(q[0]); lats.push(q[1]); }); }); });
     fit(lons, lats);
-    ['g-land', 'g-res', 'g-trk', 'g-loop', 'g-lab'].forEach(function (id) { $(id).textContent = ''; });
+    ['g-land', 'g-res'].forEach(function (id) { $(id).textContent = ''; });
     var gl = $('g-land'), d = '';
     world.land.forEach(function (r) { if (onView(r)) d += pathOf(r, true); });
     el('path', {'class': 'landp', d: d, 'fill-rule': 'evenodd'}, gl);
@@ -286,22 +305,46 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     if (d) el('path', {'class': 'lakep', d: d}, gl);
     d = ''; world.borders.forEach(function (r) { if (onView(r)) d += pathOf(r, false); });
     if (d) el('path', {'class': 'borderp', d: d}, gl);
-
-    var gr = $('g-res');
-    cur.reservations.forEach(function (r) {
-      var rings = resRings(r); if (!rings.length) return;
-      var dd = rings.map(function (ring) { return pathOf(ring, true); }).join('');
-      el('path', {'class': 'resp', d: dd}, gr);
-      var c = r.centre ? px(r.centre[1], r.centre[0]) : px(rings[0][0][0], rings[0][0][1]);
-      el('text', {'class': 'resl', x: c[0].toFixed(1), y: c[1].toFixed(1), 'text-anchor': 'middle'}, gr, r.id);
+    resEls = cur.reservations.map(function (r) {
+      var rings = resRings(r); if (!rings.length) return null;
+      return el('path', {'class': 'resp', d: rings.map(function (ring) { return pathOf(ring, true); }).join('')}, $('g-res'));
     });
-
-    var gt = $('g-trk'), glab = $('g-lab'), tags = [], loopLabels = [], baseLabels = []; pts = [];
-    var T0 = t0();
+    Z = {k: 1, x: 0, y: 0}; applyZoom();
+    drawTime();
+  }
+  function inForce(r, t) { return (r.start_epoch || 0) <= t && t < (r.end_epoch || 0); }
+  // where an aircraft was at t (s from the day's start): {lat, lon, alt}, between two fixes under 15 minutes apart; in a
+  // longer gap inside a flight (out of range), its last fix with stale: true; otherwise null
+  function posAt(p, t) {
+    var tr = p.track;
+    for (var i = 1; i < tr.length; i++) {
+      if (tr[i][3] < t) continue;
+      var a = tr[i - 1], b = tr[i];
+      if (a[3] > t) return null;
+      if (b[3] - a[3] > 900) {
+        var te = T0 + t, inFlight = p.flights.some(function (f) { return f.first <= te && te <= f.last; });
+        return inFlight ? {lat: a[0], lon: a[1], alt: a[2], stale: true} : null;
+      }
+      var f = b[3] === a[3] ? 0 : (t - a[3]) / (b[3] - a[3]);
+      return {lat: a[0] + (b[0] - a[0]) * f, lon: a[1] + (b[1] - a[1]) * f, alt: f < 0.5 ? a[2] : b[2]};
+    }
+    return null;
+  }
+  function loopR(l) { return Math.max(14, (l.miles / 2 + 6) / 69 * view.sc / view.kx); }
+  // the tracks up to tNow (the rest faint), the loops begun by then, the reservations in effect then
+  function drawTime() {
+    var gt = $('g-trk'), gp = $('g-loop'); gt.textContent = ''; gp.textContent = ''; pts = [];
+    var tc = tNow == null ? Infinity : tNow;
     cur.planes.forEach(function (p) {
+      if (tNow != null) {
+        var dd = '', pv = null;
+        p.track.forEach(function (q) { var xy = px(q[1], q[0]); dd += (!pv || q[3] - pv[3] > 900 ? 'M' : 'L') + xy[0].toFixed(1) + ' ' + xy[1].toFixed(1); pv = q; });
+        el('path', {'class': 'trk ghost', d: dd}, gt);
+      }
       var run = null, prev = null;
       function flush() { if (run && run.pts.length > 1) el('path', {'class': 'trk ' + (run.b < 0 ? 'g' : 'b' + run.b), d: 'M' + run.pts.join('L')}, gt); }
       p.track.forEach(function (q) {
+        if (q[3] > tc) return;
         var xy = px(q[1], q[0]), s = xy[0].toFixed(1) + ' ' + xy[1].toFixed(1);
         pts.push({x: xy[0], y: xy[1], p: p, alt: q[2], t: T0 + q[3]});
         var b = q[2] == null || q[2] <= 0 ? -1 : band(q[2]);
@@ -311,39 +354,62 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
         else run.pts.push(s);
         prev = q;
       });
+      if (tNow != null && run) { var now = posAt(p, tNow); if (now && !now.stale) { var nx = px(now.lon, now.lat); run.pts.push(nx[0].toFixed(1) + ' ' + nx[1].toFixed(1)); } }
       flush();
-      var last = p.track[p.track.length - 1];
-      if (last) {
-        var e = px(last[1], last[0]);
-        el('circle', {'class': 'endp', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 2.6}, glab);
-        tags.push({from: e, cls: 'tagl', en: (p.kind === 'E-4B' ? 'E-4B ' : '') + (p.callsign || p.hex), w: 7, at: [[e[0] + 6, e[1] - 5, 'start'], [e[0] + 6, e[1] + 14, 'start'], [e[0] - 6, e[1] - 5, 'end'], [e[0] - 6, e[1] + 14, 'end'], [e[0], e[1] - 10, 'middle'], [e[0], e[1] + 19, 'middle']]});
-      }
+      p.loops.forEach(function (l) {
+        if (l.from > T0 + tc) return;
+        var c = px(l.lon, l.lat);
+        el('circle', {'class': 'loopc', cx: c[0].toFixed(1), cy: c[1].toFixed(1), r: loopR(l).toFixed(1)}, gp);
+      });
     });
-
-    var gp = $('g-loop'), named = {};
+    cur.reservations.forEach(function (r, i) { if (resEls[i]) resEls[i].classList.toggle('off', tNow != null && !inForce(r, T0 + tNow)); });
+    drawLabels();
+  }
+  // labels where they don't cover another: reservations, loops, their bases, then the aircraft (each tries its spots in turn)
+  function drawLabels() {
+    var glab = $('g-lab'); glab.textContent = '';
+    var tc = tNow == null ? Infinity : tNow, resL = [], tags = [], loopLabels = [], baseLabels = [], named = {};
+    function inside(s, m) { return s[0] >= -m && s[0] <= W + m && s[1] >= -m && s[1] <= H + m; }
+    cur.reservations.forEach(function (r, i) {
+      if (!resEls[i] || (tNow != null && !inForce(r, T0 + tNow))) return;
+      var rings = resRings(r), c = scr(r.centre ? px(r.centre[1], r.centre[0]) : px(rings[0][0][0], rings[0][0][1]));
+      if (inside(c, 0)) resL.push({cls: 'resl', en: r.id, w: 7, fixed: true, at: [[c[0], c[1] + 4, 'middle']]});
+    });
+    cur.planes.forEach(function (p) {
+      var name = (p.kind === 'E-4B' ? 'E-4B ' : '') + (p.callsign || p.hex), e;
+      if (tNow == null) {
+        var last = p.track[p.track.length - 1]; if (!last) return;
+        e = scr(px(last[1], last[0])); if (!inside(e, 0)) return;
+        el('circle', {'class': 'endp', cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 2.6}, glab);
+      } else {
+        var q = posAt(p, tNow); if (!q || q.alt == null || q.alt <= 0) return;   // (airborne then)
+        e = scr(px(q.lon, q.lat)); if (!inside(e, 0)) return;
+        el('circle', {'class': 'nowp b' + band(q.alt) + (q.stale ? ' stale' : ''), cx: e[0].toFixed(1), cy: e[1].toFixed(1), r: 5}, glab);
+      }
+      tags.push({from: e, cls: 'tagl', en: name, w: 7, at: [[e[0] + 7, e[1] - 6, 'start'], [e[0] + 7, e[1] + 15, 'start'], [e[0] - 7, e[1] - 6, 'end'], [e[0] - 7, e[1] + 15, 'end'], [e[0], e[1] - 11, 'middle'], [e[0], e[1] + 20, 'middle']]});
+    });
     cur.planes.forEach(function (p) {
       p.loops.forEach(function (l) {
-        var c = px(l.lon, l.lat), r = Math.max(14, (l.miles / 2 + 6) / 69 * view.sc / view.kx);
-        el('circle', {'class': 'loopc', cx: c[0].toFixed(1), cy: c[1].toFixed(1), r: r.toFixed(1)}, gp);
-        loopLabels.push({cls: 'loopl', en: (narrow ? '' : 'LOOP ') + l.miles + ' MI · ' + durTxt(l.to - l.from, false), jp: (narrow ? '' : '旋回 ') + l.miles + 'マイル · ' + durTxt(l.to - l.from, true), w: 7.2,
+        if (l.from > T0 + tc) return;
+        var c = scr(px(l.lon, l.lat)), r = loopR(l) * Z.k, len = Math.min(l.to, T0 + tc) - l.from;
+        if (inside(c, r)) loopLabels.push({cls: 'loopl', en: (narrow ? '' : 'LOOP ') + l.miles + ' MI · ' + durTxt(len, false), jp: (narrow ? '' : '旋回 ') + l.miles + 'マイル · ' + durTxt(len, true), w: 7.2,
           at: [[c[0], c[1] - r - 6, 'middle'], [c[0], c[1] + r + 15, 'middle'], [c[0] + r + 6, c[1] + 4, 'start'], [c[0] - r - 6, c[1] + 4, 'end'], [c[0], c[1] - r - 20, 'middle'], [c[0], c[1] + r + 29, 'middle']]});
         if (l.base && !named[l.base.id]) {   // the map shows the nearest base, as the stream's loop close-ups do
           named[l.base.id] = 1;
-          var bp = world.bases && world.bases[l.base.id];
-          if (bp) {
-            var b = px(bp[1], bp[0]);
-            el('circle', {'class': 'based', cx: b[0].toFixed(1), cy: b[1].toFixed(1), r: 3.2}, gp);
-            baseLabels.push({from: b, cls: 'basel', en: narrow ? l.base.id : l.base.name + ' ' + l.base.id, w: 6.6, at: [[b[0] + 7, b[1] + 4, 'start'], [b[0] - 7, b[1] + 4, 'end'], [b[0], b[1] - 8, 'middle'], [b[0], b[1] + 17, 'middle']]});
-          }
+          var bp = world.bases && world.bases[l.base.id]; if (!bp) return;
+          var b = scr(px(bp[1], bp[0])); if (!inside(b, 0)) return;
+          el('circle', {'class': 'based', cx: b[0].toFixed(1), cy: b[1].toFixed(1), r: 3.2}, glab);
+          baseLabels.push({from: b, cls: 'basel', en: narrow ? l.base.id : l.base.name + ' ' + l.base.id, w: 6.6, at: [[b[0] + 7, b[1] + 4, 'start'], [b[0] - 7, b[1] + 4, 'end'], [b[0], b[1] - 8, 'middle'], [b[0], b[1] + 17, 'middle']]});
         }
       });
     });
-    // labels where they don't cover another: loops first, then their bases, then the aircraft (each tries its spots in turn)
     var taken = [];
-    loopLabels.concat(baseLabels, tags).forEach(function (L) {
+    resL.concat(loopLabels, baseLabels, tags).forEach(function (L) {
       var w = Math.max(L.en.length * L.w, L.jp ? L.jp.length * 11.5 : 0) + 6, pick = null, f = L.at[0];
-      [16, -16, 32, -32, 48, -48, 64, -64].forEach(function (dy) { L.at.push([f[0], f[1] + dy, f[2]]); });
-      [[1, 0], [-1, 0], [1, 16], [-1, 16], [1, -16], [-1, -16]].forEach(function (o) { L.at.push([f[0] + o[0] * (w / 2 + 12), f[1] + o[1], o[0] > 0 ? 'start' : 'end']); });
+      if (!L.fixed) {
+        [16, -16, 32, -32, 48, -48, 64, -64].forEach(function (dy) { L.at.push([f[0], f[1] + dy, f[2]]); });
+        [[1, 0], [-1, 0], [1, 16], [-1, 16], [1, -16], [-1, -16]].forEach(function (o) { L.at.push([f[0] + o[0] * (w / 2 + 12), f[1] + o[1], o[0] > 0 ? 'start' : 'end']); });
+      }
       for (var i = 0; i < L.at.length && !pick; i++) {
         var a = L.at[i], x0 = a[2] === 'start' ? a[0] : a[2] === 'end' ? a[0] - w : a[0] - w / 2, box = [x0, a[1] - 12, x0 + w, a[1] + 3];
         if (box[0] < 2 || box[2] > W - 2 || box[1] < 2 || box[3] > H - 2) continue;
@@ -361,17 +427,73 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     if (!cur.planes.length) twin(glab, {'class': 'empty', x: W / 2, y: H / 2, 'text-anchor': 'middle'}, 'NO FLIGHTS', '飛行なし');
   }
 
-  // ---------------------------------------------------------------- hover
+  // ---------------------------------------------------------------- zoom and drag
+  // wheel with ctrl/⌘ (a trackpad pinch), or any wheel once the map's been clicked; drag to move; double-click to zoom in
+  // (shift: out); two fingers on a phone; the + − RESET buttons
+  function applyZoom() {
+    Z.k = Math.max(1, Math.min(ZMAX, Z.k));
+    Z.x = Math.min(0, Math.max(W - Z.k * W, Z.x)); Z.y = Math.min(0, Math.max(H - Z.k * H, Z.y));
+    $('g-geo').setAttribute('transform', 'translate(' + Z.x.toFixed(2) + ' ' + Z.y.toFixed(2) + ') scale(' + Z.k.toFixed(4) + ')');
+    $('hatch').setAttribute('patternTransform', 'rotate(45) scale(' + (1 / Z.k).toFixed(4) + ')');
+    $('zin').disabled = Z.k >= ZMAX; $('zout').disabled = $('zreset').disabled = Z.k <= 1;
+    svg.style.touchAction = Z.k > 1 ? 'none' : 'pan-y';   // (zoomed in, one finger moves the map; otherwise it scrolls the page)
+  }
+  var raf = 0;
+  function relabel() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; drawLabels(); }); }
+  function zoomAt(sx, sy, f) {
+    var k = Math.max(1, Math.min(ZMAX, Z.k * f)); f = k / Z.k;
+    Z.x = sx - (sx - Z.x) * f; Z.y = sy - (sy - Z.y) * f; Z.k = k; applyZoom(); hide(); relabel();
+  }
+  function svgPt(ev) { var m = svg.getScreenCTM(), p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; return m ? p.matrixTransform(m.inverse()) : {x: 0, y: 0}; }
+  var active = false, drag = null, touches = {}, pinch = null;
+  svg.addEventListener('wheel', function (ev) {
+    if (!cur || !(ev.ctrlKey || ev.metaKey || active)) return;
+    ev.preventDefault();
+    var p = svgPt(ev); zoomAt(p.x, p.y, Math.exp(-ev.deltaY * (ev.ctrlKey ? 0.01 : 0.0025)));
+  }, {passive: false});
+  svg.addEventListener('dblclick', function (ev) { var p = svgPt(ev); zoomAt(p.x, p.y, ev.shiftKey ? 0.5 : 2); });
+  svg.addEventListener('pointerdown', function (ev) {
+    active = true;
+    if (ev.pointerType === 'touch') {
+      touches[ev.pointerId] = svgPt(ev);
+      var ids = Object.keys(touches);
+      if (ids.length === 2) { var a = touches[ids[0]], b = touches[ids[1]]; pinch = {d: Math.hypot(a.x - b.x, a.y - b.y), m: {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}}; drag = null; return; }
+      if (Z.k <= 1) return;
+    } else if (ev.button !== 0) return;
+    drag = {x: ev.clientX, y: ev.clientY, zx: Z.x, zy: Z.y};
+    try { svg.setPointerCapture(ev.pointerId); } catch (e) {}
+  });
+  function endPointer(ev) {
+    delete touches[ev.pointerId]; if (Object.keys(touches).length < 2) pinch = null;
+    if (drag) { drag = null; svg.classList.remove('drag'); }
+  }
+  svg.addEventListener('pointerup', endPointer);
+  svg.addEventListener('pointercancel', endPointer);
+  svg.addEventListener('pointerleave', function () { active = false; hide(); });
+
+  // ---------------------------------------------------------------- hover (and the moves above)
   var tip = $('tip'), hov = $('hov');
   function hide() { tip.style.display = 'none'; hov.style.display = 'none'; }
   svg.addEventListener('pointermove', function (ev) {
-    if (!pts.length) return;
-    var m = svg.getScreenCTM(); if (!m) return;
-    var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; var v = pt.matrixTransform(m.inverse());
-    var best = null, bd = 18 * 18;
-    for (var i = 0; i < pts.length; i++) { var q = pts[i], dx = q.x - v.x, dy = q.y - v.y, dd = dx * dx + dy * dy; if (dd < bd) { bd = dd; best = q; } }
+    if (pinch && touches[ev.pointerId]) {
+      touches[ev.pointerId] = svgPt(ev);
+      var ids = Object.keys(touches), a = touches[ids[0]], b = touches[ids[1]];
+      var d = Math.hypot(a.x - b.x, a.y - b.y), m = {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2};
+      Z.x += m.x - pinch.m.x; Z.y += m.y - pinch.m.y; zoomAt(m.x, m.y, pinch.d ? d / pinch.d : 1);
+      pinch = {d: d, m: m}; return;
+    }
+    if (drag) {
+      if (Math.abs(ev.clientX - drag.x) + Math.abs(ev.clientY - drag.y) > 3) svg.classList.add('drag');
+      Z.x = drag.zx + ev.clientX - drag.x; Z.y = drag.zy + ev.clientY - drag.y; applyZoom(); hide(); relabel(); return;
+    }
+    if (!pts.length || ev.pointerType === 'touch' && Object.keys(touches).length) return;
+    var v = svgPt(ev), best = null, bd = 18 * 18, bs = null;
+    for (var i = 0; i < pts.length; i++) {
+      var q = pts[i], sx = Z.x + Z.k * q.x, sy = Z.y + Z.k * q.y, dx = sx - v.x, dy = sy - v.y, dd = dx * dx + dy * dy;
+      if (dd < bd) { bd = dd; best = q; bs = [sx, sy]; }
+    }
     if (!best) { hide(); return; }
-    hov.setAttribute('cx', best.x.toFixed(1)); hov.setAttribute('cy', best.y.toFixed(1)); hov.style.display = '';
+    hov.setAttribute('cx', bs[0].toFixed(1)); hov.setAttribute('cy', bs[1].toFixed(1)); hov.style.display = '';
     var ja = document.documentElement.classList.contains('show-jp');
     tip.innerHTML = '<b>' + esc(best.p.kind) + '</b> <code>' + esc(best.p.hex) + '</code>' + (best.p.callsign ? ' ' + esc(best.p.callsign) : '') +
       '<br>' + hm(best.t) + ' UTC · ' + (best.alt == null || best.alt <= 0 ? (ja ? '地上' : 'ON THE GROUND') : num(best.alt) + ' ft');
@@ -381,7 +503,35 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     if (y + r.height > window.innerHeight - 8) y = ev.clientY - r.height - 14;
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   });
-  svg.addEventListener('pointerleave', hide);
+  $('zin').addEventListener('click', function () { zoomAt(W / 2, H / 2, 2); });
+  $('zout').addEventListener('click', function () { zoomAt(W / 2, H / 2, 0.5); });
+  $('zreset').addEventListener('click', function () { Z = {k: 1, x: 0, y: 0}; applyZoom(); hide(); relabel(); });
+
+  // ---------------------------------------------------------------- the time slider
+  var slider = $('tslider'), playT = null;
+  function span() {   // the minutes the day's fixes cover
+    var a = 1440, b = 0;
+    cur.planes.forEach(function (p) { if (p.track.length) { a = Math.min(a, Math.floor(p.track[0][3] / 60)); b = Math.max(b, Math.ceil(p.track[p.track.length - 1][3] / 60)); } });
+    return a > b ? [0, 1439] : [a, Math.min(1439, b)];
+  }
+  function tLabel() {
+    $('tlabel').innerHTML = tNow == null ? bi('WHOLE DAY', '終日') : String(Math.floor(tNow / 3600)).padStart(2, '0') + ':' + String(Math.floor(tNow / 60) % 60).padStart(2, '0') + ' UTC';
+    $('play').innerHTML = playT ? '&#x275A;&#x275A;' : '&#x25B6;'; $('play').setAttribute('aria-label', playT ? 'Pause' : 'Play');
+  }
+  function setT(min) {
+    tNow = min >= 1440 ? null : min * 60; slider.value = String(Math.min(1440, min)); hide(); drawTime(); tLabel();
+  }
+  function stopPlay() { if (playT) { clearInterval(playT); playT = null; } tLabel(); }
+  slider.addEventListener('input', function () { stopPlay(); setT(+slider.value); });
+  $('play').addEventListener('click', function () {
+    if (!cur) return;
+    if (playT) { stopPlay(); return; }
+    var s = span(), m = tNow == null || tNow / 60 >= s[1] ? s[0] : Math.floor(tNow / 60);
+    setT(m);
+    playT = setInterval(function () { m += 2; if (m > s[1]) { stopPlay(); setT(1440); } else setT(m); }, 50);
+    tLabel();
+  });
+  function resetTime() { stopPlay(); tNow = null; slider.value = '1440'; tLabel(); }
 
   // ---------------------------------------------------------------- tables and chips
   function rows(id, list, row) {
@@ -392,9 +542,6 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     var nE6 = 0, nE4 = 0, loops = [];
     cur.planes.forEach(function (p) { if (p.kind === 'E-4B') nE4++; else nE6++; p.loops.forEach(function (l) { loops.push({p: p, l: l}); }); });
     loops.sort(function (a, b) { return a.l.from - b.l.from; });
-    var heard = cur.eams.map(function (e) { return {t: e.utc, kind: e.how === 'VLF' ? 'VLF' : e.how === 'HF voice' ? 'VOICE' : 'EAM', kHz: e.kHz, msg: e.message, auto: e.auto}; })
-      .concat(cur.vlf.map(function (v) { return {t: hm(v.t), kind: 'VLFCUE', kHz: v.kHz, area: v.area || v.name}; }))
-      .sort(function (a, b) { return a.t < b.t ? -1 : a.t > b.t ? 1 : 0; });
     var nEam = cur.eams.filter(function (e) { return e.message; }).length;
     $('chips').innerHTML = [
       [bi('E-6Bs', 'E-6B'), nE6], [bi('E-4Bs', 'E-4B'), nE4], [bi('LOOPS', '旋回'), loops.length],
@@ -426,12 +573,6 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
       return '<tr><td class="mono">' + esc(r.id) + '</td><td class="l">' + esc(r.fir || '') + '</td><td class="mono">' + esc(r.alt_block || '') + '</td>' +
         '<td>' + (r.start_epoch ? hm(r.start_epoch) : '') + '</td><td>' + (r.end_epoch ? hm(r.end_epoch) : '') + '</td></tr>';
     });
-    rows('t-heard', heard, function (h) {
-      var what = h.kind === 'VLF' ? bi('VLF EAM', 'VLF EAM') : h.kind === 'VOICE' ? bi('HF voice', 'HF音声') : h.kind === 'VLFCUE' ? bi('VLF data', 'VLFデータ') : bi('EAM', 'EAM');
-      var msg = h.msg ? esc(h.msg) : h.kind === 'VLFCUE' ? '<span class="dim">' + esc(h.area || '') + '</span>' :
-        h.kind === 'VOICE' ? '<span class="dim">' + bi('transcript unchecked', '文字起こし未確認') + '</span>' : '';
-      return '<tr><td>' + esc(h.t) + '</td><td class="l">' + what + '</td><td class="mono">' + (h.kHz ? esc(h.kHz) : '') + '</td><td class="msg">' + msg + '</td></tr>';
-    });
   }
 
   function legend() {
@@ -449,7 +590,7 @@ html .fab button:hover,html .totop:hover{color:var(--ink)}
     fetch('e6b_tracker/' + d + '.json', {cache: 'no-cache'}).then(function (r) { return r.json(); }).then(function (j) {
       if (day !== d) return;
       cur = j; cur.reservations = cur.reservations || []; cur.eams = cur.eams || []; cur.vlf = cur.vlf || [];
-      hide(); drawMap(); render();
+      hide(); resetTime(); drawMap(); render();
     });
   }
   $('daysel').addEventListener('change', function () { show(this.value); });
